@@ -127,13 +127,23 @@ table {
 /* CSS Custom Properties */
 :root {
   --primary-color: #dd082e;
-  --secondary-color--red: #a0092f;
+  --secondary-color--red: #ee1e45;
+  --secondary-color--red-gradient--1: #a0092f;
+  --secondary-color--red-gradient--2: #ffc3c6;
   --secondary-color--blue: #27aaff;
-  --secondary-color--blue-shadow: #0c91ea;
-  --secondary-color--yellow: #f7d340;
+  --secondary-color--blue-gradient--1: #0d6dad;
+  --secondary-color--blue-gradient--2: #9bdefb;
+  --secondary-color--yellow: #ffdd51;
+  --secondary-color--yellow-gradient--1: #958414;
+  --secondary-color--yellow-gradient--2: #fdfc91;
   --secondary-color--green: #3a9456;
-  --screen-color-dark: #242424;
-  --text-light: #fff;
+  --secondary-color--green-gradient--1: #28662f;
+  --secondary-color--green-gradient--2: #bff8cd;
+  --secondary-color--grey: #d9d5de;
+  --secondary-color--grey-gradient: #8a848a;
+
+  --screen-color--dark: #242424;
+  --text--light: #fff;
 }
 
 /* Formatting */
@@ -147,19 +157,19 @@ body {
 }
 .container {
   margin: 1rem;
-  height: 95vh;
+  height: 93vh;
 }
 
 .header {
   display: flex;
-  background-color: rgb(207, 96, 96);
   justify-content: space-between;
   margin-bottom: 0.5rem;
+  border-image: 1px solid black;
 }
 
 .lights {
   display: flex;
-  background-color: rgb(152, 152, 214);
+  /* background-color: rgb(152, 152, 214); */
   margin-bottom: 0.5rem;
 }
 
@@ -167,51 +177,97 @@ body {
 .logo {
   font-family: "Pokemon Solid", sans-serif;
   font-size: 2rem;
-  color: var(--text-light);
+  color: var(--text--light);
   letter-spacing: 0.15rem;
 }
 
-.menu {
+.menu__btn {
   background-color: var(--secondary-color--blue);
-  color: var(--text-light);
+  color: var(--text--light);
   border: none;
   border-radius: 3px;
   padding: 0.2rem 0.3rem 0 0.3rem;
   transition: background-color 0.2s;
 }
 
-.menu:hover {
-  background-color: var(--secondary-color--blue-shadow);
+.menu__btn:hover {
+  background-color: var(--secondary-color--blue-gradient--1);
   cursor: pointer;
 }
 
-.light {
+.light__outer {
+  position: relative;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  background-image: radial-gradient(
+    circle,
+    var(--secondary-color--grey-gradient) 60%,
+    var(--secondary-color--grey) 90%
+  );
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.light__inner {
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
-  border: 2px solid black;
-  margin-right: 0.15rem;
+  margin-right: 0.5rem;
 }
 
 .light--blue {
-  background-color: var(--secondary-color--blue);
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  inset: 0.15rem;
+  border: 0.115rem solid var(--secondary-color--blue-gradient--1);
+  background-image: radial-gradient(
+    farthest-corner at 2.25rem 2.25rem,
+    var(--secondary-color--blue-gradient--1) 28%,
+    var(--secondary-color--blue) 70%,
+    var(--secondary-color--blue-gradient--2) 85%
+  );
 }
 
 .light--red {
-  background-color: var(--secondary-color--red);
+  background-image: radial-gradient(
+    farthest-corner at 2rem 2rem,
+    var(--secondary-color--red-gradient--1) 60%,
+    var(--secondary-color--red) 80%,
+    var(--secondary-color--red-gradient--2) 97%
+  );
+  border: 0.08rem solid var(--secondary-color--red-gradient--1);
 }
 
 .light--yellow {
-  background-color: var(--secondary-color--yellow);
+  background-image: radial-gradient(
+    farthest-corner at 2rem 2rem,
+    var(--secondary-color--yellow-gradient--1) 60%,
+    var(--secondary-color--yellow) 80%,
+    var(--secondary-color--yellow-gradient--2) 97%
+  );
+  border: 0.08rem solid var(--secondary-color--yellow-gradient--1);
 }
 
 .light--green {
-  background-color: var(--secondary-color--green);
+  background-image: radial-gradient(
+    farthest-corner at 2rem 2rem,
+    var(--secondary-color--green-gradient--1) 60%,
+    var(--secondary-color--green) 80%,
+    var(--secondary-color--green-gradient--2) 97%
+  );
+  border: 0.08rem solid var(--secondary-color--green-gradient--1);
 }
 
+.divider--diagonal {
+  background-color: blue;
+  height: 3rem;
+  transform: skew(-40deg);
+  border-right: 3px solid rgb(96, 7, 7);
+}
 /* Styling -- Screen */
 .screen {
-  background-color: var(--screen-color-dark);
+  background-color: var(--screen-color--dark);
   height: 91.5%;
   border-radius: 10px;
 }

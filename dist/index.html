@@ -15,7 +15,7 @@
         <h1 class="logo">Pokédex</h1>
 
         <nav>
-          <button class="menu">
+          <button class="menu__btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewbox="0 0 16 16">
               <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"></path>
             </svg>
@@ -24,11 +24,24 @@
       </header>
 
       <div class="lights">
-        <span class="light light--blue"></span>
-        <span class="light light--red"></span>
-        <span class="light light--yellow"></span>
-        <span class="light light--green"></span>
+        <div class="light__outer">
+          <div class="light__inner light--blue"></div>
+        </div>
+
+        <div class="light__inner light--red"></div>
+
+        <div class="light__inner light--yellow"></div>
+
+        <div class="light__inner light--green"></div>
+
+        <!-- <div class="divider--diagonal"></div> -->
       </div>
+
+      <!-- To Do List
+       1) finish styling lights
+       2) decide whether or not to add border
+       3) add functionality to nav bar menu 
+       4) begin developing pokemon search -->
 
       <!-- Screen -->
       <div class="screen">
