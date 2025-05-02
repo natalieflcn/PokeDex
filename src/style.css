@@ -71,23 +71,22 @@ table {
   --text--light: #fff;
 }
 
+@font-face {
+  font-family: Gameboy;
+  src: url("Gameboy-Font.ttf");
+}
+
 /* Formatting */
 html {
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 body {
-  /* background: linear-gradient(
-    180deg,
-    var(--primary-color) 9.5%,
-    var(--secondary-color--red-gradient--3) 10%,
-    var(--secondary-color--red) 70%,
-    var(--primary-color) 50%
-  ); */
   background-repeat: no-repeat;
   background-color: var(--primary-color);
-  overflow: hidden;
 }
+
 .container {
   margin: 1rem;
   height: 93vh;
@@ -105,6 +104,9 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.hidden {
+  display: none;
+}
 /* Styling -- Header */
 .logo {
   font-family: "Pokemon Solid", sans-serif;
@@ -114,19 +116,74 @@ body {
 }
 
 .menu__btn {
-  background-color: var(--secondary-color--blue);
-  color: var(--text--light);
+  font-family: Gameboy, sans-serif;
+  padding: 0.5rem 1rem;
+  margin-left: 0.6rem;
   border: none;
-  border-radius: 3px;
-  padding: 0.2rem 0.3rem 0 0.3rem;
-  transition: background-color 0.2s;
+  border-radius: 3.5px;
+  box-shadow: 2px 3px 5px 3px var(--secondary-color--red-gradient--3);
+  background: var(--btn-bg);
+  color: var(--text--light);
+  transition: background-color 0.2s, box-shadow 0.2s;
 }
 
-.menu__btn:hover {
-  background-color: var(--secondary-color--blue-gradient--1);
+.menu__btn:first-child {
+  margin-left: none;
+}
+
+/* Desktop Menu Buttons */
+.menu__btn--search {
+  --btn-bg: linear-gradient(
+    -40deg,
+    var(--secondary-color--blue-gradient--1) 10%,
+    var(--secondary-color--blue) 90%,
+    var(--secondary-color--blue-gradient--2) 100%
+  );
+  --btn-shadow: var(--secondary-color--blue-gradient--1);
+  --btn-highlight: var(--secondary-color--blue-gradient--2);
+}
+
+.menu__btn--map {
+  --btn-bg: linear-gradient(
+    -40deg,
+    var(--secondary-color--yellow-gradient--1) 10%,
+    var(--secondary-color--yellow) 85%,
+    var(--secondary-color--yellow-gradient--2) 100%
+  );
+  --btn-shadow: var(--secondary-color--yellow-gradient--1);
+  --btn-highlight: var(--secondary-color--yellow-gradient--2);
+}
+
+.menu__btn--profile {
+  --btn-bg: linear-gradient(
+    -20deg,
+    var(--secondary-color--green-gradient--1) 10%,
+    var(--secondary-color--green) 80%,
+    var(--secondary-color--green-gradient--2) 100%
+  );
+  --btn-shadow: var(--secondary-color--green-gradient--1);
+  --btn-highlight: var(--secondary-color--green-gradient--2);
+}
+
+/* Button States */
+.menu__btn:hover,
+.menu__btn--active {
+  background: var(--btn-highlight);
+  box-shadow: 0px 0px 3px 1.5px var(--btn-shadow);
+  color: var(--btn-shadow);
+  font-weight: bold;
   cursor: pointer;
 }
 
+/* Mobile Menu Button */
+.menu--mobile__btn {
+  --btn-bg: var(--secondary-color--blue);
+  --btn-shadow: var(--secondary-color--blue-gradient--1);
+  --btn-highlight: var(--secondary-color--blue-gradient--2);
+  padding: 0.2rem 0.3rem 0 0.3rem;
+}
+
+/* Lights */
 .light__outer {
   position: relative;
   margin-right: 0.5rem;
@@ -141,17 +198,18 @@ body {
 }
 
 .light__inner {
-  width: 1rem;
-  height: 1rem;
+  width: 1.1rem;
+  height: 1.1rem;
   border: 0.05rem solid var(--screen-color--dark);
   border-radius: 50%;
   margin-right: 0.5rem;
+  box-sizing: border-box;
 }
 
 .light--blue {
   position: absolute;
-  width: 2rem;
-  height: 2rem;
+  width: 2.1rem;
+  height: 2.1rem;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -162,6 +220,7 @@ body {
     var(--secondary-color--blue) 70%,
     var(--secondary-color--blue-gradient--2) 85%
   );
+  --btn-highlight: var(--secondary-color--blue-gradient--2);
 }
 
 .light--red {
@@ -171,7 +230,7 @@ body {
     var(--secondary-color--red) 80%,
     var(--secondary-color--red-gradient--2) 97%
   );
-  /* border: 0.08rem solid var(--secondary-color--red-gradient--1); */
+  --btn-highlight: var(--secondary-color--red-gradient--2);
 }
 
 .light--yellow {
@@ -181,7 +240,7 @@ body {
     var(--secondary-color--yellow) 80%,
     var(--secondary-color--yellow-gradient--2) 97%
   );
-  /* border: 0.08rem solid var(--secondary-color--yellow-gradient--1); */
+  --btn-highlight: var(--secondary-color--yellow-gradient--2);
 }
 
 .light--green {
@@ -191,6 +250,11 @@ body {
     var(--secondary-color--green) 80%,
     var(--secondary-color--green-gradient--2) 97%
   );
+  --btn-highlight: var(--secondary-color--green-gradient--2);
+}
+
+.light--active {
+  border: 1px solid var(--btn-highlight);
 }
 
 .divider {
@@ -200,7 +264,7 @@ body {
   opacity: 90%;
 }
 .divider--diagonal {
-  width: 23%;
+  width: 10em;
   height: 2rem;
   transform: skew(-50deg);
   border-right: 5px solid var(--secondary-color--red-gradient--3);
@@ -215,8 +279,36 @@ body {
 }
 
 /* Styling -- Screen */
+.screen__border {
+  display: flex;
+  background-color: var(--secondary-color--grey);
+  border-radius: 5px;
+  width: 100%;
+  height: 85%;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0.5rem 1.25rem;
+}
+
 .screen {
   background-color: var(--screen-color--dark);
-  height: 85%;
+  box-shadow: 3px 3px 4px 3px var(--secondary-color--grey-gradient);
+  height: 96%;
   border-radius: 10px;
+  width: 49%;
+}
+
+/* Media Queries -- for Tablets, Mobile Devices */
+
+@media (max-width: 992px) {
+  .screen {
+    width: 95%;
+  }
+}
+
+@media (max-width: 768px) {
+  .screen {
+    width: 95%;
+  }
 }

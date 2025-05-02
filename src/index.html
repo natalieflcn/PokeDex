@@ -17,8 +17,17 @@
       <header class="header">
         <h1 class="logo">Pokédex</h1>
 
+        <!-- Buttons -->
         <nav>
-          <button class="menu__btn">
+          <!-- Desktop Nav Buttons -->
+          <button class="menu__btn menu__btn--search menu__btn--active">
+            Search
+          </button>
+          <button class="menu__btn menu__btn--map">Map</button>
+          <button class="menu__btn menu__btn--profile">Profile</button>
+          <!-- Tablet Icon Buttons -->
+          <!-- Mobile Hamburger Button -->
+          <button class="menu__btn menu--mobile__btn hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -38,7 +47,7 @@
 
       <div class="lights">
         <div class="light__outer">
-          <div class="light__inner light--blue"></div>
+          <div class="light__inner light--blue light--active"></div>
         </div>
 
         <div class="light__inner light--red"></div>
@@ -54,14 +63,19 @@
       </div>
 
       <!-- To Do List
-       1) finish styling lights
-       2) decide whether or not to add border
+       1) fix border
        3) add functionality to nav bar menu 
        4) begin developing pokemon search -->
 
       <!-- Screen -->
-      <div class="screen">
-        <p>This is the screen.</p>
+      <div class="screen__border">
+        <div class="screen">
+          <p>This is the screen.</p>
+        </div>
+
+        <div class="screen">
+          <p>This is the screen.</p>
+        </div>
       </div>
     </div>
   </body>

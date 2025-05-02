@@ -54,14 +54,19 @@ table {
   --text--light: #fff;
 }
 
+@font-face {
+  font-family: Gameboy;
+  src: url("Gameboy-Font.92145bb8.ttf");
+}
+
 html {
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 body {
   background-repeat: no-repeat;
   background-color: var(--primary-color);
-  overflow: hidden;
 }
 
 .container {
@@ -81,6 +86,10 @@ body {
   display: flex;
 }
 
+.hidden {
+  display: none;
+}
+
 .logo {
   color: var(--text--light);
   letter-spacing: .15rem;
@@ -89,17 +98,52 @@ body {
 }
 
 .menu__btn {
-  background-color: var(--secondary-color--blue);
+  box-shadow: 2px 3px 5px 3px var(--secondary-color--red-gradient--3);
+  background: var(--btn-bg);
   color: var(--text--light);
   border: none;
-  border-radius: 3px;
-  padding: .2rem .3rem 0;
-  transition: background-color .2s;
+  border-radius: 3.5px;
+  margin-left: .6rem;
+  padding: .5rem 1rem;
+  font-family: Gameboy, sans-serif;
+  transition: background-color .2s, box-shadow .2s;
 }
 
-.menu__btn:hover {
-  background-color: var(--secondary-color--blue-gradient--1);
+.menu__btn:first-child {
+  margin-left: none;
+}
+
+.menu__btn--search {
+  --btn-bg: linear-gradient(-40deg, var(--secondary-color--blue-gradient--1) 10%, var(--secondary-color--blue) 90%, var(--secondary-color--blue-gradient--2) 100%);
+  --btn-shadow: var(--secondary-color--blue-gradient--1);
+  --btn-highlight: var(--secondary-color--blue-gradient--2);
+}
+
+.menu__btn--map {
+  --btn-bg: linear-gradient(-40deg, var(--secondary-color--yellow-gradient--1) 10%, var(--secondary-color--yellow) 85%, var(--secondary-color--yellow-gradient--2) 100%);
+  --btn-shadow: var(--secondary-color--yellow-gradient--1);
+  --btn-highlight: var(--secondary-color--yellow-gradient--2);
+}
+
+.menu__btn--profile {
+  --btn-bg: linear-gradient(-20deg, var(--secondary-color--green-gradient--1) 10%, var(--secondary-color--green) 80%, var(--secondary-color--green-gradient--2) 100%);
+  --btn-shadow: var(--secondary-color--green-gradient--1);
+  --btn-highlight: var(--secondary-color--green-gradient--2);
+}
+
+.menu__btn:hover, .menu__btn--active {
+  background: var(--btn-highlight);
+  box-shadow: 0px 0px 3px 1.5px var(--btn-shadow);
+  color: var(--btn-shadow);
   cursor: pointer;
+  font-weight: bold;
+}
+
+.menu--mobile__btn {
+  --btn-bg: var(--secondary-color--blue);
+  --btn-shadow: var(--secondary-color--blue-gradient--1);
+  --btn-highlight: var(--secondary-color--blue-gradient--2);
+  padding: .2rem .3rem 0;
 }
 
 .light__outer {
@@ -113,17 +157,19 @@ body {
 
 .light__inner {
   border: .05rem solid var(--screen-color--dark);
+  box-sizing: border-box;
   border-radius: 50%;
-  width: 1rem;
-  height: 1rem;
+  width: 1.1rem;
+  height: 1.1rem;
   margin-right: .5rem;
 }
 
 .light--blue {
   border: .115rem solid var(--secondary-color--blue-gradient--1);
   background-image: radial-gradient(farthest-corner at 2.25rem 2.25rem, var(--secondary-color--blue-gradient--1) 28%, var(--secondary-color--blue) 70%, var(--secondary-color--blue-gradient--2) 85%);
-  width: 2rem;
-  height: 2rem;
+  --btn-highlight: var(--secondary-color--blue-gradient--2);
+  width: 2.1rem;
+  height: 2.1rem;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -132,14 +178,21 @@ body {
 
 .light--red {
   background-image: radial-gradient(farthest-corner at 2rem 2rem, var(--secondary-color--red-gradient--1) 60%, var(--secondary-color--red) 80%, var(--secondary-color--red-gradient--2) 97%);
+  --btn-highlight: var(--secondary-color--red-gradient--2);
 }
 
 .light--yellow {
   background-image: radial-gradient(farthest-corner at 2rem 2rem, var(--secondary-color--yellow-gradient--1) 60%, var(--secondary-color--yellow) 80%, var(--secondary-color--yellow-gradient--2) 97%);
+  --btn-highlight: var(--secondary-color--yellow-gradient--2);
 }
 
 .light--green {
   background-image: radial-gradient(farthest-corner at 2rem 2rem, var(--secondary-color--green-gradient--1) 60%, var(--secondary-color--green) 80%, var(--secondary-color--green-gradient--2) 97%);
+  --btn-highlight: var(--secondary-color--green-gradient--2);
+}
+
+.light--active {
+  border: 1px solid var(--btn-highlight);
 }
 
 .divider {
@@ -152,7 +205,7 @@ body {
 .divider--diagonal {
   border-right: 5px solid var(--secondary-color--red-gradient--3);
   border-bottom: 3px solid var(--secondary-color--red-gradient--3);
-  width: 23%;
+  width: 10em;
   height: 2rem;
   transform: skew(-50deg);
 }
@@ -164,9 +217,35 @@ body {
   transform: skew(-50deg);
 }
 
+.screen__border {
+  background-color: var(--secondary-color--grey);
+  box-sizing: border-box;
+  border-radius: 5px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 85%;
+  padding: .5rem 1.25rem;
+  display: flex;
+}
+
 .screen {
   background-color: var(--screen-color--dark);
+  box-shadow: 3px 3px 4px 3px var(--secondary-color--grey-gradient);
   border-radius: 10px;
-  height: 85%;
+  width: 49%;
+  height: 96%;
+}
+
+@media (width <= 992px) {
+  .screen {
+    width: 95%;
+  }
+}
+
+@media (width <= 768px) {
+  .screen {
+    width: 95%;
+  }
 }
 /*# sourceMappingURL=PokeDex.2cdaf7bc.css.map */
