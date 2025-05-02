@@ -99,11 +99,6 @@ body {
   border-image: 1px solid black;
 }
 
-.lights {
-  display: flex;
-  margin-bottom: 0.5rem;
-}
-
 .hidden {
   display: none;
 }
@@ -113,18 +108,23 @@ body {
   font-size: 2rem;
   color: var(--text--light);
   letter-spacing: 0.15rem;
+  text-shadow: 3px 4px 2px var(--secondary-color--red-gradient--3);
 }
 
-.menu__btn {
+/* Menu Buttons */
+.btn {
   font-family: Gameboy, sans-serif;
-  padding: 0.5rem 1rem;
-  margin-left: 0.6rem;
-  border: none;
-  border-radius: 3.5px;
-  box-shadow: 2px 3px 5px 3px var(--secondary-color--red-gradient--3);
+  border-radius: 0.3rem;
   background: var(--btn-bg);
   color: var(--text--light);
   transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.menu__btn {
+  padding: 0.5rem 1rem;
+  margin-left: 0.6rem;
+  border: none;
+  box-shadow: 2px 3px 5px 3px var(--secondary-color--red-gradient--3);
 }
 
 .menu__btn:first-child {
@@ -167,7 +167,8 @@ body {
 
 /* Button States */
 .menu__btn:hover,
-.menu__btn--active {
+.menu__btn--active,
+.search__btn:hover {
   background: var(--btn-highlight);
   box-shadow: 0px 0px 3px 1.5px var(--btn-shadow);
   color: var(--btn-shadow);
@@ -184,6 +185,11 @@ body {
 }
 
 /* Lights */
+.lights {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
 .light__outer {
   position: relative;
   margin-right: 0.5rem;
@@ -257,12 +263,14 @@ body {
   border: 1px solid var(--btn-highlight);
 }
 
+/* Frame */
 .divider {
   display: flex;
   position: relative;
   bottom: 1.5rem;
   opacity: 90%;
 }
+
 .divider--diagonal {
   width: 10em;
   height: 2rem;
@@ -278,9 +286,20 @@ body {
   border-top: 3px solid var(--secondary-color--red-gradient--3);
 }
 
-/* Styling -- Screen */
+.hinge {
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  width: 3%;
+  height: 100%;
+  left: 48.5%;
+  background-color: var(--primary-color);
+}
+
+/* Screen */
 .screen__border {
   display: flex;
+  position: relative;
   background-color: var(--secondary-color--grey);
   border-radius: 5px;
   width: 100%;
@@ -291,12 +310,100 @@ body {
   padding: 0.5rem 1.25rem;
 }
 
-.screen {
+.screen--1,
+.screen--2 {
   background-color: var(--screen-color--dark);
   box-shadow: 3px 3px 4px 3px var(--secondary-color--grey-gradient);
   height: 96%;
   border-radius: 10px;
-  width: 49%;
+  width: 47%;
+  overflow: scroll;
+}
+
+/* PERSPECTIVE -- Search */
+.search__form {
+  display: flex;
+  padding: 1rem 0rem;
+  justify-content: space-evenly;
+}
+
+/* Search Form */
+.search__input {
+  font-family: Gameboy;
+  position: relative;
+  padding: 0.25rem 0.4rem;
+  left: 1.1rem;
+  height: 1.75em;
+  width: 50%;
+  border-radius: 5px;
+  text-transform: lowercase;
+}
+
+.search__input::placeholder {
+  font-size: 0.75rem;
+  color: var(--secondary-color--grey-gradient);
+  padding: 2rem 0.5rem;
+  text-transform: none;
+}
+
+.search__btn {
+  padding: 0 0.5rem;
+  font-size: 0.75rem;
+}
+
+.search__btn--sort {
+  --btn-bg: linear-gradient(
+    -40deg,
+    var(--secondary-color--blue-gradient--1) 10%,
+    var(--secondary-color--blue) 90%,
+    var(--secondary-color--blue-gradient--2) 100%
+  );
+  --btn-shadow: var(--secondary-color--blue-gradient--1);
+  --btn-highlight: var(--secondary-color--blue-gradient--2);
+  position: relative;
+  left: 1rem;
+}
+
+.search__btn--arrow {
+  --btn-bg: linear-gradient(
+    -40deg,
+    var(--secondary-color--yellow-gradient--1) 10%,
+    var(--secondary-color--yellow) 85%,
+    var(--secondary-color--yellow-gradient--2) 100%
+  );
+  --btn-shadow: var(--secondary-color--yellow-gradient--1);
+  --btn-highlight: var(--secondary-color--yellow-gradient--2);
+}
+
+.search__btn--arrow:last-child {
+  --btn-bg: linear-gradient(
+    -20deg,
+    var(--secondary-color--green-gradient--1) 10%,
+    var(--secondary-color--green) 80%,
+    var(--secondary-color--green-gradient--2) 100%
+  );
+  --btn-shadow: var(--secondary-color--green-gradient--1);
+  --btn-highlight: var(--secondary-color--green-gradient--2);
+  position: relative;
+  right: 1rem;
+}
+
+/* Pokemon Search Panel Results */
+.row--panel--search {
+  display: flex;
+  padding: 1rem 0.5rem;
+  justify-content: space-evenly;
+}
+
+.panel--search {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--secondary-color--grey);
+  border-radius: 5px;
+  height: 7.75rem;
+  width: 7.75rem;
+  padding: 1rem;
+  /* align-items: center; */
 }
 
 /* Media Queries -- for Tablets, Mobile Devices */

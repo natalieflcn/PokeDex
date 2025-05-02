@@ -20,14 +20,14 @@
         <!-- Buttons -->
         <nav>
           <!-- Desktop Nav Buttons -->
-          <button class="menu__btn menu__btn--search menu__btn--active">
+          <button class="btn menu__btn menu__btn--search menu__btn--active">
             Search
           </button>
-          <button class="menu__btn menu__btn--map">Map</button>
-          <button class="menu__btn menu__btn--profile">Profile</button>
+          <button class="btn menu__btn menu__btn--map">Map</button>
+          <button class="btn menu__btn menu__btn--profile">Profile</button>
           <!-- Tablet Icon Buttons -->
           <!-- Mobile Hamburger Button -->
-          <button class="menu__btn menu--mobile__btn hidden">
+          <button class="btn menu__btn menu--mobile__btn hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -69,12 +69,101 @@
 
       <!-- Screen -->
       <div class="screen__border">
-        <div class="screen">
-          <p>This is the screen.</p>
+        <div class="screen--1">
+          <!-- Perspective: Search -->
+
+          <form class="search__form" action="/dummy">
+            <input
+              class="search__input"
+              type="text"
+              placeholder="Search for a Pokémon..."
+            />
+            <button class="btn search__btn search__btn--sort">Sort</button>
+            <button class="btn search__btn search__btn--arrow">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="25"
+                height="25"
+                fill="currentColor"
+                class="bi bi-arrow-up-short"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"
+                />
+              </svg>
+            </button>
+            <button class="btn search__btn search__btn--arrow">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="25"
+                height="25"
+                fill="currentColor"
+                class="bi bi-arrow-down-short"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"
+                />
+              </svg>
+            </button>
+          </form>
+
+          <div class="row--panel--search">
+            <div class="panel--search">
+              <span>1</span>
+              <img
+                src="https://pbs.twimg.com/profile_images/1902753393329983489/5Hm9zaBJ_400x400.jpg"
+                alt=""
+              />
+              <span>pikachu</span>
+            </div>
+            <div class="panel--search">pokemon</div>
+            <div class="panel--search">pokemon</div>
+          </div>
+
+          <!-- 
+          1) complete styling the pokemon panels
+          2) complete styling the pokemon card result 
+          3) wrap in a search perspective container, hide the class
+          
+          4) begin developing screen for the map 
+          
+          5) begin developing screen for the profile
+          -->
+          <div class="row--panel--search">
+            <div class="panel--search">pokemon</div>
+            <div class="panel--search">pokemon</div>
+            <div class="panel--search">pokemon</div>
+          </div>
+
+          <div class="row--panel--search">
+            <div class="panel--search">pokemon</div>
+            <div class="panel--search">pokemon</div>
+            <div class="panel--search">pokemon</div>
+          </div>
+
+          <div class="row--panel--search">
+            <div class="panel--search">pokemon</div>
+            <div class="panel--search">pokemon</div>
+            <div class="panel--search">pokemon</div>
+          </div>
+
+          <!-- Perspective: Map -->
+
+          <!-- Perspective: Profile -->
         </div>
 
-        <div class="screen">
-          <p>This is the screen.</p>
+        <div class="hinge"></div>
+
+        <div class="screen--2">
+          <!-- Perspective: Search -->
+
+          <!-- Perspective: Map -->
+
+          <!-- Perspective: Profile -->
         </div>
       </div>
     </div>
