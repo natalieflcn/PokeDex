@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pokédex</title>
-    <link rel="icon" href="Pokéball.svg" />
+    <link rel="icon" href="imgs/pokeball-favicon.svg" />
     <link
       href="https://fonts.cdnfonts.com/css/pokemon-solid"
       rel="stylesheet"
@@ -29,7 +29,7 @@
           <button class="btn menu__btn menu__btn--profile">Profile</button>
           <!-- Tablet Icon Buttons -->
           <!-- Mobile Hamburger Button -->
-          <button class="btn menu__btn menu--mobile__btn hidden">
+          <button class="btn menu__btn menu__btn--mobile hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -113,17 +113,37 @@
             </button>
           </form>
 
-          <div class="row--panel--search">
-            <div class="panel--search">
-              <span>1</span>
-              <img
-                src="https://pbs.twimg.com/profile_images/1902753393329983489/5Hm9zaBJ_400x400.jpg"
+          <div class="row__search--preview">
+            <div class="search--preview search--preview--active">
+              <span class="search--preview__id search--preview__id--active"
+                >10</span
+              ><img
+                class="search--preview__img search--preview__img--active"
+                src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
                 alt=""
               />
-              <span>pikachu</span>
+              <p class="search--preview__name search--preview__name--active">
+                Bulbasaur
+              </p>
             </div>
-            <div class="panel--search">pokemon</div>
-            <div class="panel--search">pokemon</div>
+            <div class="search--preview">
+              <span class="search--preview__id">1000</span
+              ><img
+                class="search--preview__img"
+                src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png"
+                alt=""
+              />
+              <p class="search--preview__name">fletchinder</p>
+            </div>
+            <div class="search--preview">
+              <span class="search--preview__id">100</span
+              ><img
+                class="search--preview__img"
+                src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png"
+                alt=""
+              />
+              <p class="search--preview__name">Bulbasaur</p>
+            </div>
           </div>
 
           <!-- 
@@ -135,22 +155,22 @@
           
           5) begin developing screen for the profile
           -->
-          <div class="row--panel--search">
-            <div class="panel--search">pokemon</div>
-            <div class="panel--search">pokemon</div>
-            <div class="panel--search">pokemon</div>
+          <div class="row__search--preview">
+            <div class="search--preview">pokemon</div>
+            <div class="search--preview">pokemon</div>
+            <div class="search--preview">pokemon</div>
           </div>
 
-          <div class="row--panel--search">
-            <div class="panel--search">pokemon</div>
-            <div class="panel--search">pokemon</div>
-            <div class="panel--search">pokemon</div>
+          <div class="row__search--preview">
+            <div class="search--preview">pokemon</div>
+            <div class="search--preview">pokemon</div>
+            <div class="search--preview">pokemon</div>
           </div>
 
-          <div class="row--panel--search">
-            <div class="panel--search">pokemon</div>
-            <div class="panel--search">pokemon</div>
-            <div class="panel--search">pokemon</div>
+          <div class="row__search--preview">
+            <div class="search--preview">pokemon</div>
+            <div class="search--preview">pokemon</div>
+            <div class="search--preview">pokemon</div>
           </div>
 
           <!-- Perspective: Map -->

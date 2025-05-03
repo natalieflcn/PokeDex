@@ -73,7 +73,12 @@ table {
 
 @font-face {
   font-family: Gameboy;
-  src: url("Gameboy-Font.ttf");
+  src: url("fonts/gameboy-font.ttf");
+}
+
+@font-face {
+  font-family: Pokemon Solid;
+  src: url("fonts/pokemon-font.ttf");
 }
 
 /* Formatting */
@@ -177,7 +182,7 @@ body {
 }
 
 /* Mobile Menu Button */
-.menu--mobile__btn {
+.menu__btn--mobile {
   --btn-bg: var(--secondary-color--blue);
   --btn-shadow: var(--secondary-color--blue-gradient--1);
   --btn-highlight: var(--secondary-color--blue-gradient--2);
@@ -388,23 +393,95 @@ body {
   right: 1rem;
 }
 
-/* Pokemon Search Panel Results */
-.row--panel--search {
+/* Pokemon Search Preview Results */
+.row__search--preview {
   display: flex;
   padding: 1rem 0.5rem;
   justify-content: space-evenly;
 }
 
-.panel--search {
+.search--preview {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   background-color: var(--secondary-color--grey);
-  border-radius: 5px;
-  height: 7.75rem;
+  background-image: url(imgs/pokeball.svg);
+  background-repeat: no-repeat;
+  background-position: 20% 25%;
+  background-size: 40%;
+  background-blend-mode: soft-light;
+  height: 9.5rem;
   width: 7.75rem;
+  border-radius: 5px;
   padding: 1rem;
-  /* align-items: center; */
+  font-family: "Gameboy", sans-serif;
+  transition: background-color 0.2s;
 }
+
+.search--preview__id {
+  align-self: flex-end;
+  font-size: 0.5rem;
+  background: radial-gradient(
+    farthest-corner at 2rem 2rem,
+    var(--secondary-color--red-gradient--1) 60%,
+    var(--secondary-color--red) 80%,
+    var(--secondary-color--red-gradient--2) 97%
+  );
+  color: var(--text--light);
+  padding: 0.5rem 0.4rem 0.3rem;
+  border: 1px solid var(--secondary-color--red-gradient--2);
+  box-shadow: 1px 1px 8px 3px var(--secondary-color--red-gradient--3);
+}
+
+.search--preview__name {
+  font-size: 0.65rem;
+  font-weight: bold;
+  background-color: var(--secondary-color--grey-gradient);
+  color: var(--text--light);
+  margin-top: 0.5rem;
+  padding: 0.6rem 0.6rem 0.4rem;
+  border-radius: 3px;
+  text-shadow: 2px 2px 2px var(--secondary-color--grey-gradient);
+  box-shadow: 1px 1px 2px 2px var(--screen-color--dark) inset;
+}
+
+.search--preview--active {
+  background-color: var(--text--light);
+  background-blend-mode: normal;
+  background-image: url(imgs/pokeball-red.svg);
+}
+
+.search--preview__id--active {
+  border: 1px solid var(--secondary-color--red-gradient--1);
+  box-shadow: 1px 1px 4px 3px var(--secondary-color--red-gradient--2);
+}
+
+.search--preview__name--active {
+  background-color: var(--secondary-color--grey);
+  box-shadow: 1px 1px 2px 2px var(--screen-color--dark);
+  text-shadow: none;
+  color: var(--screen-color--dark);
+}
+
+.search--preview__img--active {
+  animation: bounce 0.5s;
+  animation-direction: alternate;
+  animation-timing-function: cubic-bezier(0.5, 0.06, 1, 1);
+  animation-iteration-count: infinite;
+}
+
+@keyframes bounce {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0.25rem, 0);
+  }
+}
+
+/* Pokemon Panel Result */
 
 /* Media Queries -- for Tablets, Mobile Devices */
 
