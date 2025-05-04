@@ -72,6 +72,7 @@ html {
 body {
   background-repeat: no-repeat;
   background-color: var(--primary-color);
+  font-family: Gameboy, sans-serif;
 }
 
 .container {
@@ -135,7 +136,7 @@ body {
   --btn-highlight: var(--secondary-color--green-gradient--2);
 }
 
-.menu__btn:hover, .menu__btn--active, .search__btn:hover {
+.menu__btn:hover, .menu__btn--active, .search__btn:hover, .panel__btn:hover {
   background: var(--btn-highlight);
   box-shadow: 0px 0px 3px 1.5px var(--btn-shadow);
   color: var(--btn-shadow);
@@ -258,27 +259,29 @@ body {
   overflow: scroll;
 }
 
+.feature--search {
+  padding: 1rem;
+}
+
 .search__form {
   justify-content: space-evenly;
-  padding: 1rem 0;
+  margin: .5rem;
   display: flex;
 }
 
 .search__input {
   text-transform: lowercase;
   border-radius: 5px;
-  width: 50%;
+  width: 48%;
   height: 1.75em;
   padding: .25rem .4rem;
-  font-family: Gameboy;
-  position: relative;
-  left: 1.1rem;
 }
 
 .search__input::placeholder {
   color: var(--secondary-color--grey-gradient);
   text-transform: none;
   padding: 2rem .5rem;
+  font-family: Gameboy, sans-serif;
   font-size: .75rem;
 }
 
@@ -291,8 +294,7 @@ body {
   --btn-bg: linear-gradient(-40deg, var(--secondary-color--blue-gradient--1) 10%, var(--secondary-color--blue) 90%, var(--secondary-color--blue-gradient--2) 100%);
   --btn-shadow: var(--secondary-color--blue-gradient--1);
   --btn-highlight: var(--secondary-color--blue-gradient--2);
-  position: relative;
-  left: 1rem;
+  margin-left: 1.7rem;
 }
 
 .search__btn--arrow {
@@ -305,13 +307,11 @@ body {
   --btn-bg: linear-gradient(-20deg, var(--secondary-color--green-gradient--1) 10%, var(--secondary-color--green) 80%, var(--secondary-color--green-gradient--2) 100%);
   --btn-shadow: var(--secondary-color--green-gradient--1);
   --btn-highlight: var(--secondary-color--green-gradient--2);
-  position: relative;
-  right: 1rem;
 }
 
 .row__search--preview {
   justify-content: space-evenly;
-  padding: 1rem .5rem;
+  padding: 1rem 0;
   display: flex;
 }
 
@@ -328,19 +328,22 @@ body {
   align-items: center;
   width: 7.75rem;
   height: 9.5rem;
+  margin: 0 .6rem;
   padding: 1rem;
-  font-family: Gameboy, sans-serif;
-  transition: background-color .2s;
   display: flex;
 }
 
-.search--preview__id {
-  background: radial-gradient(farthest-corner at 2rem 2rem, var(--secondary-color--red-gradient--1) 60%, var(--secondary-color--red) 80%, var(--secondary-color--red-gradient--2) 97%);
+.pokemon__id {
+  background: radial-gradient(farthest-corner at 2.3rem 2rem, var(--secondary-color--red-gradient--1) 60%, var(--secondary-color--red) 80%, var(--secondary-color--red-gradient--2) 97%);
   color: var(--text--light);
   border: 1px solid var(--secondary-color--red-gradient--2);
-  box-shadow: 1px 1px 8px 3px var(--secondary-color--red-gradient--3);
-  align-self: flex-end;
+  box-shadow: 0px 0px 8px 3px var(--secondary-color--red-gradient--3);
   padding: .5rem .4rem .3rem;
+}
+
+.search--preview__id {
+  box-shadow: 0px 0px 8px 3px var(--secondary-color--red-gradient--3);
+  align-self: flex-end;
   font-size: .5rem;
 }
 
@@ -359,6 +362,7 @@ body {
 .search--preview--active {
   background-color: var(--text--light);
   background-blend-mode: normal;
+  box-shadow: 1px 1px 4px 3px var(--secondary-color--red-gradient--2);
   background-image: url("pokeball-red.0e004c28.svg");
 }
 
@@ -375,7 +379,7 @@ body {
 }
 
 .search--preview__img--active {
-  animation: .5s cubic-bezier(.5, .06, 1, 1) infinite alternate bounce;
+  animation: .3s cubic-bezier(.5, .06, 1, 1) infinite alternate bounce;
 }
 
 @keyframes bounce {
@@ -384,8 +388,198 @@ body {
   }
 
   to {
-    transform: translate3d(0, .25rem, 0);
+    transform: translate3d(0, .275rem, 0);
   }
+}
+
+.panel {
+  color: var(--text--light);
+  padding: 1.5rem;
+}
+
+.panel--about {
+  display: flex;
+}
+
+.panel--about img {
+  background-color: var(--text--light);
+  box-shadow: 3px 3px 6px 4px var(--secondary-color--grey-gradient) inset;
+  border-radius: 5px;
+  width: 10rem;
+  height: 10rem;
+  margin-right: 1.5rem;
+  padding: 1rem;
+}
+
+.panel--about__details {
+  flex-wrap: wrap;
+  display: flex;
+}
+
+.panel--about__details h1 {
+  text-shadow: 3px 2px 4px var(--secondary-color--grey-gradient);
+  align-content: center;
+  padding: .5rem 1rem .25rem 0;
+  font-size: 1.55rem;
+  font-weight: bolder;
+  display: inline-block;
+}
+
+.panel--about__details span {
+  place-content: center flex-end;
+  align-self: center;
+  padding: .5rem .25rem .25rem;
+  font-size: .7rem;
+}
+
+.panel--about__details--desc {
+  box-sizing: border-box;
+  background-color: var(--text--light);
+  color: var(--screen-color--dark);
+  box-shadow: 1px 1px 5px 3px var(--secondary-color--grey-gradient) inset;
+  border-radius: 4px;
+  min-height: 4rem;
+  padding: .5rem;
+  font-size: .75rem;
+}
+
+.panel--about__types {
+  margin: .25rem 0 .3rem;
+}
+
+.panel--about__types span {
+  background-color: none;
+  box-shadow: 0px 0px 3px 2px var(--text--light);
+  border-radius: 4px;
+  margin-right: .75rem;
+  padding: .4rem .75rem .3rem;
+  font-size: .5rem;
+  font-weight: bolder;
+}
+
+.panel--about__measurements {
+  width: 100%;
+  margin: .5rem 0 .4rem;
+  font-size: .9rem;
+  display: flex;
+}
+
+.panel--about__measurements p:first-child, .panel--about__measurements p:last-child {
+  flex-grow: 1;
+  font-size: .6rem;
+}
+
+.panel__label {
+  background-color: var(--text--light);
+  color: var(--screen-color--dark);
+  box-shadow: 0px 1px 2px 2px var(--secondary-color--grey-gradient) inset;
+  border-radius: 5px;
+  padding: .25rem .25rem .15rem;
+}
+
+.panel--abilities {
+  margin: 1.8rem 0 1.5rem;
+  display: flex;
+}
+
+.panel--stats {
+  flex-direction: column;
+  flex-grow: 3;
+  justify-content: space-between;
+  margin-top: .5rem;
+  display: flex;
+}
+
+.panel--stats span {
+  display: inline;
+}
+
+.panel--stats__display {
+  align-items: center;
+  margin-bottom: .9rem;
+  font-size: .85rem;
+  display: flex;
+}
+
+.panel--stats__display p {
+  width: 4.5rem;
+}
+
+.panel--stats__display span {
+  margin-right: 1.5rem;
+  font-size: .6rem;
+}
+
+.panel--stats__display progress {
+  background-color: green;
+  border: 1px solid #141414;
+  border-radius: 2px;
+  width: 14rem;
+  height: .5rem;
+}
+
+.panel--moves {
+  flex-grow: 1;
+  margin-top: .5rem;
+}
+
+.panel--moves img, .panel--stats img {
+  width: 1em;
+  margin-right: .75rem;
+}
+
+.panel--moves h1, .panel--stats h1 {
+  text-shadow: 1px 1px 2px var(--secondary-color--grey);
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.panel--moves p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.panel--moves span {
+  border-radius: 3px;
+  margin-left: 1rem;
+  padding: .5rem .5rem .25rem;
+  font-size: .75rem;
+}
+
+.panel--moves__known {
+  background-color: var(--secondary-color--green);
+  box-shadow: 0px 1px 3px 3px var(--secondary-color--green-gradient--1) inset;
+}
+
+.panel--moves__unknown {
+  background-color: var(--secondary-color--grey-gradient);
+  color: var(--text--light);
+  letter-spacing: .15rem;
+  box-shadow: 0px 0px 3px 1px var(--secondary-color--grey) inset;
+}
+
+.panel--pagination {
+  justify-content: space-between;
+  display: flex;
+}
+
+.panel--pagination button:first-child, .panel--pagination button:last-child {
+  --btn-bg: linear-gradient(-40deg, var(--secondary-color--blue-gradient--1) 10%, var(--secondary-color--blue) 90%, var(--secondary-color--blue-gradient--2) 100%);
+  --btn-shadow: var(--secondary-color--blue-gradient--1);
+  --btn-highlight: var(--secondary-color--blue-gradient--2);
+  color: var(--text--light);
+}
+
+.panel__btn--favorite {
+  --btn-bg: linear-gradient(-40deg, var(--secondary-color--green-gradient--1) 10%, var(--secondary-color--green) 85%, var(--secondary-color--green-gradient--2) 100%);
+  --btn-shadow: var(--secondary-color--green-gradient--1);
+  --btn-highlight: var(--secondary-color--green-gradient--2);
+}
+
+.panel__btn--sighting {
+  --btn-bg: linear-gradient(-20deg, var(--secondary-color--yellow-gradient--1) 2%, var(--secondary-color--yellow) 85%, var(--secondary-color--yellow-gradient--2) 100%);
+  --btn-shadow: var(--secondary-color--yellow-gradient--1);
+  --btn-highlight: var(--secondary-color--yellow-gradient--2);
 }
 
 @media (width <= 992px) {

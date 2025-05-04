@@ -57,43 +57,47 @@
        4) begin developing pokemon search -->
 
       <!-- Screen -->
-      <div class="screen__border">
-        <div class="screen--1">
+      <main class="screen__border">
+        <section class="screen--1">
           <!-- Perspective: Search -->
 
-          <form class="search__form" action="/dummy">
-            <input class="search__input" type="text" placeholder="Search for a Pokémon...">
-            <button class="btn search__btn search__btn--sort">Sort</button>
-            <button class="btn search__btn search__btn--arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-short" viewbox="0 0 16 16">
-                <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"></path>
-              </svg>
-            </button>
-            <button class="btn search__btn search__btn--arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-short" viewbox="0 0 16 16">
-                <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"></path>
-              </svg>
-            </button>
-          </form>
+          <section class="feature--search">
+            <form class="search__form" action="/dummy">
+              <input class="search__input" type="text" placeholder="Search for a Pokémon...">
 
-          <div class="row__search--preview">
-            <div class="search--preview search--preview--active">
-              <span class="search--preview__id search--preview__id--active">10</span><img class="search--preview__img search--preview__img--active" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="">
-              <p class="search--preview__name search--preview__name--active">
-                Bulbasaur
-              </p>
-            </div>
-            <div class="search--preview">
-              <span class="search--preview__id">1000</span><img class="search--preview__img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png" alt="">
-              <p class="search--preview__name">fletchinder</p>
-            </div>
-            <div class="search--preview">
-              <span class="search--preview__id">100</span><img class="search--preview__img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png" alt="">
-              <p class="search--preview__name">Bulbasaur</p>
-            </div>
-          </div>
+              <!-- TODO: Turn Sort button into radio drop down menu to sort by Name and Number -->
 
-          <!-- 
+              <button class="btn search__btn search__btn--sort">Sort</button>
+              <button class="btn search__btn search__btn--arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-short" viewbox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"></path>
+                </svg>
+              </button>
+              <button class="btn search__btn search__btn--arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-down-short" viewbox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"></path>
+                </svg>
+              </button>
+            </form>
+
+            <div class="row__search--preview">
+              <div class="search--preview search--preview--active">
+                <span class="pokemon__id search--preview__id search--preview__id--active">#10</span><img class="search--preview__img search--preview__img--active" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="">
+                <p class="search--preview__name search--preview__name--active">
+                  Bulbasaur
+                </p>
+              </div>
+              <div class="search--preview">
+                <span class="pokemon__id search--preview__id">#1000</span><img class="search--preview__img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png" alt="">
+                <p class="search--preview__name">fletchinder</p>
+              </div>
+              <div class="search--preview">
+                <span class="pokemon__id search--preview__id">#100</span><img class="search--preview__img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png" alt="">
+                <p class="search--preview__name">Bulbasaur</p>
+              </div>
+            </div>
+
+            <!-- 
           1) complete styling the pokemon panels
           2) complete styling the pokemon card result 
           3) wrap in a search perspective container, hide the class
@@ -102,39 +106,136 @@
           
           5) begin developing screen for the profile
           -->
-          <div class="row__search--preview">
-            <div class="search--preview">pokemon</div>
-            <div class="search--preview">pokemon</div>
-            <div class="search--preview">pokemon</div>
-          </div>
+            <div class="row__search--preview">
+              <div class="search--preview">pokemon</div>
+              <div class="search--preview">pokemon</div>
+              <div class="search--preview">pokemon</div>
+            </div>
 
-          <div class="row__search--preview">
-            <div class="search--preview">pokemon</div>
-            <div class="search--preview">pokemon</div>
-            <div class="search--preview">pokemon</div>
-          </div>
+            <div class="row__search--preview">
+              <div class="search--preview">pokemon</div>
+              <div class="search--preview">pokemon</div>
+              <div class="search--preview">pokemon</div>
+            </div>
 
-          <div class="row__search--preview">
-            <div class="search--preview">pokemon</div>
-            <div class="search--preview">pokemon</div>
-            <div class="search--preview">pokemon</div>
-          </div>
-
+            <div class="row__search--preview">
+              <div class="search--preview">pokemon</div>
+              <div class="search--preview">pokemon</div>
+              <div class="search--preview">pokemon</div>
+            </div>
+          </section>
           <!-- Perspective: Map -->
 
           <!-- Perspective: Profile -->
-        </div>
+        </section>
 
         <div class="hinge"></div>
 
-        <div class="screen--2">
+        <section class="screen--2">
           <!-- Perspective: Search -->
+          <section class="panel">
+            <!-- img, name, id, height, weight, desc -->
+            <div class="panel--about">
+              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png" alt="Fletchinder">
+              <div class="panel--about__details">
+                <h1>Fletchinder</h1>
+                <span class="pokemon__id">#1000</span>
+                <div class="panel--about__types">
+                  <span data-type="grass" style="background-color: green">Grass</span><span data-type="poison" style="background-color: purple">Poison</span>
+                </div>
+                <div class="panel--about__measurements">
+                  <p>Height <span class="panel__label">7m</span></p>
+                  <p>Weight <span class="panel__label">600kg</span></p>
+                </div>
+                <p class="panel--about__details--desc">
+                  Obviously prefers\nhot places. When\nit rains, steam\fis said
+                  to spout\nfrom the tip of\nits tail.
+                </p>
+              </div>
+            </div>
+
+            <div class="panel--abilities">
+              <div class="panel--stats">
+                <h1>Base Stats</h1>
+
+                <div class="panel--stats__display">
+                  <p>HP</p>
+                  <span class="panel__label">255</span>
+                  <progress value="25" max="100"></progress>
+                </div>
+                <div class="panel--stats__display">
+                  <p>ATK</p>
+                  <span class="panel__label">255</span>
+                  <progress value="30" max="100"></progress>
+                </div>
+                <div class="panel--stats__display">
+                  <p>DEF</p>
+                  <span class="panel__label">255</span>
+                  <progress value="2" max="100"></progress>
+                </div>
+                <div class="panel--stats__display">
+                  <p>SATK</p>
+                  <span class="panel__label">255</span>
+                  <progress value="80" max="100"></progress>
+                </div>
+                <div class="panel--stats__display">
+                  <p>SDEF</p>
+                  <span class="panel__label">255</span>
+                  <progress value="55" max="100"></progress>
+                </div>
+                <div class="panel--stats__display">
+                  <p>SPO</p>
+                  <span class="panel__label">255</span>
+                  <progress value="23" max="100"></progress>
+                </div>
+              </div>
+
+              <div class="panel--moves">
+                <h1>Moves</h1>
+                <p>1<span class="panel--moves__known">Razor-Wind</span></p>
+
+                <p>2<span class="panel--moves__known">Cut</span></p>
+
+                <p>3<span class="panel--moves__known">Bind</span></p>
+
+                <p>4<span class="panel--moves__known">Vine-Whip</span></p>
+
+                <p>5<span class="panel--moves__known">Tackle</span></p>
+
+                <p>6<span class="panel--moves__unknown">???</span></p>
+              </div>
+            </div>
+            <div class="panel--pagination">
+              <button class="btn panel__btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-left-short" viewbox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"></path>
+                </svg>
+              </button>
+              <button class="btn panel__btn panel__btn--favorite">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-suit-heart-fill" viewbox="0 0 16 16">
+                  <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1"></path>
+                </svg>
+                Favorite
+              </button>
+              <button class="btn panel__btn panel__btn--sighting">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-geo-alt-fill" viewbox="0 0 16 16">
+                  <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"></path>
+                </svg>
+                Log Pokémon Sighting
+              </button>
+              <button class="btn panel__btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-right-short" viewbox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"></path>
+                </svg>
+              </button>
+            </div>
+          </section>
 
           <!-- Perspective: Map -->
 
           <!-- Perspective: Profile -->
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   <script src="/PokeDex.59712999.js"></script></body>
 </html>
