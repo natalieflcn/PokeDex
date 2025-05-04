@@ -61,13 +61,20 @@
         <section class="screen--1">
           <!-- Perspective: Search -->
 
-          <section class="feature--search">
+          <section class="feature__search--1 hidden">
             <form class="search__form" action="/dummy">
               <input class="search__input" type="text" placeholder="Search for a Pokémon...">
 
-              <!-- TODO: Turn Sort button into radio drop down menu to sort by Name and Number -->
+              <div class="sort__dropdown">
+                <button class="btn search__btn search__btn--sort">Sort</button>
+                <div class="sort__options">
+                  <button class="btn search__btn sort__options--name">
+                    Name
+                  </button>
+                  <button class="btn search__btn sort__options--id">ID</button>
+                </div>
+              </div>
 
-              <button class="btn search__btn search__btn--sort">Sort</button>
               <button class="btn search__btn search__btn--arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-up-short" viewbox="0 0 16 16">
                   <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"></path>
@@ -97,15 +104,6 @@
               </div>
             </div>
 
-            <!-- 
-          1) complete styling the pokemon panels
-          2) complete styling the pokemon card result 
-          3) wrap in a search perspective container, hide the class
-          
-          4) begin developing screen for the map 
-          
-          5) begin developing screen for the profile
-          -->
             <div class="row__search--preview">
               <div class="search--preview">pokemon</div>
               <div class="search--preview">pokemon</div>
@@ -124,7 +122,49 @@
               <div class="search--preview">pokemon</div>
             </div>
           </section>
+
           <!-- Perspective: Map -->
+          <section class="feature__map--1">
+            <header class="map__header">
+              <h2>Caught Pokémon</h2>
+              <p><span class="panel__label">25</span>Pokémon Caught</p>
+            </header>
+
+            <div class="map__btn--group">
+              <button>+ Add New Entry</button>
+
+              <div class="sort__dropdown">
+                <button class="btn search__btn search__btn--sort">Sort</button>
+                <div class="sort__options">
+                  <button class="btn search__btn sort__options--name">
+                    Name
+                  </button>
+                  <button class="btn search__btn sort__options--id">ID</button>
+                  <button class="btn search__btn sort__options--name">
+                    Date
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="map__entry">
+              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="">
+              <h2 class="map__entry--name">
+                Bulbasaur<span>#400</span><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewbox="0 0 16 16">
+                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"></path></svg></span>
+              </h2>
+              <span>Grass</span><span>Poison</span>
+              <p>Caught on <span>08/14/25</span>at<span>11:20PM</span></p>
+            </div>
+            <div class="map__entry">
+              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png" alt="">
+              <h2 class="map__entry--name">
+                Bulbasaur<span>#400</span><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewbox="0 0 16 16">
+                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"></path></svg></span>
+              </h2>
+              <span>Grass</span><span>Poison</span>
+              <p>Caught on <span>08/14/25</span>at<span>11:20PM</span></p>
+            </div>
+          </section>
 
           <!-- Perspective: Profile -->
         </section>
@@ -133,12 +173,12 @@
 
         <section class="screen--2">
           <!-- Perspective: Search -->
-          <section class="panel">
+          <section class="feature__search--2 hidden">
             <!-- img, name, id, height, weight, desc -->
             <div class="panel--about">
               <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png" alt="Fletchinder">
               <div class="panel--about__details">
-                <h1>Fletchinder</h1>
+                <h2>Fletchinder</h2>
                 <span class="pokemon__id">#1000</span>
                 <div class="panel--about__types">
                   <span data-type="grass" style="background-color: green">Grass</span><span data-type="poison" style="background-color: purple">Poison</span>
@@ -156,7 +196,7 @@
 
             <div class="panel--abilities">
               <div class="panel--stats">
-                <h1>Base Stats</h1>
+                <h2>Base Stats</h2>
 
                 <div class="panel--stats__display">
                   <p>HP</p>
@@ -191,7 +231,7 @@
               </div>
 
               <div class="panel--moves">
-                <h1>Moves</h1>
+                <h2>Moves</h2>
                 <p>1<span class="panel--moves__known">Razor-Wind</span></p>
 
                 <p>2<span class="panel--moves__known">Cut</span></p>
@@ -221,7 +261,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-geo-alt-fill" viewbox="0 0 16 16">
                   <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"></path>
                 </svg>
-                Log Pokémon Sighting
+                Caught This Pokémon
               </button>
               <button class="btn panel__btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-right-short" viewbox="0 0 16 16">
@@ -232,6 +272,7 @@
           </section>
 
           <!-- Perspective: Map -->
+          <section class="feature__map--2"></section>
 
           <!-- Perspective: Profile -->
         </section>

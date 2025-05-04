@@ -108,7 +108,8 @@ body {
 .hidden {
   display: none;
 }
-/* Styling -- Header */
+
+/* Header */
 .logo {
   font-family: 'Pokemon Solid', sans-serif;
   font-size: 2rem;
@@ -177,7 +178,7 @@ body {
 .search__btn:hover,
 .panel__btn:hover {
   background: var(--btn-highlight);
-  box-shadow: 0px 0px 3px 1.5px var(--btn-shadow);
+  box-shadow: 0px 0px 4px 2px inset var(--btn-shadow);
   color: var(--btn-shadow);
   font-weight: bold;
   cursor: pointer;
@@ -320,21 +321,28 @@ body {
 .screen--1,
 .screen--2 {
   background-color: var(--screen-color--dark);
-  box-shadow: 3px 3px 4px 3px var(--secondary-color--grey-gradient);
+  box-shadow: 0px 4px 4px 3px var(--secondary-color--grey-gradient);
   height: 96%;
   border-radius: 10px;
   width: 47%;
   overflow: scroll;
 }
 
-/* PERSPECTIVE -- Search */
-.feature--search {
-  padding: 1rem;
+.feature__search--1,
+.feature__search--2,
+.feature__map--1,
+.feature__map--2 {
+  padding: 1.5rem;
+  color: var(--text--light);
 }
+
+/* PERSPECTIVE -- Search (Screen 1) */
+
 .search__form {
   display: flex;
   justify-content: space-evenly;
-  margin: 0.5rem;
+
+  /* margin: 0.5rem; */
 }
 
 /* Search Form */
@@ -344,6 +352,7 @@ body {
   width: 48%;
   border-radius: 5px;
   text-transform: lowercase;
+  margin-right: 1.7rem;
 }
 
 .search__input::placeholder {
@@ -368,9 +377,56 @@ body {
   );
   --btn-shadow: var(--secondary-color--blue-gradient--1);
   --btn-highlight: var(--secondary-color--blue-gradient--2);
-  margin-left: 1.7rem;
 }
 
+.sort__dropdown {
+  position: relative;
+  display: flex;
+  transition: hover 0.2s;
+}
+
+/* 1) finalize dropdown menu for sort function
+2_ create map perspective
+3) create profile perspective */
+
+.sort__options {
+  position: absolute;
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+  top: 100%;
+  display: none;
+}
+
+.sort__options > button {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  color: var(--screen-color--dark);
+  border-radius: 0;
+}
+.sort__options--name {
+  --btn-bg: var(--secondary-color--grey);
+  --btn-shadow: var(--secondary-color--grey-gradient);
+  --btn-highlight: var(--text--light);
+  width: 100%;
+}
+
+.sort__options--id {
+  --btn-bg: var(--secondary-color--red-gradient--1);
+  --btn-shadow: var(--secondary-color--red-gradient--1);
+  --btn-highlight: var(--secondary-color--red-gradient--2);
+  width: 100%;
+}
+
+.sort__dropdown:hover .sort__options {
+  display: block;
+  /* border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0; */
+}
+/* 
+.search__btn--sort:hover .sort__options {
+  display: inline;
+} */
 .search__btn--arrow {
   --btn-bg: linear-gradient(
     -40deg,
@@ -415,7 +471,7 @@ body {
   width: 7.75rem;
   border-radius: 5px;
   padding: 1rem;
-  margin: 0rem 0.6rem;
+  margin: 0rem 1rem;
 }
 
 .pokemon__id {
@@ -485,12 +541,7 @@ body {
   }
 }
 
-/* Pokemon Panel Result */
-.panel {
-  /* display: flex; */
-  padding: 1.5rem;
-  color: var(--text--light);
-}
+/* PERSPECTIVE -- Search (Screen 2) */
 
 /* Pokemon Panel -- About */
 .panel--about {
@@ -512,7 +563,8 @@ body {
   flex-wrap: wrap;
 }
 
-.panel--about__details h1 {
+.panel--about__details h2,
+.map__header h2 {
   display: inline-block;
   font-weight: bolder;
   align-content: center;
@@ -539,9 +591,11 @@ body {
   border-radius: 4px;
   padding: 0.5rem;
 }
+
 .panel--about__types {
   margin: 0.25rem 0 0.3rem;
 }
+
 .panel--about__types span {
   font-size: 0.5rem;
   font-weight: bolder;
@@ -565,14 +619,6 @@ body {
   flex-grow: 1;
   font-size: 0.6rem;
 }
-
-/* .panel--about__measurements span {
-  background-color: var(--text--light);
-  color: var(--screen-color--dark);
-  border-radius: 5px;
-  padding: 0.25rem 0.25rem 0.15rem;
-  box-shadow: 0px 1px 2px 2px var(--secondary-color--grey-gradient) inset;
-} */
 
 .panel__label {
   background-color: var(--text--light);
@@ -635,8 +681,8 @@ body {
   width: 1em;
   margin-right: 0.75rem;
 }
-.panel--moves h1,
-.panel--stats h1 {
+.panel--moves h2,
+.panel--stats h2 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
   text-shadow: 1px 1px 2px var(--secondary-color--grey);
@@ -682,7 +728,6 @@ body {
   );
   --btn-shadow: var(--secondary-color--blue-gradient--1);
   --btn-highlight: var(--secondary-color--blue-gradient--2);
-  color: var(--text--light);
 }
 
 .panel__btn--favorite {
@@ -706,6 +751,40 @@ body {
   --btn-shadow: var(--secondary-color--yellow-gradient--1);
   --btn-highlight: var(--secondary-color--yellow-gradient--2);
 }
+
+/* PERSPECTIVE -- Map (Screen 1) */
+
+/* Map Header */
+.map__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.map__header h2 {
+  padding: 0;
+  font-size: 1.6rem;
+}
+
+.map__header p {
+  font-size: 0.75rem;
+  /* background-color: blue; */
+}
+
+.map__header span {
+  position: relative;
+  bottom: 6%;
+  font-size: 0.5rem;
+  margin-right: 0.4rem;
+}
+
+/* Map Button Group -- Add/Sort Entries */
+.map__btn--group {
+  display: flex;
+}
+
+/* PERSPECTIVE -- Map (Screen 2) */
+
 /* Media Queries -- for Tablets, Mobile Devices */
 
 @media (max-width: 992px) {
