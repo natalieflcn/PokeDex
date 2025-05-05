@@ -69,6 +69,25 @@ table {
 
   --screen-color--dark: #242424;
   --text--light: #fff;
+
+  --type--normal: #aaaa99;
+  --type--fire: #bb5544;
+  --type--water: #3399ff;
+  --type--electric: #ffcc33;
+  --type--grass: #78cc55;
+  --type--ice: #66ccff;
+  --type--fighting: #bb5544;
+  --type--poison: #aa5599;
+  --type--ground: #ddbb56;
+  --type--flying: #8899ff;
+  --type--psychic: #8899ff;
+  --type--bug: #abbb23;
+  --type--rock: #bcaa66;
+  --type--ghost: #6666bc;
+  --type--dragon: #7767ee;
+  --type--dark: #765443;
+  --type--steel: #aaaabb;
+  --type--fairy: #ee9aee;
 }
 
 @font-face {
@@ -333,7 +352,9 @@ body {
 .feature__search--1,
 .feature__search--2,
 .feature__map--1,
-.feature__map--2 {
+.feature__map--2,
+.feature__favorites--1,
+.feature__favorites--2 {
   padding: 1.5rem;
   color: var(--text--light);
 }
@@ -355,6 +376,7 @@ body {
   border-radius: 5px;
   text-transform: lowercase;
   margin-right: 1.7rem;
+  font-family: Gameboy, sans-serif;
 }
 
 .search__input::placeholder,
@@ -383,7 +405,7 @@ body {
 }
 
 .search__form label {
-  margin-top: 0.6rem;
+  margin-top: 0.7rem;
   font-size: 0.9rem;
 }
 
@@ -694,12 +716,12 @@ body {
 .panel__btn--favorite {
   --btn-bg: linear-gradient(
     -40deg,
-    var(--secondary-color--green-gradient--1) 10%,
-    var(--secondary-color--green) 85%,
-    var(--secondary-color--green-gradient--2) 100%
+    var(--secondary-color--red-gradient--1) 10%,
+    var(--secondary-color--red) 85%,
+    var(--secondary-color--red-gradient--2) 100%
   );
-  --btn-shadow: var(--secondary-color--green-gradient--1);
-  --btn-highlight: var(--secondary-color--green-gradient--2);
+  --btn-shadow: var(--secondary-color--red-gradient--1);
+  --btn-highlight: var(--secondary-color--red-gradient--2);
 }
 
 .panel__btn--sighting {
@@ -764,16 +786,15 @@ body {
   justify-content: flex-end;
 }
 
-.map__btn--add,
-.map__form--btn {
+.map__btn--id {
   --btn-bg: linear-gradient(
     -20deg,
-    var(--secondary-color--red-gradient--1) 20%,
-    var(--secondary-color--red) 80%,
-    var(--secondary-color--red-gradient--2) 97%
+    var(--secondary-color--yellow-gradient--1) 20%,
+    var(--secondary-color--yellow) 80%,
+    var(--secondary-color--yellow-gradient--2) 97%
   );
-  --btn-highlight: var(--secondary-color--red-gradient--2);
-  --btn-shadow: var(--secondary-color--red-gradient--1);
+  --btn-highlight: var(--secondary-color--yellow-gradient--2);
+  --btn-shadow: var(--secondary-color--yellow-gradient--1);
 }
 
 .map__btn--name {
@@ -787,15 +808,16 @@ body {
   --btn-highlight: var(--secondary-color--blue-gradient--2);
 }
 
-.map__btn--id {
+.map__btn--add,
+.map__form--btn {
   --btn-bg: linear-gradient(
     -20deg,
-    var(--secondary-color--yellow-gradient--1) 2%,
-    var(--secondary-color--yellow) 85%,
-    var(--secondary-color--yellow-gradient--2) 100%
+    var(--secondary-color--red-gradient--1) 2%,
+    var(--secondary-color--red) 85%,
+    var(--secondary-color--red-gradient--2) 100%
   );
-  --btn-shadow: var(--secondary-color--yellow-gradient--1);
-  --btn-highlight: var(--secondary-color--yellow-gradient--2);
+  --btn-shadow: var(--secondary-color--red-gradient--1);
+  --btn-highlight: var(--secondary-color--red-gradient--2);
 }
 
 .map__btn--date {
@@ -814,7 +836,12 @@ body {
   display: flex;
   color: var(--screen-color--dark);
   margin-bottom: 1rem;
-  background-color: var(--secondary-color--grey-gradient);
+  background: linear-gradient(
+    -40deg,
+    var(--secondary-color--red-gradient--1) 10%,
+    var(--secondary-color--red) 85%,
+    var(--secondary-color--red-gradient--2) 100%
+  );
   padding: 0.7rem;
   border-radius: 5px;
   /* overflow-x: hidden; */
@@ -936,6 +963,11 @@ body {
 .map__entry--new {
   display: flex;
   flex-direction: column;
+  background: linear-gradient(
+    10deg,
+    var(--secondary-color--grey) 10%,
+    var(--secondary-color--grey-gradient) 100%
+  );
 }
 
 .map__entry--form {
@@ -985,6 +1017,105 @@ body {
 }
 
 /* PERSPECTIVE -- Map (Screen 2) */
+
+/* PERSPECTIVE -- Profile (Screen 1) */
+
+.favorites__about img {
+  width: 7rem;
+  height: 7rem;
+  margin-bottom: 2rem;
+}
+
+.favorites__labels {
+  display: flex;
+  width: 100%;
+  font-size: 0.6rem;
+  margin: 1rem 0 1rem;
+}
+
+.favorites__label {
+  margin-left: 1rem;
+}
+
+.favorites--about__details {
+  margin-bottom: 2rem;
+}
+/* PERSPECTIVE -- Profile (Screen 2) */
+.favorites__btns {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 1rem;
+}
+
+.favorites__btn {
+  width: 45%;
+  padding: 0.5rem 0.5rem 0.3rem;
+}
+
+.favorites__btn--caught {
+  --btn-bg: linear-gradient(
+    -20deg,
+    var(--secondary-color--yellow-gradient--1) 2%,
+    var(--secondary-color--yellow) 85%,
+    var(--secondary-color--yellow-gradient--2) 100%
+  );
+  --btn-shadow: var(--secondary-color--yellow-gradient--1);
+  --btn-highlight: var(--secondary-color--yellow-gradient--2);
+}
+
+.favorites__btn--favorites {
+  --btn-bg: linear-gradient(
+    -20deg,
+    var(--secondary-color--green-gradient--1) 2%,
+    var(--secondary-color--green) 85%,
+    var(--secondary-color--green-gradient--2) 100%
+  );
+  --btn-shadow: var(--secondary-color--green-gradient--1);
+  --btn-highlight: var(--secondary-color--green-gradient--2);
+}
+
+/* Profile Stats */
+.feature__favorites--1 {
+  overflow: hidden;
+}
+.wrapper--profile__stats {
+  display: flex;
+  margin-top: 0.5rem;
+}
+
+.profile--stats__display {
+  display: flex;
+
+  margin-bottom: 1.25rem;
+  justify-content: space-around;
+}
+
+.profile__types {
+  font-size: 0.5rem;
+  font-weight: bolder;
+  /* margin-right: 0.75rem; */
+  border-radius: 4px;
+  box-shadow: 0px 0px 3px 2px var(--text--light);
+  background-color: green;
+  padding: 0.3rem 0.3rem 0.2rem;
+  color: var(--text--light);
+  width: 4rem;
+  text-align: center;
+}
+
+.profile__label {
+  font-size: 0.5rem;
+}
+.profile--stats__display progress {
+  width: 9rem;
+  height: 0.55rem;
+  position: relative;
+  top: 20%;
+  right: 2%;
+  background-color: green;
+  border-radius: 2px;
+  border: 1px solid rgb(20, 20, 20);
+}
 
 /* Media Queries -- for Tablets, Mobile Devices */
 

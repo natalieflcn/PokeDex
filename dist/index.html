@@ -61,50 +61,16 @@
         <section class="screen--1">
           <!-- Perspective: Search -->
 
-          <section class="feature__search--1">
+          <section class="feature__search--1 hidden">
             <form class="search__form" action="/dummy">
               <input class="search__input" type="text" placeholder="Search for a Pokémon...">
 
               <label>Sort</label>
-              <div class="search__sort">
-                <button class="btn search__btn map__btn map__btn--name">
-                  Name
-                </button>
-                <button class="btn search__btn map__btn map__btn--id">
-                  ID
-                </button>
-              </div>
 
-              <!-- <button class="btn search__btn search__btn--arrow">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="25"
-                  fill="currentColor"
-                  class="bi bi-arrow-up-short"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5"
-                  />
-                </svg>
+              <button class="btn search__btn map__btn map__btn--name">
+                Name
               </button>
-              <button class="btn search__btn search__btn--arrow">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="25"
-                  fill="currentColor"
-                  class="bi bi-arrow-down-short"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"
-                  />
-                </svg>
-              </button> -->
+              <button class="btn search__btn map__btn map__btn--id">ID</button>
             </form>
 
             <div class="row__search--preview">
@@ -223,7 +189,126 @@
             </div>
           </section>
 
-          <!-- Perspective: Profile -->
+          <!-- Perspective: Favorites -->
+          <section class="feature__favorites--1">
+            <div class="panel--about favorites__about">
+              <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ce59ab1e-3349-49ea-a021-e0fc8c0dc054/dau5pmk-ff876a20-b483-4ed0-8968-29b4648e5fe1.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2NlNTlhYjFlLTMzNDktNDllYS1hMDIxLWUwZmM4YzBkYzA1NFwvZGF1NXBtay1mZjg3NmEyMC1iNDgzLTRlZDAtODk2OC0yOWI0NjQ4ZTVmZTEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.vnqf14GGZS1KBdD7b8MbxK4RX957bZwVMIH6PmxCo9I" alt="Fletchinder">
+              <div class="panel--about__details favorites--about__details">
+                <h2>Naty's Pokédex</h2>
+
+                <div class="favorites__labels">
+                  <p class="">
+                    Pokémon Caught<span class="panel__label favorites__label">7m</span>
+                  </p>
+                  <p class="favorites__label">
+                    Pokémon Favorited<span class="panel__label favorites__label">60</span>
+                  </p>
+                </div>
+                <p class="panel--about__details--desc">
+                  Obviously prefers\nhot places. When\nit rains, steam\fis said
+                  to spout\nfrom the tip of\nits tail.
+                </p>
+              </div>
+            </div>
+            <h2>Types of Pokémon Caught</h2>
+            <div class="wrapper--profile__stats">
+              <div class="panel--stats">
+                <div class="profile--stats__display">
+                  <p class="profile__types">Normal</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="25" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Fire</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="30" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Water</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="2" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Electric</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="80" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Grass</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="55" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Ice</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="23" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Fighting</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="23" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Poison</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="23" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Ground</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="23" max="100"></progress>
+                </div>
+              </div>
+
+              <div class="panel--stats">
+                <div class="profile--stats__display">
+                  <p class="profile__types">Flying</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="25" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Psychic</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="30" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Bug</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="2" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Rock</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="80" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Ghost</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="55" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Dragon</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="23" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Dark</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="23" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Steel</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="23" max="100"></progress>
+                </div>
+                <div class="profile--stats__display">
+                  <p class="profile__types">Fairy</p>
+                  <span class="panel__label profile__label">255</span>
+                  <progress value="23" max="100"></progress>
+                </div>
+              </div>
+            </div>
+          </section>
         </section>
 
         <div class="hinge"></div>
@@ -329,9 +414,64 @@
           </section>
 
           <!-- Perspective: Map -->
-          <section class="feature__map--2"></section>
+          <section class="feature__map--2 hidden"></section>
 
           <!-- Perspective: Profile -->
+          <section class="feature__favorites--2">
+            <div class="favorites__btns">
+              <button class="btn search__btn favorites__btn favorites__btn--caught">
+                Caught
+              </button>
+              <button class="btn search__btn favorites__btn favorites__btn--favorites">
+                Favorites
+              </button>
+            </div>
+            <form class="search__form" action="/dummy">
+              <input class="search__input" type="text" placeholder="Search for a Pokémon...">
+
+              <label>Sort</label>
+
+              <button class="btn search__btn map__btn map__btn--name">
+                Name
+              </button>
+              <button class="btn search__btn map__btn map__btn--id">ID</button>
+            </form>
+
+            <div class="row__search--preview">
+              <div class="search--preview search--preview--active">
+                <span class="pokemon__id search--preview__id search--preview__id--active">#10</span><img class="search--preview__img search--preview__img--active" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="">
+                <p class="search--preview__name search--preview__name--active">
+                  Bulbasaur
+                </p>
+              </div>
+              <div class="search--preview">
+                <span class="pokemon__id search--preview__id">#1000</span><img class="search--preview__img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png" alt="">
+                <p class="search--preview__name">fletchinder</p>
+              </div>
+              <div class="search--preview">
+                <span class="pokemon__id search--preview__id">#100</span><img class="search--preview__img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png" alt="">
+                <p class="search--preview__name">Bulbasaur</p>
+              </div>
+            </div>
+
+            <div class="row__search--preview">
+              <div class="search--preview">pokemon</div>
+              <div class="search--preview">pokemon</div>
+              <div class="search--preview">pokemon</div>
+            </div>
+
+            <div class="row__search--preview">
+              <div class="search--preview">pokemon</div>
+              <div class="search--preview">pokemon</div>
+              <div class="search--preview">pokemon</div>
+            </div>
+
+            <div class="row__search--preview">
+              <div class="search--preview">pokemon</div>
+              <div class="search--preview">pokemon</div>
+              <div class="search--preview">pokemon</div>
+            </div>
+          </section>
         </section>
       </main>
     </div>
