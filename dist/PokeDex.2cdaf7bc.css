@@ -94,7 +94,7 @@ body {
 }
 
 .container {
-  height: 93vh;
+  height: 45rem;
   margin: 1rem;
 }
 
@@ -321,18 +321,6 @@ body {
   font-size: .9rem;
 }
 
-.search__btn--arrow {
-  --btn-bg: linear-gradient(-40deg, var(--secondary-color--yellow-gradient--1) 10%, var(--secondary-color--yellow) 85%, var(--secondary-color--yellow-gradient--2) 100%);
-  --btn-shadow: var(--secondary-color--yellow-gradient--1);
-  --btn-highlight: var(--secondary-color--yellow-gradient--2);
-}
-
-.search__btn--arrow:last-child {
-  --btn-bg: linear-gradient(-20deg, var(--secondary-color--green-gradient--1) 10%, var(--secondary-color--green) 80%, var(--secondary-color--green-gradient--2) 100%);
-  --btn-shadow: var(--secondary-color--green-gradient--1);
-  --btn-highlight: var(--secondary-color--green-gradient--2);
-}
-
 .row__search--preview {
   justify-content: space-evenly;
   padding: 1rem 0;
@@ -540,11 +528,6 @@ body {
 .panel--moves {
   flex-grow: 1;
   margin-top: .5rem;
-}
-
-.panel--moves img, .panel--stats img {
-  width: 1em;
-  margin-right: .75rem;
 }
 
 .panel--moves h2, .panel--stats h2 {
@@ -861,33 +844,6 @@ body {
   margin-bottom: 2rem;
 }
 
-.favorites__btns {
-  justify-content: space-evenly;
-  margin-bottom: 1rem;
-  display: flex;
-}
-
-.favorites__btn {
-  width: 45%;
-  padding: .5rem .5rem .3rem;
-}
-
-.favorites__btn--caught {
-  --btn-bg: linear-gradient(-20deg, var(--secondary-color--yellow-gradient--1) 2%, var(--secondary-color--yellow) 85%, var(--secondary-color--yellow-gradient--2) 100%);
-  --btn-shadow: var(--secondary-color--yellow-gradient--1);
-  --btn-highlight: var(--secondary-color--yellow-gradient--2);
-}
-
-.favorites__btn--favorites {
-  --btn-bg: linear-gradient(-20deg, var(--secondary-color--green-gradient--1) 2%, var(--secondary-color--green) 85%, var(--secondary-color--green-gradient--2) 100%);
-  --btn-shadow: var(--secondary-color--green-gradient--1);
-  --btn-highlight: var(--secondary-color--green-gradient--2);
-}
-
-.feature__favorites--1 {
-  overflow: hidden;
-}
-
 .wrapper--profile__stats {
   margin-top: .5rem;
   display: flex;
@@ -924,6 +880,29 @@ body {
   position: relative;
   top: 20%;
   right: 2%;
+}
+
+.favorites__btns {
+  justify-content: space-evenly;
+  margin-bottom: 1rem;
+  display: flex;
+}
+
+.favorites__btn {
+  width: 45%;
+  padding: .5rem .5rem .3rem;
+}
+
+.favorites__btn--caught {
+  --btn-bg: linear-gradient(-20deg, var(--secondary-color--yellow-gradient--1) 2%, var(--secondary-color--yellow) 85%, var(--secondary-color--yellow-gradient--2) 100%);
+  --btn-shadow: var(--secondary-color--yellow-gradient--1);
+  --btn-highlight: var(--secondary-color--yellow-gradient--2);
+}
+
+.favorites__btn--favorites {
+  --btn-bg: linear-gradient(-20deg, var(--secondary-color--green-gradient--1) 2%, var(--secondary-color--green) 85%, var(--secondary-color--green-gradient--2) 100%);
+  --btn-shadow: var(--secondary-color--green-gradient--1);
+  --btn-highlight: var(--secondary-color--green-gradient--2);
 }
 
 @media (width <= 992px) {

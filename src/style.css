@@ -114,7 +114,7 @@ body {
 
 .container {
   margin: 1rem;
-  height: 93vh;
+  height: 45rem;
 }
 
 .header {
@@ -409,28 +409,6 @@ body {
   font-size: 0.9rem;
 }
 
-.search__btn--arrow {
-  --btn-bg: linear-gradient(
-    -40deg,
-    var(--secondary-color--yellow-gradient--1) 10%,
-    var(--secondary-color--yellow) 85%,
-    var(--secondary-color--yellow-gradient--2) 100%
-  );
-  --btn-shadow: var(--secondary-color--yellow-gradient--1);
-  --btn-highlight: var(--secondary-color--yellow-gradient--2);
-}
-
-.search__btn--arrow:last-child {
-  --btn-bg: linear-gradient(
-    -20deg,
-    var(--secondary-color--green-gradient--1) 10%,
-    var(--secondary-color--green) 80%,
-    var(--secondary-color--green-gradient--2) 100%
-  );
-  --btn-shadow: var(--secondary-color--green-gradient--1);
-  --btn-highlight: var(--secondary-color--green-gradient--2);
-}
-
 /* Pokemon Search Preview Results */
 .row__search--preview {
   display: flex;
@@ -659,11 +637,11 @@ body {
   margin-top: 0.5rem;
 }
 
-.panel--moves img,
+/* .panel--moves img,
 .panel--stats img {
   width: 1em;
   margin-right: 0.75rem;
-}
+} */
 .panel--moves h2,
 .panel--stats h2 {
   font-size: 1.25rem;
@@ -934,8 +912,6 @@ body {
 
 .sort__dropdown:hover .sort__options {
   display: block;
-  /* border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0; */
 }
 
 .map__entry--types {
@@ -1040,44 +1016,9 @@ body {
 .favorites--about__details {
   margin-bottom: 2rem;
 }
-/* PERSPECTIVE -- Profile (Screen 2) */
-.favorites__btns {
-  display: flex;
-  justify-content: space-evenly;
-  margin-bottom: 1rem;
-}
-
-.favorites__btn {
-  width: 45%;
-  padding: 0.5rem 0.5rem 0.3rem;
-}
-
-.favorites__btn--caught {
-  --btn-bg: linear-gradient(
-    -20deg,
-    var(--secondary-color--yellow-gradient--1) 2%,
-    var(--secondary-color--yellow) 85%,
-    var(--secondary-color--yellow-gradient--2) 100%
-  );
-  --btn-shadow: var(--secondary-color--yellow-gradient--1);
-  --btn-highlight: var(--secondary-color--yellow-gradient--2);
-}
-
-.favorites__btn--favorites {
-  --btn-bg: linear-gradient(
-    -20deg,
-    var(--secondary-color--green-gradient--1) 2%,
-    var(--secondary-color--green) 85%,
-    var(--secondary-color--green-gradient--2) 100%
-  );
-  --btn-shadow: var(--secondary-color--green-gradient--1);
-  --btn-highlight: var(--secondary-color--green-gradient--2);
-}
 
 /* Profile Stats */
-.feature__favorites--1 {
-  overflow: hidden;
-}
+
 .wrapper--profile__stats {
   display: flex;
   margin-top: 0.5rem;
@@ -1115,6 +1056,40 @@ body {
   background-color: green;
   border-radius: 2px;
   border: 1px solid rgb(20, 20, 20);
+}
+
+/* PERSPECTIVE -- Profile (Screen 2) */
+.favorites__btns {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 1rem;
+}
+
+.favorites__btn {
+  width: 45%;
+  padding: 0.5rem 0.5rem 0.3rem;
+}
+
+.favorites__btn--caught {
+  --btn-bg: linear-gradient(
+    -20deg,
+    var(--secondary-color--yellow-gradient--1) 2%,
+    var(--secondary-color--yellow) 85%,
+    var(--secondary-color--yellow-gradient--2) 100%
+  );
+  --btn-shadow: var(--secondary-color--yellow-gradient--1);
+  --btn-highlight: var(--secondary-color--yellow-gradient--2);
+}
+
+.favorites__btn--favorites {
+  --btn-bg: linear-gradient(
+    -20deg,
+    var(--secondary-color--green-gradient--1) 2%,
+    var(--secondary-color--green) 85%,
+    var(--secondary-color--green-gradient--2) 100%
+  );
+  --btn-shadow: var(--secondary-color--green-gradient--1);
+  --btn-highlight: var(--secondary-color--green-gradient--2);
 }
 
 /* Media Queries -- for Tablets, Mobile Devices */
