@@ -177,6 +177,15 @@ body {
   color: var(--secondary-color--grey-gradient);
 }
 
+.dropdown {
+  position: relative;
+  transition: hover 0.2s;
+}
+
+.dropdown:hover .map__dropdown {
+  display: block;
+}
+
 .pokemon__id {
   background: radial-gradient(
     farthest-corner at 2.3rem 2rem,
@@ -257,6 +266,14 @@ body {
 }
 
 .btn--grey {
+  --btn-bg: linear-gradient(
+    -40deg,
+    var(--secondary-color--grey-gradient) 10%,
+    var(--secondary-color--grey) 85%,
+    var(--text--light) 100%
+  );
+  --btn-shadow: var(--secondary-color--grey-gradient);
+  --btn-highlight: var(--text--light);
 }
 
 .btn--sort {
@@ -278,7 +295,7 @@ body {
 .search__btn:hover,
 .panel__btn:hover,
 .map__form--btn:hover,
-.sort__dropdown:hover .map__entry--options,
+.dropdown:hover .map__entry--options,
 .btn--red:hover,
 .btn--blue:hover,
 .btn--yellow:hover,
@@ -692,93 +709,45 @@ body {
   margin-bottom: 1rem;
 }
 
-.map__header h2 {
+.map__header .heading {
   padding: 0;
-  font-size: 1.6rem;
 }
 
 .map__header p {
   font-size: 0.75rem;
-  /* background-color: blue; */
 }
 
-.map__header span {
+.map__header--summary {
   position: relative;
   bottom: 9%;
   font-size: 0.5rem;
   margin-right: 0.6rem;
 }
 
-/* Map Button Group -- Add/Sort Entries */
-.map__btn--group {
+.map__btns {
   display: flex;
   justify-content: space-between;
   position: relative;
   margin-bottom: 1rem;
 }
 
-.map__btn--group label {
-  align-content: center;
-  font-size: 0.9rem;
+.map__btns label {
   position: absolute;
-  height: 100%;
   top: 5%;
   left: 52%;
+  align-content: center;
+  height: 100%;
+  font-size: 0.9rem;
 }
 
-.map__sort {
+.map__btns--sort {
   justify-content: flex-end;
-}
-
-.map__btn--id {
-  --btn-bg: linear-gradient(
-    -20deg,
-    var(--secondary-color--yellow-gradient--1) 20%,
-    var(--secondary-color--yellow) 80%,
-    var(--secondary-color--yellow-gradient--2) 97%
-  );
-  --btn-highlight: var(--secondary-color--yellow-gradient--2);
-  --btn-shadow: var(--secondary-color--yellow-gradient--1);
-}
-
-.map__btn--name {
-  --btn-bg: linear-gradient(
-    -40deg,
-    var(--secondary-color--blue-gradient--1) 10%,
-    var(--secondary-color--blue) 90%,
-    var(--secondary-color--blue-gradient--2) 100%
-  );
-  --btn-shadow: var(--secondary-color--blue-gradient--1);
-  --btn-highlight: var(--secondary-color--blue-gradient--2);
-}
-
-.map__btn--add,
-.map__form--btn {
-  --btn-bg: linear-gradient(
-    -20deg,
-    var(--secondary-color--red-gradient--1) 2%,
-    var(--secondary-color--red) 85%,
-    var(--secondary-color--red-gradient--2) 100%
-  );
-  --btn-shadow: var(--secondary-color--red-gradient--1);
-  --btn-highlight: var(--secondary-color--red-gradient--2);
-}
-
-.map__btn--date {
-  --btn-bg: linear-gradient(
-    -40deg,
-    var(--secondary-color--green-gradient--1) 10%,
-    var(--secondary-color--green) 85%,
-    var(--secondary-color--green-gradient--2) 100%
-  );
-  --btn-shadow: var(--secondary-color--green-gradient--1);
-  --btn-highlight: var(--secondary-color--green-gradient--2);
 }
 
 /* Map Entries */
 .map__entry {
   display: flex;
-  color: var(--screen-color--dark);
+  padding: 0.7rem;
   margin-bottom: 1rem;
   background: linear-gradient(
     -40deg,
@@ -786,20 +755,27 @@ body {
     var(--secondary-color--red) 85%,
     var(--secondary-color--red-gradient--2) 100%
   );
-  padding: 0.7rem;
+  color: var(--screen-color--dark);
   border-radius: 5px;
-  /* overflow-x: hidden; */
+}
+
+.map__entry img {
+  padding: 0.25rem;
+  margin-right: 1rem;
+  border-radius: 3px;
+  background-color: var(--text--light);
+  box-shadow: 2px 3px 6px 3px inset var(--screen-color--dark);
 }
 
 .map__entry--details {
   display: flex;
-  background-color: var(--text--light);
-  border-radius: 3px;
-  box-shadow: 2px 3px 6px 3px inset var(--screen-color--dark);
-  padding: 1rem;
   flex-direction: column;
-  width: 80%;
   position: relative;
+  padding: 1rem;
+  width: 80%;
+  border-radius: 3px;
+  background-color: var(--text--light);
+  box-shadow: 2px 3px 6px 3px inset var(--screen-color--dark);
 }
 
 .map__entry--header {
@@ -809,24 +785,15 @@ body {
 }
 
 .map__entry--name {
-  margin-top: 0.2rem;
-  font-weight: bold;
+  margin: 0.2rem 0 0.1rem;
   font-size: 1.4rem;
-  margin-bottom: 0.1rem;
-}
-
-.map__entry img {
-  background-color: var(--text--light);
-  margin-right: 1rem;
-  border-radius: 3px;
-  box-shadow: 2px 3px 6px 3px inset var(--screen-color--dark);
-  padding: 0.25rem;
+  font-weight: bold;
 }
 
 .map__entry--id {
-  padding: 0.25rem 0.2rem 0.2rem;
-  margin-left: 0.5rem;
   position: absolute;
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.2rem 0.2rem;
 }
 
 .map__entry--options {
@@ -838,48 +805,24 @@ body {
   border-color: var(--screen-color--dark);
 }
 
-.map__entry--types p {
-  margin-right: 0.75rem;
-}
-
-.sort__dropdown {
-  position: relative;
-  transition: hover 0.2s;
-}
-
-.sort__options {
+.map__dropdown {
+  display: none;
   position: absolute;
   top: 100%;
   right: 1%;
-  display: none;
-  background-color: green;
-  flex-direction: column;
 }
 
-.sort__options > button {
-  font-size: 0.5rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+.map__dropdown > button {
+  padding: 0.5rem 0 0.5rem;
   width: 7rem;
+  font-size: 0.5rem;
   line-height: 0.8rem;
-  color: var(--screen-color--dark);
   border-radius: 0;
+  color: var(--screen-color--dark);
 }
 
-.sort__options--name {
-  --btn-bg: var(--secondary-color--grey);
-  --btn-shadow: var(--secondary-color--grey-gradient);
-  --btn-highlight: var(--text--light);
-}
-
-.sort__options--id {
-  --btn-bg: var(--secondary-color--red-gradient--1);
-  --btn-shadow: var(--secondary-color--red-gradient--1);
-  --btn-highlight: var(--secondary-color--red-gradient--2);
-}
-
-.sort__dropdown:hover .sort__options {
-  display: block;
+.map__entry--types p {
+  margin-right: 0.75rem;
 }
 
 .map__entry--types {
@@ -899,8 +842,8 @@ body {
 
 .map__entry--timestamp span {
   margin: 0rem 0.7rem;
-  color: var(--primary-color);
   text-shadow: 1px 1px 1px var(--secondary-color--grey);
+  color: var(--primary-color);
 }
 
 /* Adding a New Entry */

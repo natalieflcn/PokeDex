@@ -19,9 +19,9 @@
       <header class="header">
         <h1 class="header__logo">Pokédex</h1>
 
-        <!-- Buttons -->
+        <!-- Nav Buttons -->
         <nav>
-          <!-- Desktop Nav Buttons -->
+          <!-- Desktop Buttons -->
           <button
             class="btn header__btn header__btn--search btn--blue btn--active"
           >
@@ -31,7 +31,9 @@
           <button class="btn header__btn header--profile btn--green">
             Profile
           </button>
+
           <!-- Tablet Icon Buttons -->
+
           <!-- Mobile Hamburger Button -->
           <button class="btn header__btn header__btn--mobile btn--blue hidden">
             <svg
@@ -74,13 +76,13 @@
        1) REFACTOR HTML and CSS Classes
        2) Begin to plan user stories, flowcharts, and project architecture
        3) Brainstorm structure of modules with JS2
+    -->
 
       <!-- Screen -->
       <main class="screen__border">
         <section class="screen__1">
           <!-- Perspective: Search -->
-
-          <section class="screen__1--search">
+          <section class="screen__1--search hidden">
             <form class="form search__form" action="/dummy">
               <input
                 class="input search__input"
@@ -89,9 +91,8 @@
               />
 
               <label>Sort</label>
-
-              <button class="btn search__btn--name map__btn--name">Name</button>
-              <button class="btn search__btn--id map__btn--id">ID</button>
+              <button class="btn search__btn--name btn--blue">Name</button>
+              <button class="btn search__btn--id btn--yellow">ID</button>
             </form>
 
             <div class="search__preview--row">
@@ -126,20 +127,23 @@
           </section>
 
           <!-- Perspective: Map -->
-          <section class="screen__1--map hidden">
+          <section class="screen__1--map">
             <header class="map__header">
               <h2 class="heading">Caught Pokémon</h2>
-              <p><span class="label--inset">25</span>Pokémon Caught</p>
+              <p>
+                <span class="map__header--summary label--inset">25</span>Pokémon
+                Caught
+              </p>
             </header>
 
-            <div class="map__btn--group">
-              <button class="btn map__btn--add">+ Add New Entry</button>
+            <div class="map__btns">
+              <button class="btn btn--red">+ Add New Entry</button>
 
               <label>Sort</label>
-              <div class="map__sort">
-                <button class="btn map__btn--name">Name</button>
-                <button class="btn map__btn--id">ID</button>
-                <button class="btn map__btn--date">Date</button>
+              <div class="map__btns--sort">
+                <button class="btn map__btn--name btn--blue">Name</button>
+                <button class="btn map__btn--id btn--yellow">ID</button>
+                <button class="btn map__btn--date btn--green">Date</button>
               </div>
             </div>
 
@@ -166,7 +170,7 @@
                   <input class="input map__form--input" type="time" />
                 </div>
               </form>
-              <button class="btn map__form--btn">Log Entry</button>
+              <button class="btn map__btn--submit btn--red">Log Entry</button>
             </div>
 
             <div class="map__entry">
@@ -174,15 +178,16 @@
                 src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
                 alt=""
               />
+
               <div class="map__entry--details">
-                <div class="map__entry--header">
+                <header class="map__entry--header">
                   <h2 class="map__entry--name">
                     Bulbasaur<span class="map__entry--id pokemon__id"
                       >#400</span
                     >
                   </h2>
 
-                  <div class="sort__dropdown">
+                  <div class="dropdown">
                     <button class="map__entry--options">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -197,21 +202,22 @@
                         />
                       </svg>
                     </button>
-                    <div class="sort__options">
-                      <button class="btn sort__options--name">
+                    <div class="map__dropdown">
+                      <button class="btn map__dropdown--edit btn--grey">
                         Edit Log Entry
                       </button>
-                      <button class="btn sort__options--id">
+                      <button class="btn map__dropdown--delete btn--red">
                         Delete Log Entry
                       </button>
                     </div>
                   </div>
-                </div>
+                </header>
 
                 <div class="map__entry--types">
                   <p class="pokemon__type">Grass</p>
                   <p class="pokemon__type">Poison</p>
                 </div>
+
                 <div class="map__entry--timestamp">
                   <p>Caught on<span>08/14/25</span>at<span>11:20AM</span></p>
                 </div>
@@ -358,7 +364,7 @@
                 src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png"
                 alt="Fletchinder"
               />
-              <div class="search__panel--header">
+              <header class="search__panel--header">
                 <h2 class="heading">
                   Fletchinder<span class="pokemon__id">#1000</span>
                 </h2>
@@ -385,7 +391,7 @@
                   Obviously prefers\nhot places. When\nit rains, steam\fis said
                   to spout\nfrom the tip of\nits tail.
                 </p>
-              </div>
+              </header>
             </div>
 
             <div class="search__abilities">
