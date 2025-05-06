@@ -123,11 +123,23 @@ body {
   font-size: .75rem;
 }
 
+.pokemon__id {
+  background: radial-gradient(farthest-corner at 2.3rem 2rem, var(--secondary-color--red-gradient--1) 60%, var(--secondary-color--red) 80%, var(--secondary-color--red-gradient--2) 97%);
+  color: var(--text--light);
+  border: 1px solid var(--secondary-color--red-gradient--2);
+  box-shadow: 0px 0px 8px 3px var(--secondary-color--red-gradient--3);
+  align-content: center;
+  padding: .5rem .4rem .3rem;
+  font-size: .5rem;
+}
+
 .btn {
   background: var(--btn-bg);
   color: var(--text--light);
   border-radius: .3rem;
+  padding: .5rem .5rem .3rem;
   font-family: Gameboy, sans-serif;
+  font-size: .75rem;
 }
 
 .btn--blue {
@@ -316,30 +328,19 @@ body {
   padding: .25rem .4rem;
 }
 
-.search__btn {
-  padding: 0 .5rem;
-  font-size: .75rem;
-}
-
-.search__btn--sort {
-  --btn-bg: linear-gradient(-40deg, var(--secondary-color--blue-gradient--1) 10%, var(--secondary-color--blue) 90%, var(--secondary-color--blue-gradient--2) 100%);
-  --btn-shadow: var(--secondary-color--blue-gradient--1);
-  --btn-highlight: var(--secondary-color--blue-gradient--2);
-}
-
-.row__search--preview {
+.search__preview--row {
   justify-content: space-evenly;
   padding: 1rem 0;
   display: flex;
 }
 
-.search--preview {
-  background-color: var(--secondary-color--grey);
-  background-blend-mode: soft-light;
-  background-image: url("pokeball.f74292ea.svg");
+.search__preview {
   background-position: 20% 25%;
   background-repeat: no-repeat;
   background-size: 40%;
+  background-color: var(--secondary-color--grey);
+  background-blend-mode: soft-light;
+  background-image: url("pokeball.f74292ea.svg");
   border-radius: 5px;
   flex-direction: column;
   justify-content: space-between;
@@ -351,25 +352,15 @@ body {
   display: flex;
 }
 
-.pokemon__id {
-  background: radial-gradient(farthest-corner at 2.3rem 2rem, var(--secondary-color--red-gradient--1) 60%, var(--secondary-color--red) 80%, var(--secondary-color--red-gradient--2) 97%);
-  color: var(--text--light);
-  border: 1px solid var(--secondary-color--red-gradient--2);
-  box-shadow: 0px 0px 8px 3px var(--secondary-color--red-gradient--3);
-  padding: .5rem .4rem .3rem;
-}
-
-.search--preview__id {
-  box-shadow: 0px 0px 8px 3px var(--secondary-color--red-gradient--3);
+.search__preview--id {
   align-self: flex-end;
-  font-size: .5rem;
 }
 
-.search--preview__name {
+.search__preview--name {
+  box-shadow: 1px 1px 2px 2px var(--screen-color--dark) inset;
   background-color: var(--secondary-color--grey-gradient);
   color: var(--text--light);
   text-shadow: 2px 2px 2px var(--secondary-color--grey-gradient);
-  box-shadow: 1px 1px 2px 2px var(--screen-color--dark) inset;
   border-radius: 3px;
   margin-top: .5rem;
   padding: .6rem .6rem .4rem;
@@ -377,26 +368,26 @@ body {
   font-weight: bold;
 }
 
-.search--preview--active {
+.search__preview--active {
   background-color: var(--text--light);
   background-blend-mode: normal;
-  box-shadow: 1px 1px 4px 3px var(--secondary-color--red-gradient--2);
+  box-shadow: 0px 0px 4px 3px var(--secondary-color--red-gradient--2);
   background-image: url("pokeball-red.0e004c28.svg");
 }
 
-.search--preview__id--active {
+.search__preview--active .search__preview--id {
   border: 1px solid var(--secondary-color--red-gradient--1);
-  box-shadow: 1px 1px 4px 3px var(--secondary-color--red-gradient--2);
+  box-shadow: 0px 0px 3px 3px var(--secondary-color--red-gradient--2);
 }
 
-.search--preview__name--active {
+.search__preview--active .search__preview--name {
   background-color: var(--secondary-color--grey);
   box-shadow: 1px 1px 2px 2px var(--screen-color--dark);
   text-shadow: none;
   color: var(--screen-color--dark);
 }
 
-.search--preview__img--active {
+.search__preview--active .search__preview--img {
   animation: .3s cubic-bezier(.5, .06, 1, 1) infinite alternate bounce;
 }
 
@@ -627,10 +618,6 @@ body {
   left: 52%;
 }
 
-.map__btn {
-  padding: .5rem .5rem .3rem;
-}
-
 .map__sort {
   justify-content: flex-end;
 }
@@ -701,10 +688,8 @@ body {
 }
 
 .map__entry--id {
-  align-content: center;
   margin-left: .5rem;
   padding: .25rem .2rem .2rem;
-  font-size: .5rem;
   position: absolute;
 }
 
