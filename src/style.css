@@ -20,6 +20,7 @@ time, mark, audio, video {
   font: inherit;
   vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 /* prettier-ignore */
 article, aside, details, figcaption, figure, 
@@ -70,6 +71,15 @@ table {
   --screen-color--dark: #242424;
   --text--light: #fff;
 
+  /* Gradients */
+  --linear-gradient--blue: linear-gradient(
+    -40deg,
+    var(--secondary-color--blue-gradient--1) 10%,
+    var(--secondary-color--blue) 90%,
+    var(--secondary-color--blue-gradient--2) 100%
+  );
+
+  /* Pokémon Types */
   --type--normal: #aaaa99;
   --type--fire: #bb5544;
   --type--water: #3399ff;
@@ -90,6 +100,7 @@ table {
   --type--fairy: #ee9aee;
 }
 
+/* Custom Fonts */
 @font-face {
   font-family: Gameboy;
   src: url('fonts/gameboy-font.ttf');
@@ -100,14 +111,13 @@ table {
   src: url('fonts/pokemon-font.ttf');
 }
 
-/* Formatting */
+/* General Formatting */
 html {
   box-sizing: border-box;
   overflow: hidden;
 }
 
 body {
-  background-repeat: no-repeat;
   background-color: var(--primary-color);
   font-family: Gameboy, sans-serif;
 }
@@ -117,48 +127,43 @@ body {
   height: 45rem;
 }
 
-.header {
+/* Reusable Components */
+.form {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-  border-image: 1px solid black;
+  justify-content: space-evenly;
 }
 
-.hidden {
-  display: none;
+.form label {
+  margin-top: 0.7rem;
+  font-size: 0.9rem;
 }
 
-/* Header */
-.logo {
-  font-family: 'Pokemon Solid', sans-serif;
-  font-size: 2rem;
-  color: var(--text--light);
-  letter-spacing: 0.15rem;
-  text-shadow: 3px 4px 2px var(--secondary-color--red-gradient--3);
+.input {
+  height: 1.75em;
+  border-radius: 5px;
+  font-family: Gameboy, sans-serif;
+  text-transform: lowercase;
 }
 
-/* Menu Buttons */
+.input::placeholder {
+  padding: 2rem 0.5rem;
+  font-family: Gameboy, sans-serif;
+  font-size: 0.75rem;
+  text-transform: none;
+  color: var(--secondary-color--grey-gradient);
+}
+
 .btn {
+  font-family: Gameboy, sans-serif;
   border-radius: 0.3rem;
   background: var(--btn-bg);
   color: var(--text--light);
-  transition: background-color 0.2s, box-shadow 0.2s;
-  font-family: Gameboy, sans-serif;
 }
 
-.menu__btn {
-  padding: 0.5rem 1rem;
-  margin-left: 0.6rem;
-  border: none;
-  box-shadow: 2px 3px 5px 3px var(--secondary-color--red-gradient--3);
+.btn--red {
 }
 
-.menu__btn:first-child {
-  margin-left: none;
-}
-
-/* Desktop Menu Buttons */
-.menu__btn--search {
+.btn--blue {
   --btn-bg: linear-gradient(
     -40deg,
     var(--secondary-color--blue-gradient--1) 10%,
@@ -169,18 +174,7 @@ body {
   --btn-highlight: var(--secondary-color--blue-gradient--2);
 }
 
-.menu__btn--map {
-  --btn-bg: linear-gradient(
-    -40deg,
-    var(--secondary-color--yellow-gradient--1) 10%,
-    var(--secondary-color--yellow) 85%,
-    var(--secondary-color--yellow-gradient--2) 100%
-  );
-  --btn-shadow: var(--secondary-color--yellow-gradient--1);
-  --btn-highlight: var(--secondary-color--yellow-gradient--2);
-}
-
-.menu__btn--profile {
+.btn--green {
   --btn-bg: linear-gradient(
     -20deg,
     var(--secondary-color--green-gradient--1) 10%,
@@ -191,13 +185,44 @@ body {
   --btn-highlight: var(--secondary-color--green-gradient--2);
 }
 
+.btn--yellow {
+  --btn-bg: linear-gradient(
+    -40deg,
+    var(--secondary-color--yellow-gradient--1) 10%,
+    var(--secondary-color--yellow) 85%,
+    var(--secondary-color--yellow-gradient--2) 100%
+  );
+  --btn-shadow: var(--secondary-color--yellow-gradient--1);
+  --btn-highlight: var(--secondary-color--yellow-gradient--2);
+}
+
+.btn--grey {
+}
+
+.btn--sort {
+}
+.btn--active {
+  font-weight: bold;
+  background: var(--btn-highlight);
+  color: var(--btn-shadow);
+  box-shadow: 0px 0px 4px 2px inset var(--btn-shadow);
+  cursor: pointer;
+}
+
+.btn--options {
+}
+
 /* Button States */
 .menu__btn:hover,
-.menu__btn--active,
+.btn--active,
 .search__btn:hover,
 .panel__btn:hover,
 .map__form--btn:hover,
-.sort__dropdown:hover .map__entry--options {
+.sort__dropdown:hover .map__entry--options,
+.btn--red:hover,
+.btn--blue:hover,
+.btn--yellow:hover,
+.btn--green:hover {
   background: var(--btn-highlight);
   box-shadow: 0px 0px 4px 2px inset var(--btn-shadow);
   color: var(--btn-shadow);
@@ -205,11 +230,35 @@ body {
   cursor: pointer;
 }
 
-/* Mobile Menu Button */
-.menu__btn--mobile {
-  --btn-bg: var(--secondary-color--blue);
-  --btn-shadow: var(--secondary-color--blue-gradient--1);
-  --btn-highlight: var(--secondary-color--blue-gradient--2);
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  border-image: 1px solid black;
+  color: var(--text--light);
+}
+
+.header__logo {
+  font-family: 'Pokemon Solid', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.15rem;
+  text-shadow: 3px 4px 2px var(--secondary-color--red-gradient--3);
+}
+
+.header__btn {
+  margin-left: 0.6rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  box-shadow: 2px 3px 5px 3px var(--secondary-color--red-gradient--3);
+  transition: background-color 0.1s, box-shadow 0.5s;
+}
+
+.header__btn:first-child {
+  margin-left: none;
+}
+
+.header__btn--mobile {
   padding: 0.2rem 0.3rem 0 0.3rem;
 }
 
@@ -219,8 +268,10 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.light__outer {
+.lights__outer {
   position: relative;
+  width: 2.5rem;
+  height: 2.5rem;
   margin-right: 0.5rem;
   border-radius: 50%;
   background-image: radial-gradient(
@@ -228,25 +279,23 @@ body {
     var(--secondary-color--grey-gradient) 60%,
     var(--secondary-color--grey) 90%
   );
-  width: 2.5rem;
-  height: 2.5rem;
 }
 
-.light__inner {
+.lights__inner {
+  box-sizing: border-box;
   width: 1.1rem;
   height: 1.1rem;
+  margin-right: 0.5rem;
   border: 0.05rem solid var(--screen-color--dark);
   border-radius: 50%;
-  margin-right: 0.5rem;
-  box-sizing: border-box;
 }
 
-.light--blue {
+.lights__inner--blue {
   position: absolute;
-  width: 2.1rem;
-  height: 2.1rem;
   top: 50%;
   left: 50%;
+  width: 2.1rem;
+  height: 2.1rem;
   transform: translate(-50%, -50%);
   border: 0.115rem solid var(--secondary-color--blue-gradient--1);
   background-image: radial-gradient(
@@ -255,44 +304,44 @@ body {
     var(--secondary-color--blue) 70%,
     var(--secondary-color--blue-gradient--2) 85%
   );
-  --btn-highlight: var(--secondary-color--blue-gradient--2);
+  --lights-highlight: var(--secondary-color--blue-gradient--2);
 }
 
-.light--red {
+.lights__inner--red {
   background-image: radial-gradient(
     farthest-corner at 2rem 2rem,
     var(--secondary-color--red-gradient--1) 60%,
     var(--secondary-color--red) 80%,
     var(--secondary-color--red-gradient--2) 97%
   );
-  --btn-highlight: var(--secondary-color--red-gradient--2);
+  --lights-highlight: var(--secondary-color--red-gradient--2);
 }
 
-.light--yellow {
+.lights__inner--yellow {
   background-image: radial-gradient(
     farthest-corner at 2rem 2rem,
     var(--secondary-color--yellow-gradient--1) 60%,
     var(--secondary-color--yellow) 80%,
     var(--secondary-color--yellow-gradient--2) 97%
   );
-  --btn-highlight: var(--secondary-color--yellow-gradient--2);
+  --lights-highlight: var(--secondary-color--yellow-gradient--2);
 }
 
-.light--green {
+.lights__inner--green {
   background-image: radial-gradient(
     farthest-corner at 2rem 2rem,
     var(--secondary-color--green-gradient--1) 60%,
     var(--secondary-color--green) 80%,
     var(--secondary-color--green-gradient--2) 97%
   );
-  --btn-highlight: var(--secondary-color--green-gradient--2);
+  --lights-highlight: var(--secondary-color--green-gradient--2);
 }
 
-.light--active {
-  border: 1px solid var(--btn-highlight);
+.lights__inner--active {
+  border: 1px solid var(--lights-highlight);
 }
 
-/* Frame */
+/* Divider */
 .divider {
   display: flex;
   position: relative;
@@ -300,25 +349,27 @@ body {
   opacity: 90%;
 }
 
-.divider--diagonal {
-  width: 10em;
+.divider__diagonal,
+.divider__top {
   height: 2rem;
   transform: skew(-50deg);
+}
+
+.divider__diagonal {
+  width: 10em;
   border-right: 5px solid var(--secondary-color--red-gradient--3);
   border-bottom: 3px solid var(--secondary-color--red-gradient--3);
 }
 
-.divider--top {
+.divider__top {
   width: 100%;
-  height: 2rem;
-  transform: skew(-50deg);
   border-top: 3px solid var(--secondary-color--red-gradient--3);
 }
 
-.hinge {
+.divider__hinge {
   display: flex;
-  position: absolute;
   flex-direction: column;
+  position: absolute;
   width: 3%;
   height: 100%;
   left: 48.5%;
@@ -328,19 +379,19 @@ body {
 /* Screen */
 .screen__border {
   display: flex;
-  position: relative;
-  background-color: var(--secondary-color--grey);
-  border-radius: 5px;
-  width: 100%;
-  height: 85%;
   justify-content: space-between;
   align-items: center;
+  position: relative;
   box-sizing: border-box;
+  width: 100%;
+  height: 85%;
   padding: 0.5rem 1.25rem;
+  border-radius: 5px;
+  background-color: var(--secondary-color--grey);
 }
 
-.screen--1,
-.screen--2 {
+.screen__1,
+.screen__2 {
   background-color: var(--screen-color--dark);
   box-shadow: 0px 4px 4px 3px var(--secondary-color--grey-gradient);
   height: 96%;
@@ -349,43 +400,22 @@ body {
   overflow: scroll;
 }
 
-.feature__search--1,
-.feature__search--2,
-.feature__map--1,
-.feature__map--2,
-.feature__favorites--1,
-.feature__favorites--2 {
+.screen__1--search,
+.screen__2--search,
+.screen__1--map,
+.screen__2--map,
+.screen__1--profile,
+.screen__2--profile {
   padding: 1.5rem;
   color: var(--text--light);
 }
 
-/* PERSPECTIVE -- Search (Screen 1) */
-
-.search__form {
-  display: flex;
-  justify-content: space-evenly;
-
-  /* margin: 0.5rem; */
-}
-
-/* Search Form */
+/* Search (Screen 1) */
 .search__input {
   padding: 0.25rem 0.4rem;
   height: 1.75em;
   width: 48%;
-  border-radius: 5px;
-  text-transform: lowercase;
   margin-right: 1.7rem;
-  font-family: Gameboy, sans-serif;
-}
-
-.search__input::placeholder,
-.map__form--input::placeholder {
-  font-family: Gameboy, sans-serif;
-  font-size: 0.75rem;
-  color: var(--secondary-color--grey-gradient);
-  padding: 2rem 0.5rem;
-  text-transform: none;
 }
 
 .search__btn {
@@ -404,10 +434,10 @@ body {
   --btn-highlight: var(--secondary-color--blue-gradient--2);
 }
 
-.search__form label {
+/* .search__form label {
   margin-top: 0.7rem;
   font-size: 0.9rem;
-}
+} */
 
 /* Pokemon Search Preview Results */
 .row__search--preview {
@@ -966,13 +996,8 @@ body {
 
 .map__form--input {
   padding: 0.2rem 0.4rem 0.1rem;
-  height: 1.75em;
   width: 30%;
-  border-radius: 5px;
-  text-transform: lowercase;
-
   margin-bottom: 0.4rem;
-  font-family: 'Gameboy', sans-serif;
   font-size: 0.7rem;
 }
 
@@ -1090,6 +1115,11 @@ body {
   );
   --btn-shadow: var(--secondary-color--green-gradient--1);
   --btn-highlight: var(--secondary-color--green-gradient--2);
+}
+
+/* Utility Classes */
+.hidden {
+  display: none;
 }
 
 /* Media Queries -- for Tablets, Mobile Devices */

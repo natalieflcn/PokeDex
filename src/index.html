@@ -17,19 +17,23 @@
     <div class="container">
       <!-- Header -->
       <header class="header">
-        <h1 class="logo">Pokédex</h1>
+        <h1 class="header__logo">Pokédex</h1>
 
         <!-- Buttons -->
         <nav>
           <!-- Desktop Nav Buttons -->
-          <button class="btn menu__btn menu__btn--search menu__btn--active">
+          <button
+            class="btn header__btn header__btn--search btn--blue btn--active"
+          >
             Search
           </button>
-          <button class="btn menu__btn menu__btn--map">Map</button>
-          <button class="btn menu__btn menu__btn--profile">Profile</button>
+          <button class="btn header__btn header--map btn--yellow">Map</button>
+          <button class="btn header__btn header--profile btn--green">
+            Profile
+          </button>
           <!-- Tablet Icon Buttons -->
           <!-- Mobile Hamburger Button -->
-          <button class="btn menu__btn menu__btn--mobile hidden">
+          <button class="btn header__btn header__btn--mobile btn--blue hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -48,20 +52,22 @@
       </header>
 
       <div class="lights">
-        <div class="light__outer">
-          <div class="light__inner light--blue light--active"></div>
+        <div class="lights__outer">
+          <div
+            class="lights__inner lights__inner--blue lights__inner--active"
+          ></div>
         </div>
 
-        <div class="light__inner light--red"></div>
+        <div class="lights__inner lights__inner--red"></div>
 
-        <div class="light__inner light--yellow"></div>
+        <div class="lights__inner lights__inner--yellow"></div>
 
-        <div class="light__inner light--green"></div>
+        <div class="lights__inner lights__inner--green"></div>
       </div>
 
       <div class="divider">
-        <div class="divider--diagonal"></div>
-        <div class="divider--top"></div>
+        <div class="divider__diagonal"></div>
+        <div class="divider__top"></div>
       </div>
 
       <!-- To Do List
@@ -71,13 +77,13 @@
 
       <!-- Screen -->
       <main class="screen__border">
-        <section class="screen--1">
+        <section class="screen__1">
           <!-- Perspective: Search -->
 
-          <section class="feature__search--1">
-            <form class="search__form" action="/dummy">
+          <section class="screen__1--search">
+            <form class="form search__form" action="/dummy">
               <input
-                class="search__input"
+                class="input search__input"
                 type="text"
                 placeholder="Search for a Pokémon..."
               />
@@ -144,7 +150,7 @@
           </section>
 
           <!-- Perspective: Map -->
-          <section class="feature__map--1 hidden">
+          <section class="screen__1--map hidden">
             <header class="map__header">
               <h2>Caught Pokémon</h2>
               <p><span class="panel__label">25</span>Pokémon Caught</p>
@@ -174,22 +180,22 @@
                 <div class="map__form--row">
                   <label for="Name">Name</label>
                   <input
-                    class="map__form--input"
+                    class="input map__form--input"
                     type="text"
                     placeholder="Pokémon Name"
                   />
                   <label for="ID">ID</label>
                   <input
-                    class="map__form--input"
+                    class="input map__form--input"
                     type="number"
                     placeholder="Pokémon ID"
                   />
                 </div>
                 <div class="map__form--row">
                   <label for="Date">Date</label>
-                  <input class="map__form--input" type="date" />
+                  <input class="input map__form--input" type="date" />
                   <label for="Time">Time</label>
-                  <input class="map__form--input" type="time" />
+                  <input class="input map__form--input" type="time" />
                 </div>
               </form>
               <button class="btn map__form--btn">Log Entry</button>
@@ -209,7 +215,7 @@
                   </h2>
 
                   <div class="sort__dropdown">
-                    <button class="search__btn map__entry--options">
+                    <button class="map__entry--options">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="13"
@@ -246,7 +252,7 @@
           </section>
 
           <!-- Perspective: Favorites -->
-          <section class="feature__favorites--1 hidden">
+          <section class="screen__1--profile hidden">
             <div class="panel--about favorites__about">
               <img
                 src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ce59ab1e-3349-49ea-a021-e0fc8c0dc054/dau5pmk-ff876a20-b483-4ed0-8968-29b4648e5fe1.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2NlNTlhYjFlLTMzNDktNDllYS1hMDIxLWUwZmM4YzBkYzA1NFwvZGF1NXBtay1mZjg3NmEyMC1iNDgzLTRlZDAtODk2OC0yOWI0NjQ4ZTVmZTEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.vnqf14GGZS1KBdD7b8MbxK4RX957bZwVMIH6PmxCo9I"
@@ -374,11 +380,11 @@
           </section>
         </section>
 
-        <div class="hinge"></div>
+        <div class="divider__hinge"></div>
 
-        <section class="screen--2">
+        <section class="screen__2">
           <!-- Perspective: Search -->
-          <section class="feature__search--2">
+          <section class="screen__2--search hidden">
             <!-- img, name, id, height, weight, desc -->
             <div class="panel--about">
               <img
@@ -522,10 +528,10 @@
           </section>
 
           <!-- Perspective: Map -->
-          <section class="feature__map--2 hidden"></section>
+          <section class="screen__2--map hidden"></section>
 
           <!-- Perspective: Profile -->
-          <section class="feature__favorites--2 hidden">
+          <section class="screen__2--profile">
             <div class="favorites__btns">
               <button
                 class="btn search__btn favorites__btn favorites__btn--caught"
@@ -538,9 +544,9 @@
                 Favorites
               </button>
             </div>
-            <form class="search__form" action="/dummy">
+            <form class="form" action="/dummy">
               <input
-                class="search__input"
+                class="input search__input"
                 type="text"
                 placeholder="Search for a Pokémon..."
               />
