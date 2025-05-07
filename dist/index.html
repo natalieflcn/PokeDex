@@ -55,26 +55,22 @@
         <div class="divider__top"></div>
       </div>
 
-      <!-- To Do List
-       1) REFACTOR HTML and CSS Classes
-       2) Begin to plan user stories, flowcharts, and project architecture
-       3) Brainstorm structure of modules with JS2
-    -->
-
       <!-- Screen -->
       <main class="screen__border">
         <section class="screen__1">
           <!-- Perspective: Search -->
-          <section class="screen__1--search hidden">
-            <form class="form search__form" action="/dummy">
-              <input class="input search__input" type="text" placeholder="Search for a Pokémon...">
+          <section class="screen__1--search">
+            <form class="form search__form" action="/dummy" method="POST">
+              <input class="input search__input" type="text" name="search-query" id="search-query" placeholder="Search for a Pokémon...">
 
-              <label>Sort</label>
-              <button class="btn search__btn--name btn--blue">Name</button>
-              <button class="btn search__btn--id btn--yellow">ID</button>
+              <div class="search__form--sort">
+                <label>Sort</label>
+                <button class="btn search__btn--name btn--blue">Name</button>
+                <button class="btn search__btn--id btn--yellow">ID</button>
+              </div>
             </form>
 
-            <div class="search__preview--row">
+            <div class="search__preview--container">
               <div class="search__preview search__preview--active">
                 <span class="pokemon__id search__preview--id">#10</span><img class="search__preview--img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="">
                 <p class="search__preview--name">Bulbasaur</p>
@@ -83,15 +79,11 @@
                 <span class="pokemon__id search__preview--id">#1000</span><img class="search__preview--img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png" alt="">
                 <p class="search__preview--name">fletchinder</p>
               </div>
-              <div class="search__preview">
-                <span class="pokemon__id search__preview--id">#100</span><img class="search__preview--img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png" alt="">
-                <p class="search__preview--name">Bulbasaur</p>
-              </div>
             </div>
           </section>
 
           <!-- Perspective: Map -->
-          <section class="screen__1--map">
+          <section class="screen__1--map hidden">
             <header class="map__header">
               <h2 class="heading">Caught Pokémon</h2>
               <p>
@@ -112,25 +104,25 @@
             </div>
 
             <div class="map__entry map__entry--new">
-              <form class="map__entry--form" action="">
+              <form class="map__form" action="/" method="POST">
                 <div class="map__form--row">
-                  <label for="Name">Name</label>
-                  <input class="input map__form--input" type="text" placeholder="Pokémon Name">
-                  <label for="ID">ID</label>
-                  <input class="input map__form--input" type="number" placeholder="Pokémon ID">
+                  <label for="name">Name</label>
+                  <input class="input map__input" type="text" name="pokemon-name" id="pokemon-name" placeholder="Pokémon Name">
+                  <label for="id">ID</label>
+                  <input class="input map__input" type="number" name="pokemon-id" id="pokemon-id" placeholder="Pokémon ID">
                 </div>
                 <div class="map__form--row">
-                  <label for="Date">Date</label>
-                  <input class="input map__form--input" type="date">
-                  <label for="Time">Time</label>
-                  <input class="input map__form--input" type="time">
+                  <label for="date">Date</label>
+                  <input class="input map__input" type="date" name="date" id="date">
+                  <label for="time">Time</label>
+                  <input class="input map__input" type="time" name="time" id="time">
                 </div>
               </form>
               <button class="btn map__btn--submit btn--red">Log Entry</button>
             </div>
 
             <div class="map__entry">
-              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="">
+              <img class="map__entry--img img__display" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="">
 
               <div class="map__entry--details">
                 <header class="map__entry--header">
@@ -156,8 +148,12 @@
                 </header>
 
                 <div class="map__entry--types">
-                  <p class="pokemon__type">Grass</p>
-                  <p class="pokemon__type">Poison</p>
+                  <p class="profile__stats--type pokemon__type" data-type="">
+                    Grass
+                  </p>
+                  <p class="profile__stats--type pokemon__type" data-type="">
+                    Poison
+                  </p>
                 </div>
 
                 <div class="map__entry--timestamp">
@@ -169,120 +165,158 @@
 
           <!-- Perspective: Favorites -->
           <section class="screen__1--profile hidden">
-            <div class="panel--about favorites__about">
-              <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ce59ab1e-3349-49ea-a021-e0fc8c0dc054/dau5pmk-ff876a20-b483-4ed0-8968-29b4648e5fe1.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2NlNTlhYjFlLTMzNDktNDllYS1hMDIxLWUwZmM4YzBkYzA1NFwvZGF1NXBtay1mZjg3NmEyMC1iNDgzLTRlZDAtODk2OC0yOWI0NjQ4ZTVmZTEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.vnqf14GGZS1KBdD7b8MbxK4RX957bZwVMIH6PmxCo9I" alt="Fletchinder">
-              <div class="panel--about__details favorites--about__details">
-                <h2>Naty's Pokédex</h2>
+            <header class="profile__header">
+              <img class="profile__img img__display" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ce59ab1e-3349-49ea-a021-e0fc8c0dc054/dau5pmk-ff876a20-b483-4ed0-8968-29b4648e5fe1.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2NlNTlhYjFlLTMzNDktNDllYS1hMDIxLWUwZmM4YzBkYzA1NFwvZGF1NXBtay1mZjg3NmEyMC1iNDgzLTRlZDAtODk2OC0yOWI0NjQ4ZTVmZTEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.vnqf14GGZS1KBdD7b8MbxK4RX957bZwVMIH6PmxCo9I" alt="Fletchinder">
+              <div class="profile__header--details">
+                <h2 class="heading">Naty's Pokédex</h2>
 
-                <div class="favorites__labels">
-                  <p class="">
-                    Pokémon Caught<span class="label--inset favorites__label">7m</span>
+                <div class="profile__header--labels">
+                  <p class="profile__header--label">
+                    Pokémon Caught<span class="profile__header--label label--inset">7m</span>
                   </p>
-                  <p class="favorites__label">
-                    Pokémon Favorited<span class="label--inset favorites__label">60</span>
+                  <p class="profile__header--label">
+                    Pokémon Favorited<span class="profile__header--label label--inset">60</span>
                   </p>
                 </div>
-                <p class="search__panel--bio">
+
+                <p class="profile__header--bio bio">
                   Obviously prefers\nhot places. When\nit rains, steam\fis said
                   to spout\nfrom the tip of\nits tail.
                 </p>
               </div>
-            </div>
+            </header>
+
             <h2>Types of Pokémon Caught</h2>
-            <div class="wrapper--profile__stats">
-              <div class="panel--stats">
-                <div class="profile--stats__display">
-                  <p class="profile__types">Normal</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="25" max="100"></progress>
+            <div class="profile__stats">
+              <div class="profile__stats--column">
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="normal">
+                    Normal
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="25" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Fire</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="30" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="fire">
+                    Fire
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="30" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Water</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="2" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="water">
+                    Water
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="2" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Electric</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="80" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="electric">
+                    Electric
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="80" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Grass</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="55" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="grass">
+                    Grass
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="55" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Ice</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="23" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="ice">
+                    Ice
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="23" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Fighting</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="23" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="fighting">
+                    Fighting
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="23" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Poison</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="23" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="poison">
+                    Poison
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="23" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Ground</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="23" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="ground">
+                    Ground
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="23" max="100"></progress>
                 </div>
               </div>
 
-              <div class="panel--stats">
-                <div class="profile--stats__display">
-                  <p class="profile__types">Flying</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="25" max="100"></progress>
+              <div class="profile__stats--column">
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="flying">
+                    Flying
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="25" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Psychic</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="30" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="psychic">
+                    Psychic
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="30" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Bug</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="2" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="bug">
+                    Bug
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="2" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Rock</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="80" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="rock">
+                    Rock
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="80" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Ghost</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="55" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="ghost">
+                    Ghost
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="55" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Dragon</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="23" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="dragon">
+                    Dragon
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="23" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Dark</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="23" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="dark">
+                    Dark
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="23" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Steel</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="23" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="steel">
+                    Steel
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="23" max="100"></progress>
                 </div>
-                <div class="profile--stats__display">
-                  <p class="profile__types">Fairy</p>
-                  <span class="label--inset profile__label">255</span>
-                  <progress value="23" max="100"></progress>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="fairy">
+                    Fairy
+                  </p>
+                  <span class="profile__label label--inset">255</span>
+                  <progress class="profile__progress" value="23" max="100"></progress>
                 </div>
               </div>
             </div>
@@ -295,21 +329,21 @@
           <!-- Perspective: Search -->
           <section class="screen__2--search">
             <div class="search__panel">
-              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png" alt="Fletchinder">
+              <img class="img__display" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png" alt="Fletchinder">
               <header class="search__panel--header">
                 <h2 class="heading">
                   Fletchinder<span class="pokemon__id">#1000</span>
                 </h2>
 
                 <div class="search__panel--types">
-                  <span class="pokemon__type" data-type="grass" style="background-color: green">Grass</span><span class="pokemon__type" data-type="poison" style="background-color: purple">Poison</span>
+                  <span class="profile__stats--type pokemon__type" data-type="" style="background-color: green">Grass</span><span class="profile__stats--type pokemon__type" data-type="" style="background-color: purple">Poison</span>
                 </div>
 
                 <div class="search__panel--measurements">
                   <p>Height <span class="label--inset">7m</span></p>
                   <p>Weight <span class="label--inset">600kg</span></p>
                 </div>
-                <p class="search__panel--bio">
+                <p class="search__panel--bio bio">
                   Obviously prefers\nhot places. When\nit rains, steam\fis said
                   to spout\nfrom the tip of\nits tail.
                 </p>
@@ -322,32 +356,32 @@
                 <div class="search__stats--row">
                   <p>HP</p>
                   <span class="label--inset">255</span>
-                  <progress value="25" max="100"></progress>
+                  <progress class="profile__progress" value="25" max="100"></progress>
                 </div>
                 <div class="search__stats--row">
                   <p>ATK</p>
                   <span class="label--inset">255</span>
-                  <progress value="30" max="100"></progress>
+                  <progress class="profile__progress" value="30" max="100"></progress>
                 </div>
                 <div class="search__stats--row">
                   <p>DEF</p>
                   <span class="label--inset">255</span>
-                  <progress value="2" max="100"></progress>
+                  <progress class="profile__progress" value="2" max="100"></progress>
                 </div>
                 <div class="search__stats--row">
                   <p>SATK</p>
                   <span class="label--inset">255</span>
-                  <progress value="80" max="100"></progress>
+                  <progress class="profile__progress" value="80" max="100"></progress>
                 </div>
                 <div class="search__stats--row">
                   <p>SDEF</p>
                   <span class="label--inset">255</span>
-                  <progress value="55" max="100"></progress>
+                  <progress class="profile__progress" value="55" max="100"></progress>
                 </div>
                 <div class="search__stats--row">
                   <p>SPO</p>
                   <span class="label--inset">255</span>
-                  <progress value="23" max="100"></progress>
+                  <progress class="profile__progress" value="23" max="100"></progress>
                 </div>
               </div>
 
@@ -398,40 +432,45 @@
 
           <!-- Perspective: Profile -->
           <section class="screen__2--profile hidden">
-            <div class="favorites__btns">
-              <button class="btn favorites__btn favorites__btn--caught">
+            <div class="profile__categories">
+              <button class="btn profile__btn--caught btn--green">
                 Caught
               </button>
-              <button class="btn favorites__btn favorites__btn--favorites">
+              <button class="btn profile__btn--favorites btn--red">
                 Favorites
               </button>
             </div>
-            <form class="form" action="/dummy">
-              <input class="input search__input" type="text" placeholder="Search for a Pokémon...">
+
+            <form class="form profile__form" action="/dummy" method="POST">
+              <input class="input profile__input" type="text" name="profile-query" id="profile-query" placeholder="Search for a Pokémon...">
 
               <label>Sort</label>
 
-              <button class="btn map__btn--name">Name</button>
-              <button class="btn map__btn--id">ID</button>
+              <button class="btn profile__btn--name btn--blue">Name</button>
+              <button class="btn profile__btn--id btn--yellow">ID</button>
             </form>
 
-            <div class="search__preview--row">
-              <div class="search__preview search--preview--active">
-                <span class="pokemon__id search__preview--id">#10</span><img class="search__preview--img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="">
-                <p class="search__preview--name">Bulbasaur</p>
+            <div class="profile__preview--container">
+              <div class="profile__preview profile__preview--active">
+                <span class="pokemon__id profile__preview--id">#10</span><img class="profile__preview--img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="">
+                <p class="profile__preview--name">Bulbasaur</p>
               </div>
-              <div class="search__preview">
-                <span class="pokemon__id search__preview--id">#1000</span><img class="search__preview--img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png" alt="">
-                <p class="search__preview--name">fletchinder</p>
+              <div class="profile__preview">
+                <span class="pokemon__id profile__preview--id">#1000</span><img class="profile__preview--img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png" alt="">
+                <p class="profile__preview--name">fletchinder</p>
               </div>
-              <div class="search__preview">
-                <span class="pokemon__id search__preview--id">#100</span><img class="search__preview--img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png" alt="">
-                <p class="search__preview--name">Bulbasaur</p>
+              <div class="profile__preview">
+                <span class="pokemon__id profile__preview--id">#100</span><img class="profile__preview--img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png" alt="">
+                <p class="profile__preview--name">Bulbasaur</p>
               </div>
             </div>
           </section>
         </section>
       </main>
+      <footer>
+        <div class="divider__footer"></div>
+        <p>Pokédex Created By <bold>Natalie Falcon</bold> &copy;</p>
+      </footer>
     </div>
   <script src="/PokeDex.59712999.js"></script></body>
 </html>
