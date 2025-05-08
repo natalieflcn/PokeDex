@@ -130,7 +130,7 @@
 
   // Only insert newRequire.load when it is actually used.
   // The code in this file is linted against ES5, so dynamic import is not allowed.
-  // INSERT_LOAD_HERE
+  function $parcel$resolve(url) {  url = importMap[url] || url;  return import.meta.resolve(distDir + url);}newRequire.resolve = $parcel$resolve;
 
   Object.defineProperty(newRequire, 'root', {
     get: function () {
@@ -668,56 +668,77 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"7dWZ8":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-var _model = require("./model");
-var _searchView = require("./Views/searchView");
-var _searchViewDefault = parcelHelpers.interopDefault(_searchView);
-// const y = model.loadSearchResults('1');
-_model.loadPokemon(1).then((res)=>console.log(res));
-// y.then(res => console.log(res));
+var _modelJs = require("./model.js");
+var _searchViewJs = require("./Views/searchView.js");
+var _searchViewJsDefault = parcelHelpers.interopDefault(_searchViewJs);
+var _panelViewJs = require("./Views/panelView.js");
+var _panelViewJsDefault = parcelHelpers.interopDefault(_panelViewJs);
 // const x = function () {
 //   console.log(document.querySelector('.search__input').value);
 // };
 // document.querySelector('.search__input').addEventListener('input', x);
-const controlPokemonSearch = async function() {
-    document.querySelector('.screen__2--search').innerHTML = '';
+const controlPokemonPanel = async function() {
+    try {
+        (0, _panelViewJsDefault.default).renderSpinner();
+        // const id = window.location.hash.slice(1);
+        // if (!id) return;
+        // Update searchResultsView to highlight active search result (screen 1)
+        // Load Pokémon (data) panel details
+        await _modelJs.loadPokemon(1);
+        // Render Pokémon panel (screen 2)
+        (0, _panelViewJsDefault.default).render(_modelJs.state.pokemon);
+    } catch (err) {
+        console.error(err);
+    }
 };
+document.addEventListener('DOMContentLoaded', function() {
+    controlPokemonPanel();
+});
 const controlSearchResults = async function() {
     try {
-        const query = (0, _searchViewDefault.default).query();
+        const query = (0, _searchViewJsDefault.default).query();
         if (!query) return;
         console.log(query);
     } catch (err) {
         console.error(err);
     }
-};
-const init = function() {
-    (0, _searchViewDefault.default).addHandlerSearch(controlSearchResults);
-};
-init(); /**
- * Pokemon Name (https://pokeapi.co/api/v2/pokemon-form/1/ --> "name":"bulbasaur"
- *
- * Image -- Pokemon Visual (https://pokeapi.co/api/v2/pokemon-form/1/ --> "front_default":"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
- *
- * ID -- Number in Pokedex (https://pokeapi.co/api/v2/pokemon-form/1/ --> "id":1
- *
- * Types -- 1 or 2 (https://pokeapi.co/api/v2/pokemon-form/1/ --> "types":[{"slot":1,"type":{"name":"grass","url":"https://pokeapi.co/api/v2/type/12/"}},{"slot":2,"type":{"name":"poison","url":"https://pokeapi.co/api/v2/type/4/"}}]
- *
- * Description -- of Pokemon --> https://pokeapi.co/api/v2/pokemon-species/1 --> "flavor_text_entries":[{"flavor_text":"Obviously prefers\nhot places. When\nit rains, steam\fis said to spout\nfrom the tip of\nits tail.","language":{"name":"en","url":"https://pokeapi.co/api/v2/language/9/"}
- *
- * Height -- https://pokeapi.co/api/v2/pokemon/1/ --> "height":7
- *
- * Weight -- https://pokeapi.co/api/v2/pokemon/1/ --> "weight":69
- *
- 
- *
- * Moves -- 3 moves? -- https://pokeapi.co/api/v2/pokemon/1/ --> "moves":[{"move":{"name":"razor-wind","url":"https://pokeapi.co/api/v2/move/13/"},"version_group_details":[{"level_learned_at":0,"move_learn_method":{"name":"egg","url":"https://pokeapi.co/api/v2/move-learn-method/2/"},"order":null,"version_group":{"name":"gold-silver","url":"https://pokeapi.co/api/v2/version-group/3/"}},{"level_learned_at":0,"move_learn_method":{"name":"egg","url":"https://pokeapi.co/api/v2/move-learn-method/2/"},"order":null,"version_group":{"name":"crystal","url":"https://pokeapi.co/api/v2/version-group/4/"}}]},{"move":{"name":"swords-dance","url":"https://pokeapi.co/api/v2/move/14/"},"version_group_details":[{"level_learned_at":0,"move_learn_method":{"name":"machine","url":"https://pokeapi.co/api/v2/move-learn-method/4/"},"order":null,"version_group":{"name":"red-blue","url":"https://pokeapi.co/api/v2/version-group/1/"}},{"level_learned_at":0,"move_learn_method":{"name":"machine","url":"https://pokeapi.co/api/v2/move-learn-method/4/"}
- *
- * https://pokeapi.co/api/v2/move/{id or name}/ --> Pokemon Move Type
- *
- * Base Stats -- HP, ATK, DEF, SATK, SDEF, SPO -- https://pokeapi.co/api/v2/pokemon/1/ -->  "stats":[{"base_stat":45,"effort":0,"stat":{"name":"hp","url":"https://pokeapi.co/api/v2/stat/1/"}},{"base_stat":49,"effort":0,"stat":{"name":"attack","url":"https://pokeapi.co/api/v2/stat/2/"}},{"base_stat":49,"effort":0,"stat":{"name":"defense","url":"https://pokeapi.co/api/v2/stat/3/"}},{"base_stat":65,"effort":1,"stat":{"name":"special-attack","url":"https://pokeapi.co/api/v2/stat/4/"}},{"base_stat":65,"effort":0,"stat":{"name":"special-defense","url":"https://pokeapi.co/api/v2/stat/5/"}},{"base_stat":45,"effort":0,"stat":{"name":"speed","url":"https://pokeapi.co/api/v2/stat/6/"}}]
- **/ 
+}; // const init = function () {
+ //   panelView.addHandlerRender(controlPokemonPanel);
+ //   searchView.addHandlerSearch(controlSearchResults);
+ // };
+ // init();
 
-},{"./model":"3QBkH","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./Views/searchView":"aUu1u"}],"3QBkH":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG"}],"jnFvT":[function(require,module,exports,__globalThis) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, '__esModule', {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === 'default' || key === '__esModule' || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"3QBkH":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
@@ -775,14 +796,8 @@ const loadPokemon = async function(pokemon) {
         ]);
         state.pokemon = await createPokemonObject(parsedData);
         console.log(state.pokemon);
-    // Loading name, id, and image
-    // const data1 = await fetch(`${BASIC_API_URL}${pokemon}`);
-    // const basic = await data1.json();
-    // console.log(basic);
-    // Loading description
-    // Loading height, weight, stats, moves
     } catch (err) {
-        console.error('you suck ' + err);
+        console.error('Something went wrong! ' + err);
     }
 };
 const loadSearchResults = async function(query) {
@@ -806,39 +821,31 @@ parcelHelpers.export(exports, "DESC_API_URL", ()=>DESC_API_URL);
 parcelHelpers.export(exports, "DETAILS_API_URL", ()=>DETAILS_API_URL);
 const BASIC_API_URL = 'https://pokeapi.co/api/v2/pokemon-form/';
 const DESC_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/';
-const DETAILS_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
+const DETAILS_API_URL = 'https://pokeapi.co/api/v2/pokemon/'; /**
+ * Pokemon Name (https://pokeapi.co/api/v2/pokemon-form/1/ --> "name":"bulbasaur"
+ *
+ * Image -- Pokemon Visual (https://pokeapi.co/api/v2/pokemon-form/1/ --> "front_default":"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
+ *
+ * ID -- Number in Pokedex (https://pokeapi.co/api/v2/pokemon-form/1/ --> "id":1
+ *
+ * Types -- 1 or 2 (https://pokeapi.co/api/v2/pokemon-form/1/ --> "types":[{"slot":1,"type":{"name":"grass","url":"https://pokeapi.co/api/v2/type/12/"}},{"slot":2,"type":{"name":"poison","url":"https://pokeapi.co/api/v2/type/4/"}}]
+ *
+ * Description -- of Pokemon --> https://pokeapi.co/api/v2/pokemon-species/1 --> "flavor_text_entries":[{"flavor_text":"Obviously prefers\nhot places. When\nit rains, steam\fis said to spout\nfrom the tip of\nits tail.","language":{"name":"en","url":"https://pokeapi.co/api/v2/language/9/"}
+ *
+ * Height -- https://pokeapi.co/api/v2/pokemon/1/ --> "height":7
+ *
+ * Weight -- https://pokeapi.co/api/v2/pokemon/1/ --> "weight":69
+ *
+ 
+ *
+ * Moves -- 3 moves? -- https://pokeapi.co/api/v2/pokemon/1/ --> "moves":[{"move":{"name":"razor-wind","url":"https://pokeapi.co/api/v2/move/13/"},"version_group_details":[{"level_learned_at":0,"move_learn_method":{"name":"egg","url":"https://pokeapi.co/api/v2/move-learn-method/2/"},"order":null,"version_group":{"name":"gold-silver","url":"https://pokeapi.co/api/v2/version-group/3/"}},{"level_learned_at":0,"move_learn_method":{"name":"egg","url":"https://pokeapi.co/api/v2/move-learn-method/2/"},"order":null,"version_group":{"name":"crystal","url":"https://pokeapi.co/api/v2/version-group/4/"}}]},{"move":{"name":"swords-dance","url":"https://pokeapi.co/api/v2/move/14/"},"version_group_details":[{"level_learned_at":0,"move_learn_method":{"name":"machine","url":"https://pokeapi.co/api/v2/move-learn-method/4/"},"order":null,"version_group":{"name":"red-blue","url":"https://pokeapi.co/api/v2/version-group/1/"}},{"level_learned_at":0,"move_learn_method":{"name":"machine","url":"https://pokeapi.co/api/v2/move-learn-method/4/"}
+ *
+ * https://pokeapi.co/api/v2/move/{id or name}/ --> Pokemon Move Type
+ *
+ * Base Stats -- HP, ATK, DEF, SATK, SDEF, SPO -- https://pokeapi.co/api/v2/pokemon/1/ -->  "stats":[{"base_stat":45,"effort":0,"stat":{"name":"hp","url":"https://pokeapi.co/api/v2/stat/1/"}},{"base_stat":49,"effort":0,"stat":{"name":"attack","url":"https://pokeapi.co/api/v2/stat/2/"}},{"base_stat":49,"effort":0,"stat":{"name":"defense","url":"https://pokeapi.co/api/v2/stat/3/"}},{"base_stat":65,"effort":1,"stat":{"name":"special-attack","url":"https://pokeapi.co/api/v2/stat/4/"}},{"base_stat":65,"effort":0,"stat":{"name":"special-defense","url":"https://pokeapi.co/api/v2/stat/5/"}},{"base_stat":45,"effort":0,"stat":{"name":"speed","url":"https://pokeapi.co/api/v2/stat/6/"}}]
+ **/ 
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jnFvT":[function(require,module,exports,__globalThis) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, '__esModule', {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === 'default' || key === '__esModule' || Object.prototype.hasOwnProperty.call(dest, key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"aUu1u":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"aUu1u":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class SearchView {
@@ -855,6 +862,235 @@ class SearchView {
 }
 exports.default = new SearchView();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire7ea9", {})
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7JptG":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class PanelView extends (0, _viewJsDefault.default) {
+    _parentEl = document.querySelector('.screen__2--search');
+    _errorMessage = 'oops';
+    addHandlerRender(handler) {
+        [
+            'hashchange',
+            'load'
+        ].forEach((e)=>window.addEventListener(e, handler));
+    }
+    _generateMarkup() {
+        return `
+    <div class="search__panel">
+              <img
+                class="img__display"
+                src=${this._data.img}
+                alt="Fletchinder"
+              />
+              <header class="search__panel--header">
+                <h2 class="heading">
+                  ${this._data.name}<span class="pokemon__id">#${this._data.id}</span>
+                </h2>
+
+                <div class="search__panel--types">
+                  <span
+                    class="profile__stats--type pokemon__type"
+                    data-type=""
+                    style="background-color: green"
+                    >Grass</span
+                  ><span
+                    class="profile__stats--type pokemon__type"
+                    data-type=""
+                    style="background-color: purple"
+                    >Poison</span
+                  >
+                </div>
+
+                <div class="search__panel--measurements">
+                  <p>Height <span class="label--inset">${this._data.height}m</span></p>
+                  <p>Weight <span class="label--inset">${this._data.weight}kg</span></p>
+                </div>
+                <p class="search__panel--bio bio">
+                  ${this._data.desc}
+                </p>
+              </header>
+            </div>
+
+            <div class="search__abilities">
+              <div class="search__stats">
+                <h2 class="heading--2">Base Stats</h2>
+                <div class="search__stats--row">
+                  <p>HP</p>
+                  <span class="label--inset">${this._data.stats[0][1]}</span>
+                  <progress
+                    class="profile__progress"
+                    value="25"
+                    max="100"
+                  ></progress>
+                </div>
+                <div class="search__stats--row">
+                  <p>ATK</p>
+                  <span class="label--inset">${this._data.stats[1][1]}</span>
+                  <progress
+                    class="profile__progress"
+                    value="30"
+                    max="100"
+                  ></progress>
+                </div>
+                <div class="search__stats--row">
+                  <p>DEF</p>
+                  <span class="label--inset">${this._data.stats[2][1]}</span>
+                  <progress
+                    class="profile__progress"
+                    value="2"
+                    max="100"
+                  ></progress>
+                </div>
+                <div class="search__stats--row">
+                  <p>SATK</p>
+                  <span class="label--inset">${this._data.stats[3][1]}</span>
+                  <progress
+                    class="profile__progress"
+                    value="80"
+                    max="100"
+                  ></progress>
+                </div>
+                <div class="search__stats--row">
+                  <p>SDEF</p>
+                  <span class="label--inset">${this._data.stats[4][1]}</span>
+                  <progress
+                    class="profile__progress"
+                    value="55"
+                    max="100"
+                  ></progress>
+                </div>
+                <div class="search__stats--row">
+                  <p>SPD</p>
+                  <span class="label--inset">${this._data.stats[5][1]}</span>
+                  <progress
+                    class="profile__progress"
+                    value="23"
+                    max="100"
+                  ></progress>
+                </div>
+              </div>
+
+              <div class="search__moves">
+                <h2 class="heading--2">Moves</h2>
+                <p>1<span class="search__moves--known">${this._data.moves[0]}</span></p>
+
+                <p>2<span class="search__moves--known">${this._data.moves[1]}</span></p>
+
+                <p>3<span class="search__moves--known">${this._data.moves[2]}/span></p>
+
+                <p>4<span class="search__moves--known">${this._data.moves[3]}</span></p>
+
+                <p>5<span class="search__moves--known">${this._data.moves[4]}/span></p>
+
+                <p>6<span class="search__moves--unknown">${this._data.moves[5]}</span></p>
+              </div>
+            </div>
+
+            <div class="search__pagination">
+              <button class="btn search__btn--prev btn--blue">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="25"
+                  fill="currentColor"
+                  class="bi bi-arrow-left-short"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"
+                  />
+                </svg>
+              </button>
+              <button class="btn search__btn--favorite btn--red">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="13"
+                  height="13"
+                  fill="currentColor"
+                  class="bi bi-suit-heart-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1"
+                  />
+                </svg>
+                Favorite
+              </button>
+              <button class="btn search__btn--caught btn--yellow">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="13"
+                  height="13"
+                  fill="currentColor"
+                  class="bi bi-geo-alt-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"
+                  />
+                </svg>
+                Caught This Pok\xe9mon
+              </button>
+              <button class="btn search__btn--next btn--blue">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="25"
+                  fill="currentColor"
+                  class="bi bi-arrow-right-short"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"
+                  />
+                </svg>
+              </button>
+            </div>
+    `;
+    }
+}
+exports.default = new PanelView();
+
+},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"YJQ6Q":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _pokeballFaviconSvg = require("url:../../imgs/pokeball-favicon.svg");
+var _pokeballFaviconSvgDefault = parcelHelpers.interopDefault(_pokeballFaviconSvg);
+class View {
+    _data;
+    _clear() {
+        this._parentEl.innerHTML = '';
+    }
+    renderSpinner = function(parentEl) {
+        const markup = `
+    <div class="spinner__div">
+        <img class="spinner__img" src="${(0, _pokeballFaviconSvgDefault.default)}"/>
+    </div>
+  `;
+        this._clear();
+        this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    };
+    render(data) {
+        if (!data) return this.renderError();
+        this._data = data;
+        const markup = this._generateMarkup();
+        this._clear();
+        console.log(markup);
+        this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    }
+    renderError(message = this._errorMessage) {
+        console.log(message);
+    }
+}
+exports.default = View;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","url:../../imgs/pokeball-favicon.svg":"8TbbI"}],"8TbbI":[function(require,module,exports,__globalThis) {
+module.exports = module.bundle.resolve("pokeball-favicon.33b29b13.svg") + "?" + Date.now();
+
+},{}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire7ea9", {}, "./", "/")
 
 //# sourceMappingURL=PokeDex.4a59a05f.js.map

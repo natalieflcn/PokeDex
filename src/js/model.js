@@ -44,7 +44,7 @@ export const createPokemonObject = async function (data) {
   };
 };
 
-// To load Pokémon details in the search results panel
+// To load Pokémon details in the search panel (screen 2)
 export const loadPokemon = async function (pokemon) {
   try {
     const data = await Promise.all([
@@ -61,21 +61,12 @@ export const loadPokemon = async function (pokemon) {
 
     state.pokemon = await createPokemonObject(parsedData);
     console.log(state.pokemon);
-
-    // Loading name, id, and image
-    // const data1 = await fetch(`${BASIC_API_URL}${pokemon}`);
-    // const basic = await data1.json();
-
-    // console.log(basic);
-    // Loading description
-
-    // Loading height, weight, stats, moves
   } catch (err) {
-    console.error('you suck ' + err);
+    console.error('Something went wrong! ' + err);
   }
 };
 
-// To load previews in the search results screen
+// To load previews in the search results screen (screen 1)
 export const loadSearchResults = async function (query) {
   state.search.query = query;
 

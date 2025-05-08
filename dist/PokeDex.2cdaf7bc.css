@@ -529,6 +529,7 @@ body {
 
 .search__panel--bio {
   height: 4rem;
+  overflow-y: scroll;
 }
 
 .search__abilities {
@@ -884,12 +885,15 @@ footer p {
   display: none;
 }
 
-.spinner {
+.screen__2 .spinner__div {
   text-align: center;
-  width: 6rem;
-  height: 6rem;
-  margin: 5rem auto;
+  margin: 13em auto;
   animation: 2s linear infinite rotate;
+}
+
+.spinner__img {
+  width: 3rem;
+  height: 3rem;
 }
 
 @keyframes rotate {
