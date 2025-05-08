@@ -10,7 +10,7 @@
       rel="stylesheet"
     />
     <link href="style.css" rel="stylesheet" />
-    <script defer src="controller.js"></script>
+    <script type="module" src="./js/controller.js"></script>
   </head>
 
   <body>
@@ -76,7 +76,7 @@
       <main class="screen__border">
         <section class="screen__1">
           <!-- Perspective: Search -->
-          <section class="screen__1--search hidden">
+          <section class="screen__1--search">
             <form class="form search__form" action="/dummy" method="POST">
               <input
                 class="input search__input"
@@ -85,6 +85,20 @@
                 id="search-query"
                 placeholder="Search for a Pokémon..."
               />
+              <!-- <button class="btn search__btn--submit btn--grey">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-search"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
+                  />
+                </svg>
+              </button> -->
 
               <div class="search__form--sort">
                 <label>Sort</label>
@@ -94,7 +108,7 @@
             </form>
 
             <div class="search__preview--container">
-              <div class="search__preview search__preview--active">
+              <!-- <div class="search__preview search__preview--active">
                 <span class="pokemon__id search__preview--id">#10</span
                 ><img
                   class="search__preview--img"
@@ -102,21 +116,12 @@
                   alt=""
                 />
                 <p class="search__preview--name">Bulbasaur</p>
-              </div>
-              <div class="search__preview">
-                <span class="pokemon__id search__preview--id">#1000</span
-                ><img
-                  class="search__preview--img"
-                  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png"
-                  alt=""
-                />
-                <p class="search__preview--name">fletchinder</p>
-              </div>
+              </div> -->
             </div>
           </section>
 
           <!-- Perspective: Map -->
-          <section class="screen__1--map">
+          <section class="screen__1--map hidden">
             <header class="map__header">
               <h2 class="heading">Caught Pokémon</h2>
               <p>
@@ -641,7 +646,7 @@
 
         <section class="screen__2">
           <!-- Perspective: Search -->
-          <section class="screen__2--search hidden">
+          <section class="screen__2--search">
             <div class="search__panel">
               <img
                 class="img__display"
@@ -727,7 +732,7 @@
                   ></progress>
                 </div>
                 <div class="search__stats--row">
-                  <p>SPO</p>
+                  <p>SPD</p>
                   <span class="label--inset">255</span>
                   <progress
                     class="profile__progress"
@@ -821,7 +826,7 @@
           <section class="screen__2--map hidden"></section>
 
           <!-- Perspective: Profile -->
-          <section class="screen__2--profile">
+          <section class="screen__2--profile hidden">
             <div class="profile__categories">
               <button class="btn profile__btn--caught btn--green">
                 Caught

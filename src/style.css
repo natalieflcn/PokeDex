@@ -509,7 +509,6 @@ body {
 .profile__input {
   height: 1.75em;
   width: 48%;
-  margin-right: 1.7rem;
   padding: 0.25rem 0.4rem;
 }
 
@@ -602,6 +601,7 @@ body {
 .search__form--sort {
   align-content: center;
 }
+
 /* PERSPECTIVE -- Search (Screen 2) */
 
 .search__panel {
@@ -1021,9 +1021,29 @@ footer p {
   padding-bottom: 0.75rem;
   text-align: center;
 }
+
 /* Utility Classes */
 .hidden {
   display: none;
+}
+
+.spinner {
+  margin: 5rem auto;
+  text-align: center;
+
+  height: 6rem;
+  width: 6rem;
+  animation: rotate 2s infinite linear;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Media Queries -- for Tablets, Mobile Devices */
@@ -1053,7 +1073,7 @@ footer p {
   .profile__input {
     height: 1.75em;
     width: 10rem;
-    margin-right: 1.7rem;
+
     padding: 0.25rem 0.4rem;
   }
 

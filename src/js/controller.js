@@ -1,3 +1,36 @@
+import * as model from './model';
+import searchView from './Views/searchView';
+
+// const y = model.loadSearchResults('1');
+
+model.loadPokemon(1).then(res => console.log(res));
+// y.then(res => console.log(res));
+// const x = function () {
+//   console.log(document.querySelector('.search__input').value);
+// };
+// document.querySelector('.search__input').addEventListener('input', x);
+
+const controlPokemonSearch = async function () {
+  document.querySelector('.screen__2--search').innerHTML = '';
+};
+
+const controlSearchResults = async function () {
+  try {
+    const query = searchView.query();
+
+    if (!query) return;
+
+    console.log(query);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const init = function () {
+  searchView.addHandlerSearch(controlSearchResults);
+};
+
+init();
 /**
  * Pokemon Name (https://pokeapi.co/api/v2/pokemon-form/1/ --> "name":"bulbasaur"
  *
@@ -13,12 +46,11 @@
  *
  * Weight -- https://pokeapi.co/api/v2/pokemon/1/ --> "weight":69
  *
- * Held Items -- https://pokeapi.co/api/v2/pokemon/1/ --> "held_items":[]
+ 
  *
  * Moves -- 3 moves? -- https://pokeapi.co/api/v2/pokemon/1/ --> "moves":[{"move":{"name":"razor-wind","url":"https://pokeapi.co/api/v2/move/13/"},"version_group_details":[{"level_learned_at":0,"move_learn_method":{"name":"egg","url":"https://pokeapi.co/api/v2/move-learn-method/2/"},"order":null,"version_group":{"name":"gold-silver","url":"https://pokeapi.co/api/v2/version-group/3/"}},{"level_learned_at":0,"move_learn_method":{"name":"egg","url":"https://pokeapi.co/api/v2/move-learn-method/2/"},"order":null,"version_group":{"name":"crystal","url":"https://pokeapi.co/api/v2/version-group/4/"}}]},{"move":{"name":"swords-dance","url":"https://pokeapi.co/api/v2/move/14/"},"version_group_details":[{"level_learned_at":0,"move_learn_method":{"name":"machine","url":"https://pokeapi.co/api/v2/move-learn-method/4/"},"order":null,"version_group":{"name":"red-blue","url":"https://pokeapi.co/api/v2/version-group/1/"}},{"level_learned_at":0,"move_learn_method":{"name":"machine","url":"https://pokeapi.co/api/v2/move-learn-method/4/"}
  *
  * https://pokeapi.co/api/v2/move/{id or name}/ --> Pokemon Move Type
  *
  * Base Stats -- HP, ATK, DEF, SATK, SDEF, SPO -- https://pokeapi.co/api/v2/pokemon/1/ -->  "stats":[{"base_stat":45,"effort":0,"stat":{"name":"hp","url":"https://pokeapi.co/api/v2/stat/1/"}},{"base_stat":49,"effort":0,"stat":{"name":"attack","url":"https://pokeapi.co/api/v2/stat/2/"}},{"base_stat":49,"effort":0,"stat":{"name":"defense","url":"https://pokeapi.co/api/v2/stat/3/"}},{"base_stat":65,"effort":1,"stat":{"name":"special-attack","url":"https://pokeapi.co/api/v2/stat/4/"}},{"base_stat":65,"effort":0,"stat":{"name":"special-defense","url":"https://pokeapi.co/api/v2/stat/5/"}},{"base_stat":45,"effort":0,"stat":{"name":"speed","url":"https://pokeapi.co/api/v2/stat/6/"}}]
- **/ 
-//# sourceMappingURL=PokeDex.253c89eb.js.map
+ **/
