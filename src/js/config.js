@@ -1,6 +1,7 @@
-export const BASIC_API_URL = 'https://pokeapi.co/api/v2/pokemon-form/';
+export const MAIN_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
 export const DESC_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/';
-export const DETAILS_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
+export const POKEMON_NAMES_API_URL =
+  'https://pokeapi.co/api/v2/pokemon-species/?limit=1025';
 
 export const TIMEOUT_SEC = 10;
 

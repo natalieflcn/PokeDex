@@ -119,6 +119,7 @@ html {
 body {
   background-color: var(--primary-color);
   font-family: Gameboy, sans-serif;
+  overflow-x: hidden;
 }
 
 .container {
@@ -634,17 +635,20 @@ body {
 
 .search__panel--measurements {
   display: flex;
-  margin: 1rem 0 1rem;
+  margin: 0.75rem 0 0.75rem;
   font-size: 0.6rem;
   flex-grow: 1;
 }
 
+.search__panel--measurements p {
+  margin-bottom: 0;
+}
 .search__panel--measurements p:first-child {
   margin-right: 2rem;
 }
 
 .search__panel--bio {
-  height: 4rem;
+  height: 4.7rem;
   overflow-y: scroll;
 }
 
@@ -1039,6 +1043,23 @@ footer p {
 .spinner__img {
   height: 3rem;
   width: 3rem;
+}
+
+.error {
+  display: flex;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 5rem 4rem;
+}
+
+.error svg {
+  height: 3rem;
+  width: 3rem;
+}
+
+.error p {
+  font-size: 1.8rem;
+  line-height: 1.5;
 }
 
 @keyframes rotate {

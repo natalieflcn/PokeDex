@@ -32,7 +32,7 @@ class PanelView extends View {
                     >${this._data.types[0]}</span
                   >${
                     this._data.types.length == 2
-                      ? `<span class="profile__stats--type pokemon__type" style="background-color: var(--type--${this._data.types[1]})">Poison</span>`
+                      ? `<span class="profile__stats--type pokemon__type" style="background-color: var(--type--${this._data.types[1]})">${this._data.types[1]}</span>`
                       : ''
                   }
                 </div>

@@ -5,11 +5,6 @@ import panelView from './Views/panelView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-// const x = function () {
-//   console.log(document.querySelector('.search__input').value);
-// };
-// document.querySelector('.search__input').addEventListener('input', x);
-
 const controlPokemonPanel = async function () {
   try {
     // Retrieve hash from URL
@@ -21,31 +16,40 @@ const controlPokemonPanel = async function () {
     // Update searchResultsView to highlight active search result (screen 1)
 
     // Load Pokémon (data) panel details
-    await model.loadPokemon(1);
-
-    // Render Pokémon panel (screen 2)
+    await model.loadPokemon(155);
+    console.log(model.state.pokemon);
+    // Render Pokémon panel (screen 2 -- search)
     panelView.render(model.state.pokemon);
   } catch (err) {
-    console.error(err);
+    panelView.renderError();
   }
 };
 
-controlPokemonPanel();
-
-// document.addEventListener('load', function () {
-//   const id = window.location.hash.slice(1);
-//   console.log(id);
-// });
-
 const controlSearchResults = async function () {
   try {
-    const query = searchView.query();
+    // Retrieve query from user input
+    const query = searchView.getQuery();
 
+    // TODO If there's no query, render all existing Pokémon
     if (!query) return;
 
-    console.log(query);
+    // Load Pokémon search results data
+    await model.loadSearchResults(query);
+
+    // Render Pokémon search results (screen 1 -- search)
   } catch (err) {
-    console.error(err);
+    searchResults.renderError();
+  }
+};
+
+const controlInitSearchResults = async function () {
+  try {
+    // Retrieve all Pokémon names from PokéAPI and store in our state
+    await model.storePokemonNames();
+
+    // Render all Pokémon upon initial load of page
+  } catch (err) {
+    searchResults.renderError();
   }
 };
 

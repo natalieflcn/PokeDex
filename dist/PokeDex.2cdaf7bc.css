@@ -90,6 +90,7 @@ html {
 body {
   background-color: var(--primary-color);
   font-family: Gameboy, sans-serif;
+  overflow-x: hidden;
 }
 
 .container {
@@ -518,9 +519,13 @@ body {
 
 .search__panel--measurements {
   flex-grow: 1;
-  margin: 1rem 0;
+  margin: .75rem 0;
   font-size: .6rem;
   display: flex;
+}
+
+.search__panel--measurements p {
+  margin-bottom: 0;
 }
 
 .search__panel--measurements p:first-child {
@@ -528,7 +533,7 @@ body {
 }
 
 .search__panel--bio {
-  height: 4rem;
+  height: 4.7rem;
   overflow-y: scroll;
 }
 
@@ -896,6 +901,23 @@ footer p {
 .spinner__img {
   width: 3rem;
   height: 3rem;
+}
+
+.error {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 5rem 4rem;
+  display: flex;
+}
+
+.error svg {
+  width: 3rem;
+  height: 3rem;
+}
+
+.error p {
+  font-size: 1.8rem;
+  line-height: 1.5;
 }
 
 @keyframes rotate {

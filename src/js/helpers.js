@@ -1,4 +1,4 @@
-import { TIMEOUT_SEC } from './config';
+import { TIMEOUT_SEC } from './config.js';
 
 const timeout = function (s) {
   return new Promise(function (_, reject) {
@@ -19,4 +19,8 @@ export const AJAX = async function (url) {
   } catch (err) {
     throw err;
   }
+};
+
+export const capitalize = function (word) {
+  return word[0].toUpperCase().concat(word.slice(1));
 };

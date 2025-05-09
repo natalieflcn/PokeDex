@@ -675,10 +675,6 @@ var _searchViewJsDefault = parcelHelpers.interopDefault(_searchViewJs);
 var _panelViewJs = require("./Views/panelView.js");
 var _panelViewJsDefault = parcelHelpers.interopDefault(_panelViewJs);
 var _runtime = require("regenerator-runtime/runtime");
-// const x = function () {
-//   console.log(document.querySelector('.search__input').value);
-// };
-// document.querySelector('.search__input').addEventListener('input', x);
 const controlPokemonPanel = async function() {
     try {
         // Retrieve hash from URL
@@ -687,25 +683,34 @@ const controlPokemonPanel = async function() {
         (0, _panelViewJsDefault.default).renderSpinner();
         // Update searchResultsView to highlight active search result (screen 1)
         // Load Pokémon (data) panel details
-        await _modelJs.loadPokemon(1);
-        // Render Pokémon panel (screen 2)
+        await _modelJs.loadPokemon(155);
+        console.log(_modelJs.state.pokemon);
+        // Render Pokémon panel (screen 2 -- search)
         (0, _panelViewJsDefault.default).render(_modelJs.state.pokemon);
     } catch (err) {
-        console.error(err);
+        (0, _panelViewJsDefault.default).renderError();
     }
 };
-controlPokemonPanel();
-// document.addEventListener('load', function () {
-//   const id = window.location.hash.slice(1);
-//   console.log(id);
-// });
 const controlSearchResults = async function() {
     try {
-        const query = (0, _searchViewJsDefault.default).query();
+        // Retrieve query from user input
+        const query = (0, _searchViewJsDefault.default).getQuery();
+        // TODO If there's no query, render all existing Pokémon
         if (!query) return;
-        console.log(query);
+        // Load Pokémon search results data
+        await _modelJs.loadSearchResults(query);
+    // Render Pokémon search results (screen 1 -- search)
     } catch (err) {
-        console.error(err);
+        searchResults.renderError();
+    }
+};
+const controlInitSearchResults = async function() {
+    try {
+        // Retrieve all Pokémon names from PokéAPI and store in our state
+        await _modelJs.storePokemonNames();
+    // Render all Pokémon upon initial load of page
+    } catch (err) {
+        searchResults.renderError();
     }
 };
 const init = function() {
@@ -1971,13 +1976,15 @@ module.exports = function(scheduler, hasTimeArg) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
+parcelHelpers.export(exports, "storePokemonNames", ()=>storePokemonNames);
 parcelHelpers.export(exports, "createPokemonObject", ()=>createPokemonObject);
 parcelHelpers.export(exports, "loadPokemon", ()=>loadPokemon);
 parcelHelpers.export(exports, "loadSearchResults", ()=>loadSearchResults);
-var _config = require("./config");
-var _helpers = require("./helpers");
+var _configJs = require("./config.js");
+var _helpersJs = require("./helpers.js");
 const state = {
     pokemon: {},
+    pokemonNames: [],
     search: {
         query: '',
         results: []
@@ -1989,23 +1996,28 @@ const state = {
     favorites: [],
     caught: []
 };
+const storePokemonNames = async function() {
+    const pokeAPIData = await (0, _helpersJs.AJAX)(`${(0, _configJs.POKEMON_NAMES_API_URL)}`);
+    const { results } = pokeAPIData;
+    const pokemonNames = results.map((pokemon)=>pokemon.name);
+    state.pokemonNames = pokemonNames;
+};
+storePokemonNames();
 const createPokemonObject = async function(data) {
-    // Loaded from Basic API URL
-    const { name, id, sprites: { front_default: img } } = data[0];
-    const types = data[0].types.map((entry)=>capitalize(entry.type.name));
-    // Loaded from Desc API URL
-    const [{ flavor_text }] = data[1].flavor_text_entries;
-    // Loaded from Details API URL
-    const { height, weight } = data[2];
-    const stats = data[2].stats.map((stat)=>[
+    // Loaded from MAIN_API_URL
+    const { name, id, sprites: { front_default: img }, height, weight } = data[0];
+    const types = data[0].types.map((entry)=>(0, _helpersJs.capitalize)(entry.type.name));
+    const stats = data[0].stats.map((stat)=>[
             stat.stat.name,
             stat.base_stat
         ]);
-    const moves = data[2].moves.slice(0, 6).map((mov)=>{
-        return mov.move.name.split('-').map((word)=>capitalize(word)).join('-');
+    const moves = data[0].moves.slice(0, 6).map((mov)=>{
+        return mov.move.name.split('-').map((word)=>(0, _helpersJs.capitalize)(word)).join(' ');
     });
+    // Loaded from DESC_API_URL
+    const [{ flavor_text }] = data[1].flavor_text_entries;
     return {
-        name: capitalize(name),
+        name: (0, _helpersJs.capitalize)(name),
         id,
         img,
         types,
@@ -2019,66 +2031,32 @@ const createPokemonObject = async function(data) {
 const loadPokemon = async function(pokemon) {
     try {
         const data = await Promise.all([
-            (0, _helpers.AJAX)(`${(0, _config.BASIC_API_URL)}${pokemon}`),
-            (0, _helpers.AJAX)(`${(0, _config.DESC_API_URL)}${pokemon}`),
-            (0, _helpers.AJAX)(`${(0, _config.DETAILS_API_URL)}${pokemon}`)
+            (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`),
+            (0, _helpersJs.AJAX)(`${(0, _configJs.DESC_API_URL)}${pokemon}`)
         ]);
         state.pokemon = await createPokemonObject(data);
     } catch (err) {
-        console.error('Something went wrong! ' + err);
+        throw err;
     }
 };
 const loadSearchResults = async function(query) {
     state.search.query = query;
     try {
-        const data = await fetch(`${API_URL}/`);
-        const json = await data.json();
-        state.search.results = json;
-        return json;
+        state.search.query = query;
+        console.log(query);
+        const data = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${query}`);
+        const { name, id, sprites: { front_default: img } } = data;
+        state.search.results = [
+            name,
+            id,
+            img
+        ];
     } catch (err) {
-        console.error(`Something went wrong! ${err}`);
+        throw err;
     }
 };
-// HELPER METHODS
-const capitalize = function(word) {
-    return word[0].toUpperCase().concat(word.slice(1));
-};
 
-},{"./config":"2hPh4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./helpers":"7nL9P"}],"2hPh4":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "BASIC_API_URL", ()=>BASIC_API_URL);
-parcelHelpers.export(exports, "DESC_API_URL", ()=>DESC_API_URL);
-parcelHelpers.export(exports, "DETAILS_API_URL", ()=>DETAILS_API_URL);
-parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
-const BASIC_API_URL = 'https://pokeapi.co/api/v2/pokemon-form/';
-const DESC_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/';
-const DETAILS_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
-const TIMEOUT_SEC = 10; /**
- * Pokemon Name (https://pokeapi.co/api/v2/pokemon-form/1/ --> "name":"bulbasaur"
- *
- * Image -- Pokemon Visual (https://pokeapi.co/api/v2/pokemon-form/1/ --> "front_default":"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
- *
- * ID -- Number in Pokedex (https://pokeapi.co/api/v2/pokemon-form/1/ --> "id":1
- *
- * Types -- 1 or 2 (https://pokeapi.co/api/v2/pokemon-form/1/ --> "types":[{"slot":1,"type":{"name":"grass","url":"https://pokeapi.co/api/v2/type/12/"}},{"slot":2,"type":{"name":"poison","url":"https://pokeapi.co/api/v2/type/4/"}}]
- *
- * Description -- of Pokemon --> https://pokeapi.co/api/v2/pokemon-species/1 --> "flavor_text_entries":[{"flavor_text":"Obviously prefers\nhot places. When\nit rains, steam\fis said to spout\nfrom the tip of\nits tail.","language":{"name":"en","url":"https://pokeapi.co/api/v2/language/9/"}
- *
- * Height -- https://pokeapi.co/api/v2/pokemon/1/ --> "height":7
- *
- * Weight -- https://pokeapi.co/api/v2/pokemon/1/ --> "weight":69
- *
- 
- *
- * Moves -- 3 moves? -- https://pokeapi.co/api/v2/pokemon/1/ --> "moves":[{"move":{"name":"razor-wind","url":"https://pokeapi.co/api/v2/move/13/"},"version_group_details":[{"level_learned_at":0,"move_learn_method":{"name":"egg","url":"https://pokeapi.co/api/v2/move-learn-method/2/"},"order":null,"version_group":{"name":"gold-silver","url":"https://pokeapi.co/api/v2/version-group/3/"}},{"level_learned_at":0,"move_learn_method":{"name":"egg","url":"https://pokeapi.co/api/v2/move-learn-method/2/"},"order":null,"version_group":{"name":"crystal","url":"https://pokeapi.co/api/v2/version-group/4/"}}]},{"move":{"name":"swords-dance","url":"https://pokeapi.co/api/v2/move/14/"},"version_group_details":[{"level_learned_at":0,"move_learn_method":{"name":"machine","url":"https://pokeapi.co/api/v2/move-learn-method/4/"},"order":null,"version_group":{"name":"red-blue","url":"https://pokeapi.co/api/v2/version-group/1/"}},{"level_learned_at":0,"move_learn_method":{"name":"machine","url":"https://pokeapi.co/api/v2/move-learn-method/4/"}
- *
- * https://pokeapi.co/api/v2/move/{id or name}/ --> Pokemon Move Type
- *
- * Base Stats -- HP, ATK, DEF, SATK, SDEF, SPO -- https://pokeapi.co/api/v2/pokemon/1/ -->  "stats":[{"base_stat":45,"effort":0,"stat":{"name":"hp","url":"https://pokeapi.co/api/v2/stat/1/"}},{"base_stat":49,"effort":0,"stat":{"name":"attack","url":"https://pokeapi.co/api/v2/stat/2/"}},{"base_stat":49,"effort":0,"stat":{"name":"defense","url":"https://pokeapi.co/api/v2/stat/3/"}},{"base_stat":65,"effort":1,"stat":{"name":"special-attack","url":"https://pokeapi.co/api/v2/stat/4/"}},{"base_stat":65,"effort":0,"stat":{"name":"special-defense","url":"https://pokeapi.co/api/v2/stat/5/"}},{"base_stat":45,"effort":0,"stat":{"name":"speed","url":"https://pokeapi.co/api/v2/stat/6/"}}]
- **/ 
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jnFvT":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./config.js":"2hPh4","./helpers.js":"7nL9P"}],"jnFvT":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -2108,11 +2086,46 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"7nL9P":[function(require,module,exports,__globalThis) {
+},{}],"2hPh4":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "MAIN_API_URL", ()=>MAIN_API_URL);
+parcelHelpers.export(exports, "DESC_API_URL", ()=>DESC_API_URL);
+parcelHelpers.export(exports, "POKEMON_NAMES_API_URL", ()=>POKEMON_NAMES_API_URL);
+parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
+const MAIN_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
+const DESC_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/';
+const POKEMON_NAMES_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/?limit=1025';
+const TIMEOUT_SEC = 10; /**
+ * Pokemon Name (https://pokeapi.co/api/v2/pokemon-form/1/ --> "name":"bulbasaur"
+ *
+ * Image -- Pokemon Visual (https://pokeapi.co/api/v2/pokemon-form/1/ --> "front_default":"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
+ *
+ * ID -- Number in Pokedex (https://pokeapi.co/api/v2/pokemon-form/1/ --> "id":1
+ *
+ * Types -- 1 or 2 (https://pokeapi.co/api/v2/pokemon-form/1/ --> "types":[{"slot":1,"type":{"name":"grass","url":"https://pokeapi.co/api/v2/type/12/"}},{"slot":2,"type":{"name":"poison","url":"https://pokeapi.co/api/v2/type/4/"}}]
+ *
+ * Description -- of Pokemon --> https://pokeapi.co/api/v2/pokemon-species/1 --> "flavor_text_entries":[{"flavor_text":"Obviously prefers\nhot places. When\nit rains, steam\fis said to spout\nfrom the tip of\nits tail.","language":{"name":"en","url":"https://pokeapi.co/api/v2/language/9/"}
+ *
+ * Height -- https://pokeapi.co/api/v2/pokemon/1/ --> "height":7
+ *
+ * Weight -- https://pokeapi.co/api/v2/pokemon/1/ --> "weight":69
+ *
+ 
+ *
+ * Moves -- 3 moves? -- https://pokeapi.co/api/v2/pokemon/1/ --> "moves":[{"move":{"name":"razor-wind","url":"https://pokeapi.co/api/v2/move/13/"},"version_group_details":[{"level_learned_at":0,"move_learn_method":{"name":"egg","url":"https://pokeapi.co/api/v2/move-learn-method/2/"},"order":null,"version_group":{"name":"gold-silver","url":"https://pokeapi.co/api/v2/version-group/3/"}},{"level_learned_at":0,"move_learn_method":{"name":"egg","url":"https://pokeapi.co/api/v2/move-learn-method/2/"},"order":null,"version_group":{"name":"crystal","url":"https://pokeapi.co/api/v2/version-group/4/"}}]},{"move":{"name":"swords-dance","url":"https://pokeapi.co/api/v2/move/14/"},"version_group_details":[{"level_learned_at":0,"move_learn_method":{"name":"machine","url":"https://pokeapi.co/api/v2/move-learn-method/4/"},"order":null,"version_group":{"name":"red-blue","url":"https://pokeapi.co/api/v2/version-group/1/"}},{"level_learned_at":0,"move_learn_method":{"name":"machine","url":"https://pokeapi.co/api/v2/move-learn-method/4/"}
+ *
+ * https://pokeapi.co/api/v2/move/{id or name}/ --> Pokemon Move Type
+ *
+ * Base Stats -- HP, ATK, DEF, SATK, SDEF, SPO -- https://pokeapi.co/api/v2/pokemon/1/ -->  "stats":[{"base_stat":45,"effort":0,"stat":{"name":"hp","url":"https://pokeapi.co/api/v2/stat/1/"}},{"base_stat":49,"effort":0,"stat":{"name":"attack","url":"https://pokeapi.co/api/v2/stat/2/"}},{"base_stat":49,"effort":0,"stat":{"name":"defense","url":"https://pokeapi.co/api/v2/stat/3/"}},{"base_stat":65,"effort":1,"stat":{"name":"special-attack","url":"https://pokeapi.co/api/v2/stat/4/"}},{"base_stat":65,"effort":0,"stat":{"name":"special-defense","url":"https://pokeapi.co/api/v2/stat/5/"}},{"base_stat":45,"effort":0,"stat":{"name":"speed","url":"https://pokeapi.co/api/v2/stat/6/"}}]
+ **/ 
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7nL9P":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AJAX", ()=>AJAX);
-var _config = require("./config");
+parcelHelpers.export(exports, "capitalize", ()=>capitalize);
+var _configJs = require("./config.js");
 const timeout = function(s) {
     return new Promise(function(_, reject) {
         setTimeout(function() {
@@ -2124,7 +2137,7 @@ const AJAX = async function(url) {
     try {
         const res = await Promise.race([
             fetch(url),
-            timeout((0, _config.TIMEOUT_SEC))
+            timeout((0, _configJs.TIMEOUT_SEC))
         ]);
         const data = await res.json();
         if (!res.ok) throw new Error(`${data.message} (${res.status})`);
@@ -2133,25 +2146,74 @@ const AJAX = async function(url) {
         throw err;
     }
 };
+const capitalize = function(word) {
+    return word[0].toUpperCase().concat(word.slice(1));
+};
 
-},{"./config":"2hPh4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"aUu1u":[function(require,module,exports,__globalThis) {
+},{"./config.js":"2hPh4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"aUu1u":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-class SearchView {
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class SearchView extends (0, _viewJsDefault.default) {
     _parentEl = document.querySelector('.search__form');
+    _errorMessage = "We could not find that Pok\xe9mon! Please try again.";
+    addHandlerSearch(handler) {
+        this._parentEl.querySelector('.search__input').addEventListener('input', handler);
+    }
     getQuery() {
         return this._parentEl.querySelector('.search__input').value;
-    }
-    addHandlerSearch(handler) {
-        this._parentEl.addEventListener('input', function(e) {
-            e.preventDefault();
-            handler();
-        });
     }
 }
 exports.default = new SearchView();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7JptG":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./View.js":"YJQ6Q"}],"YJQ6Q":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _pokeballFaviconSvg = require("url:../../imgs/pokeball-favicon.svg");
+var _pokeballFaviconSvgDefault = parcelHelpers.interopDefault(_pokeballFaviconSvg);
+class View {
+    _data;
+    _clear() {
+        this._parentEl.innerHTML = '';
+    }
+    renderSpinner = function(parentEl) {
+        const markup = `
+    <div class="spinner__div">
+        <img class="spinner__img" src="${(0, _pokeballFaviconSvgDefault.default)}"/>
+    </div>
+  `;
+        this._clear();
+        this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    };
+    render(data) {
+        if (!data) return this.renderError();
+        this._data = data;
+        const markup = this._generateMarkup();
+        this._clear();
+        this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    }
+    renderError(message = this._errorMessage) {
+        const markup = `
+      <div class="error">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+    `;
+        this._clear();
+        this._parentElement.insertAdjacentHTML('afterbegin', markup);
+    }
+}
+exports.default = View;
+
+},{"url:../../imgs/pokeball-favicon.svg":"8TbbI","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8TbbI":[function(require,module,exports,__globalThis) {
+module.exports = module.bundle.resolve("pokeball-favicon.33b29b13.svg") + "?" + Date.now();
+
+},{}],"7JptG":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("./View.js");
@@ -2183,7 +2245,7 @@ class PanelView extends (0, _viewJsDefault.default) {
                     class="profile__stats--type pokemon__type"
                     style="background-color: var(--type--${this._data.types[0]})"
                     >${this._data.types[0]}</span
-                  >${this._data.types.length == 2 ? `<span class="profile__stats--type pokemon__type" style="background-color: var(--type--${this._data.types[1]})">Poison</span>` : ''}
+                  >${this._data.types.length == 2 ? `<span class="profile__stats--type pokemon__type" style="background-color: var(--type--${this._data.types[1]})">${this._data.types[1]}</span>` : ''}
                 </div>
 
                 <div class="search__panel--measurements">
@@ -2338,42 +2400,7 @@ class PanelView extends (0, _viewJsDefault.default) {
 }
 exports.default = new PanelView();
 
-},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"YJQ6Q":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _pokeballFaviconSvg = require("url:../../imgs/pokeball-favicon.svg");
-var _pokeballFaviconSvgDefault = parcelHelpers.interopDefault(_pokeballFaviconSvg);
-class View {
-    _data;
-    _clear() {
-        this._parentEl.innerHTML = '';
-    }
-    renderSpinner = function(parentEl) {
-        const markup = `
-    <div class="spinner__div">
-        <img class="spinner__img" src="${(0, _pokeballFaviconSvgDefault.default)}"/>
-    </div>
-  `;
-        this._clear();
-        this._parentEl.insertAdjacentHTML('afterbegin', markup);
-    };
-    render(data) {
-        if (!data) return this.renderError();
-        this._data = data;
-        const markup = this._generateMarkup();
-        this._clear();
-        this._parentEl.insertAdjacentHTML('afterbegin', markup);
-    }
-    renderError(message = this._errorMessage) {
-        console.log(message);
-    }
-}
-exports.default = View;
-
-},{"url:../../imgs/pokeball-favicon.svg":"8TbbI","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8TbbI":[function(require,module,exports,__globalThis) {
-module.exports = module.bundle.resolve("pokeball-favicon.33b29b13.svg") + "?" + Date.now();
-
-},{}],"f6ot0":[function(require,module,exports,__globalThis) {
+},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"f6ot0":[function(require,module,exports,__globalThis) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
