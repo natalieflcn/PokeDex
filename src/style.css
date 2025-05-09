@@ -916,6 +916,11 @@ body {
   font-size: 0.7rem;
 }
 
+.map__input--name {
+  position: relative;
+  right: 0.65rem;
+}
+
 .map__input:focus {
   box-shadow: 1px 1px 2px 1px inset var(--screen-color--dark);
   outline: none;

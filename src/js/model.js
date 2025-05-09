@@ -14,7 +14,7 @@ export const state = {
   caught: [],
 };
 
-// To create a Pokemon object after parsing API data
+// To create a Pokemon object after parsing PokeAPI data
 export const createPokemonObject = async function (data) {
   // Loaded from Basic API URL
   const {
@@ -22,21 +22,27 @@ export const createPokemonObject = async function (data) {
     id,
     sprites: { front_default: img },
   } = data[0];
+  const types = data[0].types.map(entry => entry.type.name);
 
   // Loaded from Desc API URL
-  const [{ flavor_text: flavor1 }, , { flavor_text: flavor2 }] =
-    data[1].flavor_text_entries;
+  const [{ flavor_text }] = data[1].flavor_text_entries;
 
   // Loaded from Details API URL
   const { height, weight } = data[2];
-  const moves = data[2].moves.slice(0, 6).map(mov => mov.move.name);
   const stats = data[2].stats.map(stat => [stat.stat.name, stat.base_stat]);
+  const moves = data[2].moves.slice(0, 6).map(mov => {
+    return mov.move.name
+      .split('-')
+      .map(word => capitalize(word))
+      .join('-');
+  });
 
   return {
-    name,
+    name: capitalize(name),
     id,
     img,
-    desc: `${flavor1} ${flavor2}`,
+    types,
+    desc: flavor_text,
     height,
     weight,
     stats,
@@ -44,7 +50,7 @@ export const createPokemonObject = async function (data) {
   };
 };
 
-// To load Pokémon details in the search panel (screen 2)
+// To load Pokemon details for the search panel [screen 2]
 export const loadPokemon = async function (pokemon) {
   try {
     const data = await Promise.all([
@@ -60,13 +66,12 @@ export const loadPokemon = async function (pokemon) {
     ]);
 
     state.pokemon = await createPokemonObject(parsedData);
-    console.log(state.pokemon);
   } catch (err) {
     console.error('Something went wrong! ' + err);
   }
 };
 
-// To load previews in the search results screen (screen 1)
+// To load Pokemon previews in the search results screen [screen 1]
 export const loadSearchResults = async function (query) {
   state.search.query = query;
 
@@ -81,4 +86,10 @@ export const loadSearchResults = async function (query) {
   } catch (err) {
     console.log(`Something went wrong! ${err}`);
   }
+};
+
+// HELPER METHODS
+
+const capitalize = function (word) {
+  return word[0].toUpperCase().concat(word.slice(1));
 };

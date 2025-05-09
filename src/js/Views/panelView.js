@@ -53,8 +53,8 @@ class PanelView extends View {
                   <span class="label--inset">${this._data.stats[0][1]}</span>
                   <progress
                     class="profile__progress"
-                    value="25"
-                    max="100"
+                    value="${this._data.stats[0][1]}"
+                    max="255"
                   ></progress>
                 </div>
                 <div class="search__stats--row">
@@ -62,8 +62,8 @@ class PanelView extends View {
                   <span class="label--inset">${this._data.stats[1][1]}</span>
                   <progress
                     class="profile__progress"
-                    value="30"
-                    max="100"
+                    value="${this._data.stats[1][1]}"
+                    max="255"
                   ></progress>
                 </div>
                 <div class="search__stats--row">
@@ -71,8 +71,8 @@ class PanelView extends View {
                   <span class="label--inset">${this._data.stats[2][1]}</span>
                   <progress
                     class="profile__progress"
-                    value="2"
-                    max="100"
+                    value="${this._data.stats[2][1]}"
+                    max="255"
                   ></progress>
                 </div>
                 <div class="search__stats--row">
@@ -80,8 +80,8 @@ class PanelView extends View {
                   <span class="label--inset">${this._data.stats[3][1]}</span>
                   <progress
                     class="profile__progress"
-                    value="80"
-                    max="100"
+                    value="${this._data.stats[3][1]}"
+                    max="255"
                   ></progress>
                 </div>
                 <div class="search__stats--row">
@@ -89,8 +89,8 @@ class PanelView extends View {
                   <span class="label--inset">${this._data.stats[4][1]}</span>
                   <progress
                     class="profile__progress"
-                    value="55"
-                    max="100"
+                    value="${this._data.stats[4][1]}"
+                    max="255"
                   ></progress>
                 </div>
                 <div class="search__stats--row">
@@ -98,8 +98,8 @@ class PanelView extends View {
                   <span class="label--inset">${this._data.stats[5][1]}</span>
                   <progress
                     class="profile__progress"
-                    value="23"
-                    max="100"
+                    value="${this._data.stats[5][1]}"
+                    max="255"
                   ></progress>
                 </div>
               </div>
@@ -110,11 +110,11 @@ class PanelView extends View {
 
                 <p>2<span class="search__moves--known">${this._data.moves[1]}</span></p>
 
-                <p>3<span class="search__moves--known">${this._data.moves[2]}/span></p>
+                <p>3<span class="search__moves--known">${this._data.moves[2]}</span></p>
 
                 <p>4<span class="search__moves--known">${this._data.moves[3]}</span></p>
 
-                <p>5<span class="search__moves--known">${this._data.moves[4]}/span></p>
+                <p>5<span class="search__moves--known">${this._data.moves[4]}</span></p>
 
                 <p>6<span class="search__moves--unknown">${this._data.moves[5]}</span></p>
               </div>

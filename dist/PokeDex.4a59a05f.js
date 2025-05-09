@@ -684,7 +684,8 @@ const controlPokemonPanel = async function() {
         // if (!id) return;
         // Update searchResultsView to highlight active search result (screen 1)
         // Load Pokémon (data) panel details
-        await _modelJs.loadPokemon(1);
+        await _modelJs.loadPokemon(2);
+        console.log(_modelJs.state.pokemon);
         // Render Pokémon panel (screen 2)
         (0, _panelViewJsDefault.default).render(_modelJs.state.pokemon);
     } catch (err) {
@@ -762,20 +763,24 @@ const state = {
 const createPokemonObject = async function(data) {
     // Loaded from Basic API URL
     const { name, id, sprites: { front_default: img } } = data[0];
+    const types = data[0].types.map((entry)=>entry.type.name);
     // Loaded from Desc API URL
-    const [{ flavor_text: flavor1 }, , { flavor_text: flavor2 }] = data[1].flavor_text_entries;
+    const [{ flavor_text }] = data[1].flavor_text_entries;
     // Loaded from Details API URL
     const { height, weight } = data[2];
-    const moves = data[2].moves.slice(0, 6).map((mov)=>mov.move.name);
     const stats = data[2].stats.map((stat)=>[
             stat.stat.name,
             stat.base_stat
         ]);
+    const moves = data[2].moves.slice(0, 6).map((mov)=>{
+        return mov.move.name.split('-').map((word)=>capitalize(word)).join('-');
+    });
     return {
-        name,
+        name: capitalize(name),
         id,
         img,
-        desc: `${flavor1} ${flavor2}`,
+        types,
+        desc: flavor_text,
         height,
         weight,
         stats,
@@ -795,7 +800,6 @@ const loadPokemon = async function(pokemon) {
             data[2].json()
         ]);
         state.pokemon = await createPokemonObject(parsedData);
-        console.log(state.pokemon);
     } catch (err) {
         console.error('Something went wrong! ' + err);
     }
@@ -811,6 +815,10 @@ const loadSearchResults = async function(query) {
     } catch (err) {
         console.log(`Something went wrong! ${err}`);
     }
+};
+// HELPER METHODS
+const capitalize = function(word) {
+    return word[0].toUpperCase().concat(word.slice(1));
 };
 
 },{"./config":"2hPh4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2hPh4":[function(require,module,exports,__globalThis) {
@@ -921,8 +929,8 @@ class PanelView extends (0, _viewJsDefault.default) {
                   <span class="label--inset">${this._data.stats[0][1]}</span>
                   <progress
                     class="profile__progress"
-                    value="25"
-                    max="100"
+                    value="${this._data.stats[0][1]}"
+                    max="255"
                   ></progress>
                 </div>
                 <div class="search__stats--row">
@@ -930,8 +938,8 @@ class PanelView extends (0, _viewJsDefault.default) {
                   <span class="label--inset">${this._data.stats[1][1]}</span>
                   <progress
                     class="profile__progress"
-                    value="30"
-                    max="100"
+                    value="${this._data.stats[1][1]}"
+                    max="255"
                   ></progress>
                 </div>
                 <div class="search__stats--row">
@@ -939,8 +947,8 @@ class PanelView extends (0, _viewJsDefault.default) {
                   <span class="label--inset">${this._data.stats[2][1]}</span>
                   <progress
                     class="profile__progress"
-                    value="2"
-                    max="100"
+                    value="${this._data.stats[2][1]}"
+                    max="255"
                   ></progress>
                 </div>
                 <div class="search__stats--row">
@@ -948,8 +956,8 @@ class PanelView extends (0, _viewJsDefault.default) {
                   <span class="label--inset">${this._data.stats[3][1]}</span>
                   <progress
                     class="profile__progress"
-                    value="80"
-                    max="100"
+                    value="${this._data.stats[3][1]}"
+                    max="255"
                   ></progress>
                 </div>
                 <div class="search__stats--row">
@@ -957,8 +965,8 @@ class PanelView extends (0, _viewJsDefault.default) {
                   <span class="label--inset">${this._data.stats[4][1]}</span>
                   <progress
                     class="profile__progress"
-                    value="55"
-                    max="100"
+                    value="${this._data.stats[4][1]}"
+                    max="255"
                   ></progress>
                 </div>
                 <div class="search__stats--row">
@@ -966,8 +974,8 @@ class PanelView extends (0, _viewJsDefault.default) {
                   <span class="label--inset">${this._data.stats[5][1]}</span>
                   <progress
                     class="profile__progress"
-                    value="23"
-                    max="100"
+                    value="${this._data.stats[5][1]}"
+                    max="255"
                   ></progress>
                 </div>
               </div>
@@ -978,11 +986,11 @@ class PanelView extends (0, _viewJsDefault.default) {
 
                 <p>2<span class="search__moves--known">${this._data.moves[1]}</span></p>
 
-                <p>3<span class="search__moves--known">${this._data.moves[2]}/span></p>
+                <p>3<span class="search__moves--known">${this._data.moves[2]}</span></p>
 
                 <p>4<span class="search__moves--known">${this._data.moves[3]}</span></p>
 
-                <p>5<span class="search__moves--known">${this._data.moves[4]}/span></p>
+                <p>5<span class="search__moves--known">${this._data.moves[4]}</span></p>
 
                 <p>6<span class="search__moves--unknown">${this._data.moves[5]}</span></p>
               </div>
@@ -1079,7 +1087,6 @@ class View {
         this._data = data;
         const markup = this._generateMarkup();
         this._clear();
-        console.log(markup);
         this._parentEl.insertAdjacentHTML('afterbegin', markup);
     }
     renderError(message = this._errorMessage) {

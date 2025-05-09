@@ -17,7 +17,8 @@ const controlPokemonPanel = async function () {
 
     // Update searchResultsView to highlight active search result (screen 1)
     // Load Pokémon (data) panel details
-    await model.loadPokemon(1);
+    await model.loadPokemon(2);
+    console.log(model.state.pokemon);
 
     // Render Pokémon panel (screen 2)
     panelView.render(model.state.pokemon);
