@@ -18,26 +18,32 @@ class PanelView extends View {
               />
               <header class="search__panel--header">
                 <h2 class="heading">
-                  ${this._data.name}<span class="pokemon__id">#${this._data.id}</span>
+                  ${this._data.name}<span class="pokemon__id">#${
+      this._data.id
+    }</span>
                 </h2>
 
                 <div class="search__panel--types">
                   <span
                     class="profile__stats--type pokemon__type"
-                    data-type=""
-                    style="background-color: green"
-                    >Grass</span
-                  ><span
-                    class="profile__stats--type pokemon__type"
-                    data-type=""
-                    style="background-color: purple"
-                    >Poison</span
-                  >
+                    style="background-color: var(--type--${
+                      this._data.types[0]
+                    })"
+                    >${this._data.types[0]}</span
+                  >${
+                    this._data.types.length == 2
+                      ? `<span class="profile__stats--type pokemon__type" style="background-color: var(--type--${this._data.types[1]})">Poison</span>`
+                      : ''
+                  }
                 </div>
 
                 <div class="search__panel--measurements">
-                  <p>Height <span class="label--inset">${this._data.height}m</span></p>
-                  <p>Weight <span class="label--inset">${this._data.weight}kg</span></p>
+                  <p>Height <span class="label--inset">${
+                    this._data.height
+                  }m</span></p>
+                  <p>Weight <span class="label--inset">${
+                    this._data.weight
+                  }kg</span></p>
                 </div>
                 <p class="search__panel--bio bio">
                   ${this._data.desc}
@@ -106,17 +112,29 @@ class PanelView extends View {
 
               <div class="search__moves">
                 <h2 class="heading--2">Moves</h2>
-                <p>1<span class="search__moves--known">${this._data.moves[0]}</span></p>
+                <p>1<span class="search__moves--known">${
+                  this._data.moves[0]
+                }</span></p>
 
-                <p>2<span class="search__moves--known">${this._data.moves[1]}</span></p>
+                <p>2<span class="search__moves--known">${
+                  this._data.moves[1]
+                }</span></p>
 
-                <p>3<span class="search__moves--known">${this._data.moves[2]}</span></p>
+                <p>3<span class="search__moves--known">${
+                  this._data.moves[2]
+                }</span></p>
 
-                <p>4<span class="search__moves--known">${this._data.moves[3]}</span></p>
+                <p>4<span class="search__moves--known">${
+                  this._data.moves[3]
+                }</span></p>
 
-                <p>5<span class="search__moves--known">${this._data.moves[4]}</span></p>
+                <p>5<span class="search__moves--known">${
+                  this._data.moves[4]
+                }</span></p>
 
-                <p>6<span class="search__moves--unknown">${this._data.moves[5]}</span></p>
+                <p>6<span class="search__moves--unknown">${
+                  this._data.moves[5]
+                }</span></p>
               </div>
             </div>
 

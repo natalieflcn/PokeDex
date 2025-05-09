@@ -80,24 +80,24 @@ table {
   );
 
   /* Pokémon Types */
-  --type--normal: #aaaa99;
-  --type--fire: #bb5544;
-  --type--water: #3399ff;
-  --type--electric: #ffcc33;
-  --type--grass: #78cc55;
-  --type--ice: #66ccff;
-  --type--fighting: #bb5544;
-  --type--poison: #aa5599;
-  --type--ground: #ddbb56;
-  --type--flying: #8899ff;
-  --type--psychic: #8899ff;
-  --type--bug: #abbb23;
-  --type--rock: #bcaa66;
-  --type--ghost: #6666bc;
-  --type--dragon: #7767ee;
-  --type--dark: #765443;
-  --type--steel: #aaaabb;
-  --type--fairy: #ee9aee;
+  --type--Normal: #aaaa99;
+  --type--Fire: #bb5544;
+  --type--Water: #3399ff;
+  --type--Electric: #ffcc33;
+  --type--Grass: #78cc55;
+  --type--Ice: #66ccff;
+  --type--Fighting: #bb5544;
+  --type--Poison: #aa5599;
+  --type--Ground: #ddbb56;
+  --type--Flying: #8899ff;
+  --type--Psychic: #8899ff;
+  --type--Bug: #abbb23;
+  --type--Rock: #bcaa66;
+  --type--Ghost: #6666bc;
+  --type--Dragon: #7767ee;
+  --type--Dark: #765443;
+  --type--Steel: #aaaabb;
+  --type--Fairy: #ee9aee;
 }
 
 /* Custom Fonts */
@@ -682,7 +682,6 @@ body {
   height: 0.5rem;
   border-radius: 2px;
   border: 1px solid rgb(20, 20, 20);
-  background-color: green;
 }
 
 .search__moves {
@@ -847,7 +846,6 @@ body {
 }
 
 .map__entry--types p {
-  background-color: green;
   padding: 0.3rem 0.3rem 0.2rem;
   margin-bottom: 1rem;
   color: var(--text--light);
@@ -987,7 +985,6 @@ body {
 
 .profile__stats--type {
   width: 4rem;
-  background-color: green;
 }
 
 .profile__progress {

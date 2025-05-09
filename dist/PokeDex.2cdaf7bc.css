@@ -53,24 +53,24 @@ table {
   --screen-color--dark: #242424;
   --text--light: #fff;
   --linear-gradient--blue: linear-gradient(-40deg, var(--secondary-color--blue-gradient--1) 10%, var(--secondary-color--blue) 90%, var(--secondary-color--blue-gradient--2) 100%);
-  --type--normal: #aa9;
-  --type--fire: #b54;
-  --type--water: #39f;
-  --type--electric: #fc3;
-  --type--grass: #78cc55;
-  --type--ice: #6cf;
-  --type--fighting: #b54;
-  --type--poison: #a59;
-  --type--ground: #ddbb56;
-  --type--flying: #89f;
-  --type--psychic: #89f;
-  --type--bug: #abbb23;
-  --type--rock: #bcaa66;
-  --type--ghost: #6666bc;
-  --type--dragon: #7767ee;
-  --type--dark: #765443;
-  --type--steel: #aab;
-  --type--fairy: #ee9aee;
+  --type--Normal: #aa9;
+  --type--Fire: #b54;
+  --type--Water: #39f;
+  --type--Electric: #fc3;
+  --type--Grass: #78cc55;
+  --type--Ice: #6cf;
+  --type--Fighting: #b54;
+  --type--Poison: #a59;
+  --type--Ground: #ddbb56;
+  --type--Flying: #89f;
+  --type--Psychic: #89f;
+  --type--Bug: #abbb23;
+  --type--Rock: #bcaa66;
+  --type--Ghost: #6666bc;
+  --type--Dragon: #7767ee;
+  --type--Dark: #765443;
+  --type--Steel: #aab;
+  --type--Fairy: #ee9aee;
 }
 
 @font-face {
@@ -562,7 +562,6 @@ body {
 }
 
 .search__stats--row progress {
-  background-color: green;
   border: 1px solid #141414;
   border-radius: 2px;
   width: 14rem;
@@ -726,7 +725,6 @@ body {
 
 .map__entry--types p {
   color: var(--text--light);
-  background-color: green;
   margin-bottom: 1rem;
   padding: .3rem .3rem .2rem;
 }
@@ -847,7 +845,6 @@ body {
 }
 
 .profile__stats--type {
-  background-color: green;
   width: 4rem;
 }
 

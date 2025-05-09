@@ -1,4 +1,5 @@
 import { BASIC_API_URL, DESC_API_URL, DETAILS_API_URL } from './config';
+import { AJAX } from './helpers';
 
 export const state = {
   pokemon: {},
@@ -22,7 +23,7 @@ export const createPokemonObject = async function (data) {
     id,
     sprites: { front_default: img },
   } = data[0];
-  const types = data[0].types.map(entry => entry.type.name);
+  const types = data[0].types.map(entry => capitalize(entry.type.name));
 
   // Loaded from Desc API URL
   const [{ flavor_text }] = data[1].flavor_text_entries;
@@ -54,18 +55,12 @@ export const createPokemonObject = async function (data) {
 export const loadPokemon = async function (pokemon) {
   try {
     const data = await Promise.all([
-      fetch(`${BASIC_API_URL}${pokemon}`),
-      fetch(`${DESC_API_URL}${pokemon}`),
-      fetch(`${DETAILS_API_URL}${pokemon}`),
+      AJAX(`${BASIC_API_URL}${pokemon}`),
+      AJAX(`${DESC_API_URL}${pokemon}`),
+      AJAX(`${DETAILS_API_URL}${pokemon}`),
     ]);
 
-    const parsedData = await Promise.all([
-      data[0].json(),
-      data[1].json(),
-      data[2].json(),
-    ]);
-
-    state.pokemon = await createPokemonObject(parsedData);
+    state.pokemon = await createPokemonObject(data);
   } catch (err) {
     console.error('Something went wrong! ' + err);
   }
@@ -78,13 +73,12 @@ export const loadSearchResults = async function (query) {
   try {
     const data = await fetch(`${API_URL}/`);
     const json = await data.json();
-    // console.log(`json is ${json}`);
 
     state.search.results = json;
 
     return json;
   } catch (err) {
-    console.log(`Something went wrong! ${err}`);
+    console.error(`Something went wrong! ${err}`);
   }
 };
 
