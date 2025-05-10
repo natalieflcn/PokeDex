@@ -1,17 +1,21 @@
 import View from './View.js';
 
 class SearchView extends View {
-  _parentEl = document.querySelector('.search__form');
+  _parentEl = document.querySelector('.search__input');
   _errorMessage = 'We could not find that Pokémon! Please try again.';
 
   addHandlerSearch(handler) {
-    this._parentEl
-      .querySelector('.search__input')
-      .addEventListener('input', handler);
+    window.addEventListener('load', handler);
+
+    this._parentEl.addEventListener('input', handler);
+
+    this._parentEl.addEventListener('submit', function (e) {
+      e.preventDefault();
+    });
   }
 
   getQuery() {
-    return this._parentEl.querySelector('.search__input').value;
+    return this._parentEl.value;
   }
 }
 

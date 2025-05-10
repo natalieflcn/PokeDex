@@ -10,6 +10,7 @@ import { AJAX, capitalize } from './helpers.js';
 export const state = {
   pokemon: {},
   pokemonNames: [],
+  allPokemon: [],
   search: {
     query: '',
     results: [],
@@ -31,7 +32,14 @@ export const storePokemonNames = async function () {
   state.pokemonNames = pokemonNames;
 };
 
-storePokemonNames();
+// To store 25 Pokémon (names, IDs, and imgs) in our state for initial/default resultsView
+export const storeAllPokemon = async function () {
+  const pokeAPIData = await AJAX(`${POKEMON_NAMES_API_URL}`);
+  const { results } = pokeAPIData;
+  const pokemonNames = results.map(pokemon => pokemon.name);
+
+  state.pokemonNames = pokemonNames;
+};
 
 // To create a Pokémon object after parsing PokéAPI data
 export const createPokemonObject = async function (data) {
@@ -84,21 +92,24 @@ export const loadPokemon = async function (pokemon) {
 };
 
 // To load Pokémon previews in the search results screen [screen 1]
-export const loadSearchResults = async function (query) {
-  state.search.query = query;
-
+export const loadSearchResults = async function (query, allPokemon = false) {
+  state.search.query = query; //array of pokemon names, need to pull name out of array, ajax call, store data into array
+  console.log('query is ' + query);
   try {
-    state.search.query = query;
-    console.log(query);
-    const data = await AJAX(`${MAIN_API_URL}${query}`);
+    const data1 = await AJAX(`${MAIN_API_URL}${query}`);
 
-    const {
-      name,
-      id,
-      sprites: { front_default: img },
-    } = data;
+    // if allPokemon is false, use helper method to determine search results array
+    for (pokemon of query) {
+      const data = await AJAX(`${MAIN_API_URL}${pokemon}`);
 
-    state.search.results = [name, id, img];
+      const {
+        name,
+        id,
+        sprites: { front_default: img },
+      } = data;
+
+      state.search.results.push({ name, id, img });
+    }
   } catch (err) {
     throw err;
   }

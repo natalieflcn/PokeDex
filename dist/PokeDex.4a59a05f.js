@@ -675,6 +675,8 @@ var _searchViewJsDefault = parcelHelpers.interopDefault(_searchViewJs);
 var _panelViewJs = require("./Views/panelView.js");
 var _panelViewJsDefault = parcelHelpers.interopDefault(_panelViewJs);
 var _runtime = require("regenerator-runtime/runtime");
+var _resultsViewJs = require("./Views/resultsView.js");
+var _resultsViewJsDefault = parcelHelpers.interopDefault(_resultsViewJs);
 const controlPokemonPanel = async function() {
     try {
         // Retrieve hash from URL
@@ -684,7 +686,6 @@ const controlPokemonPanel = async function() {
         // Update searchResultsView to highlight active search result (screen 1)
         // Load Pokémon (data) panel details
         await _modelJs.loadPokemon(155);
-        console.log(_modelJs.state.pokemon);
         // Render Pokémon panel (screen 2 -- search)
         (0, _panelViewJsDefault.default).render(_modelJs.state.pokemon);
     } catch (err) {
@@ -696,30 +697,26 @@ const controlSearchResults = async function() {
         // Retrieve query from user input
         const query = (0, _searchViewJsDefault.default).getQuery();
         // TODO If there's no query, render all existing Pokémon
-        if (!query) return;
-        // Load Pokémon search results data
-        await _modelJs.loadSearchResults(query);
-    // Render Pokémon search results (screen 1 -- search)
+        if (!query) await _modelJs.loadSearchResults(_modelJs.state.pokemonNames);
+        else // Load Pokémon search results data
+        await _modelJs.loadSearchResults(query, true);
+        // Render Pokémon search results (screen 1 -- search)
+        (0, _resultsViewJsDefault.default).render(query ? _modelJs.state.query : _modelJs.state.pokemonNames);
     } catch (err) {
-        searchResults.renderError();
+        (0, _searchViewJsDefault.default).renderError();
     }
 };
-const controlInitSearchResults = async function() {
-    try {
-        // Retrieve all Pokémon names from PokéAPI and store in our state
-        await _modelJs.storePokemonNames();
-    // Render all Pokémon upon initial load of page
-    } catch (err) {
-        searchResults.renderError();
-    }
+const initPokemonData = async function() {
+    await _modelJs.storePokemonNames();
 };
 const init = function() {
+    initPokemonData();
     (0, _panelViewJsDefault.default).addHandlerRender(controlPokemonPanel);
     (0, _searchViewJsDefault.default).addHandlerSearch(controlSearchResults);
 };
 init();
 
-},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","regenerator-runtime/runtime":"f6ot0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bzsBv":[function(require,module,exports,__globalThis) {
+},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","regenerator-runtime/runtime":"f6ot0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./Views/resultsView.js":"fYkxP"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("52e9b3eefbbce1ed");
@@ -1977,6 +1974,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "storePokemonNames", ()=>storePokemonNames);
+parcelHelpers.export(exports, "storeAllPokemon", ()=>storeAllPokemon);
 parcelHelpers.export(exports, "createPokemonObject", ()=>createPokemonObject);
 parcelHelpers.export(exports, "loadPokemon", ()=>loadPokemon);
 parcelHelpers.export(exports, "loadSearchResults", ()=>loadSearchResults);
@@ -1985,6 +1983,7 @@ var _helpersJs = require("./helpers.js");
 const state = {
     pokemon: {},
     pokemonNames: [],
+    allPokemon: [],
     search: {
         query: '',
         results: []
@@ -1999,10 +1998,15 @@ const state = {
 const storePokemonNames = async function() {
     const pokeAPIData = await (0, _helpersJs.AJAX)(`${(0, _configJs.POKEMON_NAMES_API_URL)}`);
     const { results } = pokeAPIData;
-    const pokemonNames = results.map((pokemon)=>pokemon.name);
+    const pokemonNames = results.map((pokemon1)=>pokemon1.name);
     state.pokemonNames = pokemonNames;
 };
-storePokemonNames();
+const storeAllPokemon = async function() {
+    const pokeAPIData = await (0, _helpersJs.AJAX)(`${(0, _configJs.POKEMON_NAMES_API_URL)}`);
+    const { results } = pokeAPIData;
+    const pokemonNames = results.map((pokemon1)=>pokemon1.name);
+    state.pokemonNames = pokemonNames;
+};
 const createPokemonObject = async function(data) {
     // Loaded from MAIN_API_URL
     const { name, id, sprites: { front_default: img }, height, weight } = data[0];
@@ -2028,29 +2032,32 @@ const createPokemonObject = async function(data) {
         moves
     };
 };
-const loadPokemon = async function(pokemon) {
+const loadPokemon = async function(pokemon1) {
     try {
         const data = await Promise.all([
-            (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`),
-            (0, _helpersJs.AJAX)(`${(0, _configJs.DESC_API_URL)}${pokemon}`)
+            (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon1}`),
+            (0, _helpersJs.AJAX)(`${(0, _configJs.DESC_API_URL)}${pokemon1}`)
         ]);
         state.pokemon = await createPokemonObject(data);
     } catch (err) {
         throw err;
     }
 };
-const loadSearchResults = async function(query) {
-    state.search.query = query;
+const loadSearchResults = async function(query, allPokemon = false) {
+    state.search.query = query; //array of pokemon names, need to pull name out of array, ajax call, store data into array
+    console.log('query is ' + query);
     try {
-        state.search.query = query;
-        console.log(query);
-        const data = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${query}`);
-        const { name, id, sprites: { front_default: img } } = data;
-        state.search.results = [
-            name,
-            id,
-            img
-        ];
+        const data1 = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${query}`);
+        // if allPokemon is false, use helper method to determine search results array
+        for (pokemon of query){
+            const data = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
+            const { name, id, sprites: { front_default: img } } = data;
+            state.search.results.push({
+                name,
+                id,
+                img
+            });
+        }
     } catch (err) {
         throw err;
     }
@@ -2092,10 +2099,12 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "MAIN_API_URL", ()=>MAIN_API_URL);
 parcelHelpers.export(exports, "DESC_API_URL", ()=>DESC_API_URL);
 parcelHelpers.export(exports, "POKEMON_NAMES_API_URL", ()=>POKEMON_NAMES_API_URL);
+parcelHelpers.export(exports, "POKEMON_DATABASE_URL", ()=>POKEMON_DATABASE_URL);
 parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
 const MAIN_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
 const DESC_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/';
 const POKEMON_NAMES_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/?limit=1025';
+const POKEMON_DATABASE_URL = 'https://pokeapi.co/api/v2/pokemon/?limit=25';
 const TIMEOUT_SEC = 10; /**
  * Pokemon Name (https://pokeapi.co/api/v2/pokemon-form/1/ --> "name":"bulbasaur"
  *
@@ -2156,13 +2165,17 @@ parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("./View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
 class SearchView extends (0, _viewJsDefault.default) {
-    _parentEl = document.querySelector('.search__form');
+    _parentEl = document.querySelector('.search__input');
     _errorMessage = "We could not find that Pok\xe9mon! Please try again.";
     addHandlerSearch(handler) {
-        this._parentEl.querySelector('.search__input').addEventListener('input', handler);
+        window.addEventListener('load', handler);
+        this._parentEl.addEventListener('input', handler);
+        this._parentEl.addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
     }
     getQuery() {
-        return this._parentEl.querySelector('.search__input').value;
+        return this._parentEl.value;
     }
 }
 exports.default = new SearchView();
@@ -2186,10 +2199,11 @@ class View {
         this._clear();
         this._parentEl.insertAdjacentHTML('afterbegin', markup);
     };
-    render(data) {
-        if (!data) return this.renderError();
+    render(data, render = true) {
+        if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
         this._data = data;
         const markup = this._generateMarkup();
+        if (!render) return markup;
         this._clear();
         this._parentEl.insertAdjacentHTML('afterbegin', markup);
     }
@@ -2985,6 +2999,22 @@ try {
     else Function("r", "regeneratorRuntime = r")(runtime);
 }
 
-},{}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire7ea9", {}, "./", "/")
+},{}],"fYkxP":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class ResultsView extends (0, _viewJsDefault.default) {
+    _parentEl = document.querySelector('.search__preview--container');
+    _errorMessage = "We could not find that Pok\xe9mon! Please try again.";
+    _generateMarkup() {
+        console.log('wor');
+        // Map each Pokémon from an array of data created with previewView markup texts and consolidate markup into one string
+        return this._data.map((result)=>previewView.render(result, false));
+    }
+}
+exports.default = new ResultsView();
+
+},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire7ea9", {}, "./", "/")
 
 //# sourceMappingURL=PokeDex.4a59a05f.js.map
