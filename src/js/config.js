@@ -4,7 +4,7 @@ export const POKEMON_NAMES_API_URL =
   'https://pokeapi.co/api/v2/pokemon-species/?limit=1025';
 
 export const TIMEOUT_SEC = 10;
-export const LIMIT = 20;
+export const LIMIT = 21;
 
 /**
  * Pokemon Name (https://pokeapi.co/api/v2/pokemon-form/1/ --> "name":"bulbasaur"

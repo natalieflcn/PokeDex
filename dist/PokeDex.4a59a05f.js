@@ -685,7 +685,7 @@ const controlPokemonPanel = async function() {
         (0, _panelViewJsDefault.default).renderSpinner();
         // Update searchResultsView to highlight active search result (screen 1)
         // Load Pokémon (data) panel details
-        await _modelJs.loadPokemon(155);
+        await _modelJs.loadPokemon(144);
         // Render Pokémon panel (screen 2 -- search)
         (0, _panelViewJsDefault.default).render(_modelJs.state.pokemon);
     } catch (err) {
@@ -697,17 +697,18 @@ const controlSearchResults = async function() {
         // Retrieve query from user input
         const query = (0, _searchViewJsDefault.default).getQuery();
         // TODO If there's no query, render all existing Pokémon
-        if (!query) await _modelJs.loadSearchResults(_modelJs.state.pokemonNames);
+        if (!query) ;
         else // Load Pokémon search results data
         await _modelJs.loadSearchResults(query, true);
-    // Render Pokémon search results (screen 1 -- search)
-    //resultsView.render(model.state.search.results);
+        // Render Pokémon search results (screen 1 -- search)
+        (0, _resultsViewJsDefault.default).render(_modelJs.state.search.results);
     } catch (err) {
         (0, _searchViewJsDefault.default).renderError();
     }
 };
 const initPokemonData = async function() {
     // Load initial Pokémon search results
+    await _modelJs.loadPokemonBatch(0, true);
     // Load all Pokémon names and store them into our state
     await _modelJs.storePokemonNames();
 };
@@ -2046,7 +2047,7 @@ const createPokemonPreviewObject = function(name, details) {
         img
     };
 };
-const loadPokemonBatch = async function(offset = 0, initialPageLoad = false) {
+const loadPokemonBatch = async function(offset = 0, defaultBatch = false) {
     try {
         state.search.results = [];
         // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
@@ -2062,7 +2063,6 @@ const loadPokemonBatch = async function(offset = 0, initialPageLoad = false) {
         throw err;
     }
 };
-loadPokemonBatch();
 const loadPokemon = async function(pokemon1) {
     try {
         const data1 = await Promise.all([
@@ -2138,7 +2138,7 @@ const MAIN_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
 const DETAILS_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/';
 const POKEMON_NAMES_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/?limit=1025';
 const TIMEOUT_SEC = 10;
-const LIMIT = 20; /**
+const LIMIT = 21; /**
  * Pokemon Name (https://pokeapi.co/api/v2/pokemon-form/1/ --> "name":"bulbasaur"
  *
  * Image -- Pokemon Visual (https://pokeapi.co/api/v2/pokemon-form/1/ --> "front_default":"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
@@ -2315,6 +2315,7 @@ class PanelView extends (0, _viewJsDefault.default) {
                     class="profile__progress"
                     value="${this._data.stats[0][1]}"
                     max="255"
+                    style="color: red"
                   ></progress>
                 </div>
                 <div class="search__stats--row">
@@ -3037,16 +3038,41 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("./View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _previewViewJs = require("./previewView.js");
+var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
 class ResultsView extends (0, _viewJsDefault.default) {
     _parentEl = document.querySelector('.search__preview--container');
     _errorMessage = "We could not find that Pok\xe9mon! Please try again.";
     _generateMarkup() {
-        console.log('wor');
         // Map each Pokémon from an array of data created with previewView markup texts and consolidate markup into one string
-        return this._data.map((result)=>previewView.render(result, false));
+        return this._data.map((result)=>(0, _previewViewJsDefault.default).render(result, false)).join('');
     }
 }
 exports.default = new ResultsView();
+
+},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./previewView.js":"hoVX0"}],"hoVX0":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class PreviewView extends (0, _viewJsDefault.default) {
+    _parentEl = '';
+    _generateMarkup(activePokemon = 0) {
+        //search__preview--active TODO Need to implement active class based on active Pokemon (Pokemon in the state)
+        return `
+            <div class="search__preview">
+                <span class="pokemon__id search__preview--id">#${this._data.id}</span
+                ><img
+                  class="search__preview--img"
+                  src=${this._data.img}
+                  alt=""
+                />
+                <p class="search__preview--name">${this._data.name}</p>
+            </div>
+            `;
+    }
+}
+exports.default = new PreviewView();
 
 },{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire7ea9", {}, "./", "/")
 

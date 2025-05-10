@@ -61,6 +61,7 @@ class PanelView extends View {
                     class="profile__progress"
                     value="${this._data.stats[0][1]}"
                     max="255"
+                    style="color: red"
                   ></progress>
                 </div>
                 <div class="search__stats--row">

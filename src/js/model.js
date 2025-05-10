@@ -96,7 +96,7 @@ const createPokemonPreviewObject = function (name, details) {
 // To load Pokémon details for the current batch rendered in search results [screen 1]
 export const loadPokemonBatch = async function (
   offset = 0,
-  initialPageLoad = false
+  defaultBatch = false
 ) {
   try {
     state.search.results = [];
@@ -122,7 +122,6 @@ export const loadPokemonBatch = async function (
   }
 };
 
-loadPokemonBatch();
 // To load Pokémon details for the search panel [screen 2]
 export const loadPokemon = async function (pokemon) {
   try {

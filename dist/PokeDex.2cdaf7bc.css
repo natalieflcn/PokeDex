@@ -452,26 +452,26 @@ body {
   font-weight: bold;
 }
 
-.search__preview--active, .profile__preview--active {
+.search__preview--active, .profile__preview--active, .search__preview:hover, .profile__preview:hover {
   background-color: var(--text--light);
   background-blend-mode: normal;
   box-shadow: 0px 0px 4px 3px var(--secondary-color--red-gradient--2);
   background-image: url("pokeball-red.0e004c28.svg");
 }
 
-.search__preview--active .search__preview--id, .profile__preview--active .profile__preview--id {
+.search__preview--active .search__preview--id, .profile__preview--active .profile__preview--id, .search__preview:hover .search__preview--id, .profile__preview:hover .profile__preview--id {
   border: 1px solid var(--secondary-color--red-gradient--1);
   box-shadow: 0px 0px 3px 3px var(--secondary-color--red-gradient--2);
 }
 
-.search__preview--active .search__preview--name, .profile__preview--active .profile__preview--name {
+.search__preview--active .search__preview--name, .profile__preview--active .profile__preview--name, .search__preview:hover .search__preview--name, .profile__preview:hover .profile__preview--name {
   background-color: var(--secondary-color--grey);
   box-shadow: 1px 1px 2px 2px var(--screen-color--dark);
   text-shadow: none;
   color: var(--screen-color--dark);
 }
 
-.search__preview--active .search__preview--img, .profile__preview--active .profile__preview--img {
+.search__preview--active .search__preview--img, .profile__preview--active .profile__preview--img, .search__preview:hover .search__preview--img, .profile__preview:hover .profile__preview--img {
   animation: .3s cubic-bezier(.5, .06, 1, 1) infinite alternate bounce;
 }
 
@@ -555,6 +555,7 @@ body {
   margin-bottom: .9rem;
   font-size: .85rem;
   display: flex;
+  position: relative;
 }
 
 .search__stats--row p {
@@ -567,10 +568,13 @@ body {
 }
 
 .search__stats--row progress {
+  background-color: red;
   border: 1px solid #141414;
   border-radius: 2px;
-  width: 14rem;
+  width: 13rem;
   height: .5rem;
+  position: absolute;
+  right: 8%;
 }
 
 .search__moves {

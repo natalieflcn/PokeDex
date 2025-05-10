@@ -560,7 +560,9 @@ body {
 }
 
 .search__preview--active,
-.profile__preview--active {
+.profile__preview--active,
+.search__preview:hover,
+.profile__preview:hover {
   background-color: var(--text--light);
   background-image: url(imgs/pokeball-red.svg);
   background-blend-mode: normal;
@@ -568,13 +570,17 @@ body {
 }
 
 .search__preview--active .search__preview--id,
-.profile__preview--active .profile__preview--id {
+.profile__preview--active .profile__preview--id,
+.search__preview:hover .search__preview--id,
+.profile__preview:hover .profile__preview--id {
   border: 1px solid var(--secondary-color--red-gradient--1);
   box-shadow: 0px 0px 3px 3px var(--secondary-color--red-gradient--2);
 }
 
 .search__preview--active .search__preview--name,
-.profile__preview--active .profile__preview--name {
+.profile__preview--active .profile__preview--name,
+.search__preview:hover .search__preview--name,
+.profile__preview:hover .profile__preview--name {
   background-color: var(--secondary-color--grey);
   box-shadow: 1px 1px 2px 2px var(--screen-color--dark);
   text-shadow: none;
@@ -582,7 +588,9 @@ body {
 }
 
 .search__preview--active .search__preview--img,
-.profile__preview--active .profile__preview--img {
+.profile__preview--active .profile__preview--img,
+.search__preview:hover .search__preview--img,
+.profile__preview:hover .profile__preview--img {
   animation: bounce 0.3s;
   animation-direction: alternate;
   animation-timing-function: cubic-bezier(0.5, 0.06, 1, 1);
@@ -667,9 +675,10 @@ body {
 
 .search__stats--row {
   display: flex;
+  align-items: center;
+  position: relative;
   font-size: 0.85rem;
   margin-bottom: 0.9rem;
-  align-items: center;
 }
 
 .search__stats--row p {
@@ -682,10 +691,13 @@ body {
 }
 
 .search__stats--row progress {
-  width: 14rem;
+  position: absolute;
+  right: 8%;
+  width: 13rem;
   height: 0.5rem;
   border-radius: 2px;
   border: 1px solid rgb(20, 20, 20);
+  background-color: red;
 }
 
 .search__moves {
