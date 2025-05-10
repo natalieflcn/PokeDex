@@ -39,17 +39,20 @@ const controlSearchResults = async function () {
       await model.loadSearchResults(query, true);
     }
     // Render Pokémon search results (screen 1 -- search)
-    resultsView.render(query ? model.state.query : model.state.pokemonNames);
+    //resultsView.render(model.state.search.results);
   } catch (err) {
     searchView.renderError();
   }
 };
 
 const initPokemonData = async function () {
+  // Load initial Pokémon search results
+
+  // Load all Pokémon names and store them into our state
   await model.storePokemonNames();
 };
 
-const init = function () {
+const init = async function () {
   initPokemonData();
   panelView.addHandlerRender(controlPokemonPanel);
   searchView.addHandlerSearch(controlSearchResults);

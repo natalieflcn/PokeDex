@@ -6,7 +6,7 @@ class PreviewView extends View {
 
   _generateMarkup() {
     console.log('markup working');
-    //Data only returns name,
+    //Data only returns name -- this is not working because its not receiving id or img
     return `
             <div class="search__preview search__preview--active">
                 <span class="pokemon__id search__preview--id">#${this._data.id}</span

@@ -700,16 +700,18 @@ const controlSearchResults = async function() {
         if (!query) await _modelJs.loadSearchResults(_modelJs.state.pokemonNames);
         else // Load Pokémon search results data
         await _modelJs.loadSearchResults(query, true);
-        // Render Pokémon search results (screen 1 -- search)
-        (0, _resultsViewJsDefault.default).render(query ? _modelJs.state.query : _modelJs.state.pokemonNames);
+    // Render Pokémon search results (screen 1 -- search)
+    //resultsView.render(model.state.search.results);
     } catch (err) {
         (0, _searchViewJsDefault.default).renderError();
     }
 };
 const initPokemonData = async function() {
+    // Load initial Pokémon search results
+    // Load all Pokémon names and store them into our state
     await _modelJs.storePokemonNames();
 };
-const init = function() {
+const init = async function() {
     initPokemonData();
     (0, _panelViewJsDefault.default).addHandlerRender(controlPokemonPanel);
     (0, _searchViewJsDefault.default).addHandlerSearch(controlSearchResults);
@@ -1974,20 +1976,20 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "storePokemonNames", ()=>storePokemonNames);
-parcelHelpers.export(exports, "storeAllPokemon", ()=>storeAllPokemon);
-parcelHelpers.export(exports, "createPokemonObject", ()=>createPokemonObject);
+parcelHelpers.export(exports, "loadPokemonBatch", ()=>loadPokemonBatch);
 parcelHelpers.export(exports, "loadPokemon", ()=>loadPokemon);
 parcelHelpers.export(exports, "loadSearchResults", ()=>loadSearchResults);
 var _configJs = require("./config.js");
 var _helpersJs = require("./helpers.js");
 const state = {
-    pokemon: {},
     pokemonNames: [],
-    allPokemon: [],
     search: {
         query: '',
-        results: []
+        results: [],
+        offset: 0,
+        limit: (0, _configJs.LIMIT)
     },
+    pokemon: {},
     profile: {
         name: '',
         types: []
@@ -2001,25 +2003,27 @@ const storePokemonNames = async function() {
     const pokemonNames = results.map((pokemon1)=>pokemon1.name);
     state.pokemonNames = pokemonNames;
 };
-const storeAllPokemon = async function() {
-    const pokeAPIData = await (0, _helpersJs.AJAX)(`${(0, _configJs.POKEMON_NAMES_API_URL)}`);
-    const { results } = pokeAPIData;
-    const pokemonNames = results.map((pokemon1)=>pokemon1.name);
-    state.pokemonNames = pokemonNames;
-};
-const createPokemonObject = async function(data) {
+// To store 25 Pokémon (names, IDs, and imgs) in our state for initial/default resultsView
+// export const storeAllPokemon = async function () {
+//   const pokeAPIData = await AJAX(`${POKEMON_NAMES_API_URL}`);
+//   const { results } = pokeAPIData;
+//   const pokemonNames = results.map(pokemon => pokemon.name);
+//   state.pokemonNames = pokemonNames;
+// };
+// To create a Pokémon object after parsing PokéAPI data
+const createPokemonObject = function(data1) {
     // Loaded from MAIN_API_URL
-    const { name, id, sprites: { front_default: img }, height, weight } = data[0];
-    const types = data[0].types.map((entry)=>(0, _helpersJs.capitalize)(entry.type.name));
-    const stats = data[0].stats.map((stat)=>[
+    const { name, id, sprites: { front_default: img }, height, weight } = data1[0];
+    const types = data1[0].types.map((entry)=>(0, _helpersJs.capitalize)(entry.type.name));
+    const stats = data1[0].stats.map((stat)=>[
             stat.stat.name,
             stat.base_stat
         ]);
-    const moves = data[0].moves.slice(0, 6).map((mov)=>{
+    const moves = data1[0].moves.slice(0, 6).map((mov)=>{
         return mov.move.name.split('-').map((word)=>(0, _helpersJs.capitalize)(word)).join(' ');
     });
-    // Loaded from DESC_API_URL
-    const [{ flavor_text }] = data[1].flavor_text_entries;
+    // Loaded from DETAILS_API_URL
+    const [{ flavor_text }] = data1[1].flavor_text_entries;
     return {
         name: (0, _helpersJs.capitalize)(name),
         id,
@@ -2032,25 +2036,52 @@ const createPokemonObject = async function(data) {
         moves
     };
 };
+// To create a Pokémon preview object after parsing PokéAPI data
+const createPokemonPreviewObject = function(name, details) {
+    const { id, sprites: { front_default: img } } = details;
+    console.log(name, id, img);
+    return {
+        name: (0, _helpersJs.capitalize)(name),
+        id,
+        img
+    };
+};
+const loadPokemonBatch = async function(offset = 0, initialPageLoad = false) {
+    try {
+        state.search.results = [];
+        // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
+        let currPokemon = 1;
+        const pokemonNames = await (0, _helpersJs.AJAX)(`${(0, _configJs.DETAILS_API_URL)}?limit=${state.search.limit}&offset=${offset}`);
+        for (const pokemon1 of pokemonNames.results){
+            const pokemonName = pokemon1.name;
+            const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemonName}`);
+            state.search.results.push(createPokemonPreviewObject(pokemonName, pokemonDetails));
+        }
+    // Retrieving Pokémon Names -- Any default display after page loads (after storing PokemonNames) TODO
+    } catch (err) {
+        throw err;
+    }
+};
+loadPokemonBatch();
 const loadPokemon = async function(pokemon1) {
     try {
-        const data = await Promise.all([
+        const data1 = await Promise.all([
             (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon1}`),
-            (0, _helpersJs.AJAX)(`${(0, _configJs.DESC_API_URL)}${pokemon1}`)
+            (0, _helpersJs.AJAX)(`${(0, _configJs.DETAILS_API_URL)}${pokemon1}`)
         ]);
-        state.pokemon = await createPokemonObject(data);
+        state.pokemon = createPokemonObject(data1);
     } catch (err) {
         throw err;
     }
 };
 const loadSearchResults = async function(query, allPokemon = false) {
     state.search.query = query; //array of pokemon names, need to pull name out of array, ajax call, store data into array
-    console.log('query is ' + query);
+    //console.log(query);
     try {
-        const data1 = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${query}`);
+        //const data1 = await AJAX(`${MAIN_API_URL}${query}`);
         // if allPokemon is false, use helper method to determine search results array
         for (pokemon of query){
-            const data = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
+            //const data = await AJAX(`${MAIN_API_URL}${pokemon}`);
             const { name, id, sprites: { front_default: img } } = data;
             state.search.results.push({
                 name,
@@ -2058,6 +2089,8 @@ const loadSearchResults = async function(query, allPokemon = false) {
                 img
             });
         }
+        state.search.results = state.pokemonNames;
+    //console.log(state.search.results);
     } catch (err) {
         throw err;
     }
@@ -2097,15 +2130,15 @@ exports.export = function(dest, destName, get) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "MAIN_API_URL", ()=>MAIN_API_URL);
-parcelHelpers.export(exports, "DESC_API_URL", ()=>DESC_API_URL);
+parcelHelpers.export(exports, "DETAILS_API_URL", ()=>DETAILS_API_URL);
 parcelHelpers.export(exports, "POKEMON_NAMES_API_URL", ()=>POKEMON_NAMES_API_URL);
-parcelHelpers.export(exports, "POKEMON_DATABASE_URL", ()=>POKEMON_DATABASE_URL);
 parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
+parcelHelpers.export(exports, "LIMIT", ()=>LIMIT);
 const MAIN_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
-const DESC_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/';
+const DETAILS_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/';
 const POKEMON_NAMES_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/?limit=1025';
-const POKEMON_DATABASE_URL = 'https://pokeapi.co/api/v2/pokemon/?limit=25';
-const TIMEOUT_SEC = 10; /**
+const TIMEOUT_SEC = 10;
+const LIMIT = 20; /**
  * Pokemon Name (https://pokeapi.co/api/v2/pokemon-form/1/ --> "name":"bulbasaur"
  *
  * Image -- Pokemon Visual (https://pokeapi.co/api/v2/pokemon-form/1/ --> "front_default":"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
