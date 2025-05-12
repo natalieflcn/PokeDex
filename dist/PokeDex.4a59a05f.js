@@ -685,7 +685,7 @@ const controlPokemonPanel = async function() {
         (0, _panelViewJsDefault.default).renderSpinner();
         // Update searchResultsView to highlight active search result (screen 1)
         // Load Pokémon (data) panel details
-        await _modelJs.loadPokemon(144);
+        await _modelJs.loadPokemon(155);
         // Render Pokémon panel (screen 2 -- search)
         (0, _panelViewJsDefault.default).render(_modelJs.state.pokemon);
     } catch (err) {
@@ -697,7 +697,7 @@ const controlSearchResults = async function() {
         // Retrieve query from user input
         const query = (0, _searchViewJsDefault.default).getQuery();
         // TODO If there's no query, render all existing Pokémon
-        if (!query) ;
+        if (!query) await _modelJs.loadPokemonBatch(0, true);
         else // Load Pokémon search results data
         await _modelJs.loadSearchResults(query, true);
         // Render Pokémon search results (screen 1 -- search)
@@ -708,7 +708,6 @@ const controlSearchResults = async function() {
 };
 const initPokemonData = async function() {
     // Load initial Pokémon search results
-    await _modelJs.loadPokemonBatch(0, true);
     // Load all Pokémon names and store them into our state
     await _modelJs.storePokemonNames();
 };
@@ -2311,57 +2310,44 @@ class PanelView extends (0, _viewJsDefault.default) {
                 <div class="search__stats--row">
                   <p>HP</p>
                   <span class="label--inset">${this._data.stats[0][1]}</span>
-                  <progress
-                    class="profile__progress"
-                    value="${this._data.stats[0][1]}"
-                    max="255"
-                    style="color: red"
-                  ></progress>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[0][1] / 255 * 100}%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>ATK</p>
                   <span class="label--inset">${this._data.stats[1][1]}</span>
-                  <progress
-                    class="profile__progress"
-                    value="${this._data.stats[1][1]}"
-                    max="255"
-                  ></progress>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[1][1] / 255 * 100}%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>DEF</p>
                   <span class="label--inset">${this._data.stats[2][1]}</span>
-                  <progress
-                    class="profile__progress"
-                    value="${this._data.stats[2][1]}"
-                    max="255"
-                  ></progress>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[2][1] / 255 * 100}%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>SATK</p>
                   <span class="label--inset">${this._data.stats[3][1]}</span>
-                  <progress
-                    class="profile__progress"
-                    value="${this._data.stats[3][1]}"
-                    max="255"
-                  ></progress>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[3][1] / 255 * 100}%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>SDEF</p>
                   <span class="label--inset">${this._data.stats[4][1]}</span>
-                  <progress
-                    class="profile__progress"
-                    value="${this._data.stats[4][1]}"
-                    max="255"
-                  ></progress>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[4][1] / 255 * 100}%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>SPD</p>
                   <span class="label--inset">${this._data.stats[5][1]}</span>
-                  <progress
-                    class="profile__progress"
-                    value="${this._data.stats[5][1]}"
-                    max="255"
-                  ></progress>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[5][1] / 255 * 100}%"></div></div>
                 </div>
               </div>
 

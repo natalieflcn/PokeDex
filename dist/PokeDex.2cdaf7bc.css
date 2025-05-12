@@ -155,6 +155,13 @@ body {
   font-size: .75rem;
 }
 
+.progress__outer {
+  background-color: var(--secondary-color--grey-gradient);
+  box-shadow: 0px 0px 5px inset var(--screen-color--dark);
+  border: 1px solid #141414;
+  border-radius: 2px;
+}
+
 .bio {
   box-sizing: border-box;
   background-color: var(--text--light);
@@ -567,14 +574,15 @@ body {
   font-size: .6rem;
 }
 
-.search__stats--row progress {
-  background-color: red;
-  border: 1px solid #141414;
-  border-radius: 2px;
-  width: 13rem;
+.search__stats--row .progress__outer {
+  width: 12rem;
   height: .5rem;
   position: absolute;
   right: 8%;
+}
+
+.search__stats--row .progress__inner {
+  height: .45rem;
 }
 
 .search__moves {
@@ -857,7 +865,7 @@ body {
   width: 4rem;
 }
 
-.profile__progress {
+.profile__progress .progress {
   background-color: green;
   border: 1px solid #141414;
   border-radius: 2px;

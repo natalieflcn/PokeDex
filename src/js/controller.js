@@ -17,7 +17,7 @@ const controlPokemonPanel = async function () {
     // Update searchResultsView to highlight active search result (screen 1)
 
     // Load Pokémon (data) panel details
-    await model.loadPokemon(144);
+    await model.loadPokemon(155);
 
     // Render Pokémon panel (screen 2 -- search)
     panelView.render(model.state.pokemon);
@@ -33,6 +33,7 @@ const controlSearchResults = async function () {
 
     // TODO If there's no query, render all existing Pokémon
     if (!query) {
+      await model.loadPokemonBatch(0, true);
     } else {
       // Load Pokémon search results data
       await model.loadSearchResults(query, true);
@@ -46,7 +47,6 @@ const controlSearchResults = async function () {
 
 const initPokemonData = async function () {
   // Load initial Pokémon search results
-  await model.loadPokemonBatch(0, true);
 
   // Load all Pokémon names and store them into our state
   await model.storePokemonNames();

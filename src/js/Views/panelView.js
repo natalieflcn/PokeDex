@@ -57,57 +57,68 @@ class PanelView extends View {
                 <div class="search__stats--row">
                   <p>HP</p>
                   <span class="label--inset">${this._data.stats[0][1]}</span>
-                  <progress
-                    class="profile__progress"
-                    value="${this._data.stats[0][1]}"
-                    max="255"
-                    style="color: red"
-                  ></progress>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${
+                    this._data.types[0]
+                  }); width: ${
+      (this._data.stats[0][1] / 255) * 100
+    }%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>ATK</p>
                   <span class="label--inset">${this._data.stats[1][1]}</span>
-                  <progress
-                    class="profile__progress"
-                    value="${this._data.stats[1][1]}"
-                    max="255"
-                  ></progress>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${
+                    this._data.types[0]
+                  }); width: ${
+      (this._data.stats[1][1] / 255) * 100
+    }%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>DEF</p>
                   <span class="label--inset">${this._data.stats[2][1]}</span>
-                  <progress
-                    class="profile__progress"
-                    value="${this._data.stats[2][1]}"
-                    max="255"
-                  ></progress>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${
+                    this._data.types[0]
+                  }); width: ${
+      (this._data.stats[2][1] / 255) * 100
+    }%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>SATK</p>
                   <span class="label--inset">${this._data.stats[3][1]}</span>
-                  <progress
-                    class="profile__progress"
-                    value="${this._data.stats[3][1]}"
-                    max="255"
-                  ></progress>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${
+                    this._data.types[0]
+                  }); width: ${
+      (this._data.stats[3][1] / 255) * 100
+    }%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>SDEF</p>
                   <span class="label--inset">${this._data.stats[4][1]}</span>
-                  <progress
-                    class="profile__progress"
-                    value="${this._data.stats[4][1]}"
-                    max="255"
-                  ></progress>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${
+                    this._data.types[0]
+                  }); width: ${
+      (this._data.stats[4][1] / 255) * 100
+    }%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>SPD</p>
                   <span class="label--inset">${this._data.stats[5][1]}</span>
-                  <progress
-                    class="profile__progress"
-                    value="${this._data.stats[5][1]}"
-                    max="255"
-                  ></progress>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${
+                    this._data.types[0]
+                  }); width: ${
+      (this._data.stats[5][1] / 255) * 100
+    }%"></div></div>
                 </div>
               </div>
 
