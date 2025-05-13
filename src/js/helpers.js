@@ -8,6 +8,7 @@ const timeout = function (s) {
   });
 };
 
+// To consolidate fetching data and parsing the JSON response
 export const AJAX = async function (url) {
   try {
     const res = await Promise.race([fetch(url), timeout(TIMEOUT_SEC)]);
@@ -21,6 +22,32 @@ export const AJAX = async function (url) {
   }
 };
 
+// To capitalize a word
 export const capitalize = function (word) {
   return word[0].toUpperCase().concat(word.slice(1));
+};
+
+// To observe a sentinel with IntersectionObserverAPI
+export const observeSentinel = function (sentinel, handler, options) {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) handler();
+    }),
+      {
+        root: options.root,
+        threshold: options.threshold,
+        rootMargin: '5rem',
+      };
+  });
+
+  observer.observe(sentinel);
+
+  return observer;
+};
+
+// To unobserve a sentinel
+export const unobserveSentinel = function (sentinel) {
+  if (observer && sentinel) {
+    observer.unobserve(observer, sentinel);
+  }
 };

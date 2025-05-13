@@ -59,7 +59,7 @@
       <main class="screen__border">
         <section class="screen__1">
           <!-- Perspective: Search -->
-          <section class="screen__1--search ">
+          <section class="screen__1--search">
             <form class="form search__form">
               <input class="input search__input" type="text" name="search-query" id="search-query" placeholder="Search for a Pokémon...">
               <!-- <button class="btn search__btn--submit btn--grey">
@@ -93,9 +93,10 @@
                   alt=""
                 />
                 <p class="search__preview--name">Bulbasaur</p>
-              </div>
-            </div> -->
-          </div></section>
+              </div> -->
+            </div>
+            <span class="search__sentinel"></span>
+          </section>
 
           <!-- Perspective: Map -->
           <section class="screen__1--map hidden">
@@ -164,12 +165,8 @@
                   </header>
 
                   <div class="map__entry--types">
-                    <p class="profile__stats--type pokemon__type">
-                      Grass
-                    </p>
-                    <p class="profile__stats--type pokemon__type">
-                      Poison
-                    </p>
+                    <p class="profile__stats--type pokemon__type">Grass</p>
+                    <p class="profile__stats--type pokemon__type">Poison</p>
                   </div>
 
                   <div class="map__entry--timestamp">
@@ -205,12 +202,8 @@
                   </header>
 
                   <div class="map__entry--types">
-                    <p class="profile__stats--type pokemon__type">
-                      Grass
-                    </p>
-                    <p class="profile__stats--type pokemon__type">
-                      Poison
-                    </p>
+                    <p class="profile__stats--type pokemon__type">Grass</p>
+                    <p class="profile__stats--type pokemon__type">Poison</p>
                   </div>
 
                   <div class="map__entry--timestamp">
@@ -246,12 +239,8 @@
                   </header>
 
                   <div class="map__entry--types">
-                    <p class="profile__stats--type pokemon__type">
-                      Grass
-                    </p>
-                    <p class="profile__stats--type pokemon__type">
-                      Poison
-                    </p>
+                    <p class="profile__stats--type pokemon__type">Grass</p>
+                    <p class="profile__stats--type pokemon__type">Poison</p>
                   </div>
 
                   <div class="map__entry--timestamp">
@@ -293,7 +282,9 @@
                     Normal
                   </p>
                   <span class="profile__label label--inset">255</span>
-                  <div class="profile__progress progress__outer" value="25" max="100"><span class="profile__progress progress__inner"></span></div>
+                  <div class="profile__progress progress__outer" value="25" max="100">
+                    <span class="profile__progress progress__inner"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p class="profile__stats--type pokemon__type" data-type="Fire">
@@ -426,7 +417,7 @@
 
         <section class="screen__2">
           <!-- Perspective: Search -->
-          <section class="screen__2--search ">
+          <section class="screen__2--search">
             <!-- <div class="search__panel">
               <img
                 class="img__display"

@@ -17,8 +17,11 @@ export const state = {
   search: {
     query: '',
     results: [],
+    currentBatch: [], // For loading additional batches of Pokémon
     offset: 0,
     limit: LIMIT,
+    initialBatchLoaded: false, // For loading the initial batch of Pokémon without query results
+    hasMoreResults: true,
   },
   pokemon: {},
   profile: {
@@ -36,6 +39,7 @@ export const storeAllPokemonNames = async function () {
   const pokemonNames = results.map(pokemon => pokemon.name);
 
   state.allPokemonNames = pokemonNames;
+  state.allPokemonNames.loaded = true;
 };
 
 // To create a Pokémon object after parsing PokéAPI data
@@ -99,44 +103,60 @@ const createPokemonPreviewObject = function (name, details) {
 // SEARCH: Rendering search results and Pokémon panel details
 
 // To load Pokémon details for the current batch rendered in search results [screen 1]
-export const loadSearchResults = async function (
-  offset = 0,
-  moreResults = false
-) {
+export const loadSearchResults = async function (offset, moreResults = false) {
   try {
+    state.loading = true;
     let pokemonNames;
 
     // To start a clean slate of search results, if not loading sequential batches of results
-    if (!moreResults) state.search.results = [];
+    if (!moreResults) {
+      state.search.results = [];
+      state.search.offset = 0;
+      state.initialBatchLoaded = false;
+    }
 
     // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
     if (!state.allPokemonNames.loaded) {
-      // When the page is initially loading, before all Pokémon names are fetched and stored
-      pokemonNames = await AJAX(
+      const pokemon = await AJAX(
         `${DETAILS_API_URL}?limit=${state.search.limit}&offset=${offset}`
       );
+      pokemonNames = pokemon.results;
     } else {
       pokemonNames = state.allPokemonNames.slice(
         state.search.offset,
         state.search.offset + LIMIT
       );
     }
+    console.log(pokemonNames); //current batch names details
 
-    for (const pokemon of pokemonNames.results) {
-      const pokemonName = pokemon.name;
+    state.currentBatch = [];
+    console.log(state.currentBatch);
+
+    for (const pokemon of pokemonNames) {
+      const pokemonName = pokemon.name || pokemon;
+      console.log('logging for loop of ' + pokemon);
       const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemonName}`);
-      state.search.results.push(
-        createPokemonPreviewObject(pokemonName, pokemonDetails)
+      const pokemonPreview = createPokemonPreviewObject(
+        pokemonName,
+        pokemonDetails
       );
+      state.search.results.push(pokemonPreview);
+      state.search.currentBatch.push(pokemonPreview);
     }
 
     state.search.offset += LIMIT;
+    console.log('offset is now ' + state.search.offset);
 
+    state.loading = false;
+    console.log(state.search.currentBatch);
+    console.log(state.search.results);
     // Retrieving Pokémon Names -- Any default display after page loads (after storing PokemonNames) TODO
   } catch (err) {
     throw err;
   }
 };
+
+export const loadAdditionalBatch = async function (offset) {};
 
 // To load Pokémon previews in the search results screen [screen 1] TODO Working on it
 export const loadQueryResults = async function (query) {
@@ -165,9 +185,9 @@ export const loadQueryResults = async function (query) {
   }
 };
 
-export const endOfResults = function (pokemonNames) {
-  return state.search.limit + state.search.offset < pokemonNames.length;
-};
+// export const endOfResults = function (pokemonNames) {
+//   return state.search.limit + state.search.offset < pokemonNames.length;
+// };
 
 // To load Pokémon details for the search panel [screen 2]
 export const loadPokemon = async function (pokemon) {
