@@ -1,5 +1,6 @@
 export const MAIN_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
 export const DETAILS_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/';
+export const MOVE_TYPE_URL = 'https://pokeapi.co/api/v2/move/';
 export const POKEMON_NAMES_API_URL =
   'https://pokeapi.co/api/v2/pokemon-species/?limit=1025';
 

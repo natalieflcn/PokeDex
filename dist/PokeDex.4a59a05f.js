@@ -677,6 +677,30 @@ var _panelViewJsDefault = parcelHelpers.interopDefault(_panelViewJs);
 var _runtime = require("regenerator-runtime/runtime");
 var _resultsViewJs = require("./Views/resultsView.js");
 var _resultsViewJsDefault = parcelHelpers.interopDefault(_resultsViewJs);
+// To coordinate rendering of the search results [Screen 1]
+const controlSearchResults = async function() {
+    try {
+        // Retrieve query from user input
+        const query = (0, _searchViewJsDefault.default).getQuery();
+        // TODO If there's no query, render all existing Pokémon
+        if (!query) await _modelJs.loadSearchResults(0);
+        else // Load Pokémon search results data
+        await _modelJs.loadSearchResults(query);
+        // Render Pokémon search results (screen 1 -- search)
+        (0, _resultsViewJsDefault.default).render(_modelJs.state.search.results);
+    } catch (err) {
+        (0, _searchViewJsDefault.default).renderError();
+    }
+};
+// To determine the scroll position of the client and to load more data, if necessary
+const controlScrollLoad = async function() {
+    //if state.loading, state.endofresults, return TODO
+    if (state.loading || _modelJs.endOfResults()) return;
+    state.loading = true;
+    await _modelJs.loadSearchResults(state.offset, true);
+    state.loading = false;
+};
+// To coordinate rendering of the Pokémon Panel [Screen 2]
 const controlPokemonPanel = async function() {
     try {
         // Retrieve hash from URL
@@ -685,33 +709,18 @@ const controlPokemonPanel = async function() {
         (0, _panelViewJsDefault.default).renderSpinner();
         // Update searchResultsView to highlight active search result (screen 1)
         // Load Pokémon (data) panel details
-        await _modelJs.loadPokemon(155);
+        await _modelJs.loadPokemon(4);
         // Render Pokémon panel (screen 2 -- search)
         (0, _panelViewJsDefault.default).render(_modelJs.state.pokemon);
     } catch (err) {
         (0, _panelViewJsDefault.default).renderError();
     }
 };
-const controlSearchResults = async function() {
-    try {
-        // Retrieve query from user input
-        const query = (0, _searchViewJsDefault.default).getQuery();
-        // TODO If there's no query, render all existing Pokémon
-        if (!query) await _modelJs.loadPokemonBatch(0, true);
-        else // Load Pokémon search results data
-        await _modelJs.loadSearchResults(query, true);
-        // Render Pokémon search results (screen 1 -- search)
-        (0, _resultsViewJsDefault.default).render(_modelJs.state.search.results);
-    } catch (err) {
-        (0, _searchViewJsDefault.default).renderError();
-    }
-};
+// To initialize all Pokémon names to store in our state
 const initPokemonData = async function() {
-    // Load initial Pokémon search results
-    // Load all Pokémon names and store them into our state
-    await _modelJs.storePokemonNames();
+    await _modelJs.storeAllPokemonNames();
 };
-const init = async function() {
+const init = function() {
     initPokemonData();
     (0, _panelViewJsDefault.default).addHandlerRender(controlPokemonPanel);
     (0, _searchViewJsDefault.default).addHandlerSearch(controlSearchResults);
@@ -1975,14 +1984,19 @@ module.exports = function(scheduler, hasTimeArg) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
-parcelHelpers.export(exports, "storePokemonNames", ()=>storePokemonNames);
-parcelHelpers.export(exports, "loadPokemonBatch", ()=>loadPokemonBatch);
-parcelHelpers.export(exports, "loadPokemon", ()=>loadPokemon);
+parcelHelpers.export(exports, "storeAllPokemonNames", ()=>storeAllPokemonNames);
 parcelHelpers.export(exports, "loadSearchResults", ()=>loadSearchResults);
+parcelHelpers.export(exports, "loadQueryResults", ()=>loadQueryResults);
+parcelHelpers.export(exports, "endOfResults", ()=>endOfResults);
+parcelHelpers.export(exports, "loadPokemon", ()=>loadPokemon);
 var _configJs = require("./config.js");
 var _helpersJs = require("./helpers.js");
 const state = {
-    pokemonNames: [],
+    loading: false,
+    allPokemonNames: {
+        names: [],
+        loaded: false
+    },
     search: {
         query: '',
         results: [],
@@ -1997,21 +2011,14 @@ const state = {
     favorites: [],
     caught: []
 };
-const storePokemonNames = async function() {
+const storeAllPokemonNames = async function() {
     const pokeAPIData = await (0, _helpersJs.AJAX)(`${(0, _configJs.POKEMON_NAMES_API_URL)}`);
     const { results } = pokeAPIData;
     const pokemonNames = results.map((pokemon1)=>pokemon1.name);
-    state.pokemonNames = pokemonNames;
+    state.allPokemonNames = pokemonNames;
 };
-// To store 25 Pokémon (names, IDs, and imgs) in our state for initial/default resultsView
-// export const storeAllPokemon = async function () {
-//   const pokeAPIData = await AJAX(`${POKEMON_NAMES_API_URL}`);
-//   const { results } = pokeAPIData;
-//   const pokemonNames = results.map(pokemon => pokemon.name);
-//   state.pokemonNames = pokemonNames;
-// };
 // To create a Pokémon object after parsing PokéAPI data
-const createPokemonObject = function(data1) {
+const createPokemonObject = async function(data1) {
     // Loaded from MAIN_API_URL
     const { name, id, sprites: { front_default: img }, height, weight } = data1[0];
     const types = data1[0].types.map((entry)=>(0, _helpersJs.capitalize)(entry.type.name));
@@ -2019,9 +2026,14 @@ const createPokemonObject = function(data1) {
             stat.stat.name,
             stat.base_stat
         ]);
-    const moves = data1[0].moves.slice(0, 6).map((mov)=>{
-        return mov.move.name.split('-').map((word)=>(0, _helpersJs.capitalize)(word)).join(' ');
-    });
+    const moves = [];
+    for (const move of data1[0].moves.slice(13, 19)){
+        const moveType = await (0, _helpersJs.AJAX)(`${(0, _configJs.MOVE_TYPE_URL)}${move.move.name}`);
+        moves.push([
+            move.move.name.split('-').map((word)=>(0, _helpersJs.capitalize)(word)).join(' '),
+            (0, _helpersJs.capitalize)(moveType.type.name)
+        ]);
+    }
     // Loaded from DETAILS_API_URL
     const [{ flavor_text }] = data1[1].flavor_text_entries;
     return {
@@ -2046,34 +2058,27 @@ const createPokemonPreviewObject = function(name, details) {
         img
     };
 };
-const loadPokemonBatch = async function(offset = 0, defaultBatch = false) {
+const loadSearchResults = async function(offset = 0, moreResults = false) {
     try {
-        state.search.results = [];
+        let pokemonNames;
+        // To start a clean slate of search results, if not loading sequential batches of results
+        if (!moreResults) state.search.results = [];
         // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
-        let currPokemon = 1;
-        const pokemonNames = await (0, _helpersJs.AJAX)(`${(0, _configJs.DETAILS_API_URL)}?limit=${state.search.limit}&offset=${offset}`);
+        if (!state.allPokemonNames.loaded) // When the page is initially loading, before all Pokémon names are fetched and stored
+        pokemonNames = await (0, _helpersJs.AJAX)(`${(0, _configJs.DETAILS_API_URL)}?limit=${state.search.limit}&offset=${offset}`);
+        else pokemonNames = state.allPokemonNames.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
         for (const pokemon1 of pokemonNames.results){
             const pokemonName = pokemon1.name;
             const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemonName}`);
             state.search.results.push(createPokemonPreviewObject(pokemonName, pokemonDetails));
         }
+        state.search.offset += (0, _configJs.LIMIT);
     // Retrieving Pokémon Names -- Any default display after page loads (after storing PokemonNames) TODO
     } catch (err) {
         throw err;
     }
 };
-const loadPokemon = async function(pokemon1) {
-    try {
-        const data1 = await Promise.all([
-            (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon1}`),
-            (0, _helpersJs.AJAX)(`${(0, _configJs.DETAILS_API_URL)}${pokemon1}`)
-        ]);
-        state.pokemon = createPokemonObject(data1);
-    } catch (err) {
-        throw err;
-    }
-};
-const loadSearchResults = async function(query, allPokemon = false) {
+const loadQueryResults = async function(query) {
     state.search.query = query; //array of pokemon names, need to pull name out of array, ajax call, store data into array
     //console.log(query);
     try {
@@ -2088,8 +2093,22 @@ const loadSearchResults = async function(query, allPokemon = false) {
                 img
             });
         }
-        state.search.results = state.pokemonNames;
+        state.search.results = state.allPokemonNames;
     //console.log(state.search.results);
+    } catch (err) {
+        throw err;
+    }
+};
+const endOfResults = function(pokemonNames) {
+    return state.search.limit + state.search.offset < pokemonNames.length;
+};
+const loadPokemon = async function(pokemon1) {
+    try {
+        const data1 = await Promise.all([
+            (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon1}`),
+            (0, _helpersJs.AJAX)(`${(0, _configJs.DETAILS_API_URL)}${pokemon1}`)
+        ]);
+        state.pokemon = await createPokemonObject(data1);
     } catch (err) {
         throw err;
     }
@@ -2130,11 +2149,13 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "MAIN_API_URL", ()=>MAIN_API_URL);
 parcelHelpers.export(exports, "DETAILS_API_URL", ()=>DETAILS_API_URL);
+parcelHelpers.export(exports, "MOVE_TYPE_URL", ()=>MOVE_TYPE_URL);
 parcelHelpers.export(exports, "POKEMON_NAMES_API_URL", ()=>POKEMON_NAMES_API_URL);
 parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
 parcelHelpers.export(exports, "LIMIT", ()=>LIMIT);
 const MAIN_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
 const DETAILS_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/';
+const MOVE_TYPE_URL = 'https://pokeapi.co/api/v2/move/';
 const POKEMON_NAMES_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/?limit=1025';
 const TIMEOUT_SEC = 10;
 const LIMIT = 21; /**
@@ -2353,17 +2374,17 @@ class PanelView extends (0, _viewJsDefault.default) {
 
               <div class="search__moves">
                 <h2 class="heading--2">Moves</h2>
-                <p>1<span class="search__moves--known">${this._data.moves[0]}</span></p>
+                <p>1<span class="search__moves--known" style="background-color: var(--type--${this._data.moves[0][1]});">${this._data.moves[0][0]}</span></p>
 
-                <p>2<span class="search__moves--known">${this._data.moves[1]}</span></p>
+                <p>2<span class="search__moves--known" style="background-color: var(--type--${this._data.moves[1][1]});">${this._data.moves[1][0]}</span></p>
 
-                <p>3<span class="search__moves--known">${this._data.moves[2]}</span></p>
+                <p>3<span class="search__moves--known" style="background-color: var(--type--${this._data.moves[2][1]});">${this._data.moves[2][0]}</span></p>
 
-                <p>4<span class="search__moves--known">${this._data.moves[3]}</span></p>
+                <p>4<span class="search__moves--known" style="background-color: var(--type--${this._data.moves[3][1]});">${this._data.moves[3][0]}</span></p>
 
-                <p>5<span class="search__moves--known">${this._data.moves[4]}</span></p>
+                <p>5<span class="search__moves--known" style="background-color: var(--type--${this._data.moves[4][1]});">${this._data.moves[4][0]}</span></p>
 
-                <p>6<span class="search__moves--unknown">${this._data.moves[5]}</span></p>
+                <p>6<span class="search__moves--known" style="background-color: var(--type--${this._data.moves[5][1]});">${this._data.moves[5][0]}</span></p>
               </div>
             </div>
 
@@ -3029,6 +3050,8 @@ var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
 class ResultsView extends (0, _viewJsDefault.default) {
     _parentEl = document.querySelector('.search__preview--container');
     _errorMessage = "We could not find that Pok\xe9mon! Please try again.";
+    _scrollHandler = null;
+    addHandlerScrollLoad(handler) {}
     _generateMarkup() {
         // Map each Pokémon from an array of data created with previewView markup texts and consolidate markup into one string
         return this._data.map((result)=>(0, _previewViewJsDefault.default).render(result, false)).join('');

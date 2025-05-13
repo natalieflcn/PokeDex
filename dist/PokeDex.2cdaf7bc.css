@@ -54,7 +54,7 @@ table {
   --text--light: #fff;
   --linear-gradient--blue: linear-gradient(-40deg, var(--secondary-color--blue-gradient--1) 10%, var(--secondary-color--blue) 90%, var(--secondary-color--blue-gradient--2) 100%);
   --type--Normal: #aa9;
-  --type--Fire: #b54;
+  --type--Fire: #ff4522;
   --type--Water: #39f;
   --type--Electric: #fc3;
   --type--Grass: #78cc55;
@@ -603,8 +603,7 @@ body {
 }
 
 .search__moves--known {
-  background-color: var(--secondary-color--green);
-  box-shadow: 0px 1px 3px 3px var(--secondary-color--green-gradient--1) inset;
+  box-shadow: 0px 0px 3px 1px var(--text--light) inset;
 }
 
 .search__moves--unknown {

@@ -4,6 +4,9 @@ import previewView from './previewView.js';
 class ResultsView extends View {
   _parentEl = document.querySelector('.search__preview--container');
   _errorMessage = 'We could not find that Pokémon! Please try again.';
+  _scrollHandler = null;
+
+  addHandlerScrollLoad(handler) {}
 
   _generateMarkup() {
     // Map each Pokémon from an array of data created with previewView markup texts and consolidate markup into one string
