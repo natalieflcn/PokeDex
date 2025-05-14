@@ -22,6 +22,7 @@ export const state = {
     offset: 0,
     limit: LIMIT,
     hasMoreResults: true,
+    currentRequestId: 0,
   },
   pokemon: {},
   profile: {
@@ -103,9 +104,12 @@ const createPokemonPreviewObject = function (name, details) {
 // SEARCH: Rendering search results and Pokémon panel details
 
 // To load Pokémon details for the current batch rendered in search results [screen 1]
-export const loadPokemonResults = async function () {
+export const loadPokemonResults = async function (requestId) {
   try {
     state.loading = true;
+
+    restartSearchResults();
+
     let pokemonNames;
 
     // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
@@ -128,6 +132,7 @@ export const loadPokemonResults = async function () {
         pokemonName,
         pokemonDetails
       );
+
       state.search.results.push(pokemonPreview);
     }
 
@@ -150,11 +155,13 @@ export const loadAdditionalBatch = async function () {
     );
 
     for (const pokemon of pokemonNames) {
+      if (requestId !== state.search.currentRequestId) return;
       const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon}`);
       const pokemonPreview = createPokemonPreviewObject(
         pokemon,
         pokemonDetails
       );
+      if (requestId !== state.search.currentRequestId) return;
       state.search.currentBatch.push(pokemonPreview);
     }
 
@@ -168,7 +175,7 @@ export const loadAdditionalBatch = async function () {
 };
 
 // To load Pokémon previews in the search results screen [screen 1]
-export const loadQueryResults = async function (query) {
+export const loadQueryResults = async function (query, requestId) {
   state.loading = true;
   restartSearchResults();
   state.search.query = query;
@@ -181,11 +188,16 @@ export const loadQueryResults = async function (query) {
 
   for (const pokemon of pokemonNames) {
     try {
+      if (requestId !== state.search.currentRequestId) return;
       const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon}`);
       const pokemonPreview = createPokemonPreviewObject(
         pokemon,
         pokemonDetails
       );
+
+      console.log(requestId, state.search.currentRequestId);
+
+      if (requestId !== state.search.currentRequestId) return;
       state.search.results.push(pokemonPreview);
     } catch (err) {
       console.error(err);
@@ -247,5 +259,4 @@ export const restartSearchResults = function () {
   state.search.results = [];
   state.search.query = '';
   state.search.queryResults = '';
-  console.log('clening search results');
 };

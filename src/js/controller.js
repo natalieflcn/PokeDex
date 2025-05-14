@@ -16,16 +16,22 @@ const controlSearchResults = async function () {
     if (resultsView._observer) resultsView.unobserve();
 
     const query = searchView.getQuery();
+    const requestId = ++model.state.search.currentRequestId;
+    console.log(model.state.search.currentRequestId, requestId);
+
     resultsView.renderSpinner();
 
     // If there's a query, render all existing Pokémon for that query
     if (query) {
-      await model.loadQueryResults(query);
+      await model.loadQueryResults(query, requestId);
 
       // If there's NO query, render all existing Pokémon from PokéAPI database
     } else if (!query) {
-      await model.loadPokemonResults();
+      await model.loadPokemonResults(requestId);
+      console.log('working');
     }
+
+    if (model.state.search.currentRequestId !== requestId) return; // Abort render if the requestId is not up-to-date
 
     // If there's  additional results
     if (model.state.search.hasMoreResults)

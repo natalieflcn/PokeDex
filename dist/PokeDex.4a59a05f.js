@@ -687,10 +687,16 @@ const controlSearchResults = async function() {
         _modelJs.restartSearchResults();
         if ((0, _resultsViewJsDefault.default)._observer) (0, _resultsViewJsDefault.default).unobserve();
         const query = (0, _searchViewJsDefault.default).getQuery();
+        const requestId = ++_modelJs.state.search.currentRequestId;
+        console.log(_modelJs.state.search.currentRequestId, requestId);
         (0, _resultsViewJsDefault.default).renderSpinner();
         // If there's a query, render all existing Pokémon for that query
-        if (query) await _modelJs.loadQueryResults(query);
-        else if (!query) await _modelJs.loadPokemonResults();
+        if (query) await _modelJs.loadQueryResults(query, requestId);
+        else if (!query) {
+            await _modelJs.loadPokemonResults(requestId);
+            console.log('working');
+        }
+        if (_modelJs.state.search.currentRequestId !== requestId) return; // Abort render if the requestId is not up-to-date
         // If there's  additional results
         if (_modelJs.state.search.hasMoreResults) (0, _resultsViewJsDefault.default).observe(controlInfiniteScroll);
         // Render Pokémon search results (screen 1 -- search)
@@ -746,7 +752,7 @@ const init = function() {
 };
 init();
 
-},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","regenerator-runtime/runtime":"f6ot0","./Views/resultsView.js":"fYkxP","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./Views/previewView.js":"hoVX0"}],"bzsBv":[function(require,module,exports,__globalThis) {
+},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","regenerator-runtime/runtime":"f6ot0","./Views/resultsView.js":"fYkxP","./Views/previewView.js":"hoVX0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("52e9b3eefbbce1ed");
@@ -2025,7 +2031,8 @@ const state = {
         currentBatch: [],
         offset: 0,
         limit: (0, _configJs.LIMIT),
-        hasMoreResults: true
+        hasMoreResults: true,
+        currentRequestId: 0
     },
     pokemon: {},
     profile: {
@@ -2083,9 +2090,10 @@ const createPokemonPreviewObject = function(name, details) {
         img
     };
 };
-const loadPokemonResults = async function() {
+const loadPokemonResults = async function(requestId1) {
     try {
         state.loading = true;
+        restartSearchResults();
         let pokemonNames;
         // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
         if (!state.allPokemonNames.loaded) {
@@ -2110,8 +2118,10 @@ const loadAdditionalBatch = async function() {
         state.search.currentBatch = [];
         const pokemonNames = state.allPokemonNames.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
         for (const pokemon of pokemonNames){
+            if (requestId !== state.search.currentRequestId) return;
             const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
             const pokemonPreview = createPokemonPreviewObject(pokemon, pokemonDetails);
+            if (requestId !== state.search.currentRequestId) return;
             state.search.currentBatch.push(pokemonPreview);
         }
         state.search.results.push(...state.search.currentBatch);
@@ -2121,15 +2131,18 @@ const loadAdditionalBatch = async function() {
         throw err;
     }
 };
-const loadQueryResults = async function(query) {
+const loadQueryResults = async function(query, requestId1) {
     state.loading = true;
     restartSearchResults();
     state.search.query = query;
     state.search.queryResults = possiblePokemon(query);
     const pokemonNames = state.search.queryResults.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
     for (const pokemon of pokemonNames)try {
+        if (requestId1 !== state.search.currentRequestId) return;
         const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
         const pokemonPreview = createPokemonPreviewObject(pokemon, pokemonDetails);
+        console.log(requestId1, state.search.currentRequestId);
+        if (requestId1 !== state.search.currentRequestId) return;
         state.search.results.push(pokemonPreview);
     } catch (err) {
         console.error(err);
@@ -2174,7 +2187,6 @@ const restartSearchResults = function() {
     state.search.results = [];
     state.search.query = '';
     state.search.queryResults = '';
-    console.log('clening search results');
 };
 
 },{"./config.js":"2hPh4","./helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2hPh4":[function(require,module,exports,__globalThis) {
@@ -2250,6 +2262,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AJAX", ()=>AJAX);
 parcelHelpers.export(exports, "capitalize", ()=>capitalize);
+parcelHelpers.export(exports, "debounce", ()=>debounce);
 parcelHelpers.export(exports, "observeSentinel", ()=>observeSentinel);
 parcelHelpers.export(exports, "unobserveSentinel", ()=>unobserveSentinel);
 var _configJs = require("./config.js");
@@ -2275,6 +2288,15 @@ const AJAX = async function(url) {
 };
 const capitalize = function(word) {
     return word[0].toUpperCase().concat(word.slice(1));
+};
+const debounce = function(func, delay) {
+    let timeoutId;
+    return function(...args) {
+        clearTimeout(timeoutId); // clear previous timer
+        timeoutId = setTimeout(()=>{
+            func.apply(this, args); // call the function after delay
+        }, delay);
+    };
 };
 const observeSentinel = function(sentinel, handler, options) {
     const observer = new IntersectionObserver((entries)=>{

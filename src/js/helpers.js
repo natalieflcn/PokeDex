@@ -27,6 +27,17 @@ export const capitalize = function (word) {
   return word[0].toUpperCase().concat(word.slice(1));
 };
 
+// To debounce a function
+export const debounce = function (func, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId); // clear previous timer
+    timeoutId = setTimeout(() => {
+      func.apply(this, args); // call the function after delay
+    }, delay);
+  };
+};
+
 // To observe a sentinel with IntersectionObserverAPI
 export const observeSentinel = function (sentinel, handler, options) {
   const observer = new IntersectionObserver(entries => {
