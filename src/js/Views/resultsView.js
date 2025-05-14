@@ -4,13 +4,15 @@ import { observeSentinel, unobserveSentinel } from '../helpers.js';
 
 class ResultsView extends View {
   _parentEl = document.querySelector('.search__preview--container');
+
   _errorMessage = 'We could not find that Pokémon! Please try again.';
   _observer = null;
 
   observe(sentinel, handler) {
     this._observer = observeSentinel(sentinel, handler, {
-      root: this._parentEl,
-      threshold: 0.1,
+      root: null,
+      threshold: 0.01,
+      rootMargin: '100%',
     });
     console.log('RV observe is running');
   }

@@ -7,7 +7,7 @@ export default class View {
     this._parentEl.innerHTML = '';
   }
 
-  renderSpinner = function (parentEl) {
+  renderSpinner = function () {
     const markup = `
     <div class="spinner__div">
         <img class="spinner__img" src="${pokeball}"/>
@@ -18,7 +18,7 @@ export default class View {
     this._parentEl.insertAdjacentHTML('afterbegin', markup);
   };
 
-  render(data, render = true) {
+  render(data, render = true, update = false) {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
 
@@ -27,8 +27,12 @@ export default class View {
 
     if (!render) return markup;
 
-    this._clear();
-    this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    if (!update) this._clear();
+
+    this._parentEl.insertAdjacentHTML(
+      `${update ? 'beforeend' : 'afterbegin'}`,
+      markup
+    );
   }
 
   renderError(message = this._errorMessage) {

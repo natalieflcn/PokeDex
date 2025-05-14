@@ -903,7 +903,7 @@ footer p {
   display: none;
 }
 
-.screen__2 .spinner__div {
+.screen__1 .spinner__div, .screen__2 .spinner__div {
   text-align: center;
   margin: 13em auto;
   animation: 2s linear infinite rotate;

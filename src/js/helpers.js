@@ -30,14 +30,16 @@ export const capitalize = function (word) {
 // To observe a sentinel with IntersectionObserverAPI
 export const observeSentinel = function (sentinel, handler, options) {
   const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) handler();
-    }),
+    entries.forEach(
+      entry => {
+        if (entry.isIntersecting) handler();
+      },
       {
         root: options.root,
         threshold: options.threshold,
-        rootMargin: '5rem',
-      };
+        rootMargin: options.rootMargin,
+      }
+    );
   });
 
   observer.observe(sentinel);

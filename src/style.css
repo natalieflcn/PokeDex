@@ -1053,6 +1053,12 @@ footer p {
   display: none;
 }
 
+.screen__1 .spinner__div {
+  margin: 13em auto;
+  text-align: center;
+  animation: rotate 2s infinite linear;
+}
+
 .screen__2 .spinner__div {
   margin: 13em auto;
   text-align: center;

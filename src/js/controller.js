@@ -13,25 +13,28 @@ const controlSearchResults = async function () {
     // Retrieve query from user input
     const query = searchView.getQuery();
 
-    // TODO If there's a query, render all existing Pokémon for that query
+    // If there's a query, render all existing Pokémon for that query
     if (query) {
-      await model.loadSearchResults(query);
+      resultsView.renderSpinner();
+      await model.loadQueryResults(query);
+      console.log(model.state.search);
 
-      // If there's NO query, and default Pokémon is being initially loaded
-    } else if (!query && !model.state.search.initialBatchLoaded) {
-      console.log('no query 1 running');
-      await model.loadSearchResults(0);
-      model.state.search.initialBatchLoaded = true;
+      // If there's NO query, render all existing Pokémon from PokéAPI database
+    } else if (!query) {
+      await model.loadPokemonResults();
     }
 
-    if (model.state.search.hasMoreResults) {
-      console.log('adding observer');
-      // If infinite scroll is being triggered and sequential Pokémon are being loaded
+    if (
+      (!query && model.state.search.hasMoreResults) ||
+      (query &&
+        model.state.search.queryResults.length >
+          model.state.search.results.length)
+    ) {
       resultsView.observe(
         document.querySelector('.search__sentinel'),
         controlInfiniteScroll
       );
-      console.log(' observer was added');
+      console.log('running');
     }
     // Render Pokémon search results (screen 1 -- search)
     resultsView.render(model.state.search.results);
@@ -41,15 +44,16 @@ const controlSearchResults = async function () {
 };
 
 // To determine the scroll position of the client and to load more data, if necessary
-const controlInfiniteScroll = async function () {
+const controlInfiniteScroll = async function (type) {
   console.log('infinite scroll running');
   if (model.state.loading || !model.state.search.hasMoreResults) return;
 
-  // Load Pokémon data
-  await model.loadSearchResults(model.state.offset, true);
+  if (model.state.search.query)
+    // Load Pokémon data
+    await model.loadAdditionalBatch(model.state.offset);
 
   // Determine if this is the end of current Pokémon search results
-  if (model.state.search.results.length === 0) {
+  if (model.state.search.currentBatch.length === 0) {
     model.state.search.hasMoreResults = false;
     resultsView.unobserveSentinel();
     return;
@@ -59,7 +63,7 @@ const controlInfiniteScroll = async function () {
   console.log(model.state.search.results);
   console.log('batch');
   console.log(model.state.search.currentBatch);
-  resultsView.render(model.state.search.currentBatch);
+  resultsView.render(model.state.search.currentBatch, true, true);
   return model.state.search.results;
 };
 

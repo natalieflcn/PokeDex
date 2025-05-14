@@ -683,18 +683,16 @@ const controlSearchResults = async function() {
     try {
         // Retrieve query from user input
         const query = (0, _searchViewJsDefault.default).getQuery();
-        // TODO If there's a query, render all existing Pokémon for that query
-        if (query) await _modelJs.loadSearchResults(query);
-        else if (!query && !_modelJs.state.search.initialBatchLoaded) {
-            console.log('no query 1 running');
-            await _modelJs.loadSearchResults(0);
-            _modelJs.state.search.initialBatchLoaded = true;
-        }
-        if (_modelJs.state.search.hasMoreResults) {
-            console.log('adding observer');
-            // If infinite scroll is being triggered and sequential Pokémon are being loaded
+        // If there's a query, render all existing Pokémon for that query
+        if (query) {
+            (0, _resultsViewJsDefault.default).renderSpinner();
+            await _modelJs.loadQueryResults(query);
+            console.log(_modelJs.state.search);
+        // If there's NO query, render all existing Pokémon from PokéAPI database
+        } else if (!query) await _modelJs.loadPokemonResults();
+        if (!query && _modelJs.state.search.hasMoreResults || query && _modelJs.state.search.queryResults.length > _modelJs.state.search.results.length) {
             (0, _resultsViewJsDefault.default).observe(document.querySelector('.search__sentinel'), controlInfiniteScroll);
-            console.log(' observer was added');
+            console.log('running');
         }
         // Render Pokémon search results (screen 1 -- search)
         (0, _resultsViewJsDefault.default).render(_modelJs.state.search.results);
@@ -703,13 +701,13 @@ const controlSearchResults = async function() {
     }
 };
 // To determine the scroll position of the client and to load more data, if necessary
-const controlInfiniteScroll = async function() {
+const controlInfiniteScroll = async function(type) {
     console.log('infinite scroll running');
     if (_modelJs.state.loading || !_modelJs.state.search.hasMoreResults) return;
-    // Load Pokémon data
-    await _modelJs.loadSearchResults(_modelJs.state.offset, true);
+    if (_modelJs.state.search.query) // Load Pokémon data
+    await _modelJs.loadAdditionalBatch(_modelJs.state.offset);
     // Determine if this is the end of current Pokémon search results
-    if (_modelJs.state.search.results.length === 0) {
+    if (_modelJs.state.search.currentBatch.length === 0) {
         _modelJs.state.search.hasMoreResults = false;
         (0, _resultsViewJsDefault.default).unobserveSentinel();
         return;
@@ -718,7 +716,7 @@ const controlInfiniteScroll = async function() {
     console.log(_modelJs.state.search.results);
     console.log('batch');
     console.log(_modelJs.state.search.currentBatch);
-    (0, _resultsViewJsDefault.default).render(_modelJs.state.search.currentBatch);
+    (0, _resultsViewJsDefault.default).render(_modelJs.state.search.currentBatch, true, true);
     return _modelJs.state.search.results;
 };
 // To coordinate rendering of the Pokémon Panel [Screen 2]
@@ -2006,7 +2004,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "storeAllPokemonNames", ()=>storeAllPokemonNames);
-parcelHelpers.export(exports, "loadSearchResults", ()=>loadSearchResults);
+parcelHelpers.export(exports, "loadPokemonResults", ()=>loadPokemonResults);
 parcelHelpers.export(exports, "loadAdditionalBatch", ()=>loadAdditionalBatch);
 parcelHelpers.export(exports, "loadQueryResults", ()=>loadQueryResults);
 parcelHelpers.export(exports, "loadPokemon", ()=>loadPokemon);
@@ -2020,11 +2018,11 @@ const state = {
     },
     search: {
         query: '',
+        queryResults: '',
         results: [],
         currentBatch: [],
         offset: 0,
         limit: (0, _configJs.LIMIT),
-        initialBatchLoaded: false,
         hasMoreResults: true
     },
     pokemon: {},
@@ -2038,21 +2036,21 @@ const state = {
 const storeAllPokemonNames = async function() {
     const pokeAPIData = await (0, _helpersJs.AJAX)(`${(0, _configJs.POKEMON_NAMES_API_URL)}`);
     const { results } = pokeAPIData;
-    const pokemonNames = results.map((pokemon1)=>pokemon1.name);
+    const pokemonNames = results.map((pokemon)=>pokemon.name);
     state.allPokemonNames = pokemonNames;
     state.allPokemonNames.loaded = true;
 };
 // To create a Pokémon object after parsing PokéAPI data
-const createPokemonObject = async function(data1) {
+const createPokemonObject = async function(data) {
     // Loaded from MAIN_API_URL
-    const { name, id, sprites: { front_default: img }, height, weight } = data1[0];
-    const types = data1[0].types.map((entry)=>(0, _helpersJs.capitalize)(entry.type.name));
-    const stats = data1[0].stats.map((stat)=>[
+    const { name, id, sprites: { front_default: img }, height, weight } = data[0];
+    const types = data[0].types.map((entry)=>(0, _helpersJs.capitalize)(entry.type.name));
+    const stats = data[0].stats.map((stat)=>[
             stat.stat.name,
             stat.base_stat
         ]);
     const moves = [];
-    for (const move of data1[0].moves.slice(13, 19)){
+    for (const move of data[0].moves.slice(13, 19)){
         const moveType = await (0, _helpersJs.AJAX)(`${(0, _configJs.MOVE_TYPE_URL)}${move.move.name}`);
         moves.push([
             move.move.name.split('-').map((word)=>(0, _helpersJs.capitalize)(word)).join(' '),
@@ -2060,7 +2058,7 @@ const createPokemonObject = async function(data1) {
         ]);
     }
     // Loaded from DETAILS_API_URL
-    const [{ flavor_text }] = data1[1].flavor_text_entries;
+    const [{ flavor_text }] = data[1].flavor_text_entries;
     return {
         name: (0, _helpersJs.capitalize)(name),
         id,
@@ -2083,74 +2081,82 @@ const createPokemonPreviewObject = function(name, details) {
         img
     };
 };
-const loadSearchResults = async function(offset, moreResults = false) {
+const loadPokemonResults = async function() {
     try {
         state.loading = true;
         let pokemonNames;
-        // To start a clean slate of search results, if not loading sequential batches of results
-        if (!moreResults) {
-            state.search.results = [];
-            state.search.offset = 0;
-            state.initialBatchLoaded = false;
-        }
+        // To start a clean slate of search results
+        restartSearchResults();
         // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
         if (!state.allPokemonNames.loaded) {
-            const pokemon1 = await (0, _helpersJs.AJAX)(`${(0, _configJs.DETAILS_API_URL)}?limit=${state.search.limit}&offset=${offset}`);
-            pokemonNames = pokemon1.results;
+            const pokemon = await (0, _helpersJs.AJAX)(`${(0, _configJs.DETAILS_API_URL)}?limit=${state.search.limit}&offset=${0}`);
+            pokemonNames = pokemon.results;
         } else pokemonNames = state.allPokemonNames.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
-        console.log(pokemonNames); //current batch names details
-        state.currentBatch = [];
-        console.log(state.currentBatch);
-        for (const pokemon1 of pokemonNames){
-            const pokemonName = pokemon1.name || pokemon1;
-            console.log('logging for loop of ' + pokemon1);
+        for (const pokemon of pokemonNames){
+            const pokemonName = pokemon.name || pokemon;
             const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemonName}`);
             const pokemonPreview = createPokemonPreviewObject(pokemonName, pokemonDetails);
             state.search.results.push(pokemonPreview);
-            state.search.currentBatch.push(pokemonPreview);
         }
         state.search.offset += (0, _configJs.LIMIT);
-        console.log('offset is now ' + state.search.offset);
         state.loading = false;
-        console.log(state.search.currentBatch);
-        console.log(state.search.results);
-    // Retrieving Pokémon Names -- Any default display after page loads (after storing PokemonNames) TODO
     } catch (err) {
         throw err;
     }
 };
-const loadAdditionalBatch = async function(offset) {};
-const loadQueryResults = async function(query) {
-    state.search.query = query; //array of pokemon names, need to pull name out of array, ajax call, store data into array
-    //console.log(query);
+const loadAdditionalBatch = async function(searchResults) {
     try {
-        //const data1 = await AJAX(`${MAIN_API_URL}${query}`);
-        // if allPokemon is false, use helper method to determine search results array
-        for (pokemon of query){
-            //const data = await AJAX(`${MAIN_API_URL}${pokemon}`);
-            const { name, id, sprites: { front_default: img } } = data;
-            state.search.results.push({
-                name,
-                id,
-                img
-            });
+        state.loading = true;
+        state.search.currentBatch = [];
+        const pokemonNames = state.allPokemonNames.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
+        for (const pokemon of pokemonNames){
+            const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
+            const pokemonPreview = createPokemonPreviewObject(pokemon, pokemonDetails);
+            state.search.currentBatch.push(pokemonPreview);
         }
-        state.search.results = state.allPokemonNames;
-    //console.log(state.search.results);
+        state.search.results.push(...state.search.currentBatch);
+        state.search.offset += (0, _configJs.LIMIT);
+        state.loading = false;
     } catch (err) {
         throw err;
     }
 };
-const loadPokemon = async function(pokemon1) {
+const loadQueryResults = async function(query) {
+    state.loading = true;
+    state.search.query = query;
+    restartSearchResults();
+    state.search.queryResults = possiblePokemon(query);
+    const pokemonNames = state.search.queryResults.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
+    for (const pokemon of pokemonNames)try {
+        const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
+        const pokemonPreview = createPokemonPreviewObject(pokemon, pokemonDetails);
+        state.search.results.push(pokemonPreview);
+    } catch (err) {
+        console.error(err);
+    }
+    state.search.offset += (0, _configJs.LIMIT);
+    state.loading = false;
+    console.log(pokemonNames);
+    state.loading = false;
+};
+const loadPokemon = async function(pokemon) {
     try {
-        const data1 = await Promise.all([
-            (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon1}`),
-            (0, _helpersJs.AJAX)(`${(0, _configJs.DETAILS_API_URL)}${pokemon1}`)
+        const data = await Promise.all([
+            (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`),
+            (0, _helpersJs.AJAX)(`${(0, _configJs.DETAILS_API_URL)}${pokemon}`)
         ]);
-        state.pokemon = await createPokemonObject(data1);
+        state.pokemon = await createPokemonObject(data);
     } catch (err) {
         throw err;
     }
+};
+const possiblePokemon = function(substring) {
+    return state.allPokemonNames.filter((pokemon)=>pokemon.startsWith(substring));
+};
+const restartSearchResults = function() {
+    state.offset = 0;
+    state.search.results = [];
+    state.search.query = '';
 };
 
 },{"./config.js":"2hPh4","./helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2hPh4":[function(require,module,exports,__globalThis) {
@@ -2256,7 +2262,11 @@ const observeSentinel = function(sentinel, handler, options) {
     const observer1 = new IntersectionObserver((entries)=>{
         entries.forEach((entry)=>{
             if (entry.isIntersecting) handler();
-        }), options.root, options.threshold;
+        }, {
+            root: options.root,
+            threshold: options.threshold,
+            rootMargin: options.rootMargin
+        });
     });
     observer1.observe(sentinel);
     return observer1;
@@ -2296,7 +2306,7 @@ class View {
     _clear() {
         this._parentEl.innerHTML = '';
     }
-    renderSpinner = function(parentEl) {
+    renderSpinner = function() {
         const markup = `
     <div class="spinner__div">
         <img class="spinner__img" src="${(0, _pokeballFaviconSvgDefault.default)}"/>
@@ -2305,13 +2315,13 @@ class View {
         this._clear();
         this._parentEl.insertAdjacentHTML('afterbegin', markup);
     };
-    render(data, render = true) {
+    render(data, render = true, update = false) {
         if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
         this._data = data;
         const markup = this._generateMarkup();
         if (!render) return markup;
-        this._clear();
-        this._parentEl.insertAdjacentHTML('afterbegin', markup);
+        if (!update) this._clear();
+        this._parentEl.insertAdjacentHTML(`${update ? 'beforeend' : 'afterbegin'}`, markup);
     }
     renderError(message = this._errorMessage) {
         const markup = `
@@ -3107,8 +3117,9 @@ class ResultsView extends (0, _viewJsDefault.default) {
     _observer = null;
     observe(sentinel1, handler) {
         this._observer = (0, _helpersJs.observeSentinel)(sentinel1, handler, {
-            root: this._parentEl,
-            threshold: 0.1
+            root: null,
+            threshold: 0.01,
+            rootMargin: '100%'
         });
         console.log('RV observe is running');
     }
