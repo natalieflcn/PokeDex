@@ -677,23 +677,22 @@ var _panelViewJsDefault = parcelHelpers.interopDefault(_panelViewJs);
 var _runtime = require("regenerator-runtime/runtime");
 var _resultsViewJs = require("./Views/resultsView.js");
 var _resultsViewJsDefault = parcelHelpers.interopDefault(_resultsViewJs);
+var _previewViewJs = require("./Views/previewView.js");
+var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
 // import { observeSentinel, unobserveSentinel } from './helpers.js';
 // To coordinate rendering of the search results [Screen 1]
 const controlSearchResults = async function() {
     try {
         // Retrieve query from user input
+        _modelJs.restartSearchResults();
+        if ((0, _resultsViewJsDefault.default)._observer) (0, _resultsViewJsDefault.default).unobserve();
         const query = (0, _searchViewJsDefault.default).getQuery();
+        (0, _resultsViewJsDefault.default).renderSpinner();
         // If there's a query, render all existing Pokémon for that query
-        if (query) {
-            (0, _resultsViewJsDefault.default).renderSpinner();
-            await _modelJs.loadQueryResults(query);
-            console.log(_modelJs.state.search);
-        // If there's NO query, render all existing Pokémon from PokéAPI database
-        } else if (!query) await _modelJs.loadPokemonResults();
-        if (!query && _modelJs.state.search.hasMoreResults || query && _modelJs.state.search.queryResults.length > _modelJs.state.search.results.length) {
-            (0, _resultsViewJsDefault.default).observe(document.querySelector('.search__sentinel'), controlInfiniteScroll);
-            console.log('running');
-        }
+        if (query) await _modelJs.loadQueryResults(query);
+        else if (!query) await _modelJs.loadPokemonResults();
+        // If there's  additional results
+        if (_modelJs.state.search.hasMoreResults) (0, _resultsViewJsDefault.default).observe(controlInfiniteScroll);
         // Render Pokémon search results (screen 1 -- search)
         (0, _resultsViewJsDefault.default).render(_modelJs.state.search.results);
     } catch (err) {
@@ -701,21 +700,19 @@ const controlSearchResults = async function() {
     }
 };
 // To determine the scroll position of the client and to load more data, if necessary
-const controlInfiniteScroll = async function(type) {
+const controlInfiniteScroll = async function() {
     console.log('infinite scroll running');
     if (_modelJs.state.loading || !_modelJs.state.search.hasMoreResults) return;
-    if (_modelJs.state.search.query) // Load Pokémon data
-    await _modelJs.loadAdditionalBatch(_modelJs.state.offset);
+    // Load additional query data
+    if (_modelJs.state.search.query) await _modelJs.loadAdditionalQuery();
+    else await _modelJs.loadAdditionalBatch();
     // Determine if this is the end of current Pokémon search results
     if (_modelJs.state.search.currentBatch.length === 0) {
         _modelJs.state.search.hasMoreResults = false;
-        (0, _resultsViewJsDefault.default).unobserveSentinel();
+        (0, _resultsViewJsDefault.default).unobserve();
         return;
     }
     // Return Pokémon data to controlSearchResults
-    console.log(_modelJs.state.search.results);
-    console.log('batch');
-    console.log(_modelJs.state.search.currentBatch);
     (0, _resultsViewJsDefault.default).render(_modelJs.state.search.currentBatch, true, true);
     return _modelJs.state.search.results;
 };
@@ -723,17 +720,19 @@ const controlInfiniteScroll = async function(type) {
 const controlPokemonPanel = async function() {
     try {
         // Retrieve hash from URL
-        // const id = window.location.hash.slice(1);
-        // if (!id) return;
+        const id = window.location.hash.slice(1);
+        if (!id) return;
         (0, _panelViewJsDefault.default).renderSpinner();
-        // Update searchResultsView to highlight active search result (screen 1)
         // Load Pokémon (data) panel details
-        await _modelJs.loadPokemon(4);
+        await _modelJs.loadPokemon(id);
         // Render Pokémon panel (screen 2 -- search)
         (0, _panelViewJsDefault.default).render(_modelJs.state.pokemon);
     } catch (err) {
         (0, _panelViewJsDefault.default).renderError();
     }
+};
+const controlActivePreview = function(pokemonName) {
+    window.location.hash = pokemonName;
 };
 // To initialize all Pokémon names to store in our state
 const initPokemonData = async function() {
@@ -743,10 +742,11 @@ const init = function() {
     initPokemonData();
     (0, _panelViewJsDefault.default).addHandlerRender(controlPokemonPanel);
     (0, _searchViewJsDefault.default).addHandlerSearch(controlSearchResults);
+    (0, _previewViewJsDefault.default).addHandlerActive(controlActivePreview);
 };
 init();
 
-},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","regenerator-runtime/runtime":"f6ot0","./Views/resultsView.js":"fYkxP","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bzsBv":[function(require,module,exports,__globalThis) {
+},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","regenerator-runtime/runtime":"f6ot0","./Views/resultsView.js":"fYkxP","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./Views/previewView.js":"hoVX0"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("52e9b3eefbbce1ed");
@@ -2007,7 +2007,9 @@ parcelHelpers.export(exports, "storeAllPokemonNames", ()=>storeAllPokemonNames);
 parcelHelpers.export(exports, "loadPokemonResults", ()=>loadPokemonResults);
 parcelHelpers.export(exports, "loadAdditionalBatch", ()=>loadAdditionalBatch);
 parcelHelpers.export(exports, "loadQueryResults", ()=>loadQueryResults);
+parcelHelpers.export(exports, "loadAdditionalQuery", ()=>loadAdditionalQuery);
 parcelHelpers.export(exports, "loadPokemon", ()=>loadPokemon);
+parcelHelpers.export(exports, "restartSearchResults", ()=>restartSearchResults);
 var _configJs = require("./config.js");
 var _helpersJs = require("./helpers.js");
 const state = {
@@ -2085,8 +2087,6 @@ const loadPokemonResults = async function() {
     try {
         state.loading = true;
         let pokemonNames;
-        // To start a clean slate of search results
-        restartSearchResults();
         // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
         if (!state.allPokemonNames.loaded) {
             const pokemon = await (0, _helpersJs.AJAX)(`${(0, _configJs.DETAILS_API_URL)}?limit=${state.search.limit}&offset=${0}`);
@@ -2104,7 +2104,7 @@ const loadPokemonResults = async function() {
         throw err;
     }
 };
-const loadAdditionalBatch = async function(searchResults) {
+const loadAdditionalBatch = async function() {
     try {
         state.loading = true;
         state.search.currentBatch = [];
@@ -2123,8 +2123,8 @@ const loadAdditionalBatch = async function(searchResults) {
 };
 const loadQueryResults = async function(query) {
     state.loading = true;
-    state.search.query = query;
     restartSearchResults();
+    state.search.query = query;
     state.search.queryResults = possiblePokemon(query);
     const pokemonNames = state.search.queryResults.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
     for (const pokemon of pokemonNames)try {
@@ -2136,7 +2136,23 @@ const loadQueryResults = async function(query) {
     }
     state.search.offset += (0, _configJs.LIMIT);
     state.loading = false;
-    console.log(pokemonNames);
+};
+const loadAdditionalQuery = async function() {
+    state.loading = true;
+    state.search.currentBatch = [];
+    console.log(state.search.queryResults);
+    const pokemonNames = state.search.queryResults.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
+    for (const pokemon of pokemonNames){
+        try {
+            const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
+            const pokemonPreview = createPokemonPreviewObject(pokemon, pokemonDetails);
+            state.search.currentBatch.push(pokemonPreview);
+        } catch (err) {
+            console.error(err);
+        }
+        state.search.results.push(...state.search.currentBatch);
+    }
+    state.search.offset += (0, _configJs.LIMIT);
     state.loading = false;
 };
 const loadPokemon = async function(pokemon) {
@@ -2147,16 +2163,18 @@ const loadPokemon = async function(pokemon) {
         ]);
         state.pokemon = await createPokemonObject(data);
     } catch (err) {
-        throw err;
+        console.error(err);
     }
 };
 const possiblePokemon = function(substring) {
     return state.allPokemonNames.filter((pokemon)=>pokemon.startsWith(substring));
 };
 const restartSearchResults = function() {
-    state.offset = 0;
+    state.search.offset = 0;
     state.search.results = [];
     state.search.query = '';
+    state.search.queryResults = '';
+    console.log('clening search results');
 };
 
 },{"./config.js":"2hPh4","./helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2hPh4":[function(require,module,exports,__globalThis) {
@@ -2259,7 +2277,7 @@ const capitalize = function(word) {
     return word[0].toUpperCase().concat(word.slice(1));
 };
 const observeSentinel = function(sentinel, handler, options) {
-    const observer1 = new IntersectionObserver((entries)=>{
+    const observer = new IntersectionObserver((entries)=>{
         entries.forEach((entry)=>{
             if (entry.isIntersecting) handler();
         }, {
@@ -2268,10 +2286,10 @@ const observeSentinel = function(sentinel, handler, options) {
             rootMargin: options.rootMargin
         });
     });
-    observer1.observe(sentinel);
-    return observer1;
+    observer.observe(sentinel);
+    return observer;
 };
-const unobserveSentinel = function(sentinel) {
+const unobserveSentinel = function(observer, sentinel) {
     if (observer && sentinel) observer.unobserve(observer, sentinel);
 };
 
@@ -3114,9 +3132,10 @@ var _helpersJs = require("../helpers.js");
 class ResultsView extends (0, _viewJsDefault.default) {
     _parentEl = document.querySelector('.search__preview--container');
     _errorMessage = "We could not find that Pok\xe9mon! Please try again.";
+    _sentinel = document.querySelector('.search__sentinel');
     _observer = null;
-    observe(sentinel1, handler) {
-        this._observer = (0, _helpersJs.observeSentinel)(sentinel1, handler, {
+    observe(handler) {
+        this._observer = (0, _helpersJs.observeSentinel)(this._sentinel, handler, {
             root: null,
             threshold: 0.01,
             rootMargin: '100%'
@@ -3124,7 +3143,7 @@ class ResultsView extends (0, _viewJsDefault.default) {
         console.log('RV observe is running');
     }
     unobserve() {
-        unobserve(this._observer, sentinel);
+        this._observer.unobserve(this._sentinel);
         console.log('RV unobserve is running');
     }
     _generateMarkup() {
@@ -3160,11 +3179,22 @@ parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("./View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
 class PreviewView extends (0, _viewJsDefault.default) {
-    _parentEl = '';
-    _generateMarkup(activePokemon = 0) {
-        //search__preview--active TODO Need to implement active class based on active Pokemon (Pokemon in the state)
+    _parentEl = document.querySelector('.search__preview--container');
+    addHandlerActive(handler) {
+        this._parentEl.addEventListener('click', function(e) {
+            const clicked = e.target.closest('.search__preview');
+            if (!clicked) return;
+            //If there's already an active item, remove its class
+            const currentlyActive = document.querySelector('.search__preview--active');
+            if (currentlyActive && currentlyActive !== clicked) currentlyActive.classList.remove('search__preview--active');
+            clicked.classList.add('search__preview--active');
+            handler(clicked.querySelector('.search__preview--name').textContent);
+        });
+    }
+    _generateMarkup() {
+        const id = window.location.hash.slice(1);
         return `
-            <div class="search__preview">
+            <div class="search__preview ${this._data.name === id ? 'search__preview--active' : ''}">
                 <span class="pokemon__id search__preview--id">#${this._data.id}</span
                 ><img
                   class="search__preview--img"

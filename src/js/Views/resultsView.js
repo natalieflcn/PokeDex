@@ -6,10 +6,11 @@ class ResultsView extends View {
   _parentEl = document.querySelector('.search__preview--container');
 
   _errorMessage = 'We could not find that Pokémon! Please try again.';
+  _sentinel = document.querySelector('.search__sentinel');
   _observer = null;
 
-  observe(sentinel, handler) {
-    this._observer = observeSentinel(sentinel, handler, {
+  observe(handler) {
+    this._observer = observeSentinel(this._sentinel, handler, {
       root: null,
       threshold: 0.01,
       rootMargin: '100%',
@@ -18,7 +19,7 @@ class ResultsView extends View {
   }
 
   unobserve() {
-    unobserve(this._observer, sentinel);
+    this._observer.unobserve(this._sentinel);
     console.log('RV unobserve is running');
   }
 

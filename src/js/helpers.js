@@ -48,7 +48,7 @@ export const observeSentinel = function (sentinel, handler, options) {
 };
 
 // To unobserve a sentinel
-export const unobserveSentinel = function (sentinel) {
+export const unobserveSentinel = function (observer, sentinel) {
   if (observer && sentinel) {
     observer.unobserve(observer, sentinel);
   }

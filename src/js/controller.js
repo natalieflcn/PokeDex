@@ -5,37 +5,32 @@ import panelView from './Views/panelView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import resultsView from './Views/resultsView.js';
+import previewView from './Views/previewView.js';
 
 // import { observeSentinel, unobserveSentinel } from './helpers.js';
 // To coordinate rendering of the search results [Screen 1]
 const controlSearchResults = async function () {
   try {
     // Retrieve query from user input
+    model.restartSearchResults();
+    if (resultsView._observer) resultsView.unobserve();
+
     const query = searchView.getQuery();
+    resultsView.renderSpinner();
 
     // If there's a query, render all existing Pokémon for that query
     if (query) {
-      resultsView.renderSpinner();
       await model.loadQueryResults(query);
-      console.log(model.state.search);
 
       // If there's NO query, render all existing Pokémon from PokéAPI database
     } else if (!query) {
       await model.loadPokemonResults();
     }
 
-    if (
-      (!query && model.state.search.hasMoreResults) ||
-      (query &&
-        model.state.search.queryResults.length >
-          model.state.search.results.length)
-    ) {
-      resultsView.observe(
-        document.querySelector('.search__sentinel'),
-        controlInfiniteScroll
-      );
-      console.log('running');
-    }
+    // If there's  additional results
+    if (model.state.search.hasMoreResults)
+      resultsView.observe(controlInfiniteScroll);
+
     // Render Pokémon search results (screen 1 -- search)
     resultsView.render(model.state.search.results);
   } catch (err) {
@@ -44,25 +39,26 @@ const controlSearchResults = async function () {
 };
 
 // To determine the scroll position of the client and to load more data, if necessary
-const controlInfiniteScroll = async function (type) {
+const controlInfiniteScroll = async function () {
   console.log('infinite scroll running');
   if (model.state.loading || !model.state.search.hasMoreResults) return;
 
-  if (model.state.search.query)
-    // Load Pokémon data
-    await model.loadAdditionalBatch(model.state.offset);
+  // Load additional query data
+  if (model.state.search.query) {
+    await model.loadAdditionalQuery();
+    // Load additional Pokémon data
+  } else {
+    await model.loadAdditionalBatch();
+  }
 
   // Determine if this is the end of current Pokémon search results
   if (model.state.search.currentBatch.length === 0) {
     model.state.search.hasMoreResults = false;
-    resultsView.unobserveSentinel();
+    resultsView.unobserve();
     return;
   }
 
   // Return Pokémon data to controlSearchResults
-  console.log(model.state.search.results);
-  console.log('batch');
-  console.log(model.state.search.currentBatch);
   resultsView.render(model.state.search.currentBatch, true, true);
   return model.state.search.results;
 };
@@ -71,21 +67,23 @@ const controlInfiniteScroll = async function (type) {
 const controlPokemonPanel = async function () {
   try {
     // Retrieve hash from URL
-    // const id = window.location.hash.slice(1);
-    // if (!id) return;
+    const id = window.location.hash.slice(1);
+    if (!id) return;
 
     panelView.renderSpinner();
 
-    // Update searchResultsView to highlight active search result (screen 1)
-
     // Load Pokémon (data) panel details
-    await model.loadPokemon(4);
+    await model.loadPokemon(id);
 
     // Render Pokémon panel (screen 2 -- search)
     panelView.render(model.state.pokemon);
   } catch (err) {
     panelView.renderError();
   }
+};
+
+const controlActivePreview = function (pokemonName) {
+  window.location.hash = pokemonName;
 };
 
 // To initialize all Pokémon names to store in our state
@@ -97,5 +95,6 @@ const init = function () {
   initPokemonData();
   panelView.addHandlerRender(controlPokemonPanel);
   searchView.addHandlerSearch(controlSearchResults);
+  previewView.addHandlerActive(controlActivePreview);
 };
 init();

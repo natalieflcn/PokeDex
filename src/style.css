@@ -557,8 +557,9 @@ body {
 .profile__preview--name {
   padding: 0.6rem 0.6rem 0.4rem;
   margin-top: 0.5rem;
-  font-size: 0.65rem;
+  font-size: 0.55rem;
   font-weight: bold;
+  text-align: center;
   border-radius: 3px;
   box-shadow: 1px 1px 2px 2px var(--screen-color--dark) inset;
   background-color: var(--secondary-color--grey-gradient);

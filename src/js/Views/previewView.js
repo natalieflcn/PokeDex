@@ -1,14 +1,35 @@
 import View from './View.js';
 
 class PreviewView extends View {
-  _parentEl = '';
+  _parentEl = document.querySelector('.search__preview--container');
 
-  _generateMarkup(activePokemon = 0) {
-    //search__preview--active TODO Need to implement active class based on active Pokemon (Pokemon in the state)
+  addHandlerActive(handler) {
+    this._parentEl.addEventListener('click', function (e) {
+      const clicked = e.target.closest('.search__preview');
+      if (!clicked) return;
 
+      //If there's already an active item, remove its class
+      const currentlyActive = document.querySelector(
+        '.search__preview--active'
+      );
+      if (currentlyActive && currentlyActive !== clicked)
+        currentlyActive.classList.remove('search__preview--active');
+
+      clicked.classList.add('search__preview--active');
+
+      handler(clicked.querySelector('.search__preview--name').textContent);
+    });
+  }
+
+  _generateMarkup() {
+    const id = window.location.hash.slice(1);
     return `
-            <div class="search__preview">
-                <span class="pokemon__id search__preview--id">#${this._data.id}</span
+            <div class="search__preview ${
+              this._data.name === id ? 'search__preview--active' : ''
+            }">
+                <span class="pokemon__id search__preview--id">#${
+                  this._data.id
+                }</span
                 ><img
                   class="search__preview--img"
                   src=${this._data.img}

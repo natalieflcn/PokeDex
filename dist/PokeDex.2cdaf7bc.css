@@ -448,6 +448,7 @@ body {
 }
 
 .search__preview--name, .profile__preview--name {
+  text-align: center;
   box-shadow: 1px 1px 2px 2px var(--screen-color--dark) inset;
   background-color: var(--secondary-color--grey-gradient);
   color: var(--text--light);
@@ -455,7 +456,7 @@ body {
   border-radius: 3px;
   margin-top: .5rem;
   padding: .6rem .6rem .4rem;
-  font-size: .65rem;
+  font-size: .55rem;
   font-weight: bold;
 }
 
