@@ -127,12 +127,14 @@ export const loadPokemonResults = async function (requestId) {
 
     for (const pokemon of pokemonNames) {
       const pokemonName = pokemon.name || pokemon;
+      if (requestId !== state.search.currentRequestId) return;
       const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemonName}`);
       const pokemonPreview = createPokemonPreviewObject(
         pokemonName,
         pokemonDetails
       );
 
+      if (requestId !== state.search.currentRequestId) return;
       state.search.results.push(pokemonPreview);
     }
 
@@ -144,7 +146,7 @@ export const loadPokemonResults = async function (requestId) {
 };
 
 // To load additional Pokémon results
-export const loadAdditionalBatch = async function () {
+export const loadAdditionalBatch = async function (requestId) {
   try {
     state.loading = true;
     state.search.currentBatch = [];
@@ -155,16 +157,16 @@ export const loadAdditionalBatch = async function () {
     );
 
     for (const pokemon of pokemonNames) {
-      if (requestId !== state.search.currentRequestId) return;
+      //   if (requestId !== state.search.currentRequestId) return;
       const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon}`);
       const pokemonPreview = createPokemonPreviewObject(
         pokemon,
         pokemonDetails
       );
-      if (requestId !== state.search.currentRequestId) return;
       state.search.currentBatch.push(pokemonPreview);
     }
 
+    // if (requestId !== state.search.currentRequestId) return;
     state.search.results.push(...state.search.currentBatch);
 
     state.search.offset += LIMIT;
@@ -209,7 +211,7 @@ export const loadQueryResults = async function (query, requestId) {
 };
 
 // To load additional query results
-export const loadAdditionalQuery = async function () {
+export const loadAdditionalQuery = async function (requestId) {
   state.loading = true;
   state.search.currentBatch = [];
 
@@ -221,6 +223,7 @@ export const loadAdditionalQuery = async function () {
 
   for (const pokemon of pokemonNames) {
     try {
+      //   if (requestId !== state.search.currentRequestId) return;
       const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon}`);
       const pokemonPreview = createPokemonPreviewObject(
         pokemon,
@@ -230,6 +233,7 @@ export const loadAdditionalQuery = async function () {
     } catch (err) {
       console.error(err);
     }
+    // if (requestId !== state.search.currentRequestId) return;
     state.search.results.push(...state.search.currentBatch);
   }
   state.search.offset += LIMIT;

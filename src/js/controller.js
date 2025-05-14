@@ -1,11 +1,13 @@
 import * as model from './model.js';
 import searchView from './Views/searchView.js';
 import panelView from './Views/panelView.js';
+import resultsView from './Views/resultsView.js';
+import previewView from './Views/previewView.js';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import resultsView from './Views/resultsView.js';
-import previewView from './Views/previewView.js';
+
+import { debounce } from './helpers.js';
 
 // import { observeSentinel, unobserveSentinel } from './helpers.js';
 // To coordinate rendering of the search results [Screen 1]
@@ -31,11 +33,11 @@ const controlSearchResults = async function () {
       console.log('working');
     }
 
-    if (model.state.search.currentRequestId !== requestId) return; // Abort render if the requestId is not up-to-date
-
     // If there's  additional results
     if (model.state.search.hasMoreResults)
       resultsView.observe(controlInfiniteScroll);
+
+    if (model.state.search.currentRequestId !== requestId) return; // Abort render if the requestId is not up-to-date
 
     // Render Pokémon search results (screen 1 -- search)
     resultsView.render(model.state.search.results);
@@ -43,19 +45,22 @@ const controlSearchResults = async function () {
     searchView.renderError();
   }
 };
+const debouncedControlSearchResults = debounce(controlSearchResults, 300);
 
 // To determine the scroll position of the client and to load more data, if necessary
 const controlInfiniteScroll = async function () {
-  console.log('infinite scroll running');
+  const requestId = model.state.search.currentRequestId;
   if (model.state.loading || !model.state.search.hasMoreResults) return;
 
   // Load additional query data
   if (model.state.search.query) {
-    await model.loadAdditionalQuery();
+    await model.loadAdditionalQuery(requestId);
     // Load additional Pokémon data
   } else {
-    await model.loadAdditionalBatch();
+    await model.loadAdditionalBatch(requestId);
   }
+
+  //   if (requestId !== model.state.search.currentRequestId) return;
 
   // Determine if this is the end of current Pokémon search results
   if (model.state.search.currentBatch.length === 0) {
@@ -100,7 +105,7 @@ const initPokemonData = async function () {
 const init = function () {
   initPokemonData();
   panelView.addHandlerRender(controlPokemonPanel);
-  searchView.addHandlerSearch(controlSearchResults);
+  searchView.addHandlerSearch(debouncedControlSearchResults);
   previewView.addHandlerActive(controlActivePreview);
 };
 init();

@@ -674,11 +674,12 @@ var _searchViewJs = require("./Views/searchView.js");
 var _searchViewJsDefault = parcelHelpers.interopDefault(_searchViewJs);
 var _panelViewJs = require("./Views/panelView.js");
 var _panelViewJsDefault = parcelHelpers.interopDefault(_panelViewJs);
-var _runtime = require("regenerator-runtime/runtime");
 var _resultsViewJs = require("./Views/resultsView.js");
 var _resultsViewJsDefault = parcelHelpers.interopDefault(_resultsViewJs);
 var _previewViewJs = require("./Views/previewView.js");
 var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
+var _runtime = require("regenerator-runtime/runtime");
+var _helpersJs = require("./helpers.js");
 // import { observeSentinel, unobserveSentinel } from './helpers.js';
 // To coordinate rendering of the search results [Screen 1]
 const controlSearchResults = async function() {
@@ -696,22 +697,24 @@ const controlSearchResults = async function() {
             await _modelJs.loadPokemonResults(requestId);
             console.log('working');
         }
-        if (_modelJs.state.search.currentRequestId !== requestId) return; // Abort render if the requestId is not up-to-date
         // If there's  additional results
         if (_modelJs.state.search.hasMoreResults) (0, _resultsViewJsDefault.default).observe(controlInfiniteScroll);
+        if (_modelJs.state.search.currentRequestId !== requestId) return; // Abort render if the requestId is not up-to-date
         // Render Pokémon search results (screen 1 -- search)
         (0, _resultsViewJsDefault.default).render(_modelJs.state.search.results);
     } catch (err) {
         (0, _searchViewJsDefault.default).renderError();
     }
 };
+const debouncedControlSearchResults = (0, _helpersJs.debounce)(controlSearchResults, 300);
 // To determine the scroll position of the client and to load more data, if necessary
 const controlInfiniteScroll = async function() {
-    console.log('infinite scroll running');
+    const requestId = _modelJs.state.search.currentRequestId;
     if (_modelJs.state.loading || !_modelJs.state.search.hasMoreResults) return;
     // Load additional query data
-    if (_modelJs.state.search.query) await _modelJs.loadAdditionalQuery();
-    else await _modelJs.loadAdditionalBatch();
+    if (_modelJs.state.search.query) await _modelJs.loadAdditionalQuery(requestId);
+    else await _modelJs.loadAdditionalBatch(requestId);
+    //   if (requestId !== model.state.search.currentRequestId) return;
     // Determine if this is the end of current Pokémon search results
     if (_modelJs.state.search.currentBatch.length === 0) {
         _modelJs.state.search.hasMoreResults = false;
@@ -747,12 +750,12 @@ const initPokemonData = async function() {
 const init = function() {
     initPokemonData();
     (0, _panelViewJsDefault.default).addHandlerRender(controlPokemonPanel);
-    (0, _searchViewJsDefault.default).addHandlerSearch(controlSearchResults);
+    (0, _searchViewJsDefault.default).addHandlerSearch(debouncedControlSearchResults);
     (0, _previewViewJsDefault.default).addHandlerActive(controlActivePreview);
 };
 init();
 
-},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","regenerator-runtime/runtime":"f6ot0","./Views/resultsView.js":"fYkxP","./Views/previewView.js":"hoVX0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bzsBv":[function(require,module,exports,__globalThis) {
+},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","regenerator-runtime/runtime":"f6ot0","./Views/resultsView.js":"fYkxP","./Views/previewView.js":"hoVX0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./helpers.js":"7nL9P"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("52e9b3eefbbce1ed");
@@ -2090,7 +2093,7 @@ const createPokemonPreviewObject = function(name, details) {
         img
     };
 };
-const loadPokemonResults = async function(requestId1) {
+const loadPokemonResults = async function(requestId) {
     try {
         state.loading = true;
         restartSearchResults();
@@ -2102,8 +2105,10 @@ const loadPokemonResults = async function(requestId1) {
         } else pokemonNames = state.allPokemonNames.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
         for (const pokemon of pokemonNames){
             const pokemonName = pokemon.name || pokemon;
+            if (requestId !== state.search.currentRequestId) return;
             const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemonName}`);
             const pokemonPreview = createPokemonPreviewObject(pokemonName, pokemonDetails);
+            if (requestId !== state.search.currentRequestId) return;
             state.search.results.push(pokemonPreview);
         }
         state.search.offset += (0, _configJs.LIMIT);
@@ -2112,18 +2117,18 @@ const loadPokemonResults = async function(requestId1) {
         throw err;
     }
 };
-const loadAdditionalBatch = async function() {
+const loadAdditionalBatch = async function(requestId) {
     try {
         state.loading = true;
         state.search.currentBatch = [];
         const pokemonNames = state.allPokemonNames.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
         for (const pokemon of pokemonNames){
-            if (requestId !== state.search.currentRequestId) return;
+            //   if (requestId !== state.search.currentRequestId) return;
             const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
             const pokemonPreview = createPokemonPreviewObject(pokemon, pokemonDetails);
-            if (requestId !== state.search.currentRequestId) return;
             state.search.currentBatch.push(pokemonPreview);
         }
+        // if (requestId !== state.search.currentRequestId) return;
         state.search.results.push(...state.search.currentBatch);
         state.search.offset += (0, _configJs.LIMIT);
         state.loading = false;
@@ -2131,18 +2136,18 @@ const loadAdditionalBatch = async function() {
         throw err;
     }
 };
-const loadQueryResults = async function(query, requestId1) {
+const loadQueryResults = async function(query, requestId) {
     state.loading = true;
     restartSearchResults();
     state.search.query = query;
     state.search.queryResults = possiblePokemon(query);
     const pokemonNames = state.search.queryResults.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
     for (const pokemon of pokemonNames)try {
-        if (requestId1 !== state.search.currentRequestId) return;
+        if (requestId !== state.search.currentRequestId) return;
         const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
         const pokemonPreview = createPokemonPreviewObject(pokemon, pokemonDetails);
-        console.log(requestId1, state.search.currentRequestId);
-        if (requestId1 !== state.search.currentRequestId) return;
+        console.log(requestId, state.search.currentRequestId);
+        if (requestId !== state.search.currentRequestId) return;
         state.search.results.push(pokemonPreview);
     } catch (err) {
         console.error(err);
@@ -2150,19 +2155,21 @@ const loadQueryResults = async function(query, requestId1) {
     state.search.offset += (0, _configJs.LIMIT);
     state.loading = false;
 };
-const loadAdditionalQuery = async function() {
+const loadAdditionalQuery = async function(requestId) {
     state.loading = true;
     state.search.currentBatch = [];
     console.log(state.search.queryResults);
     const pokemonNames = state.search.queryResults.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
     for (const pokemon of pokemonNames){
         try {
+            //   if (requestId !== state.search.currentRequestId) return;
             const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
             const pokemonPreview = createPokemonPreviewObject(pokemon, pokemonDetails);
             state.search.currentBatch.push(pokemonPreview);
         } catch (err) {
             console.error(err);
         }
+        // if (requestId !== state.search.currentRequestId) return;
         state.search.results.push(...state.search.currentBatch);
     }
     state.search.offset += (0, _configJs.LIMIT);
@@ -2264,7 +2271,6 @@ parcelHelpers.export(exports, "AJAX", ()=>AJAX);
 parcelHelpers.export(exports, "capitalize", ()=>capitalize);
 parcelHelpers.export(exports, "debounce", ()=>debounce);
 parcelHelpers.export(exports, "observeSentinel", ()=>observeSentinel);
-parcelHelpers.export(exports, "unobserveSentinel", ()=>unobserveSentinel);
 var _configJs = require("./config.js");
 const timeout = function(s) {
     return new Promise(function(_, reject) {
@@ -2292,9 +2298,9 @@ const capitalize = function(word) {
 const debounce = function(func, delay) {
     let timeoutId;
     return function(...args) {
-        clearTimeout(timeoutId); // clear previous timer
+        clearTimeout(timeoutId); // Clear previous timer
         timeoutId = setTimeout(()=>{
-            func.apply(this, args); // call the function after delay
+            func.apply(this, args); // Call the function after delay
         }, delay);
     };
 };
@@ -2310,9 +2316,6 @@ const observeSentinel = function(sentinel, handler, options) {
     });
     observer.observe(sentinel);
     return observer;
-};
-const unobserveSentinel = function(observer, sentinel) {
-    if (observer && sentinel) observer.unobserve(observer, sentinel);
 };
 
 },{"./config.js":"2hPh4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"aUu1u":[function(require,module,exports,__globalThis) {

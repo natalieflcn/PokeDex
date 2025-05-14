@@ -31,9 +31,9 @@ export const capitalize = function (word) {
 export const debounce = function (func, delay) {
   let timeoutId;
   return function (...args) {
-    clearTimeout(timeoutId); // clear previous timer
+    clearTimeout(timeoutId); // Clear previous timer
     timeoutId = setTimeout(() => {
-      func.apply(this, args); // call the function after delay
+      func.apply(this, args); // Call the function after delay
     }, delay);
   };
 };
@@ -56,11 +56,4 @@ export const observeSentinel = function (sentinel, handler, options) {
   observer.observe(sentinel);
 
   return observer;
-};
-
-// To unobserve a sentinel
-export const unobserveSentinel = function (observer, sentinel) {
-  if (observer && sentinel) {
-    observer.unobserve(observer, sentinel);
-  }
 };
