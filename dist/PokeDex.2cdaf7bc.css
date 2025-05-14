@@ -257,6 +257,14 @@ body {
   font-weight: bold;
 }
 
+.btn--disabled {
+  background: var(--text--light);
+  box-shadow: 0px 0px 4px 2px inset var(--secondary-color--grey-gradient);
+  color: var(--secondary-color--grey);
+  cursor: default;
+  font-weight: bold;
+}
+
 .header {
   border-image: 1px solid black;
   color: var(--text--light);

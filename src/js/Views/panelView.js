@@ -2,13 +2,14 @@ import View from './View.js';
 
 class PanelView extends View {
   _parentEl = document.querySelector('.screen__2--search');
-  _errorMessage = 'oops';
+  _errorMessage = 'There was an error loading this Pokémon!';
 
   addHandlerRender(handler) {
     ['hashchange', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
   _generateMarkup() {
+    console.log(this._data);
     return `
     <div class="search__panel">
               <img
@@ -124,29 +125,41 @@ class PanelView extends View {
 
               <div class="search__moves">
                 <h2 class="heading--2">Moves</h2>
-                <p>1<span class="search__moves--known" style="background-color: var(--type--${
-                  this._data.moves[0][1]
-                });">${this._data.moves[0][0]}</span></p>
+                <p>1<span class="search__moves--known" style="background-color: var(${
+                  this._data.moves?.[0]?.[1] ? '--type--' : ''
+                }${
+      this._data.moves?.[0]?.[1] || '--secondary-color--grey-gradient'
+    });">${this._data.moves?.[0]?.[0] || '???'}</span></p>
 
-                <p>2<span class="search__moves--known" style="background-color: var(--type--${
-                  this._data.moves[1][1]
-                });">${this._data.moves[1][0]}</span></p>
+                <p>2<span class="search__moves--known" style="background-color: var(${
+                  this._data.moves?.[0]?.[1] ? '--type--' : ''
+                }${
+      this._data.moves?.[1]?.[1] || '--secondary-color--grey-gradient'
+    });">${this._data.moves?.[1]?.[0] || '???'}</span></p>
 
-                <p>3<span class="search__moves--known" style="background-color: var(--type--${
-                  this._data.moves[2][1]
-                });">${this._data.moves[2][0]}</span></p>
+                <p>3<span class="search__moves--known" style="background-color: var(${
+                  this._data.moves?.[0]?.[1] ? '--type--' : ''
+                }${
+      this._data.moves?.[2]?.[1] || '--secondary-color--grey-gradient'
+    });">${this._data.moves?.[2]?.[0] || '???'}</span></p>
 
-                <p>4<span class="search__moves--known" style="background-color: var(--type--${
-                  this._data.moves[3][1]
-                });">${this._data.moves[3][0]}</span></p>
+                <p>4<span class="search__moves--known" style="background-color: var(${
+                  this._data.moves?.[0]?.[1] ? '--type--' : ''
+                }${
+      this._data.moves?.[3]?.[1] || '--secondary-color--grey-gradient'
+    });">${this._data.moves?.[3]?.[0] || '???'}</span></p>
 
-                <p>5<span class="search__moves--known" style="background-color: var(--type--${
-                  this._data.moves[4][1]
-                });">${this._data.moves[4][0]}</span></p>
+                <p>5<span class="search__moves--known" style="background-color: var(${
+                  this._data.moves?.[0]?.[1] ? '--type--' : ''
+                }${
+      this._data.moves?.[4]?.[1] || '--secondary-color--grey-gradient'
+    });">${this._data.moves?.[4]?.[0] || '???'}</span></p>
 
-                <p>6<span class="search__moves--known" style="background-color: var(--type--${
-                  this._data.moves[5][1]
-                });">${this._data.moves[5][0]}</span></p>
+                <p>6<span class="search__moves--known" style="background-color: var(${
+                  this._data.moves?.[0]?.[1] ? '--type--' : ''
+                }${
+      this._data.moves?.[5]?.[1] || '--secondary-color--grey-gradient'
+    });">${this._data.moves?.[5]?.[0] || '???'}</span></p>
               </div>
             </div>
 

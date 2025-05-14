@@ -680,6 +680,8 @@ var _previewViewJs = require("./Views/previewView.js");
 var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
 var _runtime = require("regenerator-runtime/runtime");
 var _helpersJs = require("./helpers.js");
+var _paginationViewJs = require("./Views/paginationView.js");
+var _paginationViewJsDefault = parcelHelpers.interopDefault(_paginationViewJs);
 // import { observeSentinel, unobserveSentinel } from './helpers.js';
 // To coordinate rendering of the search results [Screen 1]
 const controlSearchResults = async function() {
@@ -736,12 +738,26 @@ const controlPokemonPanel = async function() {
         await _modelJs.loadPokemon(id);
         // Render Pokémon panel (screen 2 -- search)
         (0, _panelViewJsDefault.default).render(_modelJs.state.pokemon);
+        const currIndex = _modelJs.state.search.results.findIndex((pokemon)=>pokemon.name === _modelJs.state.pokemon.name);
+        if (currIndex === 0) (0, _paginationViewJsDefault.default).disableButton('prev');
+        if (currIndex === _modelJs.state.search.results.length - 1) (0, _paginationViewJsDefault.default).disableButton('next');
     } catch (err) {
-        (0, _panelViewJsDefault.default).renderError();
+        (0, _panelViewJsDefault.default).renderError(err);
     }
 };
 const controlActivePreview = function(pokemonName) {
     window.location.hash = pokemonName;
+};
+// To control going back and forth between search results
+const controlSearchPagination = function(direction) {
+    let currIndex = _modelJs.state.search.results.findIndex((p)=>p.name === _modelJs.state.pokemon.name);
+    direction === 'next' ? currIndex++ : currIndex--;
+    if (currIndex < 0 || currIndex >= _modelJs.state.search.results.length) {
+        (0, _paginationViewJsDefault.default).disableButton(direction);
+        return;
+    }
+    const nextPokemon = _modelJs.state.search.results[currIndex];
+    window.location.hash = nextPokemon.name;
 };
 // To initialize all Pokémon names to store in our state
 const initPokemonData = async function() {
@@ -752,10 +768,11 @@ const init = function() {
     (0, _panelViewJsDefault.default).addHandlerRender(controlPokemonPanel);
     (0, _searchViewJsDefault.default).addHandlerSearch(debouncedControlSearchResults);
     (0, _previewViewJsDefault.default).addHandlerActive(controlActivePreview);
+    (0, _paginationViewJsDefault.default).addHandlerClick(controlSearchPagination);
 };
 init();
 
-},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","regenerator-runtime/runtime":"f6ot0","./Views/resultsView.js":"fYkxP","./Views/previewView.js":"hoVX0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./helpers.js":"7nL9P"}],"bzsBv":[function(require,module,exports,__globalThis) {
+},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","regenerator-runtime/runtime":"f6ot0","./Views/resultsView.js":"fYkxP","./Views/previewView.js":"hoVX0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./helpers.js":"7nL9P","./Views/paginationView.js":"kQgXX"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("52e9b3eefbbce1ed");
@@ -2362,6 +2379,7 @@ class View {
         if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
         this._data = data;
         const markup = this._generateMarkup();
+        console.log(markup);
         if (!render) return markup;
         if (!update) this._clear();
         this._parentEl.insertAdjacentHTML(`${update ? 'beforeend' : 'afterbegin'}`, markup);
@@ -2393,7 +2411,7 @@ var _viewJs = require("./View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
 class PanelView extends (0, _viewJsDefault.default) {
     _parentEl = document.querySelector('.screen__2--search');
-    _errorMessage = 'oops';
+    _errorMessage = "There was an error loading this Pok\xe9mon!";
     addHandlerRender(handler) {
         [
             'hashchange',
@@ -2401,6 +2419,7 @@ class PanelView extends (0, _viewJsDefault.default) {
         ].forEach((e)=>window.addEventListener(e, handler));
     }
     _generateMarkup() {
+        console.log(this._data);
         return `
     <div class="search__panel">
               <img
@@ -2480,17 +2499,17 @@ class PanelView extends (0, _viewJsDefault.default) {
 
               <div class="search__moves">
                 <h2 class="heading--2">Moves</h2>
-                <p>1<span class="search__moves--known" style="background-color: var(--type--${this._data.moves[0][1]});">${this._data.moves[0][0]}</span></p>
+                <p>1<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[0]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[0]?.[0] || '???'}</span></p>
 
-                <p>2<span class="search__moves--known" style="background-color: var(--type--${this._data.moves[1][1]});">${this._data.moves[1][0]}</span></p>
+                <p>2<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[1]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[1]?.[0] || '???'}</span></p>
 
-                <p>3<span class="search__moves--known" style="background-color: var(--type--${this._data.moves[2][1]});">${this._data.moves[2][0]}</span></p>
+                <p>3<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[2]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[2]?.[0] || '???'}</span></p>
 
-                <p>4<span class="search__moves--known" style="background-color: var(--type--${this._data.moves[3][1]});">${this._data.moves[3][0]}</span></p>
+                <p>4<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[3]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[3]?.[0] || '???'}</span></p>
 
-                <p>5<span class="search__moves--known" style="background-color: var(--type--${this._data.moves[4][1]});">${this._data.moves[4][0]}</span></p>
+                <p>5<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[4]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[4]?.[0] || '???'}</span></p>
 
-                <p>6<span class="search__moves--known" style="background-color: var(--type--${this._data.moves[5][1]});">${this._data.moves[5][0]}</span></p>
+                <p>6<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[5]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[5]?.[0] || '???'}</span></p>
               </div>
             </div>
 
@@ -3232,6 +3251,36 @@ class PreviewView extends (0, _viewJsDefault.default) {
     }
 }
 exports.default = new PreviewView();
+
+},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"kQgXX":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class PaginationView extends (0, _viewJsDefault.default) {
+    _parentEl = document.querySelector('.screen__2--search');
+    _errorMessage = 'oops';
+    addHandlerClick(handler) {
+        this._parentEl.addEventListener('click', function(e) {
+            const btn = e.target.closest('.search__btn--next, .search__btn--prev');
+            if (!btn) return;
+            const direction = btn.classList.contains('search__btn--next') ? 'next' : 'prev';
+            handler(direction);
+        });
+    }
+    //   addHandlerDisable(handler) {
+    //     ['load', 'hashchange'].forEach(ev =>
+    //       this._parentEl.addEventListener('ev', function (e) {
+    //         const btn = e.target.closest('.search__btn--next, .search__btn--prev');
+    //         if (!btn) return;
+    //       })
+    //     );
+    //   }
+    disableButton(btn) {
+        document.querySelector(`.search__btn--${btn}`).classList.add('btn--disabled');
+    }
+}
+exports.default = new PaginationView();
 
 },{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire7ea9", {}, "./", "/")
 

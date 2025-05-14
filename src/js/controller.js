@@ -8,6 +8,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 import { debounce } from './helpers.js';
+import paginationView from './Views/paginationView.js';
 
 // import { observeSentinel, unobserveSentinel } from './helpers.js';
 // To coordinate rendering of the search results [Screen 1]
@@ -88,13 +89,38 @@ const controlPokemonPanel = async function () {
 
     // Render Pokémon panel (screen 2 -- search)
     panelView.render(model.state.pokemon);
+
+    const currIndex = model.state.search.results.findIndex(
+      pokemon => pokemon.name === model.state.pokemon.name
+    );
+
+    if (currIndex === 0) paginationView.disableButton('prev');
+    if (currIndex === model.state.search.results.length - 1)
+      paginationView.disableButton('next');
   } catch (err) {
-    panelView.renderError();
+    panelView.renderError(err);
   }
 };
 
 const controlActivePreview = function (pokemonName) {
   window.location.hash = pokemonName;
+};
+
+// To control going back and forth between search results
+const controlSearchPagination = function (direction) {
+  let currIndex = model.state.search.results.findIndex(
+    p => p.name === model.state.pokemon.name
+  );
+
+  direction === 'next' ? currIndex++ : currIndex--;
+
+  if (currIndex < 0 || currIndex >= model.state.search.results.length) {
+    paginationView.disableButton(direction);
+    return;
+  }
+
+  const nextPokemon = model.state.search.results[currIndex];
+  window.location.hash = nextPokemon.name;
 };
 
 // To initialize all Pokémon names to store in our state
@@ -107,5 +133,6 @@ const init = function () {
   panelView.addHandlerRender(controlPokemonPanel);
   searchView.addHandlerSearch(debouncedControlSearchResults);
   previewView.addHandlerActive(controlActivePreview);
+  paginationView.addHandlerClick(controlSearchPagination);
 };
 init();
