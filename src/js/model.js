@@ -104,7 +104,9 @@ const createPokemonPreviewObject = function (name, details) {
 // SEARCH: Rendering search results and Pokémon panel details
 
 // To load Pokémon details for the current batch rendered in search results [screen 1]
-export const loadPokemonResults = async function (requestId) {
+export const loadPokemonResults = async function (
+  requestId = state.currentRequestId
+) {
   try {
     state.loading = true;
 
@@ -146,7 +148,9 @@ export const loadPokemonResults = async function (requestId) {
 };
 
 // To load additional Pokémon results
-export const loadAdditionalBatch = async function (requestId) {
+export const loadAdditionalBatch = async function (
+  requestId = state.currentRequestId
+) {
   try {
     state.loading = true;
     state.search.currentBatch = [];

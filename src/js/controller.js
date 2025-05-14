@@ -26,6 +26,8 @@ const controlSearchResults = async function () {
 
     // If there's a query, render all existing Pokémon for that query
     if (query) {
+      panelView._clear();
+      //   previewView.clearActivePreviews();
       await model.loadQueryResults(query, requestId);
 
       // If there's NO query, render all existing Pokémon from PokéAPI database
@@ -102,21 +104,58 @@ const controlPokemonPanel = async function () {
   }
 };
 
-const controlActivePreview = function (pokemonName) {
+const controlClickActivePreview = function (pokemonName) {
   window.location.hash = pokemonName;
 };
 
+const controlPageActivePreview = function () {
+  const currentlyActive = document.querySelector('.search__preview--active');
+
+  if (currentlyActive)
+    currentlyActive.classList.remove('search__preview--active');
+
+  const previews = Array.from(document.querySelectorAll('.search__preview'));
+
+  const targetPreview = previews.find(preview => {
+    const nameEl = preview.querySelector('.search__preview--name');
+    return nameEl?.textContent === window.location.hash.slice(1);
+  });
+
+  if (targetPreview) targetPreview.classList.add('search__preview--active');
+};
+
 // To control going back and forth between search results
-const controlSearchPagination = function (direction) {
+const controlSearchPagination = async function (direction) {
   let currIndex = model.state.search.results.findIndex(
     p => p.name === model.state.pokemon.name
   );
 
   direction === 'next' ? currIndex++ : currIndex--;
 
-  if (currIndex < 0 || currIndex >= model.state.search.results.length) {
+  if (
+    currIndex < 0 ||
+    (currIndex >= model.state.search.results.length &&
+      !model.state.search.hasMoreResults)
+  ) {
     paginationView.disableButton(direction);
+    resultsView.unobserve();
+
     return;
+  }
+
+  if (
+    currIndex >= model.state.search.results.length &&
+    model.state.search.hasMoreResults
+  ) {
+    paginationView.enableButton('next');
+
+    panelView.renderSpinner();
+    if (model.state.search.query) {
+      await model.loadAdditionalQuery();
+      // Load additional Pokémon data
+    } else {
+      await model.loadAdditionalBatch();
+    }
   }
 
   const nextPokemon = model.state.search.results[currIndex];
@@ -132,7 +171,8 @@ const init = function () {
   initPokemonData();
   panelView.addHandlerRender(controlPokemonPanel);
   searchView.addHandlerSearch(debouncedControlSearchResults);
-  previewView.addHandlerActive(controlActivePreview);
+  previewView.addHandlerActive(controlClickActivePreview);
+  previewView.addHandlerHashChange(controlPageActivePreview);
   paginationView.addHandlerClick(controlSearchPagination);
 };
 init();

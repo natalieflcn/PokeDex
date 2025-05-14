@@ -694,8 +694,12 @@ const controlSearchResults = async function() {
         console.log(_modelJs.state.search.currentRequestId, requestId);
         (0, _resultsViewJsDefault.default).renderSpinner();
         // If there's a query, render all existing Pokémon for that query
-        if (query) await _modelJs.loadQueryResults(query, requestId);
-        else if (!query) {
+        if (query) {
+            (0, _panelViewJsDefault.default)._clear();
+            //   previewView.clearActivePreviews();
+            await _modelJs.loadQueryResults(query, requestId);
+        // If there's NO query, render all existing Pokémon from PokéAPI database
+        } else if (!query) {
             await _modelJs.loadPokemonResults(requestId);
             console.log('working');
         }
@@ -745,16 +749,33 @@ const controlPokemonPanel = async function() {
         (0, _panelViewJsDefault.default).renderError(err);
     }
 };
-const controlActivePreview = function(pokemonName) {
+const controlClickActivePreview = function(pokemonName) {
     window.location.hash = pokemonName;
 };
+const controlPageActivePreview = function() {
+    const currentlyActive = document.querySelector('.search__preview--active');
+    if (currentlyActive) currentlyActive.classList.remove('search__preview--active');
+    const previews = Array.from(document.querySelectorAll('.search__preview'));
+    const targetPreview = previews.find((preview)=>{
+        const nameEl = preview.querySelector('.search__preview--name');
+        return nameEl?.textContent === window.location.hash.slice(1);
+    });
+    if (targetPreview) targetPreview.classList.add('search__preview--active');
+};
 // To control going back and forth between search results
-const controlSearchPagination = function(direction) {
+const controlSearchPagination = async function(direction) {
     let currIndex = _modelJs.state.search.results.findIndex((p)=>p.name === _modelJs.state.pokemon.name);
     direction === 'next' ? currIndex++ : currIndex--;
-    if (currIndex < 0 || currIndex >= _modelJs.state.search.results.length) {
+    if (currIndex < 0 || currIndex >= _modelJs.state.search.results.length && !_modelJs.state.search.hasMoreResults) {
         (0, _paginationViewJsDefault.default).disableButton(direction);
+        (0, _resultsViewJsDefault.default).unobserve();
         return;
+    }
+    if (currIndex >= _modelJs.state.search.results.length && _modelJs.state.search.hasMoreResults) {
+        (0, _paginationViewJsDefault.default).enableButton('next');
+        (0, _panelViewJsDefault.default).renderSpinner();
+        if (_modelJs.state.search.query) await _modelJs.loadAdditionalQuery();
+        else await _modelJs.loadAdditionalBatch();
     }
     const nextPokemon = _modelJs.state.search.results[currIndex];
     window.location.hash = nextPokemon.name;
@@ -767,12 +788,13 @@ const init = function() {
     initPokemonData();
     (0, _panelViewJsDefault.default).addHandlerRender(controlPokemonPanel);
     (0, _searchViewJsDefault.default).addHandlerSearch(debouncedControlSearchResults);
-    (0, _previewViewJsDefault.default).addHandlerActive(controlActivePreview);
+    (0, _previewViewJsDefault.default).addHandlerActive(controlClickActivePreview);
+    (0, _previewViewJsDefault.default).addHandlerHashChange(controlPageActivePreview);
     (0, _paginationViewJsDefault.default).addHandlerClick(controlSearchPagination);
 };
 init();
 
-},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","regenerator-runtime/runtime":"f6ot0","./Views/resultsView.js":"fYkxP","./Views/previewView.js":"hoVX0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./helpers.js":"7nL9P","./Views/paginationView.js":"kQgXX"}],"bzsBv":[function(require,module,exports,__globalThis) {
+},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","./Views/resultsView.js":"fYkxP","./Views/previewView.js":"hoVX0","regenerator-runtime/runtime":"f6ot0","./helpers.js":"7nL9P","./Views/paginationView.js":"kQgXX","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("52e9b3eefbbce1ed");
@@ -2110,7 +2132,7 @@ const createPokemonPreviewObject = function(name, details) {
         img
     };
 };
-const loadPokemonResults = async function(requestId) {
+const loadPokemonResults = async function(requestId = state.currentRequestId) {
     try {
         state.loading = true;
         restartSearchResults();
@@ -2134,7 +2156,7 @@ const loadPokemonResults = async function(requestId) {
         throw err;
     }
 };
-const loadAdditionalBatch = async function(requestId) {
+const loadAdditionalBatch = async function(requestId = state.currentRequestId) {
     try {
         state.loading = true;
         state.search.currentBatch = [];
@@ -2379,7 +2401,6 @@ class View {
         if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
         this._data = data;
         const markup = this._generateMarkup();
-        console.log(markup);
         if (!render) return markup;
         if (!update) this._clear();
         this._parentEl.insertAdjacentHTML(`${update ? 'beforeend' : 'afterbegin'}`, markup);
@@ -2419,7 +2440,6 @@ class PanelView extends (0, _viewJsDefault.default) {
         ].forEach((e)=>window.addEventListener(e, handler));
     }
     _generateMarkup() {
-        console.log(this._data);
         return `
     <div class="search__panel">
               <img
@@ -2579,6 +2599,99 @@ class PanelView extends (0, _viewJsDefault.default) {
     }
 }
 exports.default = new PanelView();
+
+},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fYkxP":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _previewViewJs = require("./previewView.js");
+var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
+var _helpersJs = require("../helpers.js");
+class ResultsView extends (0, _viewJsDefault.default) {
+    _parentEl = document.querySelector('.search__preview--container');
+    _errorMessage = "We could not find that Pok\xe9mon! Please try again.";
+    _sentinel = document.querySelector('.search__sentinel');
+    _observer = null;
+    observe(handler) {
+        this._observer = (0, _helpersJs.observeSentinel)(this._sentinel, handler, {
+            root: null,
+            threshold: 0.01,
+            rootMargin: '100%'
+        });
+        console.log('RV observe is running');
+    }
+    unobserve() {
+        this._observer.unobserve(this._sentinel);
+        console.log('RV unobserve is running');
+    }
+    _generateMarkup() {
+        // Map each Pokémon from an array of data created with previewView markup texts and consolidate markup into one string
+        return this._data.map((result)=>(0, _previewViewJsDefault.default).render(result, false)).join('');
+    }
+}
+exports.default = new ResultsView(); // export const observeSentinel = function (sentinel, handler, options) {
+ //   const observer = new IntersectionObserver(entries => {
+ //     entries.forEach(
+ //       entry => {
+ //         if (entry.isIntersecting) handler();
+ //       },
+ //       {
+ //         root: options.root,
+ //         threshold: options.threshold,
+ //         rootMargin: options.rootMargin,
+ //       }
+ //     );
+ //   });
+ //   observer.observe(sentinel);
+ // };
+ // // To unobserve a sentinel
+ // export const unobserveSentinel = function (observer, sentinel) {
+ //   if (observer && sentinel) {
+ //     observer.unobserve(sentinel);
+ //   }
+ // };
+
+},{"./View.js":"YJQ6Q","./previewView.js":"hoVX0","../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hoVX0":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class PreviewView extends (0, _viewJsDefault.default) {
+    _parentEl = document.querySelector('.search__preview--container');
+    addHandlerActive(handler) {
+        this._parentEl.addEventListener('click', function(e) {
+            const clicked = e.target.closest('.search__preview');
+            if (!clicked) return;
+            //If there's already an active item, remove its class
+            const currentlyActive = document.querySelector('.search__preview--active');
+            if (currentlyActive && currentlyActive !== clicked) currentlyActive.classList.remove('search__preview--active');
+            clicked.classList.add('search__preview--active');
+            handler(clicked.querySelector('.search__preview--name').textContent);
+        });
+    }
+    addHandlerHashChange(handler) {
+        [
+            'hashchange',
+            'load'
+        ].forEach((ev)=>window.addEventListener(ev, handler));
+    }
+    _generateMarkup() {
+        const id = window.location.hash.slice(1);
+        return `
+            <div class="search__preview ${this._data.name === id ? 'search__preview--active' : ''}">
+                <span class="pokemon__id search__preview--id">#${this._data.id}</span
+                ><img
+                  class="search__preview--img"
+                  src=${this._data.img}
+                  alt=""
+                />
+                <p class="search__preview--name">${this._data.name}</p>
+            </div>
+            `;
+    }
+}
+exports.default = new PreviewView();
 
 },{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"f6ot0":[function(require,module,exports,__globalThis) {
 /**
@@ -3165,94 +3278,7 @@ try {
     else Function("r", "regeneratorRuntime = r")(runtime);
 }
 
-},{}],"fYkxP":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _viewJs = require("./View.js");
-var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-var _previewViewJs = require("./previewView.js");
-var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
-var _helpersJs = require("../helpers.js");
-class ResultsView extends (0, _viewJsDefault.default) {
-    _parentEl = document.querySelector('.search__preview--container');
-    _errorMessage = "We could not find that Pok\xe9mon! Please try again.";
-    _sentinel = document.querySelector('.search__sentinel');
-    _observer = null;
-    observe(handler) {
-        this._observer = (0, _helpersJs.observeSentinel)(this._sentinel, handler, {
-            root: null,
-            threshold: 0.01,
-            rootMargin: '100%'
-        });
-        console.log('RV observe is running');
-    }
-    unobserve() {
-        this._observer.unobserve(this._sentinel);
-        console.log('RV unobserve is running');
-    }
-    _generateMarkup() {
-        // Map each Pokémon from an array of data created with previewView markup texts and consolidate markup into one string
-        return this._data.map((result)=>(0, _previewViewJsDefault.default).render(result, false)).join('');
-    }
-}
-exports.default = new ResultsView(); // export const observeSentinel = function (sentinel, handler, options) {
- //   const observer = new IntersectionObserver(entries => {
- //     entries.forEach(
- //       entry => {
- //         if (entry.isIntersecting) handler();
- //       },
- //       {
- //         root: options.root,
- //         threshold: options.threshold,
- //         rootMargin: options.rootMargin,
- //       }
- //     );
- //   });
- //   observer.observe(sentinel);
- // };
- // // To unobserve a sentinel
- // export const unobserveSentinel = function (observer, sentinel) {
- //   if (observer && sentinel) {
- //     observer.unobserve(sentinel);
- //   }
- // };
-
-},{"./View.js":"YJQ6Q","./previewView.js":"hoVX0","../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hoVX0":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _viewJs = require("./View.js");
-var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-class PreviewView extends (0, _viewJsDefault.default) {
-    _parentEl = document.querySelector('.search__preview--container');
-    addHandlerActive(handler) {
-        this._parentEl.addEventListener('click', function(e) {
-            const clicked = e.target.closest('.search__preview');
-            if (!clicked) return;
-            //If there's already an active item, remove its class
-            const currentlyActive = document.querySelector('.search__preview--active');
-            if (currentlyActive && currentlyActive !== clicked) currentlyActive.classList.remove('search__preview--active');
-            clicked.classList.add('search__preview--active');
-            handler(clicked.querySelector('.search__preview--name').textContent);
-        });
-    }
-    _generateMarkup() {
-        const id = window.location.hash.slice(1);
-        return `
-            <div class="search__preview ${this._data.name === id ? 'search__preview--active' : ''}">
-                <span class="pokemon__id search__preview--id">#${this._data.id}</span
-                ><img
-                  class="search__preview--img"
-                  src=${this._data.img}
-                  alt=""
-                />
-                <p class="search__preview--name">${this._data.name}</p>
-            </div>
-            `;
-    }
-}
-exports.default = new PreviewView();
-
-},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"kQgXX":[function(require,module,exports,__globalThis) {
+},{}],"kQgXX":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("./View.js");
@@ -3278,6 +3304,9 @@ class PaginationView extends (0, _viewJsDefault.default) {
     //   }
     disableButton(btn) {
         document.querySelector(`.search__btn--${btn}`).classList.add('btn--disabled');
+    }
+    enableButton(btn) {
+        document.querySelector(`.search__btn--${btn}`).classList.remove('btn--disabled');
     }
 }
 exports.default = new PaginationView();

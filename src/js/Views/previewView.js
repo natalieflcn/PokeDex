@@ -21,6 +21,10 @@ class PreviewView extends View {
     });
   }
 
+  addHandlerHashChange(handler) {
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
+  }
+
   _generateMarkup() {
     const id = window.location.hash.slice(1);
     return `
