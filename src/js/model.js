@@ -9,6 +9,7 @@ import {
 import { AJAX, capitalize } from './helpers.js';
 
 // TODO Change this file to searchModel.js, implement models for other views (Map and Profile)
+
 export const state = {
   loading: false,
   allPokemonNames: {
@@ -73,6 +74,10 @@ const createPokemonObject = async function (data) {
   // Loaded from DETAILS_API_URL
   const [{ flavor_text }] = data[1].flavor_text_entries;
 
+  // Properties created from Caught and Favorites in state
+  const caught = state.caught.some(p => p.id === id) ? true : false;
+  const favorite = state.favorites.some(p => p.id === id) ? true : false;
+
   return {
     name: capitalize(name),
     id,
@@ -83,6 +88,8 @@ const createPokemonObject = async function (data) {
     weight,
     stats,
     moves,
+    caught,
+    favorite,
   };
 };
 
@@ -162,7 +169,6 @@ export const loadAdditionalBatch = async function (
     );
 
     for (const pokemon of pokemonNames) {
-      //   if (requestId !== state.search.currentRequestId) return;
       const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon}`);
       const pokemonPreview = createPokemonPreviewObject(
         pokemon,
@@ -171,7 +177,6 @@ export const loadAdditionalBatch = async function (
       state.search.currentBatch.push(pokemonPreview);
     }
 
-    // if (requestId !== state.search.currentRequestId) return;
     state.search.results.push(...state.search.currentBatch);
 
     state.search.offset += LIMIT;
@@ -228,7 +233,6 @@ export const loadAdditionalQuery = async function (requestId) {
 
   for (const pokemon of pokemonNames) {
     try {
-      //   if (requestId !== state.search.currentRequestId) return;
       const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon}`);
       const pokemonPreview = createPokemonPreviewObject(
         pokemon,
@@ -238,7 +242,6 @@ export const loadAdditionalQuery = async function (requestId) {
     } catch (err) {
       console.error(err);
     }
-    // if (requestId !== state.search.currentRequestId) return;
     state.search.results.push(...state.search.currentBatch);
   }
   state.search.offset += LIMIT;
@@ -259,13 +262,60 @@ export const loadPokemon = async function (pokemon) {
   }
 };
 
-const possiblePokemon = function (substring) {
-  return state.allPokemonNames.filter(pokemon => pokemon.startsWith(substring));
+// To store Pokémon details in Caught Pokémon
+export const addCaughtPokemon = function (pokemon) {
+  pokemon.caught = true;
+  state.caught.push(pokemon);
+  persistData('caught', state.caught);
 };
 
+export const removeCaughtPokemon = function (pokemon) {
+  pokemon.caught = false;
+  const index = state.caught.find(p => p.name === pokemon.name);
+  state.caught.splice(index, 1);
+  persistData('caught', state.caught);
+};
+
+// To store Pokémon details in Favorite Pokémon
+export const addFavoritePokemon = function (pokemon) {
+  pokemon.favorite = true;
+  state.favorites.push(pokemon);
+  persistData('favorites', state.favorites);
+};
+
+export const removeFavoritePokemon = function (pokemon) {
+  pokemon.favorite = false;
+  const index = state.favorites.find(p => p.name === pokemon.name);
+  state.favorites.splice(index, 1);
+  persistData('favorites', state.favorites);
+};
+
+// Search -- HELPER METHODS
+
+// To clear search results
 export const restartSearchResults = function () {
   state.search.offset = 0;
   state.search.results = [];
   state.search.query = '';
   state.search.queryResults = '';
 };
+
+// To find Pokémon that begin with the passed-in substring
+const possiblePokemon = function (substring) {
+  return state.allPokemonNames.filter(pokemon => pokemon.startsWith(substring));
+};
+
+// To store Caught Pokémon and Favorite Pokémon in Local Storage
+const persistData = function (type, data) {
+  localStorage.setItem(type, JSON.stringify(data));
+};
+
+// To check local storage and update Caught/Favorite Pokémon with persisted data
+const init = function () {
+  const storageCaught = localStorage.getItem('caught');
+  if (storageCaught) state.caught = JSON.parse(storageCaught);
+
+  const storageFavorites = localStorage.getItem('favorites');
+  if (storageCaught) state.favorites = JSON.parse(storageFavorites);
+};
+init();

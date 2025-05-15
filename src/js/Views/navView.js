@@ -6,40 +6,54 @@ class NavView extends View {
   addHandlerClick(handler) {
     this._parentEl.addEventListener('click', function (e) {
       const btn = e.target.closest('.header__btn');
-      console.log(e.target);
       if (!btn) return;
 
       const page = btn.dataset.page;
       if (!page) return;
 
-      const btns = document
+      document
         .querySelectorAll(
           '.screen__1--search, .screen__2--search, .screen__1--map, .screen__2--map, .screen__1--profile, .screen__2--profile'
         )
         .forEach(page => page.classList.add('hidden'));
-      console.log('page is ' + page);
+
+      document
+        .querySelectorAll(
+          '.lights__inner--blue, .lights__inner--yellow, .lights__inner--green'
+        )
+        .forEach(light => light.classList.remove('lights__inner--active'));
       handler(page);
     });
   }
 
   search() {
-    console.log('search running');
     document
       .querySelectorAll('.screen__1--search, .screen__2--search')
       .forEach(screen => screen.classList.remove('hidden'));
+
+    document
+      .querySelector('.lights__inner--blue')
+      .classList.add('lights__inner--active');
   }
 
   map() {
-    console.log('map running');
     document
       .querySelectorAll('.screen__1--map, .screen__2--map')
       .forEach(screen => screen.classList.remove('hidden'));
+
+    document
+      .querySelector('.lights__inner--yellow')
+      .classList.add('lights__inner--active');
   }
 
   profile() {
     document
       .querySelectorAll('.screen__1--profile, .screen__2--profile')
       .forEach(screen => screen.classList.remove('hidden'));
+
+    document
+      .querySelector('.lights__inner--green')
+      .classList.add('lights__inner--active');
   }
 }
 

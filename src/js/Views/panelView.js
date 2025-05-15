@@ -8,6 +8,37 @@ class PanelView extends View {
     ['hashchange', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
+  addHandlerCaught(handler) {
+    this._parentEl.addEventListener('click', function (e) {
+      const btn = e.target.closest('.search__btn--caught');
+
+      if (!btn) return;
+      console.log('caught clicked');
+      handler();
+    });
+  }
+
+  addHandlerFavorite(handler) {
+    this._parentEl.addEventListener('click', function (e) {
+      const btn = e.target.closest('.search__btn--favorite');
+
+      if (!btn) return;
+      handler();
+    });
+  }
+
+  toggleCaught() {
+    const btn = document.querySelector('.search__btn--caught');
+
+    btn.classList.toggle('btn--active');
+  }
+
+  toggleFavorite() {
+    const btn = document.querySelector('.search__btn--favorite');
+
+    btn.classList.toggle('btn--active');
+  }
+
   _generateMarkup() {
     return `
     <div class="search__panel">
@@ -178,7 +209,9 @@ class PanelView extends View {
                   />
                 </svg>
               </button>
-              <button class="btn search__btn--favorite btn--red">
+              <button class="btn search__btn--favorite btn--red ${
+                this._data.favorite ? 'btn--active' : ''
+              }">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="13"
@@ -193,7 +226,9 @@ class PanelView extends View {
                 </svg>
                 Favorite
               </button>
-              <button class="btn search__btn--caught btn--yellow">
+              <button class="btn search__btn--caught btn--yellow ${
+                this._data.caught ? 'btn--active' : ''
+              }">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="13"

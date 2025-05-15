@@ -30,27 +30,3 @@ class ResultsView extends View {
 }
 
 export default new ResultsView();
-
-// export const observeSentinel = function (sentinel, handler, options) {
-//   const observer = new IntersectionObserver(entries => {
-//     entries.forEach(
-//       entry => {
-//         if (entry.isIntersecting) handler();
-//       },
-//       {
-//         root: options.root,
-//         threshold: options.threshold,
-//         rootMargin: options.rootMargin,
-//       }
-//     );
-//   });
-
-//   observer.observe(sentinel);
-// };
-
-// // To unobserve a sentinel
-// export const unobserveSentinel = function (observer, sentinel) {
-//   if (observer && sentinel) {
-//     observer.unobserve(sentinel);
-//   }
-// };

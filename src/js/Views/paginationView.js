@@ -17,15 +17,6 @@ class PaginationView extends View {
     });
   }
 
-  //   addHandlerDisable(handler) {
-  //     ['load', 'hashchange'].forEach(ev =>
-  //       this._parentEl.addEventListener('ev', function (e) {
-  //         const btn = e.target.closest('.search__btn--next, .search__btn--prev');
-  //         if (!btn) return;
-  //       })
-  //     );
-  //   }
-
   disableButton(btn) {
     document
       .querySelector(`.search__btn--${btn}`)

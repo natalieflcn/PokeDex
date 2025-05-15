@@ -670,21 +670,22 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _webImmediateJs = require("core-js/modules/web.immediate.js");
 var _modelJs = require("./model.js");
+var _navViewJs = require("./Views/navView.js");
+var _navViewJsDefault = parcelHelpers.interopDefault(_navViewJs);
 var _searchViewJs = require("./Views/searchView.js");
 var _searchViewJsDefault = parcelHelpers.interopDefault(_searchViewJs);
-var _panelViewJs = require("./Views/panelView.js");
-var _panelViewJsDefault = parcelHelpers.interopDefault(_panelViewJs);
+var _sortViewJs = require("./Views/sortView.js");
+var _sortViewJsDefault = parcelHelpers.interopDefault(_sortViewJs);
 var _resultsViewJs = require("./Views/resultsView.js");
 var _resultsViewJsDefault = parcelHelpers.interopDefault(_resultsViewJs);
 var _previewViewJs = require("./Views/previewView.js");
 var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
-var _runtime = require("regenerator-runtime/runtime");
-var _helpersJs = require("./helpers.js");
+var _panelViewJs = require("./Views/panelView.js");
+var _panelViewJsDefault = parcelHelpers.interopDefault(_panelViewJs);
 var _paginationViewJs = require("./Views/paginationView.js");
 var _paginationViewJsDefault = parcelHelpers.interopDefault(_paginationViewJs);
-var _navViewJs = require("./Views/navView.js");
-var _navViewJsDefault = parcelHelpers.interopDefault(_navViewJs);
-// import { observeSentinel, unobserveSentinel } from './helpers.js';
+var _runtime = require("regenerator-runtime/runtime");
+var _helpersJs = require("./helpers.js");
 const controlNav = function(page) {
     switch(page){
         case 'search':
@@ -714,7 +715,6 @@ const controlSearchResults = async function() {
         // If there's a query, render all existing Pokémon for that query
         if (query) {
             (0, _panelViewJsDefault.default)._clear();
-            //   previewView.clearActivePreviews();
             await _modelJs.loadQueryResults(query, requestId);
         // If there's NO query, render all existing Pokémon from PokéAPI database
         } else if (!query) {
@@ -730,7 +730,7 @@ const controlSearchResults = async function() {
         (0, _searchViewJsDefault.default).renderError();
     }
 };
-const debouncedControlSearchResults = (0, _helpersJs.debounce)(controlSearchResults, 300);
+const debouncedControlSearchResults = (0, _helpersJs.debounce)(controlSearchResults, 300); // Debounce search results to reduce redundant queries
 // To determine the scroll position of the client and to load more data, if necessary
 const controlInfiniteScroll = async function() {
     const requestId = _modelJs.state.search.currentRequestId;
@@ -738,7 +738,6 @@ const controlInfiniteScroll = async function() {
     // Load additional query data
     if (_modelJs.state.search.query) await _modelJs.loadAdditionalQuery(requestId);
     else await _modelJs.loadAdditionalBatch(requestId);
-    //   if (requestId !== model.state.search.currentRequestId) return;
     // Determine if this is the end of current Pokémon search results
     if (_modelJs.state.search.currentBatch.length === 0) {
         _modelJs.state.search.hasMoreResults = false;
@@ -748,6 +747,30 @@ const controlInfiniteScroll = async function() {
     // Return Pokémon data to controlSearchResults
     (0, _resultsViewJsDefault.default).render(_modelJs.state.search.currentBatch, true, true);
     return _modelJs.state.search.results;
+};
+// To sort Pokémon data by name
+const controlSortName = function() {
+    console.log('sorting by name');
+    (0, _sortViewJsDefault.default).toggleSortName();
+};
+// To sort Pokémon data by ID
+const controlSortId = function() {
+    console.log('sorting by id');
+    (0, _sortViewJsDefault.default).toggleSortId();
+};
+// To highlight active search results [screen 1]
+const controlClickActivePreview = function(pokemonName) {
+    window.location.hash = pokemonName;
+};
+const controlPageActivePreview = function() {
+    const currentlyActive = document.querySelector('.search__preview--active');
+    if (currentlyActive) currentlyActive.classList.remove('search__preview--active');
+    const previews = Array.from(document.querySelectorAll('.search__preview'));
+    const targetPreview = previews.find((preview)=>{
+        const nameEl = preview.querySelector('.search__preview--name');
+        return nameEl?.textContent === window.location.hash.slice(1);
+    });
+    if (targetPreview) targetPreview.classList.add('search__preview--active');
 };
 // To coordinate rendering of the Pokémon Panel [Screen 2]
 const controlPokemonPanel = async function() {
@@ -767,19 +790,6 @@ const controlPokemonPanel = async function() {
         (0, _panelViewJsDefault.default).renderError(err);
     }
 };
-const controlClickActivePreview = function(pokemonName) {
-    window.location.hash = pokemonName;
-};
-const controlPageActivePreview = function() {
-    const currentlyActive = document.querySelector('.search__preview--active');
-    if (currentlyActive) currentlyActive.classList.remove('search__preview--active');
-    const previews = Array.from(document.querySelectorAll('.search__preview'));
-    const targetPreview = previews.find((preview)=>{
-        const nameEl = preview.querySelector('.search__preview--name');
-        return nameEl?.textContent === window.location.hash.slice(1);
-    });
-    if (targetPreview) targetPreview.classList.add('search__preview--active');
-};
 // To control going back and forth between search results
 const controlSearchPagination = async function(direction) {
     let currIndex = _modelJs.state.search.results.findIndex((p)=>p.name === _modelJs.state.pokemon.name);
@@ -798,22 +808,41 @@ const controlSearchPagination = async function(direction) {
     const nextPokemon = _modelJs.state.search.results[currIndex];
     window.location.hash = nextPokemon.name;
 };
+// To add Pokémon to our Caught Pokémon
+const controlAddCaught = function() {
+    // To add/remove Caught status
+    if (!_modelJs.state.pokemon.caught) _modelJs.addCaughtPokemon(_modelJs.state.pokemon);
+    else _modelJs.removeCaughtPokemon(_modelJs.state.pokemon);
+    (0, _panelViewJsDefault.default).toggleCaught();
+};
+// To add Pokémon to our Favorite Pokémon
+const controlAddFavorite = function() {
+    // To add/remove Caught status
+    if (!_modelJs.state.pokemon.favorite) _modelJs.addFavoritePokemon(_modelJs.state.pokemon);
+    else _modelJs.removeFavoritePokemon(_modelJs.state.pokemon);
+    (0, _panelViewJsDefault.default).toggleFavorite();
+    console.log(_modelJs.state.favorites);
+};
 // To initialize all Pokémon names to store in our state
 const initPokemonData = async function() {
     await _modelJs.storeAllPokemonNames();
 };
 const controlSearchInit = function() {
     initPokemonData();
-    (0, _panelViewJsDefault.default).addHandlerRender(controlPokemonPanel);
+    (0, _navViewJsDefault.default).addHandlerClick(controlNav);
     (0, _searchViewJsDefault.default).addHandlerSearch(debouncedControlSearchResults);
+    (0, _sortViewJsDefault.default).addHandlerSortName(controlSortName);
+    (0, _sortViewJsDefault.default).addHandlerSortId(controlSortId);
     (0, _previewViewJsDefault.default).addHandlerActive(controlClickActivePreview);
     (0, _previewViewJsDefault.default).addHandlerHashChange(controlPageActivePreview);
+    (0, _panelViewJsDefault.default).addHandlerRender(controlPokemonPanel);
+    (0, _panelViewJsDefault.default).addHandlerCaught(controlAddCaught);
+    (0, _panelViewJsDefault.default).addHandlerFavorite(controlAddFavorite);
     (0, _paginationViewJsDefault.default).addHandlerClick(controlSearchPagination);
-    (0, _navViewJsDefault.default).addHandlerClick(controlNav);
 };
 controlSearchInit();
 
-},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/panelView.js":"7JptG","./Views/resultsView.js":"fYkxP","./Views/previewView.js":"hoVX0","regenerator-runtime/runtime":"f6ot0","./helpers.js":"7nL9P","./Views/paginationView.js":"kQgXX","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./Views/navView.js":"l5NeQ","./Views/searchView.js":"aUu1u"}],"bzsBv":[function(require,module,exports,__globalThis) {
+},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","./Views/resultsView.js":"fYkxP","./Views/previewView.js":"hoVX0","regenerator-runtime/runtime":"f6ot0","./helpers.js":"7nL9P","./Views/paginationView.js":"kQgXX","./Views/navView.js":"l5NeQ","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./Views/sortView.js":"d9lWm"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("52e9b3eefbbce1ed");
@@ -2076,6 +2105,10 @@ parcelHelpers.export(exports, "loadAdditionalBatch", ()=>loadAdditionalBatch);
 parcelHelpers.export(exports, "loadQueryResults", ()=>loadQueryResults);
 parcelHelpers.export(exports, "loadAdditionalQuery", ()=>loadAdditionalQuery);
 parcelHelpers.export(exports, "loadPokemon", ()=>loadPokemon);
+parcelHelpers.export(exports, "addCaughtPokemon", ()=>addCaughtPokemon);
+parcelHelpers.export(exports, "removeCaughtPokemon", ()=>removeCaughtPokemon);
+parcelHelpers.export(exports, "addFavoritePokemon", ()=>addFavoritePokemon);
+parcelHelpers.export(exports, "removeFavoritePokemon", ()=>removeFavoritePokemon);
 parcelHelpers.export(exports, "restartSearchResults", ()=>restartSearchResults);
 var _configJs = require("./config.js");
 var _helpersJs = require("./helpers.js");
@@ -2129,6 +2162,9 @@ const createPokemonObject = async function(data) {
     }
     // Loaded from DETAILS_API_URL
     const [{ flavor_text }] = data[1].flavor_text_entries;
+    // Properties created from Caught and Favorites in state
+    const caught = state.caught.some((p)=>p.id === id) ? true : false;
+    const favorite = state.favorites.some((p)=>p.id === id) ? true : false;
     return {
         name: (0, _helpersJs.capitalize)(name),
         id,
@@ -2138,7 +2174,9 @@ const createPokemonObject = async function(data) {
         height,
         weight,
         stats,
-        moves
+        moves,
+        caught,
+        favorite
     };
 };
 // To create a Pokémon preview object after parsing PokéAPI data
@@ -2181,12 +2219,10 @@ const loadAdditionalBatch = async function(requestId = state.currentRequestId) {
         state.search.currentBatch = [];
         const pokemonNames = state.allPokemonNames.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
         for (const pokemon of pokemonNames){
-            //   if (requestId !== state.search.currentRequestId) return;
             const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
             const pokemonPreview = createPokemonPreviewObject(pokemon, pokemonDetails);
             state.search.currentBatch.push(pokemonPreview);
         }
-        // if (requestId !== state.search.currentRequestId) return;
         state.search.results.push(...state.search.currentBatch);
         state.search.offset += (0, _configJs.LIMIT);
         state.loading = false;
@@ -2220,14 +2256,12 @@ const loadAdditionalQuery = async function(requestId) {
     const pokemonNames = state.search.queryResults.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
     for (const pokemon of pokemonNames){
         try {
-            //   if (requestId !== state.search.currentRequestId) return;
             const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
             const pokemonPreview = createPokemonPreviewObject(pokemon, pokemonDetails);
             state.search.currentBatch.push(pokemonPreview);
         } catch (err) {
             console.error(err);
         }
-        // if (requestId !== state.search.currentRequestId) return;
         state.search.results.push(...state.search.currentBatch);
     }
     state.search.offset += (0, _configJs.LIMIT);
@@ -2244,8 +2278,27 @@ const loadPokemon = async function(pokemon) {
         console.error(err);
     }
 };
-const possiblePokemon = function(substring) {
-    return state.allPokemonNames.filter((pokemon)=>pokemon.startsWith(substring));
+const addCaughtPokemon = function(pokemon) {
+    pokemon.caught = true;
+    state.caught.push(pokemon);
+    persistData('caught', state.caught);
+};
+const removeCaughtPokemon = function(pokemon) {
+    pokemon.caught = false;
+    const index = state.caught.find((p)=>p.name === pokemon.name);
+    state.caught.splice(index, 1);
+    persistData('caught', state.caught);
+};
+const addFavoritePokemon = function(pokemon) {
+    pokemon.favorite = true;
+    state.favorites.push(pokemon);
+    persistData('favorites', state.favorites);
+};
+const removeFavoritePokemon = function(pokemon) {
+    pokemon.favorite = false;
+    const index = state.favorites.find((p)=>p.name === pokemon.name);
+    state.favorites.splice(index, 1);
+    persistData('favorites', state.favorites);
 };
 const restartSearchResults = function() {
     state.search.offset = 0;
@@ -2253,6 +2306,22 @@ const restartSearchResults = function() {
     state.search.query = '';
     state.search.queryResults = '';
 };
+// To find Pokémon that begin with the passed-in substring
+const possiblePokemon = function(substring) {
+    return state.allPokemonNames.filter((pokemon)=>pokemon.startsWith(substring));
+};
+// To store Caught Pokémon and Favorite Pokémon in Local Storage
+const persistData = function(type, data) {
+    localStorage.setItem(type, JSON.stringify(data));
+};
+// To check local storage and update Caught/Favorite Pokémon with persisted data
+const init = function() {
+    const storageCaught = localStorage.getItem('caught');
+    if (storageCaught) state.caught = JSON.parse(storageCaught);
+    const storageFavorites = localStorage.getItem('favorites');
+    if (storageCaught) state.favorites = JSON.parse(storageFavorites);
+};
+init();
 
 },{"./config.js":"2hPh4","./helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2hPh4":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -2376,7 +2445,75 @@ const observeSentinel = function(sentinel, handler, options) {
     return observer;
 };
 
-},{"./config.js":"2hPh4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7JptG":[function(require,module,exports,__globalThis) {
+},{"./config.js":"2hPh4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"aUu1u":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class SearchView extends (0, _viewJsDefault.default) {
+    _parentEl = document.querySelector('.search__input');
+    _errorMessage = "We could not find that Pok\xe9mon! Please try again.";
+    addHandlerSearch(handler) {
+        window.addEventListener('load', handler);
+        this._parentEl.addEventListener('input', handler);
+        this._parentEl.addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+    }
+    getQuery() {
+        return this._parentEl.value;
+    }
+}
+exports.default = new SearchView();
+
+},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"YJQ6Q":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _pokeballFaviconSvg = require("url:../../imgs/pokeball-favicon.svg");
+var _pokeballFaviconSvgDefault = parcelHelpers.interopDefault(_pokeballFaviconSvg);
+class View {
+    _data;
+    _clear() {
+        this._parentEl.innerHTML = '';
+    }
+    renderSpinner = function() {
+        const markup = `
+    <div class="spinner__div">
+        <img class="spinner__img" src="${(0, _pokeballFaviconSvgDefault.default)}"/>
+    </div>
+  `;
+        this._clear();
+        this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    };
+    render(data, render = true, append = false) {
+        if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
+        this._data = data;
+        const markup = this._generateMarkup();
+        if (!render) return markup;
+        if (!append) this._clear();
+        this._parentEl.insertAdjacentHTML(`${append ? 'beforeend' : 'afterbegin'}`, markup);
+    }
+    renderError(message = this._errorMessage) {
+        const markup = `
+      <div class="error">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+    `;
+        this._clear();
+        this._parentElement.insertAdjacentHTML('afterbegin', markup);
+    }
+}
+exports.default = View;
+
+},{"url:../../imgs/pokeball-favicon.svg":"8TbbI","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8TbbI":[function(require,module,exports,__globalThis) {
+module.exports = module.bundle.resolve("pokeball-favicon.33b29b13.svg") + "?" + Date.now();
+
+},{}],"7JptG":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("./View.js");
@@ -2389,6 +2526,29 @@ class PanelView extends (0, _viewJsDefault.default) {
             'hashchange',
             'load'
         ].forEach((e)=>window.addEventListener(e, handler));
+    }
+    addHandlerCaught(handler) {
+        this._parentEl.addEventListener('click', function(e) {
+            const btn = e.target.closest('.search__btn--caught');
+            if (!btn) return;
+            console.log('caught clicked');
+            handler();
+        });
+    }
+    addHandlerFavorite(handler) {
+        this._parentEl.addEventListener('click', function(e) {
+            const btn = e.target.closest('.search__btn--favorite');
+            if (!btn) return;
+            handler();
+        });
+    }
+    toggleCaught() {
+        const btn = document.querySelector('.search__btn--caught');
+        btn.classList.toggle('btn--active');
+    }
+    toggleFavorite() {
+        const btn = document.querySelector('.search__btn--favorite');
+        btn.classList.toggle('btn--active');
     }
     _generateMarkup() {
         return `
@@ -2500,7 +2660,7 @@ class PanelView extends (0, _viewJsDefault.default) {
                   />
                 </svg>
               </button>
-              <button class="btn search__btn--favorite btn--red">
+              <button class="btn search__btn--favorite btn--red ${this._data.favorite ? 'btn--active' : ''}">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="13"
@@ -2515,7 +2675,7 @@ class PanelView extends (0, _viewJsDefault.default) {
                 </svg>
                 Favorite
               </button>
-              <button class="btn search__btn--caught btn--yellow">
+              <button class="btn search__btn--caught btn--yellow ${this._data.caught ? 'btn--active' : ''}">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="13"
@@ -2551,54 +2711,7 @@ class PanelView extends (0, _viewJsDefault.default) {
 }
 exports.default = new PanelView();
 
-},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"YJQ6Q":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _pokeballFaviconSvg = require("url:../../imgs/pokeball-favicon.svg");
-var _pokeballFaviconSvgDefault = parcelHelpers.interopDefault(_pokeballFaviconSvg);
-class View {
-    _data;
-    _clear() {
-        this._parentEl.innerHTML = '';
-    }
-    renderSpinner = function() {
-        const markup = `
-    <div class="spinner__div">
-        <img class="spinner__img" src="${(0, _pokeballFaviconSvgDefault.default)}"/>
-    </div>
-  `;
-        this._clear();
-        this._parentEl.insertAdjacentHTML('afterbegin', markup);
-    };
-    render(data, render = true, append = false) {
-        if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
-        this._data = data;
-        const markup = this._generateMarkup();
-        if (!render) return markup;
-        if (!append) this._clear();
-        this._parentEl.insertAdjacentHTML(`${append ? 'beforeend' : 'afterbegin'}`, markup);
-    }
-    renderError(message = this._errorMessage) {
-        const markup = `
-      <div class="error">
-        <div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-          </svg>
-        </div>
-        <p>${message}</p>
-      </div>
-    `;
-        this._clear();
-        this._parentElement.insertAdjacentHTML('afterbegin', markup);
-    }
-}
-exports.default = View;
-
-},{"url:../../imgs/pokeball-favicon.svg":"8TbbI","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8TbbI":[function(require,module,exports,__globalThis) {
-module.exports = module.bundle.resolve("pokeball-favicon.33b29b13.svg") + "?" + Date.now();
-
-},{}],"fYkxP":[function(require,module,exports,__globalThis) {
+},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fYkxP":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("./View.js");
@@ -2628,27 +2741,7 @@ class ResultsView extends (0, _viewJsDefault.default) {
         return this._data.map((result)=>(0, _previewViewJsDefault.default).render(result, false)).join('');
     }
 }
-exports.default = new ResultsView(); // export const observeSentinel = function (sentinel, handler, options) {
- //   const observer = new IntersectionObserver(entries => {
- //     entries.forEach(
- //       entry => {
- //         if (entry.isIntersecting) handler();
- //       },
- //       {
- //         root: options.root,
- //         threshold: options.threshold,
- //         rootMargin: options.rootMargin,
- //       }
- //     );
- //   });
- //   observer.observe(sentinel);
- // };
- // // To unobserve a sentinel
- // export const unobserveSentinel = function (observer, sentinel) {
- //   if (observer && sentinel) {
- //     observer.unobserve(sentinel);
- //   }
- // };
+exports.default = new ResultsView();
 
 },{"./View.js":"YJQ6Q","./previewView.js":"hoVX0","../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hoVX0":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -3292,14 +3385,6 @@ class PaginationView extends (0, _viewJsDefault.default) {
             handler(direction);
         });
     }
-    //   addHandlerDisable(handler) {
-    //     ['load', 'hashchange'].forEach(ev =>
-    //       this._parentEl.addEventListener('ev', function (e) {
-    //         const btn = e.target.closest('.search__btn--next, .search__btn--prev');
-    //         if (!btn) return;
-    //       })
-    //     );
-    //   }
     disableButton(btn) {
         document.querySelector(`.search__btn--${btn}`).classList.add('btn--disabled');
     }
@@ -3319,49 +3404,60 @@ class NavView extends (0, _viewJsDefault.default) {
     addHandlerClick(handler) {
         this._parentEl.addEventListener('click', function(e) {
             const btn = e.target.closest('.header__btn');
-            console.log(e.target);
             if (!btn) return;
             const page = btn.dataset.page;
             if (!page) return;
-            const btns = document.querySelectorAll('.screen__1--search, .screen__2--search, .screen__1--map, .screen__2--map, .screen__1--profile, .screen__2--profile').forEach((page)=>page.classList.add('hidden'));
-            console.log('page is ' + page);
+            document.querySelectorAll('.screen__1--search, .screen__2--search, .screen__1--map, .screen__2--map, .screen__1--profile, .screen__2--profile').forEach((page)=>page.classList.add('hidden'));
+            document.querySelectorAll('.lights__inner--blue, .lights__inner--yellow, .lights__inner--green').forEach((light)=>light.classList.remove('lights__inner--active'));
             handler(page);
         });
     }
     search() {
-        console.log('search running');
         document.querySelectorAll('.screen__1--search, .screen__2--search').forEach((screen)=>screen.classList.remove('hidden'));
+        document.querySelector('.lights__inner--blue').classList.add('lights__inner--active');
     }
     map() {
-        console.log('map running');
         document.querySelectorAll('.screen__1--map, .screen__2--map').forEach((screen)=>screen.classList.remove('hidden'));
+        document.querySelector('.lights__inner--yellow').classList.add('lights__inner--active');
     }
     profile() {
         document.querySelectorAll('.screen__1--profile, .screen__2--profile').forEach((screen)=>screen.classList.remove('hidden'));
+        document.querySelector('.lights__inner--green').classList.add('lights__inner--active');
     }
 }
 exports.default = new NavView();
 
-},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"aUu1u":[function(require,module,exports,__globalThis) {
+},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"d9lWm":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("./View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-class SearchView extends (0, _viewJsDefault.default) {
-    _parentEl = document.querySelector('.search__input');
-    _errorMessage = "We could not find that Pok\xe9mon! Please try again.";
-    addHandlerSearch(handler) {
-        window.addEventListener('load', handler);
-        this._parentEl.addEventListener('input', handler);
-        this._parentEl.addEventListener('submit', function(e) {
-            e.preventDefault();
+class SortView extends (0, _viewJsDefault.default) {
+    _parentEl = document.querySelector('.search__form--sort');
+    addHandlerSortName(handler) {
+        this._parentEl.addEventListener('click', function(e) {
+            const btn = e.target.closest('.search__btn--name');
+            if (!btn) return;
+            handler();
         });
     }
-    getQuery() {
-        return this._parentEl.value;
+    addHandlerSortId(handler) {
+        this._parentEl.addEventListener('click', function(e) {
+            const btn = e.target.closest('.search__btn--id');
+            if (!btn) return;
+            handler();
+        });
+    }
+    toggleSortName() {
+        document.querySelector('.search__btn--name').classList.add('btn--active');
+        document.querySelector('.search__btn--id').classList.remove('btn--active');
+    }
+    toggleSortId() {
+        document.querySelector('.search__btn--id').classList.add('btn--active');
+        document.querySelector('.search__btn--name').classList.remove('btn--active');
     }
 }
-exports.default = new SearchView();
+exports.default = new SortView();
 
 },{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire7ea9", {}, "./", "/")
 

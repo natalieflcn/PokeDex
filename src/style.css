@@ -640,6 +640,7 @@ body {
 
 .search__panel--header {
   display: flex;
+  width: 30rem;
   flex-direction: column;
 }
 
@@ -704,10 +705,10 @@ body {
 .search__stats--row span {
   margin-right: 1.5rem;
   font-size: 0.6rem;
+  width: 1.75rem;
 }
 
 .search__stats--row .progress__outer {
-  position: absolute;
   right: 8%;
   width: 12rem;
   height: 0.5rem;
@@ -719,6 +720,7 @@ body {
 
 .search__moves {
   flex-grow: 1;
+  width: 12rem;
   margin-top: 0.5rem;
 }
 
