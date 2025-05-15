@@ -1,11 +1,11 @@
-import * as model from './model.js';
+import * as model from './Models/searchModel.js';
 import navView from './Views/navView.js';
-import searchView from './Views/searchView.js';
-import sortView from './Views/sortView.js';
-import resultsView from './Views/resultsView.js';
-import previewView from './Views/previewView.js';
-import panelView from './Views/panelView.js';
-import paginationView from './Views/paginationView.js';
+import searchView from './Views/SearchViews/searchView.js';
+import sortView from './Views/SearchViews/sortView.js';
+import resultsView from './Views/SearchViews/resultsView.js';
+import previewView from './Views/SearchViews/previewView.js';
+import panelView from './Views/SearchViews/panelView.js';
+import paginationView from './Views/SearchViews/paginationView.js';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';

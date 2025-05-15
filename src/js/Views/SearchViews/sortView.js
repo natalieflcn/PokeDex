@@ -1,4 +1,4 @@
-import View from './View.js';
+import View from '../View.js';
 
 class SortView extends View {
   _parentEl = document.querySelector('.search__form--sort');

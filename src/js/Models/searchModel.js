@@ -4,9 +4,9 @@ import {
   MOVE_TYPE_URL,
   POKEMON_NAMES_API_URL,
   LIMIT,
-} from './config.js';
+} from '../config.js';
 
-import { AJAX, capitalize } from './helpers.js';
+import { AJAX, capitalize } from '../helpers.js';
 
 // TODO Change this file to searchModel.js, implement models for other views (Map and Profile)
 

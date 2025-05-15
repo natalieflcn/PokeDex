@@ -1,4 +1,4 @@
-import View from './View.js';
+import View from '../View.js';
 
 class SearchView extends View {
   _parentEl = document.querySelector('.search__input');
@@ -11,6 +11,12 @@ class SearchView extends View {
 
     this._parentEl.addEventListener('submit', function (e) {
       e.preventDefault();
+    });
+
+    this._parentEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+      }
     });
   }
 

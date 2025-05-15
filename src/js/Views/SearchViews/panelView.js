@@ -1,4 +1,4 @@
-import View from './View.js';
+import View from '../View.js';
 
 class PanelView extends View {
   _parentEl = document.querySelector('.screen__2--search');
