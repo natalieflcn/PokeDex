@@ -12,8 +12,8 @@ import { AJAX, capitalize } from './helpers.js';
 
 export const state = {
   loading: false,
-  allPokemonNames: {
-    names: [],
+  allPokemon: {
+    pokemonDB: [],
     loaded: false,
   },
   search: {
@@ -25,6 +25,7 @@ export const state = {
     limit: LIMIT,
     hasMoreResults: true,
     currentRequestId: 0,
+    mode: 'id',
   },
   pokemon: {},
   profile: {
@@ -36,13 +37,20 @@ export const state = {
 };
 
 // To store all Pokémon names in our state
-export const storeAllPokemonNames = async function () {
+export const storeAllPokemon = async function () {
   const pokeAPIData = await AJAX(`${POKEMON_NAMES_API_URL}`);
   const { results } = pokeAPIData;
-  const pokemonNames = results.map(pokemon => pokemon.name);
 
-  state.allPokemonNames = pokemonNames;
-  state.allPokemonNames.loaded = true;
+  console.log(results);
+  for (const result of results) {
+    const pokemonName = result.name;
+    const pokemonId = extractPokemonId(result.url);
+    state.allPokemon.pokemonDB.push({ name: pokemonName, id: pokemonId });
+  }
+
+  state.allPokemon.loaded = true;
+
+  console.log(state.allPokemon.pokemonDB);
 };
 
 // To create a Pokémon object after parsing PokéAPI data
@@ -123,20 +131,20 @@ export const loadPokemonResults = async function (
     let pokemonNames;
 
     // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
-    if (!state.allPokemonNames.loaded) {
+    if (!state.allPokemon.pokemonDB.loaded) {
       const pokemon = await AJAX(
         `${DETAILS_API_URL}?limit=${state.search.limit}&offset=${0}`
       );
       pokemonNames = pokemon.results;
     } else {
-      pokemonNames = state.allPokemonNames.slice(
+      pokemonNames = state.allPokemon.pokemonDB.slice(
         state.search.offset,
         state.search.offset + LIMIT
       );
     }
 
     for (const pokemon of pokemonNames) {
-      const pokemonName = pokemon.name || pokemon;
+      const pokemonName = pokemon.name;
       if (requestId !== state.search.currentRequestId) return;
       const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemonName}`);
       const pokemonPreview = createPokemonPreviewObject(
@@ -148,6 +156,7 @@ export const loadPokemonResults = async function (
       state.search.results.push(pokemonPreview);
     }
 
+    sortSearchResults(state.search.mode);
     state.search.offset += LIMIT;
     state.loading = false;
   } catch (err) {
@@ -156,22 +165,20 @@ export const loadPokemonResults = async function (
 };
 
 // To load additional Pokémon results
-export const loadAdditionalBatch = async function (
-  requestId = state.currentRequestId
-) {
+export const loadAdditionalBatch = async function () {
   try {
     state.loading = true;
     state.search.currentBatch = [];
 
-    const pokemonNames = state.allPokemonNames.slice(
+    const pokemonNames = state.allPokemon.pokemonDB.slice(
       state.search.offset,
       state.search.offset + LIMIT
     );
 
     for (const pokemon of pokemonNames) {
-      const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon}`);
+      const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon.name}`);
       const pokemonPreview = createPokemonPreviewObject(
-        pokemon,
+        pokemon.name,
         pokemonDetails
       );
       state.search.currentBatch.push(pokemonPreview);
@@ -179,6 +186,7 @@ export const loadAdditionalBatch = async function (
 
     state.search.results.push(...state.search.currentBatch);
 
+    sortSearchResults(state.search.mode);
     state.search.offset += LIMIT;
     state.loading = false;
   } catch (err) {
@@ -198,17 +206,18 @@ export const loadQueryResults = async function (query, requestId) {
     state.search.offset + LIMIT
   );
 
+  console.log(pokemonNames);
   for (const pokemon of pokemonNames) {
     try {
       if (requestId !== state.search.currentRequestId) return;
-      const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon}`);
+      const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon.name}`);
       const pokemonPreview = createPokemonPreviewObject(
-        pokemon,
+        pokemon.name,
         pokemonDetails
       );
+      console.log(pokemonPreview);
 
-      console.log(requestId, state.search.currentRequestId);
-
+      //   if(!pokemonPreview.id || pokemonPreview.img) return;
       if (requestId !== state.search.currentRequestId) return;
       state.search.results.push(pokemonPreview);
     } catch (err) {
@@ -216,6 +225,7 @@ export const loadQueryResults = async function (query, requestId) {
     }
   }
 
+  //   sortSearchResults(state.search.mode);
   state.search.offset += LIMIT;
   state.loading = false;
 };
@@ -233,20 +243,34 @@ export const loadAdditionalQuery = async function (requestId) {
 
   for (const pokemon of pokemonNames) {
     try {
-      const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon}`);
+      const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon.name}`);
       const pokemonPreview = createPokemonPreviewObject(
-        pokemon,
+        pokemon.name,
         pokemonDetails
       );
       state.search.currentBatch.push(pokemonPreview);
     } catch (err) {
       console.error(err);
     }
-    state.search.results.push(...state.search.currentBatch);
   }
+  state.search.results.push(...state.search.currentBatch);
+  //   sortSearchResults(state.search.mode);
   state.search.offset += LIMIT;
   state.loading = false;
 };
+
+// To sort Pokémon search results by name [screen 1]
+export const sortSearchResults = async function (type = 'id') {
+  // Sorting the Pokémon results
+  if (type === 'name') {
+    // Sorting my name
+    state.search.results.sort((a, b) => a.name.localCompare(b.name));
+  } else if (type === 'id') {
+    // Sorting by ID
+    state.search.results.sort((a, b) => a.id - b.id);
+  }
+};
+// To sort Pokémon search results by ID [screen 1]
 
 // To load Pokémon details for the search panel [screen 2]
 export const loadPokemon = async function (pokemon) {
@@ -302,7 +326,15 @@ export const restartSearchResults = function () {
 
 // To find Pokémon that begin with the passed-in substring
 const possiblePokemon = function (substring) {
-  return state.allPokemonNames.filter(pokemon => pokemon.startsWith(substring));
+  return state.allPokemon.pokemonDB.filter(pokemon =>
+    pokemon.name.startsWith(substring)
+  );
+};
+
+// To extract IDs for all Pokemon
+const extractPokemonId = function (url) {
+  const id = url.match(/\/(\d+)\/?$/);
+  return id ? Number(id[1]) : null;
 };
 
 // To store Caught Pokémon and Favorite Pokémon in Local Storage

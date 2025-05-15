@@ -686,6 +686,7 @@ var _paginationViewJs = require("./Views/paginationView.js");
 var _paginationViewJsDefault = parcelHelpers.interopDefault(_paginationViewJs);
 var _runtime = require("regenerator-runtime/runtime");
 var _helpersJs = require("./helpers.js");
+// import { sort } from 'core-js/core/array';
 const controlNav = function(page) {
     switch(page){
         case 'search':
@@ -717,10 +718,7 @@ const controlSearchResults = async function() {
             (0, _panelViewJsDefault.default)._clear();
             await _modelJs.loadQueryResults(query, requestId);
         // If there's NO query, render all existing Pokémon from PokéAPI database
-        } else if (!query) {
-            await _modelJs.loadPokemonResults(requestId);
-            console.log('working');
-        }
+        } else if (!query) await _modelJs.loadPokemonResults(requestId);
         // If there's  additional results
         if (_modelJs.state.search.hasMoreResults) (0, _resultsViewJsDefault.default).observe(controlInfiniteScroll);
         if (_modelJs.state.search.currentRequestId !== requestId) return; // Abort render if the requestId is not up-to-date
@@ -744,6 +742,8 @@ const controlInfiniteScroll = async function() {
         (0, _resultsViewJsDefault.default).unobserve();
         return;
     }
+    // Sort data before rendering
+    (0, _sortViewJsDefault.default)._mode;
     // Return Pokémon data to controlSearchResults
     (0, _resultsViewJsDefault.default).render(_modelJs.state.search.currentBatch, true, true);
     return _modelJs.state.search.results;
@@ -752,17 +752,24 @@ const controlInfiniteScroll = async function() {
 const controlSortName = function() {
     console.log('sorting by name');
     (0, _sortViewJsDefault.default).toggleSortName();
+    if (_modelJs.state.search.results.length <= 1) return;
+    _modelJs.state.search.mode = 'name';
+//resultsView.render(model.state.search.results);
 };
 // To sort Pokémon data by ID
 const controlSortId = function() {
     console.log('sorting by id');
     (0, _sortViewJsDefault.default).toggleSortId();
+    if (_modelJs.state.search.results.length <= 1) return;
+    _modelJs.state.search.mode = 'id';
+//resultsView.render(model.state.search.results);
 };
 // To highlight active search results [screen 1]
 const controlClickActivePreview = function(pokemonName) {
     window.location.hash = pokemonName;
 };
 const controlPageActivePreview = function() {
+    // TODO Need to refactor DOM logic into Views
     const currentlyActive = document.querySelector('.search__preview--active');
     if (currentlyActive) currentlyActive.classList.remove('search__preview--active');
     const previews = Array.from(document.querySelectorAll('.search__preview'));
@@ -825,7 +832,7 @@ const controlAddFavorite = function() {
 };
 // To initialize all Pokémon names to store in our state
 const initPokemonData = async function() {
-    await _modelJs.storeAllPokemonNames();
+    await _modelJs.storeAllPokemon();
 };
 const controlSearchInit = function() {
     initPokemonData();
@@ -2099,11 +2106,12 @@ module.exports = function(scheduler, hasTimeArg) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
-parcelHelpers.export(exports, "storeAllPokemonNames", ()=>storeAllPokemonNames);
+parcelHelpers.export(exports, "storeAllPokemon", ()=>storeAllPokemon);
 parcelHelpers.export(exports, "loadPokemonResults", ()=>loadPokemonResults);
 parcelHelpers.export(exports, "loadAdditionalBatch", ()=>loadAdditionalBatch);
 parcelHelpers.export(exports, "loadQueryResults", ()=>loadQueryResults);
 parcelHelpers.export(exports, "loadAdditionalQuery", ()=>loadAdditionalQuery);
+parcelHelpers.export(exports, "sortSearchResults", ()=>sortSearchResults);
 parcelHelpers.export(exports, "loadPokemon", ()=>loadPokemon);
 parcelHelpers.export(exports, "addCaughtPokemon", ()=>addCaughtPokemon);
 parcelHelpers.export(exports, "removeCaughtPokemon", ()=>removeCaughtPokemon);
@@ -2114,8 +2122,8 @@ var _configJs = require("./config.js");
 var _helpersJs = require("./helpers.js");
 const state = {
     loading: false,
-    allPokemonNames: {
-        names: [],
+    allPokemon: {
+        pokemonDB: [],
         loaded: false
     },
     search: {
@@ -2126,7 +2134,8 @@ const state = {
         offset: 0,
         limit: (0, _configJs.LIMIT),
         hasMoreResults: true,
-        currentRequestId: 0
+        currentRequestId: 0,
+        mode: 'id'
     },
     pokemon: {},
     profile: {
@@ -2136,12 +2145,20 @@ const state = {
     favorites: [],
     caught: []
 };
-const storeAllPokemonNames = async function() {
+const storeAllPokemon = async function() {
     const pokeAPIData = await (0, _helpersJs.AJAX)(`${(0, _configJs.POKEMON_NAMES_API_URL)}`);
     const { results } = pokeAPIData;
-    const pokemonNames = results.map((pokemon)=>pokemon.name);
-    state.allPokemonNames = pokemonNames;
-    state.allPokemonNames.loaded = true;
+    console.log(results);
+    for (const result of results){
+        const pokemonName = result.name;
+        const pokemonId = extractPokemonId(result.url);
+        state.allPokemon.pokemonDB.push({
+            name: pokemonName,
+            id: pokemonId
+        });
+    }
+    state.allPokemon.loaded = true;
+    console.log(state.allPokemon.pokemonDB);
 };
 // To create a Pokémon object after parsing PokéAPI data
 const createPokemonObject = async function(data) {
@@ -2195,35 +2212,37 @@ const loadPokemonResults = async function(requestId = state.currentRequestId) {
         restartSearchResults();
         let pokemonNames;
         // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
-        if (!state.allPokemonNames.loaded) {
+        if (!state.allPokemon.pokemonDB.loaded) {
             const pokemon = await (0, _helpersJs.AJAX)(`${(0, _configJs.DETAILS_API_URL)}?limit=${state.search.limit}&offset=${0}`);
             pokemonNames = pokemon.results;
-        } else pokemonNames = state.allPokemonNames.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
+        } else pokemonNames = state.allPokemon.pokemonDB.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
         for (const pokemon of pokemonNames){
-            const pokemonName = pokemon.name || pokemon;
+            const pokemonName = pokemon.name;
             if (requestId !== state.search.currentRequestId) return;
             const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemonName}`);
             const pokemonPreview = createPokemonPreviewObject(pokemonName, pokemonDetails);
             if (requestId !== state.search.currentRequestId) return;
             state.search.results.push(pokemonPreview);
         }
+        sortSearchResults(state.search.mode);
         state.search.offset += (0, _configJs.LIMIT);
         state.loading = false;
     } catch (err) {
         throw err;
     }
 };
-const loadAdditionalBatch = async function(requestId = state.currentRequestId) {
+const loadAdditionalBatch = async function() {
     try {
         state.loading = true;
         state.search.currentBatch = [];
-        const pokemonNames = state.allPokemonNames.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
+        const pokemonNames = state.allPokemon.pokemonDB.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
         for (const pokemon of pokemonNames){
-            const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
-            const pokemonPreview = createPokemonPreviewObject(pokemon, pokemonDetails);
+            const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon.name}`);
+            const pokemonPreview = createPokemonPreviewObject(pokemon.name, pokemonDetails);
             state.search.currentBatch.push(pokemonPreview);
         }
         state.search.results.push(...state.search.currentBatch);
+        sortSearchResults(state.search.mode);
         state.search.offset += (0, _configJs.LIMIT);
         state.loading = false;
     } catch (err) {
@@ -2236,16 +2255,19 @@ const loadQueryResults = async function(query, requestId) {
     state.search.query = query;
     state.search.queryResults = possiblePokemon(query);
     const pokemonNames = state.search.queryResults.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
+    console.log(pokemonNames);
     for (const pokemon of pokemonNames)try {
         if (requestId !== state.search.currentRequestId) return;
-        const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
-        const pokemonPreview = createPokemonPreviewObject(pokemon, pokemonDetails);
-        console.log(requestId, state.search.currentRequestId);
+        const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon.name}`);
+        const pokemonPreview = createPokemonPreviewObject(pokemon.name, pokemonDetails);
+        console.log(pokemonPreview);
+        //   if(!pokemonPreview.id || pokemonPreview.img) return;
         if (requestId !== state.search.currentRequestId) return;
         state.search.results.push(pokemonPreview);
     } catch (err) {
         console.error(err);
     }
+    //   sortSearchResults(state.search.mode);
     state.search.offset += (0, _configJs.LIMIT);
     state.loading = false;
 };
@@ -2254,18 +2276,24 @@ const loadAdditionalQuery = async function(requestId) {
     state.search.currentBatch = [];
     console.log(state.search.queryResults);
     const pokemonNames = state.search.queryResults.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
-    for (const pokemon of pokemonNames){
-        try {
-            const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon}`);
-            const pokemonPreview = createPokemonPreviewObject(pokemon, pokemonDetails);
-            state.search.currentBatch.push(pokemonPreview);
-        } catch (err) {
-            console.error(err);
-        }
-        state.search.results.push(...state.search.currentBatch);
+    for (const pokemon of pokemonNames)try {
+        const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon.name}`);
+        const pokemonPreview = createPokemonPreviewObject(pokemon.name, pokemonDetails);
+        state.search.currentBatch.push(pokemonPreview);
+    } catch (err) {
+        console.error(err);
     }
+    state.search.results.push(...state.search.currentBatch);
+    //   sortSearchResults(state.search.mode);
     state.search.offset += (0, _configJs.LIMIT);
     state.loading = false;
+};
+const sortSearchResults = async function(type = 'id') {
+    // Sorting the Pokémon results
+    if (type === 'name') // Sorting my name
+    state.search.results.sort((a, b)=>a.name.localCompare(b.name));
+    else if (type === 'id') // Sorting by ID
+    state.search.results.sort((a, b)=>a.id - b.id);
 };
 const loadPokemon = async function(pokemon) {
     try {
@@ -2308,7 +2336,12 @@ const restartSearchResults = function() {
 };
 // To find Pokémon that begin with the passed-in substring
 const possiblePokemon = function(substring) {
-    return state.allPokemonNames.filter((pokemon)=>pokemon.startsWith(substring));
+    return state.allPokemon.pokemonDB.filter((pokemon)=>pokemon.name.startsWith(substring));
+};
+// To extract IDs for all Pokemon
+const extractPokemonId = function(url) {
+    const id = url.match(/\/(\d+)\/?$/);
+    return id ? Number(id[1]) : null;
 };
 // To store Caught Pokémon and Favorite Pokémon in Local Storage
 const persistData = function(type, data) {
@@ -2488,12 +2521,14 @@ class View {
     render(data, render = true, append = false) {
         if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
         this._data = data;
+        console.log(data);
         const markup = this._generateMarkup();
         if (!render) return markup;
         if (!append) this._clear();
         this._parentEl.insertAdjacentHTML(`${append ? 'beforeend' : 'afterbegin'}`, markup);
     }
     renderError(message = this._errorMessage) {
+        console.error(message);
         const markup = `
       <div class="error">
         <div>
@@ -3434,17 +3469,20 @@ var _viewJs = require("./View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
 class SortView extends (0, _viewJsDefault.default) {
     _parentEl = document.querySelector('.search__form--sort');
+    _mode = 'id';
     addHandlerSortName(handler) {
         this._parentEl.addEventListener('click', function(e) {
             const btn = e.target.closest('.search__btn--name');
-            if (!btn) return;
+            if (!btn || btn.classList.contains('btn--active')) return;
+            this._mode = 'name';
             handler();
         });
     }
     addHandlerSortId(handler) {
         this._parentEl.addEventListener('click', function(e) {
             const btn = e.target.closest('.search__btn--id');
-            if (!btn) return;
+            if (!btn || btn.classList.contains('btn--active')) return;
+            this._mode = 'id';
             handler();
         });
     }

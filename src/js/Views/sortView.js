@@ -2,11 +2,14 @@ import View from './View.js';
 
 class SortView extends View {
   _parentEl = document.querySelector('.search__form--sort');
+  _mode = 'id';
 
   addHandlerSortName(handler) {
     this._parentEl.addEventListener('click', function (e) {
       const btn = e.target.closest('.search__btn--name');
-      if (!btn) return;
+      if (!btn || btn.classList.contains('btn--active')) return;
+
+      this._mode = 'name';
 
       handler();
     });
@@ -15,7 +18,9 @@ class SortView extends View {
   addHandlerSortId(handler) {
     this._parentEl.addEventListener('click', function (e) {
       const btn = e.target.closest('.search__btn--id');
-      if (!btn) return;
+      if (!btn || btn.classList.contains('btn--active')) return;
+
+      this._mode = 'id';
 
       handler();
     });

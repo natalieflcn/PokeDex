@@ -11,6 +11,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 import { debounce } from './helpers.js';
+// import { sort } from 'core-js/core/array';
 
 const controlNav = function (page) {
   switch (page) {
@@ -53,7 +54,6 @@ const controlSearchResults = async function () {
       // If there's NO query, render all existing Pokémon from PokéAPI database
     } else if (!query) {
       await model.loadPokemonResults(requestId);
-      console.log('working');
     }
 
     // If there's  additional results
@@ -90,6 +90,11 @@ const controlInfiniteScroll = async function () {
     return;
   }
 
+  // Sort data before rendering
+  if (sortView._mode === 'name') {
+  } else {
+  }
+
   // Return Pokémon data to controlSearchResults
   resultsView.render(model.state.search.currentBatch, true, true);
   return model.state.search.results;
@@ -99,12 +104,22 @@ const controlInfiniteScroll = async function () {
 const controlSortName = function () {
   console.log('sorting by name');
   sortView.toggleSortName();
+
+  if (model.state.search.results.length <= 1) return;
+
+  model.state.search.mode = 'name';
+  //resultsView.render(model.state.search.results);
 };
 
 // To sort Pokémon data by ID
 const controlSortId = function () {
   console.log('sorting by id');
   sortView.toggleSortId();
+
+  if (model.state.search.results.length <= 1) return;
+
+  model.state.search.mode = 'id';
+  //resultsView.render(model.state.search.results);
 };
 
 // To highlight active search results [screen 1]
@@ -113,6 +128,7 @@ const controlClickActivePreview = function (pokemonName) {
 };
 
 const controlPageActivePreview = function () {
+  // TODO Need to refactor DOM logic into Views
   const currentlyActive = document.querySelector('.search__preview--active');
 
   if (currentlyActive)
@@ -215,7 +231,7 @@ const controlAddFavorite = function () {
 
 // To initialize all Pokémon names to store in our state
 const initPokemonData = async function () {
-  await model.storeAllPokemonNames();
+  await model.storeAllPokemon();
 };
 
 const controlSearchInit = function () {

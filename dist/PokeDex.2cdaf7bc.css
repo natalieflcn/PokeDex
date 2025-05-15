@@ -63,10 +63,10 @@ table {
   --type--Poison: #a59;
   --type--Ground: #ddbb56;
   --type--Flying: #89f;
-  --type--Psychic: #89f;
+  --type--Psychic: #f774a6;
   --type--Bug: #abbb23;
   --type--Rock: #bcaa66;
-  --type--Ghost: #6666bc;
+  --type--Ghost: #5656b3;
   --type--Dragon: #7767ee;
   --type--Dark: #765443;
   --type--Steel: #aab;
@@ -580,6 +580,7 @@ body {
 }
 
 .search__stats--row span {
+  text-align: center;
   width: 1.75rem;
   margin-right: 1.5rem;
   font-size: .6rem;
@@ -860,6 +861,11 @@ body {
   display: flex;
 }
 
+.profile__stats--column:last-child {
+  position: relative;
+  left: 3%;
+}
+
 .profile__stats--row {
   justify-content: space-between;
   width: 17rem;
@@ -873,6 +879,12 @@ body {
 
 .profile__stats--type {
   width: 4rem;
+}
+
+.profile__stats--row span {
+  text-align: center;
+  width: 1.45rem;
+  height: .5rem;
 }
 
 .profile__stats--row .progress__outer {
