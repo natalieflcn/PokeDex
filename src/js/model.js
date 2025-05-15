@@ -126,7 +126,7 @@ export const loadPokemonResults = async function (
   try {
     state.loading = true;
 
-    restartSearchResults();
+    // restartSearchResults();
 
     let pokemonNames;
 
@@ -139,6 +139,7 @@ export const loadPokemonResults = async function (
     } else {
       if (state.search.mode === 'id') {
         // Loading sorted by ID
+
         console.log('loading sorted by id running');
         pokemonNames = state.allPokemon.pokemonDB.slice(
           state.search.offset,
@@ -231,6 +232,8 @@ export const loadQueryResults = async function (query, requestId) {
   state.search.query = query;
   state.search.queryResults = possiblePokemon(query);
 
+  const sorted = sortQueryResults();
+  console.log(sorted);
   const pokemonNames = state.search.queryResults.slice(
     state.search.offset,
     state.search.offset + LIMIT
@@ -284,27 +287,26 @@ export const loadAdditionalQuery = async function (requestId) {
     }
   }
   state.search.results.push(...state.search.currentBatch);
-  //   sortSearchResults(state.search.mode);
   state.search.offset += LIMIT;
   state.loading = false;
 };
 
 // To sort Pokémon search results by name OR id -- for queries ONLY
-export const sortQueryResults = async function (
-  data,
-  type = state.search.mode
-) {
+export const sortQueryResults = async function () {
+  let sort;
   // Sorting the Pokémon results
-  if (type === 'name') {
+  if (state.search.mode === 'name') {
     // Sorting my name
 
-    data.sort((a, b) => a.name.localeCompare(b.name));
-  } else if (type === 'id') {
+    sort = state.search.queryResults.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+  } else if (state.search.mode === 'id') {
     // Sorting by ID
-    data.sort((a, b) => a.id - b.id);
+    sort = state.search.queryResults.sort((a, b) => a.id - b.id);
   }
-  console.log(date);
-  return data;
+  console.log(sort);
+  return sort;
 };
 
 // To return sorted general Pokémon results by name
@@ -364,6 +366,7 @@ export const restartSearchResults = function () {
   state.search.results = [];
   state.search.query = '';
   state.search.queryResults = '';
+  state.search.hasMoreResults = true;
 };
 
 // To find Pokémon that begin with the passed-in substring

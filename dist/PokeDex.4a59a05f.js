@@ -2210,7 +2210,7 @@ const createPokemonPreviewObject = function(name, details) {
 const loadPokemonResults = async function(requestId = state.currentRequestId) {
     try {
         state.loading = true;
-        restartSearchResults();
+        // restartSearchResults();
         let pokemonNames;
         // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
         if (!state.allPokemon.pokemonDB.loaded) {
@@ -2275,6 +2275,8 @@ const loadQueryResults = async function(query, requestId) {
     restartSearchResults();
     state.search.query = query;
     state.search.queryResults = possiblePokemon(query);
+    const sorted = sortQueryResults();
+    console.log(sorted);
     const pokemonNames = state.search.queryResults.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
     console.log(pokemonNames);
     for (const pokemon of pokemonNames)try {
@@ -2305,18 +2307,18 @@ const loadAdditionalQuery = async function(requestId) {
         console.error(err);
     }
     state.search.results.push(...state.search.currentBatch);
-    //   sortSearchResults(state.search.mode);
     state.search.offset += (0, _configJs.LIMIT);
     state.loading = false;
 };
-const sortQueryResults = async function(data, type = state.search.mode) {
+const sortQueryResults = async function() {
+    let sort;
     // Sorting the Pokémon results
-    if (type === 'name') // Sorting my name
-    data.sort((a, b)=>a.name.localeCompare(b.name));
-    else if (type === 'id') // Sorting by ID
-    data.sort((a, b)=>a.id - b.id);
-    console.log(date);
-    return data;
+    if (state.search.mode === 'name') // Sorting my name
+    sort = state.search.queryResults.sort((a, b)=>a.name.localeCompare(b.name));
+    else if (state.search.mode === 'id') // Sorting by ID
+    sort = state.search.queryResults.sort((a, b)=>a.id - b.id);
+    console.log(sort);
+    return sort;
 };
 const sortPokemonName = function() {
     const names = state.allPokemon.pokemonDB.map((p)=>p.name);
@@ -2361,6 +2363,7 @@ const restartSearchResults = function() {
     state.search.results = [];
     state.search.query = '';
     state.search.queryResults = '';
+    state.search.hasMoreResults = true;
 };
 // To find Pokémon that begin with the passed-in substring
 const possiblePokemon = function(substring) {
