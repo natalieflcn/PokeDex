@@ -57,3 +57,19 @@ export const observeSentinel = function (sentinel, handler, options) {
 
   return observer;
 };
+
+// To create a Pokémon preview object after parsing PokéAPI data
+export const createPokemonPreviewObject = function (name, details) {
+  const {
+    id,
+    sprites: { front_default: img },
+  } = details;
+
+  console.log(name, id, img);
+
+  return {
+    name: capitalize(name),
+    id,
+    img,
+  };
+};

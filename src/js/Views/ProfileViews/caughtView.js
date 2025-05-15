@@ -5,8 +5,8 @@ import { observeSentinel } from '../../helpers.js';
 class CaughtView extends View {
   _parentEl = document.querySelector('.profile__preview--container');
 
-  _errorMessage = 'We could not find that Pokémon! Please try again.';
-  _sentinel = document.querySelector('.search__sentinel');
+  _errorMessage = 'We could not find any caught Pokémon! Please try again.';
+  _sentinel = document.querySelector('.profile__sentinel');
   _observer = null;
 
   observe(handler) {

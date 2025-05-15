@@ -6,7 +6,7 @@ import {
   LIMIT,
 } from '../config.js';
 
-import { AJAX, capitalize } from '../helpers.js';
+import { AJAX, capitalize, createPokemonPreviewObject } from '../helpers.js';
 
 // TODO Change this file to searchModel.js, implement models for other views (Map and Profile)
 
@@ -97,27 +97,11 @@ const createPokemonObject = async function (data) {
   };
 };
 
-// To create a Pokémon preview object after parsing PokéAPI data
-const createPokemonPreviewObject = function (name, details) {
-  const {
-    id,
-    sprites: { front_default: img },
-  } = details;
-
-  console.log(name, id, img);
-
-  return {
-    name: capitalize(name),
-    id,
-    img,
-  };
-};
-
 // SEARCH: Rendering search results and Pokémon panel details
 
 // To load Pokémon details for the current batch rendered in search results [screen 1]
 export const loadPokemonResults = async function (
-  requestId = state.currentRequestId
+  requestId = state.search.currentRequestId
 ) {
   try {
     state.loading = true;

@@ -1,38 +1,16 @@
-import * as searchModel from './Models/searchModel.js';
-import * as profileModel from './Models/profileModel.js';
+import * as searchModel from '../Models/searchModel.js';
 
-import navView from './Views/navView.js';
-import searchView from './Views/SearchViews/searchView.js';
-import sortView from './Views/SearchViews/sortView.js';
-import resultsView from './Views/SearchViews/resultsView.js';
-import previewView from './Views/previewView.js';
-import panelView from './Views/SearchViews/panelView.js';
-import paginationView from './Views/SearchViews/paginationView.js';
+import searchView from '../Views/SearchViews/searchView.js';
+import sortView from '../Views/SearchViews/sortView.js';
+import resultsView from '../Views/SearchViews/resultsView.js';
+import previewView from '../Views/previewView.js';
+import panelView from '../Views/SearchViews/panelView.js';
+import paginationView from '../Views/SearchViews/paginationView.js';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import { debounce } from './helpers.js';
-
-const controlNav = function (page) {
-  switch (page) {
-    case 'search':
-      navView.search();
-      break;
-
-    case 'map':
-      navView.map();
-      break;
-
-    case 'profile':
-      navView.profile();
-      break;
-
-    default:
-      navView.search();
-      break;
-  }
-};
+import { debounce } from '../helpers.js';
 
 // SEARCH CONTROLLER ---
 
@@ -240,7 +218,7 @@ const initPokemonData = async function () {
   await searchModel.storeAllPokemon();
 };
 
-const controlSearchInit = function () {
+export const controlSearchInit = function () {
   initPokemonData();
   searchView.addHandlerSearch(debouncedControlSearchResults);
   sortView.addHandlerSortName(controlSortName);
@@ -254,18 +232,3 @@ const controlSearchInit = function () {
 };
 
 // MAP CONTROLLER ---
-
-// PROFILE CONTROLLER ---
-
-const controlSavedResults = async function () {
-  try {
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-const init = function () {
-  navView.addHandlerClick(controlNav);
-  controlSearchInit();
-};
-init();
