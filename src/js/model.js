@@ -48,7 +48,7 @@ export const storeAllPokemon = async function () {
     state.allPokemon.pokemonDB.push({ name: pokemonName, id: pokemonId });
   }
 
-  state.allPokemon.loaded = true;
+  state.allPokemon.pokemonDB.loaded = true;
 
   console.log(state.allPokemon.pokemonDB);
 };
@@ -137,26 +137,40 @@ export const loadPokemonResults = async function (
       );
       pokemonNames = pokemon.results;
     } else {
-      pokemonNames = state.allPokemon.pokemonDB.slice(
-        state.search.offset,
-        state.search.offset + LIMIT
-      );
+      if (state.search.mode === 'id') {
+        // Loading sorted by ID
+        console.log('loading sorted by id running');
+        pokemonNames = state.allPokemon.pokemonDB.slice(
+          state.search.offset,
+          state.search.offset + LIMIT
+        );
+      } else {
+        console.log('loading sorte dby name running');
+        // Loading sorted by Name
+        pokemonNames = sortPokemonName().slice(
+          state.search.offset,
+          state.search.offset + LIMIT
+        );
+      }
     }
 
     for (const pokemon of pokemonNames) {
-      const pokemonName = pokemon.name;
-      if (requestId !== state.search.currentRequestId) return;
-      const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemonName}`);
-      const pokemonPreview = createPokemonPreviewObject(
-        pokemonName,
-        pokemonDetails
-      );
+      try {
+        const pokemonName = pokemon.name || pokemon;
+        if (requestId !== state.search.currentRequestId) return;
+        const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemonName}`);
+        const pokemonPreview = createPokemonPreviewObject(
+          pokemonName,
+          pokemonDetails
+        );
 
-      if (requestId !== state.search.currentRequestId) return;
-      state.search.results.push(pokemonPreview);
+        if (requestId !== state.search.currentRequestId) return;
+        state.search.results.push(pokemonPreview);
+      } catch (err) {
+        console.error(err);
+      }
     }
 
-    sortSearchResults(state.search.mode);
     state.search.offset += LIMIT;
     state.loading = false;
   } catch (err) {
@@ -169,24 +183,40 @@ export const loadAdditionalBatch = async function () {
   try {
     state.loading = true;
     state.search.currentBatch = [];
+    let pokemonNames = [];
 
-    const pokemonNames = state.allPokemon.pokemonDB.slice(
-      state.search.offset,
-      state.search.offset + LIMIT
-    );
+    if (state.search.mode === 'id') {
+      // Loading sorted by ID
+      console.log('loading sorted by id running');
+      pokemonNames = state.allPokemon.pokemonDB.slice(
+        state.search.offset,
+        state.search.offset + LIMIT
+      );
+    } else {
+      console.log('loading sorte dby name running');
+      // Loading sorted by Name
+      pokemonNames = sortPokemonName().slice(
+        state.search.offset,
+        state.search.offset + LIMIT
+      );
+    }
 
     for (const pokemon of pokemonNames) {
-      const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon.name}`);
-      const pokemonPreview = createPokemonPreviewObject(
-        pokemon.name,
-        pokemonDetails
-      );
-      state.search.currentBatch.push(pokemonPreview);
+      try {
+        const pokemonName = pokemon.name || pokemon;
+        const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemonName}`);
+        const pokemonPreview = createPokemonPreviewObject(
+          pokemonName,
+          pokemonDetails
+        );
+        state.search.currentBatch.push(pokemonPreview);
+      } catch (err) {
+        console.error(err);
+      }
     }
 
     state.search.results.push(...state.search.currentBatch);
 
-    sortSearchResults(state.search.mode);
     state.search.offset += LIMIT;
     state.loading = false;
   } catch (err) {
@@ -259,18 +289,30 @@ export const loadAdditionalQuery = async function (requestId) {
   state.loading = false;
 };
 
-// To sort Pokémon search results by name [screen 1]
-export const sortSearchResults = async function (type = 'id') {
+// To sort Pokémon search results by name OR id -- for queries ONLY
+export const sortQueryResults = async function (
+  data,
+  type = state.search.mode
+) {
   // Sorting the Pokémon results
   if (type === 'name') {
     // Sorting my name
-    state.search.results.sort((a, b) => a.name.localCompare(b.name));
+
+    data.sort((a, b) => a.name.localeCompare(b.name));
   } else if (type === 'id') {
     // Sorting by ID
-    state.search.results.sort((a, b) => a.id - b.id);
+    data.sort((a, b) => a.id - b.id);
   }
+  console.log(date);
+  return data;
 };
-// To sort Pokémon search results by ID [screen 1]
+
+// To return sorted general Pokémon results by name
+export const sortPokemonName = function () {
+  const names = state.allPokemon.pokemonDB.map(p => p.name);
+  const sortedNames = names.sort((a, b) => a.localeCompare(b));
+  return sortedNames;
+};
 
 // To load Pokémon details for the search panel [screen 2]
 export const loadPokemon = async function (pokemon) {

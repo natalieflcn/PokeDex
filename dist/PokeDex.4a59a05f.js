@@ -754,7 +754,7 @@ const controlSortName = function() {
     (0, _sortViewJsDefault.default).toggleSortName();
     if (_modelJs.state.search.results.length <= 1) return;
     _modelJs.state.search.mode = 'name';
-//resultsView.render(model.state.search.results);
+    controlSearchResults();
 };
 // To sort Pokémon data by ID
 const controlSortId = function() {
@@ -762,7 +762,7 @@ const controlSortId = function() {
     (0, _sortViewJsDefault.default).toggleSortId();
     if (_modelJs.state.search.results.length <= 1) return;
     _modelJs.state.search.mode = 'id';
-//resultsView.render(model.state.search.results);
+    controlSearchResults();
 };
 // To highlight active search results [screen 1]
 const controlClickActivePreview = function(pokemonName) {
@@ -2111,7 +2111,8 @@ parcelHelpers.export(exports, "loadPokemonResults", ()=>loadPokemonResults);
 parcelHelpers.export(exports, "loadAdditionalBatch", ()=>loadAdditionalBatch);
 parcelHelpers.export(exports, "loadQueryResults", ()=>loadQueryResults);
 parcelHelpers.export(exports, "loadAdditionalQuery", ()=>loadAdditionalQuery);
-parcelHelpers.export(exports, "sortSearchResults", ()=>sortSearchResults);
+parcelHelpers.export(exports, "sortQueryResults", ()=>sortQueryResults);
+parcelHelpers.export(exports, "sortPokemonName", ()=>sortPokemonName);
 parcelHelpers.export(exports, "loadPokemon", ()=>loadPokemon);
 parcelHelpers.export(exports, "addCaughtPokemon", ()=>addCaughtPokemon);
 parcelHelpers.export(exports, "removeCaughtPokemon", ()=>removeCaughtPokemon);
@@ -2157,7 +2158,7 @@ const storeAllPokemon = async function() {
             id: pokemonId
         });
     }
-    state.allPokemon.loaded = true;
+    state.allPokemon.pokemonDB.loaded = true;
     console.log(state.allPokemon.pokemonDB);
 };
 // To create a Pokémon object after parsing PokéAPI data
@@ -2215,16 +2216,25 @@ const loadPokemonResults = async function(requestId = state.currentRequestId) {
         if (!state.allPokemon.pokemonDB.loaded) {
             const pokemon = await (0, _helpersJs.AJAX)(`${(0, _configJs.DETAILS_API_URL)}?limit=${state.search.limit}&offset=${0}`);
             pokemonNames = pokemon.results;
-        } else pokemonNames = state.allPokemon.pokemonDB.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
-        for (const pokemon of pokemonNames){
-            const pokemonName = pokemon.name;
+        } else if (state.search.mode === 'id') {
+            // Loading sorted by ID
+            console.log('loading sorted by id running');
+            pokemonNames = state.allPokemon.pokemonDB.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
+        } else {
+            console.log('loading sorte dby name running');
+            // Loading sorted by Name
+            pokemonNames = sortPokemonName().slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
+        }
+        for (const pokemon of pokemonNames)try {
+            const pokemonName = pokemon.name || pokemon;
             if (requestId !== state.search.currentRequestId) return;
             const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemonName}`);
             const pokemonPreview = createPokemonPreviewObject(pokemonName, pokemonDetails);
             if (requestId !== state.search.currentRequestId) return;
             state.search.results.push(pokemonPreview);
+        } catch (err) {
+            console.error(err);
         }
-        sortSearchResults(state.search.mode);
         state.search.offset += (0, _configJs.LIMIT);
         state.loading = false;
     } catch (err) {
@@ -2235,14 +2245,25 @@ const loadAdditionalBatch = async function() {
     try {
         state.loading = true;
         state.search.currentBatch = [];
-        const pokemonNames = state.allPokemon.pokemonDB.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
-        for (const pokemon of pokemonNames){
-            const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemon.name}`);
-            const pokemonPreview = createPokemonPreviewObject(pokemon.name, pokemonDetails);
+        let pokemonNames = [];
+        if (state.search.mode === 'id') {
+            // Loading sorted by ID
+            console.log('loading sorted by id running');
+            pokemonNames = state.allPokemon.pokemonDB.slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
+        } else {
+            console.log('loading sorte dby name running');
+            // Loading sorted by Name
+            pokemonNames = sortPokemonName().slice(state.search.offset, state.search.offset + (0, _configJs.LIMIT));
+        }
+        for (const pokemon of pokemonNames)try {
+            const pokemonName = pokemon.name || pokemon;
+            const pokemonDetails = await (0, _helpersJs.AJAX)(`${(0, _configJs.MAIN_API_URL)}${pokemonName}`);
+            const pokemonPreview = createPokemonPreviewObject(pokemonName, pokemonDetails);
             state.search.currentBatch.push(pokemonPreview);
+        } catch (err) {
+            console.error(err);
         }
         state.search.results.push(...state.search.currentBatch);
-        sortSearchResults(state.search.mode);
         state.search.offset += (0, _configJs.LIMIT);
         state.loading = false;
     } catch (err) {
@@ -2288,12 +2309,19 @@ const loadAdditionalQuery = async function(requestId) {
     state.search.offset += (0, _configJs.LIMIT);
     state.loading = false;
 };
-const sortSearchResults = async function(type = 'id') {
+const sortQueryResults = async function(data, type = state.search.mode) {
     // Sorting the Pokémon results
     if (type === 'name') // Sorting my name
-    state.search.results.sort((a, b)=>a.name.localCompare(b.name));
+    data.sort((a, b)=>a.name.localeCompare(b.name));
     else if (type === 'id') // Sorting by ID
-    state.search.results.sort((a, b)=>a.id - b.id);
+    data.sort((a, b)=>a.id - b.id);
+    console.log(date);
+    return data;
+};
+const sortPokemonName = function() {
+    const names = state.allPokemon.pokemonDB.map((p)=>p.name);
+    const sortedNames = names.sort((a, b)=>a.localeCompare(b));
+    return sortedNames;
 };
 const loadPokemon = async function(pokemon) {
     try {

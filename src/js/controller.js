@@ -108,7 +108,7 @@ const controlSortName = function () {
   if (model.state.search.results.length <= 1) return;
 
   model.state.search.mode = 'name';
-  //resultsView.render(model.state.search.results);
+  controlSearchResults();
 };
 
 // To sort Pokémon data by ID
@@ -119,7 +119,7 @@ const controlSortId = function () {
   if (model.state.search.results.length <= 1) return;
 
   model.state.search.mode = 'id';
-  //resultsView.render(model.state.search.results);
+  controlSearchResults();
 };
 
 // To highlight active search results [screen 1]
