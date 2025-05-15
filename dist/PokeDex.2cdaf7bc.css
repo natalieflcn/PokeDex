@@ -873,15 +873,18 @@ body {
   width: 4rem;
 }
 
-.profile__progress .progress {
-  background-color: green;
-  border: 1px solid #141414;
+.profile__stats--row .progress__outer {
+  background-color: var(--secondary-color--grey-gradient);
   border-radius: 2px;
   width: 52%;
-  height: .55rem;
+  height: .5rem;
   position: relative;
   top: 20%;
-  right: 2%;
+  right: 1%;
+}
+
+.profile__stats--row .progress__inner {
+  height: .45rem;
 }
 
 .profile__categories {

@@ -18,7 +18,7 @@ export default class View {
     this._parentEl.insertAdjacentHTML('afterbegin', markup);
   };
 
-  render(data, render = true, update = false) {
+  render(data, render = true, append = false) {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
 
@@ -27,10 +27,10 @@ export default class View {
 
     if (!render) return markup;
 
-    if (!update) this._clear();
+    if (!append) this._clear();
 
     this._parentEl.insertAdjacentHTML(
-      `${update ? 'beforeend' : 'afterbegin'}`,
+      `${append ? 'beforeend' : 'afterbegin'}`,
       markup
     );
   }

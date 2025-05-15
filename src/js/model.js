@@ -8,6 +8,7 @@ import {
 
 import { AJAX, capitalize } from './helpers.js';
 
+// TODO Change this file to searchModel.js, implement models for other views (Map and Profile)
 export const state = {
   loading: false,
   allPokemonNames: {

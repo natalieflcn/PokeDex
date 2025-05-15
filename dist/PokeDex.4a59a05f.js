@@ -682,7 +682,25 @@ var _runtime = require("regenerator-runtime/runtime");
 var _helpersJs = require("./helpers.js");
 var _paginationViewJs = require("./Views/paginationView.js");
 var _paginationViewJsDefault = parcelHelpers.interopDefault(_paginationViewJs);
+var _navViewJs = require("./Views/navView.js");
+var _navViewJsDefault = parcelHelpers.interopDefault(_navViewJs);
 // import { observeSentinel, unobserveSentinel } from './helpers.js';
+const controlNav = function(page) {
+    switch(page){
+        case 'search':
+            (0, _navViewJsDefault.default).search();
+            break;
+        case 'map':
+            (0, _navViewJsDefault.default).map();
+            break;
+        case 'profile':
+            (0, _navViewJsDefault.default).profile();
+            break;
+        default:
+            (0, _navViewJsDefault.default).search();
+            break;
+    }
+};
 // To coordinate rendering of the search results [Screen 1]
 const controlSearchResults = async function() {
     try {
@@ -784,17 +802,18 @@ const controlSearchPagination = async function(direction) {
 const initPokemonData = async function() {
     await _modelJs.storeAllPokemonNames();
 };
-const init = function() {
+const controlSearchInit = function() {
     initPokemonData();
     (0, _panelViewJsDefault.default).addHandlerRender(controlPokemonPanel);
     (0, _searchViewJsDefault.default).addHandlerSearch(debouncedControlSearchResults);
     (0, _previewViewJsDefault.default).addHandlerActive(controlClickActivePreview);
     (0, _previewViewJsDefault.default).addHandlerHashChange(controlPageActivePreview);
     (0, _paginationViewJsDefault.default).addHandlerClick(controlSearchPagination);
+    (0, _navViewJsDefault.default).addHandlerClick(controlNav);
 };
-init();
+controlSearchInit();
 
-},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/searchView.js":"aUu1u","./Views/panelView.js":"7JptG","./Views/resultsView.js":"fYkxP","./Views/previewView.js":"hoVX0","regenerator-runtime/runtime":"f6ot0","./helpers.js":"7nL9P","./Views/paginationView.js":"kQgXX","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bzsBv":[function(require,module,exports,__globalThis) {
+},{"core-js/modules/web.immediate.js":"bzsBv","./model.js":"3QBkH","./Views/panelView.js":"7JptG","./Views/resultsView.js":"fYkxP","./Views/previewView.js":"hoVX0","regenerator-runtime/runtime":"f6ot0","./helpers.js":"7nL9P","./Views/paginationView.js":"kQgXX","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./Views/navView.js":"l5NeQ","./Views/searchView.js":"aUu1u"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("52e9b3eefbbce1ed");
@@ -2357,75 +2376,7 @@ const observeSentinel = function(sentinel, handler, options) {
     return observer;
 };
 
-},{"./config.js":"2hPh4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"aUu1u":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _viewJs = require("./View.js");
-var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-class SearchView extends (0, _viewJsDefault.default) {
-    _parentEl = document.querySelector('.search__input');
-    _errorMessage = "We could not find that Pok\xe9mon! Please try again.";
-    addHandlerSearch(handler) {
-        window.addEventListener('load', handler);
-        this._parentEl.addEventListener('input', handler);
-        this._parentEl.addEventListener('submit', function(e) {
-            e.preventDefault();
-        });
-    }
-    getQuery() {
-        return this._parentEl.value;
-    }
-}
-exports.default = new SearchView();
-
-},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"YJQ6Q":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _pokeballFaviconSvg = require("url:../../imgs/pokeball-favicon.svg");
-var _pokeballFaviconSvgDefault = parcelHelpers.interopDefault(_pokeballFaviconSvg);
-class View {
-    _data;
-    _clear() {
-        this._parentEl.innerHTML = '';
-    }
-    renderSpinner = function() {
-        const markup = `
-    <div class="spinner__div">
-        <img class="spinner__img" src="${(0, _pokeballFaviconSvgDefault.default)}"/>
-    </div>
-  `;
-        this._clear();
-        this._parentEl.insertAdjacentHTML('afterbegin', markup);
-    };
-    render(data, render = true, update = false) {
-        if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
-        this._data = data;
-        const markup = this._generateMarkup();
-        if (!render) return markup;
-        if (!update) this._clear();
-        this._parentEl.insertAdjacentHTML(`${update ? 'beforeend' : 'afterbegin'}`, markup);
-    }
-    renderError(message = this._errorMessage) {
-        const markup = `
-      <div class="error">
-        <div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-          </svg>
-        </div>
-        <p>${message}</p>
-      </div>
-    `;
-        this._clear();
-        this._parentElement.insertAdjacentHTML('afterbegin', markup);
-    }
-}
-exports.default = View;
-
-},{"url:../../imgs/pokeball-favicon.svg":"8TbbI","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8TbbI":[function(require,module,exports,__globalThis) {
-module.exports = module.bundle.resolve("pokeball-favicon.33b29b13.svg") + "?" + Date.now();
-
-},{}],"7JptG":[function(require,module,exports,__globalThis) {
+},{"./config.js":"2hPh4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7JptG":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("./View.js");
@@ -2600,7 +2551,54 @@ class PanelView extends (0, _viewJsDefault.default) {
 }
 exports.default = new PanelView();
 
-},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fYkxP":[function(require,module,exports,__globalThis) {
+},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"YJQ6Q":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _pokeballFaviconSvg = require("url:../../imgs/pokeball-favicon.svg");
+var _pokeballFaviconSvgDefault = parcelHelpers.interopDefault(_pokeballFaviconSvg);
+class View {
+    _data;
+    _clear() {
+        this._parentEl.innerHTML = '';
+    }
+    renderSpinner = function() {
+        const markup = `
+    <div class="spinner__div">
+        <img class="spinner__img" src="${(0, _pokeballFaviconSvgDefault.default)}"/>
+    </div>
+  `;
+        this._clear();
+        this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    };
+    render(data, render = true, append = false) {
+        if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
+        this._data = data;
+        const markup = this._generateMarkup();
+        if (!render) return markup;
+        if (!append) this._clear();
+        this._parentEl.insertAdjacentHTML(`${append ? 'beforeend' : 'afterbegin'}`, markup);
+    }
+    renderError(message = this._errorMessage) {
+        const markup = `
+      <div class="error">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+    `;
+        this._clear();
+        this._parentElement.insertAdjacentHTML('afterbegin', markup);
+    }
+}
+exports.default = View;
+
+},{"url:../../imgs/pokeball-favicon.svg":"8TbbI","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8TbbI":[function(require,module,exports,__globalThis) {
+module.exports = module.bundle.resolve("pokeball-favicon.33b29b13.svg") + "?" + Date.now();
+
+},{}],"fYkxP":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("./View.js");
@@ -3310,6 +3308,60 @@ class PaginationView extends (0, _viewJsDefault.default) {
     }
 }
 exports.default = new PaginationView();
+
+},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"l5NeQ":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class NavView extends (0, _viewJsDefault.default) {
+    _parentEl = document.querySelector('.header__nav');
+    addHandlerClick(handler) {
+        this._parentEl.addEventListener('click', function(e) {
+            const btn = e.target.closest('.header__btn');
+            console.log(e.target);
+            if (!btn) return;
+            const page = btn.dataset.page;
+            if (!page) return;
+            const btns = document.querySelectorAll('.screen__1--search, .screen__2--search, .screen__1--map, .screen__2--map, .screen__1--profile, .screen__2--profile').forEach((page)=>page.classList.add('hidden'));
+            console.log('page is ' + page);
+            handler(page);
+        });
+    }
+    search() {
+        console.log('search running');
+        document.querySelectorAll('.screen__1--search, .screen__2--search').forEach((screen)=>screen.classList.remove('hidden'));
+    }
+    map() {
+        console.log('map running');
+        document.querySelectorAll('.screen__1--map, .screen__2--map').forEach((screen)=>screen.classList.remove('hidden'));
+    }
+    profile() {
+        document.querySelectorAll('.screen__1--profile, .screen__2--profile').forEach((screen)=>screen.classList.remove('hidden'));
+    }
+}
+exports.default = new NavView();
+
+},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"aUu1u":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("./View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class SearchView extends (0, _viewJsDefault.default) {
+    _parentEl = document.querySelector('.search__input');
+    _errorMessage = "We could not find that Pok\xe9mon! Please try again.";
+    addHandlerSearch(handler) {
+        window.addEventListener('load', handler);
+        this._parentEl.addEventListener('input', handler);
+        this._parentEl.addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+    }
+    getQuery() {
+        return this._parentEl.value;
+    }
+}
+exports.default = new SearchView();
 
 },{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire7ea9", {}, "./", "/")
 

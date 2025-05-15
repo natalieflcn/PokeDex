@@ -1019,15 +1019,18 @@ body {
   width: 4rem;
 }
 
-.profile__progress .progress {
+.profile__stats--row .progress__outer {
   position: relative;
   top: 20%;
-  right: 2%;
+  right: 1%;
   width: 52%;
-  height: 0.55rem;
+  height: 0.5rem;
   border-radius: 2px;
-  border: 1px solid rgb(20, 20, 20);
-  background-color: green;
+  background-color: var(--secondary-color--grey-gradient);
+}
+
+.profile__stats--row .progress__inner {
+  height: 0.45rem;
 }
 
 /* PERSPECTIVE -- Profile (Screen 2) */

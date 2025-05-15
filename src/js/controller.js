@@ -9,8 +9,29 @@ import 'regenerator-runtime/runtime';
 
 import { debounce } from './helpers.js';
 import paginationView from './Views/paginationView.js';
+import navView from './Views/navView.js';
 
 // import { observeSentinel, unobserveSentinel } from './helpers.js';
+const controlNav = function (page) {
+  switch (page) {
+    case 'search':
+      navView.search();
+      break;
+
+    case 'map':
+      navView.map();
+      break;
+
+    case 'profile':
+      navView.profile();
+      break;
+
+    default:
+      navView.search();
+      break;
+  }
+};
+
 // To coordinate rendering of the search results [Screen 1]
 const controlSearchResults = async function () {
   try {
@@ -167,12 +188,13 @@ const initPokemonData = async function () {
   await model.storeAllPokemonNames();
 };
 
-const init = function () {
+const controlSearchInit = function () {
   initPokemonData();
   panelView.addHandlerRender(controlPokemonPanel);
   searchView.addHandlerSearch(debouncedControlSearchResults);
   previewView.addHandlerActive(controlClickActivePreview);
   previewView.addHandlerHashChange(controlPageActivePreview);
   paginationView.addHandlerClick(controlSearchPagination);
+  navView.addHandlerClick(controlNav);
 };
-init();
+controlSearchInit();

@@ -17,13 +17,15 @@
         <h1 class="header__logo">Pokédex</h1>
 
         <!-- Nav Buttons -->
-        <nav>
+        <nav class="header__nav">
           <!-- Desktop Buttons -->
-          <button class="btn header__btn header__btn--search btn--blue btn--active">
+          <button class="btn header__btn header__btn--search btn--blue btn--active" data-page="search">
             Search
           </button>
-          <button class="btn header__btn header--map btn--yellow">Map</button>
-          <button class="btn header__btn header--profile btn--green">
+          <button class="btn header__btn header--map btn--yellow" data-page="map">
+            Map
+          </button>
+          <button class="btn header__btn header--profile btn--green" data-page="profile">
             Profile
           </button>
 
@@ -62,20 +64,6 @@
           <section class="screen__1--search">
             <form class="form search__form">
               <input class="input search__input" type="text" name="search-query" id="search-query" placeholder="Search for a Pokémon..." autocomplete="off">
-              <!-- <button class="btn search__btn--submit btn--grey">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-search"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
-                  />
-                </svg>
-              </button> -->
 
               <div class="search__form--sort">
                 <label>Sort</label>
@@ -260,16 +248,16 @@
 
                 <div class="profile__header--labels">
                   <p class="profile__header--label">
-                    Pokémon Caught<span class="profile__header--label label--inset">7m</span>
+                    Pokémon Caught<span class="profile__header--label label--inset">0</span>
                   </p>
                   <p class="profile__header--label">
-                    Pokémon Favorited<span class="profile__header--label label--inset">60</span>
+                    Pokémon Favorited<span class="profile__header--label label--inset">0</span>
                   </p>
                 </div>
 
                 <p class="profile__header--bio bio">
-                  Obviously prefers\nhot places. When\nit rains, steam\fis said
-                  to spout\nfrom the tip of\nits tail.
+                  Grew up catching Pokémon in the Bronx, now training to catch
+                  Pokémon around Dyckman.
                 </p>
               </div>
             </header>
@@ -278,134 +266,134 @@
             <div class="profile__stats">
               <div class="profile__stats--column">
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Normal">
+                  <p class="profile__stats--type pokemon__type" data-type="Normal" style="background-color: var(--type--Normal)">
                     Normal
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="25" max="100">
                     <span class="profile__progress progress__inner"></span>
                   </div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Fire">
+                  <p class="profile__stats--type pokemon__type" data-type="Fire" style="background-color: var(--type--Fire)" "="">
                     Fire
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="30" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Water">
+                  <p class="profile__stats--type pokemon__type" data-type="Water" style="background-color: var(--type--Water)">
                     Water
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="2" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Electric">
+                  <p class="profile__stats--type pokemon__type" data-type="Electric" style="background-color: var(--type--Electric)">
                     Electric
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="80" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Grass">
+                  <p class="profile__stats--type pokemon__type" data-type="Grass" style="background-color: var(--type--Grass)">
                     Grass
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="55" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="ice">
+                  <p class="profile__stats--type pokemon__type" data-type="ice" style="background-color: var(--type--Ice)">
                     Ice
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="23" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Fighting">
+                  <p class="profile__stats--type pokemon__type" data-type="Fighting" style="background-color: var(--type--Fighting)">
                     Fighting
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="23" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Poison">
+                  <p class="profile__stats--type pokemon__type" data-type="Poison" style="background-color: var(--type--Poison)">
                     Poison
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="23" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Ground">
+                  <p class="profile__stats--type pokemon__type" data-type="Ground" style="background-color: var(--type--Ground)">
                     Ground
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="23" max="100"></div>
                 </div>
               </div>
 
               <div class="profile__stats--column">
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Flying">
+                  <p class="profile__stats--type pokemon__type" data-type="Flying" style="background-color: var(--type--Flying)">
                     Flying
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="25" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Psychic">
+                  <p class="profile__stats--type pokemon__type" data-type="Psychic" style="background-color: var(--type--Psychic)">
                     Psychic
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="30" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Bug">
+                  <p class="profile__stats--type pokemon__type" data-type="Bug" style="background-color: var(--type--Bug)"> 
                     Bug
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="2" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Rock">
+                  <p class="profile__stats--type pokemon__type" data-type="Rock" style="background-color: var(--type--Rock)">
                     Rock
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="80" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Ghost">
+                  <p class="profile__stats--type pokemon__type" data-type="Ghost" style="background-color: var(--type--Ghost)">
                     Ghost
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="55" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Dragon">
+                  <p class="profile__stats--type pokemon__type" data-type="Dragon" style="background-color: var(--type--Dragon)">
                     Dragon
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="23" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Dark">
+                  <p class="profile__stats--type pokemon__type" data-type="Dark" style="background-color: var(--type--Dark)">
                     Dark
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="23" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Steel">
+                  <p class="profile__stats--type pokemon__type" data-type="Steel" style="background-color: var(--type--Steel)">
                     Steel
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="23" max="100"></div>
                 </div>
                 <div class="profile__stats--row">
-                  <p class="profile__stats--type pokemon__type" data-type="Fairy">
+                  <p class="profile__stats--type pokemon__type" data-type="Fairy" style="background-color: var(--type--Fairy)">
                     Fairy
                   </p>
-                  <span class="profile__label label--inset">255</span>
+                  <span class="profile__label label--inset">0</span>
                   <div class="profile__progress progress__outer" value="23" max="100"></div>
                 </div>
               </div>
