@@ -28,10 +28,6 @@ export const state = {
     mode: 'id',
   },
   pokemon: {},
-  profile: {
-    name: '',
-    types: [],
-  },
   favorites: [],
   caught: [],
 };
@@ -382,6 +378,11 @@ const extractPokemonId = function (url) {
   return id ? Number(id[1]) : null;
 };
 
+// To export Caught Pokémon for Map and Profile View
+export const getCaughtPokemon = () => state.caught;
+
+// To export Favorite Pokémon for Profile View
+export const getFavoritePokemon = () => state.favorites;
 // To store Caught Pokémon and Favorite Pokémon in Local Storage
 const persistData = function (type, data) {
   localStorage.setItem(type, JSON.stringify(data));

@@ -670,6 +670,7 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _webImmediateJs = require("core-js/modules/web.immediate.js");
 var _searchModelJs = require("./Models/searchModel.js");
+var _profileModelJs = require("./Models/profileModel.js");
 var _navViewJs = require("./Views/navView.js");
 var _navViewJsDefault = parcelHelpers.interopDefault(_navViewJs);
 var _searchViewJs = require("./Views/SearchViews/searchView.js");
@@ -678,7 +679,7 @@ var _sortViewJs = require("./Views/SearchViews/sortView.js");
 var _sortViewJsDefault = parcelHelpers.interopDefault(_sortViewJs);
 var _resultsViewJs = require("./Views/SearchViews/resultsView.js");
 var _resultsViewJsDefault = parcelHelpers.interopDefault(_resultsViewJs);
-var _previewViewJs = require("./Views/SearchViews/previewView.js");
+var _previewViewJs = require("./Views/previewView.js");
 var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
 var _panelViewJs = require("./Views/SearchViews/panelView.js");
 var _panelViewJsDefault = parcelHelpers.interopDefault(_panelViewJs);
@@ -686,7 +687,6 @@ var _paginationViewJs = require("./Views/SearchViews/paginationView.js");
 var _paginationViewJsDefault = parcelHelpers.interopDefault(_paginationViewJs);
 var _runtime = require("regenerator-runtime/runtime");
 var _helpersJs = require("./helpers.js");
-// import { sort } from 'core-js/core/array';
 const controlNav = function(page) {
     switch(page){
         case 'search':
@@ -703,6 +703,7 @@ const controlNav = function(page) {
             break;
     }
 };
+// SEARCH CONTROLLER ---
 // To coordinate rendering of the search results [Screen 1]
 const controlSearchResults = async function() {
     try {
@@ -829,6 +830,7 @@ const controlAddFavorite = function() {
     else _searchModelJs.removeFavoritePokemon(_searchModelJs.state.pokemon);
     (0, _panelViewJsDefault.default).toggleFavorite();
     console.log(_searchModelJs.state.favorites);
+    _profileModelJs.print();
 };
 // To initialize all Pokémon names to store in our state
 const initPokemonData = async function() {
@@ -836,7 +838,6 @@ const initPokemonData = async function() {
 };
 const controlSearchInit = function() {
     initPokemonData();
-    (0, _navViewJsDefault.default).addHandlerClick(controlNav);
     (0, _searchViewJsDefault.default).addHandlerSearch(debouncedControlSearchResults);
     (0, _sortViewJsDefault.default).addHandlerSortName(controlSortName);
     (0, _sortViewJsDefault.default).addHandlerSortId(controlSortId);
@@ -847,9 +848,16 @@ const controlSearchInit = function() {
     (0, _panelViewJsDefault.default).addHandlerFavorite(controlAddFavorite);
     (0, _paginationViewJsDefault.default).addHandlerClick(controlSearchPagination);
 };
-controlSearchInit();
+// MAP CONTROLLER ---
+// PROFILE CONTROLLER ---
+const controlSavedResults = async function() {};
+const init = function() {
+    (0, _navViewJsDefault.default).addHandlerClick(controlNav);
+    controlSearchInit();
+};
+init();
 
-},{"core-js/modules/web.immediate.js":"bzsBv","regenerator-runtime/runtime":"f6ot0","./helpers.js":"7nL9P","./Views/navView.js":"l5NeQ","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./Views/SearchViews/searchView.js":"75HfK","./Views/SearchViews/sortView.js":"iE8OC","./Views/SearchViews/resultsView.js":"6zZCJ","./Views/SearchViews/previewView.js":"6yia0","./Views/SearchViews/panelView.js":"4OGMv","./Views/SearchViews/paginationView.js":"hOwzG","./Models/searchModel.js":"2TIqY"}],"bzsBv":[function(require,module,exports,__globalThis) {
+},{"core-js/modules/web.immediate.js":"bzsBv","regenerator-runtime/runtime":"f6ot0","./helpers.js":"7nL9P","./Views/navView.js":"l5NeQ","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./Views/SearchViews/searchView.js":"75HfK","./Views/SearchViews/sortView.js":"iE8OC","./Views/SearchViews/resultsView.js":"6zZCJ","./Views/SearchViews/panelView.js":"4OGMv","./Views/SearchViews/paginationView.js":"hOwzG","./Models/searchModel.js":"2TIqY","./Views/previewView.js":"hoVX0","./Models/profileModel.js":"f8YrZ"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("52e9b3eefbbce1ed");
@@ -2955,7 +2963,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-var _previewViewJs = require("./previewView.js");
+var _previewViewJs = require("../previewView.js");
 var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
 var _helpersJs = require("../../helpers.js");
 class ResultsView extends (0, _viewJsDefault.default) {
@@ -2982,10 +2990,10 @@ class ResultsView extends (0, _viewJsDefault.default) {
 }
 exports.default = new ResultsView();
 
-},{"../View.js":"YJQ6Q","./previewView.js":"6yia0","../../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"6yia0":[function(require,module,exports,__globalThis) {
+},{"../View.js":"YJQ6Q","../../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","../previewView.js":"hoVX0"}],"hoVX0":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _viewJs = require("../View.js");
+var _viewJs = require("./View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
 class PreviewView extends (0, _viewJsDefault.default) {
     _parentEl = document.querySelector('.search__preview--container');
@@ -3023,7 +3031,7 @@ class PreviewView extends (0, _viewJsDefault.default) {
 }
 exports.default = new PreviewView();
 
-},{"../View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4OGMv":[function(require,module,exports,__globalThis) {
+},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4OGMv":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../View.js");
@@ -3263,6 +3271,8 @@ parcelHelpers.export(exports, "removeCaughtPokemon", ()=>removeCaughtPokemon);
 parcelHelpers.export(exports, "addFavoritePokemon", ()=>addFavoritePokemon);
 parcelHelpers.export(exports, "removeFavoritePokemon", ()=>removeFavoritePokemon);
 parcelHelpers.export(exports, "restartSearchResults", ()=>restartSearchResults);
+parcelHelpers.export(exports, "getCaughtPokemon", ()=>getCaughtPokemon);
+parcelHelpers.export(exports, "getFavoritePokemon", ()=>getFavoritePokemon);
 var _configJs = require("../config.js");
 var _helpersJs = require("../helpers.js");
 const state = {
@@ -3283,10 +3293,6 @@ const state = {
         mode: 'id'
     },
     pokemon: {},
-    profile: {
-        name: '',
-        types: []
-    },
     favorites: [],
     caught: []
 };
@@ -3518,6 +3524,8 @@ const extractPokemonId = function(url) {
     const id = url.match(/\/(\d+)\/?$/);
     return id ? Number(id[1]) : null;
 };
+const getCaughtPokemon = ()=>state.caught;
+const getFavoritePokemon = ()=>state.favorites;
 // To store Caught Pokémon and Favorite Pokémon in Local Storage
 const persistData = function(type, data) {
     localStorage.setItem(type, JSON.stringify(data));
@@ -3531,6 +3539,41 @@ const init = function() {
 };
 init();
 
-},{"../config.js":"2hPh4","../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire7ea9", {}, "./", "/")
+},{"../config.js":"2hPh4","../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"f8YrZ":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "state", ()=>state);
+parcelHelpers.export(exports, "print", ()=>print);
+var _configJs = require("../config.js");
+var _searchModelJs = require("./searchModel.js");
+var _helpersJs = require("../helpers.js");
+const state = {
+    loading: false,
+    favorites: (0, _searchModelJs.state).favorites,
+    caught: (0, _searchModelJs.state).caught,
+    search: {
+        query: '',
+        queryResults: '',
+        results: [],
+        currentBatch: [],
+        offset: 0,
+        limit: (0, _configJs.LIMIT),
+        hasMoreResults: true,
+        currentRequestId: 0,
+        mode: 'id'
+    },
+    profile: {
+        name: '',
+        typesCaught: {}
+    }
+};
+const print = function() {
+    console.log('CAUGHT');
+    console.log((0, _searchModelJs.state).caught);
+    console.log('FAVORITE');
+    console.log((0, _searchModelJs.state).favorites);
+};
+
+},{"../config.js":"2hPh4","./searchModel.js":"2TIqY","../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["5DuvQ","7dWZ8"], "7dWZ8", "parcelRequire7ea9", {}, "./", "/")
 
 //# sourceMappingURL=PokeDex.4a59a05f.js.map

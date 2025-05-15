@@ -1,9 +1,9 @@
 import View from '../View.js';
-import previewView from '../previewView.js';
+import previewView from './previewView.js';
 import { observeSentinel } from '../../helpers.js';
 
-class ResultsView extends View {
-  _parentEl = document.querySelector('.search__preview--container');
+class CaughtView extends View {
+  _parentEl = document.querySelector('.profile__preview--container');
 
   _errorMessage = 'We could not find that Pokémon! Please try again.';
   _sentinel = document.querySelector('.search__sentinel');
@@ -29,4 +29,4 @@ class ResultsView extends View {
   }
 }
 
-export default new ResultsView();
+export default new CaughtView();
