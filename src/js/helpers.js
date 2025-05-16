@@ -1,4 +1,5 @@
 import { TIMEOUT_SEC } from './config.js';
+import { state } from './Models/state.js';
 
 const timeout = function (s) {
   return new Promise(function (_, reject) {
@@ -70,4 +71,38 @@ export const createPokemonPreviewObject = function (name, details) {
     id,
     img,
   };
+};
+
+export const restartSearchResults = function () {
+  state.search.offset = 0;
+  state.search.results = [];
+  state.search.query = '';
+  state.search.queryResults = '';
+  state.search.hasMoreResults = true;
+};
+
+// To sort Pokémon search results by name OR id -- for queries ONLY
+export const sortQueryResults = function () {
+  let sort;
+  console.log(state.search.queryResults);
+  // Sorting the Pokémon results
+  if (state.search.mode === 'name') {
+    // Sorting my name
+
+    sort = state.search.queryResults.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+  } else if (state.search.mode === 'id') {
+    // Sorting by ID
+    sort = state.search.queryResults.sort((a, b) => a.id - b.id);
+  }
+  console.log(sort);
+  return sort;
+};
+
+// To find Pokémon that begin with the passed-in substring
+export const possiblePokemon = function (substring, pokemonSet) {
+  return pokemonSet.filter(pokemon =>
+    pokemon.name.startsWith(capitalize(substring))
+  );
 };

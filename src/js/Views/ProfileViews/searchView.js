@@ -23,6 +23,10 @@ class SearchView extends View {
   getQuery() {
     return this._parentEl.value;
   }
+
+  clearInput() {
+    document.querySelector('.profile__input').value = '';
+  }
 }
 
 export default new SearchView();

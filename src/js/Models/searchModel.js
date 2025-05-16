@@ -6,7 +6,14 @@ import {
   POKEMON_NAMES_API_URL,
   LIMIT,
 } from '../config.js';
-import { AJAX, capitalize, createPokemonPreviewObject } from '../helpers.js';
+import {
+  AJAX,
+  capitalize,
+  createPokemonPreviewObject,
+  restartSearchResults,
+  sortQueryResults,
+  possiblePokemon,
+} from '../helpers.js';
 
 // To store all Pokémon names in our state
 export const storeAllPokemon = async function () {
@@ -181,7 +188,10 @@ export const loadQueryResults = async function (query, requestId) {
   state.loading = true;
   restartSearchResults();
   state.search.query = query;
-  state.search.queryResults = possiblePokemon(query);
+  state.search.queryResults = possiblePokemon(
+    query,
+    state.allPokemon.pokemonDB
+  );
 
   const sorted = sortQueryResults();
   console.log(sorted);
@@ -240,24 +250,6 @@ export const loadAdditionalQuery = async function (requestId) {
   state.search.results.push(...state.search.currentBatch);
   state.search.offset += LIMIT;
   state.loading = false;
-};
-
-// To sort Pokémon search results by name OR id -- for queries ONLY
-export const sortQueryResults = async function () {
-  let sort;
-  // Sorting the Pokémon results
-  if (state.search.mode === 'name') {
-    // Sorting my name
-
-    sort = state.search.queryResults.sort((a, b) =>
-      a.name.localeCompare(b.name)
-    );
-  } else if (state.search.mode === 'id') {
-    // Sorting by ID
-    sort = state.search.queryResults.sort((a, b) => a.id - b.id);
-  }
-  console.log(sort);
-  return sort;
 };
 
 // To return sorted general Pokémon results by name
@@ -320,20 +312,6 @@ export const removeFavoritePokemon = function (pokemon) {
 // Search -- HELPER METHODS
 
 // To clear search results
-export const restartSearchResults = function () {
-  state.search.offset = 0;
-  state.search.results = [];
-  state.search.query = '';
-  state.search.queryResults = '';
-  state.search.hasMoreResults = true;
-};
-
-// To find Pokémon that begin with the passed-in substring
-const possiblePokemon = function (substring) {
-  return state.allPokemon.pokemonDB.filter(pokemon =>
-    pokemon.name.startsWith(substring)
-  );
-};
 
 // To extract IDs for all Pokemon
 const extractPokemonId = function (url) {

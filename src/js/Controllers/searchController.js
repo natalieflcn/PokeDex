@@ -13,7 +13,7 @@ import { print } from '../Models/profileModel.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import { debounce } from '../helpers.js';
+import { debounce, restartSearchResults } from '../helpers.js';
 
 // SEARCH CONTROLLER ---
 
@@ -21,7 +21,8 @@ import { debounce } from '../helpers.js';
 const controlSearchResults = async function () {
   try {
     // Retrieve query from user input
-    searchModel.restartSearchResults();
+    restartSearchResults();
+    console.log('running');
     if (resultsView._observer) resultsView.unobserve();
 
     const query = searchView.getQuery();
