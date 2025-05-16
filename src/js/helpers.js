@@ -65,8 +65,6 @@ export const createPokemonPreviewObject = function (name, details) {
     sprites: { front_default: img },
   } = details;
 
-  console.log(name, id, img);
-
   return {
     name: capitalize(name),
     id,

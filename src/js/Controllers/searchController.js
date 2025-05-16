@@ -1,3 +1,4 @@
+import { state } from '../Models/state.js';
 import * as searchModel from '../Models/searchModel.js';
 
 import searchView from '../Views/SearchViews/searchView.js';
@@ -6,6 +7,8 @@ import resultsView from '../Views/SearchViews/resultsView.js';
 import previewView from '../Views/previewView.js';
 import panelView from '../Views/SearchViews/panelView.js';
 import paginationView from '../Views/SearchViews/paginationView.js';
+
+import { print } from '../Models/profileModel.js';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
@@ -22,8 +25,7 @@ const controlSearchResults = async function () {
     if (resultsView._observer) resultsView.unobserve();
 
     const query = searchView.getQuery();
-    const requestId = ++searchModel.state.search.currentRequestId;
-    console.log(searchModel.state.search.currentRequestId, requestId);
+    const requestId = ++state.search.currentRequestId;
 
     resultsView.renderSpinner();
 
@@ -38,13 +40,12 @@ const controlSearchResults = async function () {
     }
 
     // If there's  additional results
-    if (searchModel.state.search.hasMoreResults)
-      resultsView.observe(controlInfiniteScroll);
+    if (state.search.hasMoreResults) resultsView.observe(controlInfiniteScroll);
 
-    if (searchModel.state.search.currentRequestId !== requestId) return; // Abort render if the requestId is not up-to-date
+    if (state.search.currentRequestId !== requestId) return; // Abort render if the requestId is not up-to-date
 
     // Render Pokémon search results (screen 1 -- search)
-    resultsView.render(searchModel.state.search.results);
+    resultsView.render(state.search.results);
   } catch (err) {
     searchView.renderError();
   }
@@ -53,12 +54,11 @@ const debouncedControlSearchResults = debounce(controlSearchResults, 300); // De
 
 // To determine the scroll position of the client and to load more data, if necessary
 const controlInfiniteScroll = async function () {
-  const requestId = searchModel.state.search.currentRequestId;
-  if (searchModel.state.loading || !searchModel.state.search.hasMoreResults)
-    return;
+  const requestId = state.search.currentRequestId;
+  if (state.loading || !state.search.hasMoreResults) return;
 
   // Load additional query data
-  if (searchModel.state.search.query) {
+  if (state.search.query) {
     await searchModel.loadAdditionalQuery(requestId);
     // Load additional Pokémon data
   } else {
@@ -66,8 +66,8 @@ const controlInfiniteScroll = async function () {
   }
 
   // Determine if this is the end of current Pokémon search results
-  if (searchModel.state.search.currentBatch.length === 0) {
-    searchModel.state.search.hasMoreResults = false;
+  if (state.search.currentBatch.length === 0) {
+    state.search.hasMoreResults = false;
     resultsView.unobserve();
     return;
   }
@@ -78,8 +78,8 @@ const controlInfiniteScroll = async function () {
   }
 
   // Return Pokémon data to controlSearchResults
-  resultsView.render(searchModel.state.search.currentBatch, true, true);
-  return searchModel.state.search.results;
+  resultsView.render(state.search.currentBatch, true, true);
+  return state.search.results;
 };
 
 // To sort Pokémon data by name
@@ -87,9 +87,9 @@ const controlSortName = function () {
   console.log('sorting by name');
   sortView.toggleSortName();
 
-  if (searchModel.state.search.results.length <= 1) return;
+  if (state.search.results.length <= 1) return;
 
-  searchModel.state.search.mode = 'name';
+  state.search.mode = 'name';
   controlSearchResults();
 };
 
@@ -98,9 +98,9 @@ const controlSortId = function () {
   console.log('sorting by id');
   sortView.toggleSortId();
 
-  if (searchModel.state.search.results.length <= 1) return;
+  if (state.search.results.length <= 1) return;
 
-  searchModel.state.search.mode = 'id';
+  state.search.mode = 'id';
   controlSearchResults();
 };
 
@@ -139,14 +139,14 @@ const controlPokemonPanel = async function () {
     await searchModel.loadPokemon(id);
 
     // Render Pokémon panel (screen 2 -- search)
-    panelView.render(searchModel.state.pokemon);
+    panelView.render(state.pokemon);
 
-    const currIndex = searchModel.state.search.results.findIndex(
-      pokemon => pokemon.name === searchModel.state.pokemon.name
+    const currIndex = state.search.results.findIndex(
+      pokemon => pokemon.name === state.pokemon.name
     );
 
     if (currIndex === 0) paginationView.disableButton('prev');
-    if (currIndex === searchModel.state.search.results.length - 1)
+    if (currIndex === state.search.results.length - 1)
       paginationView.disableButton('next');
   } catch (err) {
     panelView.renderError(err);
@@ -155,16 +155,15 @@ const controlPokemonPanel = async function () {
 
 // To control going back and forth between search results
 const controlSearchPagination = async function (direction) {
-  let currIndex = searchModel.state.search.results.findIndex(
-    p => p.name === searchModel.state.pokemon.name
+  let currIndex = state.search.results.findIndex(
+    p => p.name === state.pokemon.name
   );
 
   direction === 'next' ? currIndex++ : currIndex--;
 
   if (
     currIndex < 0 ||
-    (currIndex >= searchModel.state.search.results.length &&
-      !searchModel.state.search.hasMoreResults)
+    (currIndex >= state.search.results.length && !state.search.hasMoreResults)
   ) {
     paginationView.disableButton(direction);
     resultsView.unobserve();
@@ -172,31 +171,27 @@ const controlSearchPagination = async function (direction) {
     return;
   }
 
-  if (
-    currIndex >= searchModel.state.search.results.length &&
-    searchModel.state.search.hasMoreResults
-  ) {
+  if (currIndex >= state.search.results.length && state.search.hasMoreResults) {
     paginationView.enableButton('next');
 
     panelView.renderSpinner();
 
-    if (searchModel.state.search.query) {
+    if (state.search.query) {
       await searchModel.loadAdditionalQuery();
     } else {
       await searchModel.loadAdditionalBatch();
     }
   }
 
-  const nextPokemon = searchModel.state.search.results[currIndex];
+  const nextPokemon = state.search.results[currIndex];
   window.location.hash = nextPokemon.name;
 };
 
 // To add Pokémon to our Caught Pokémon
 const controlAddCaught = function () {
   // To add/remove Caught status
-  if (!searchModel.state.pokemon.caught)
-    searchModel.addCaughtPokemon(searchModel.state.pokemon);
-  else searchModel.removeCaughtPokemon(searchModel.state.pokemon);
+  if (!state.pokemon.caught) searchModel.addCaughtPokemon(state.pokemon);
+  else searchModel.removeCaughtPokemon(state.pokemon);
 
   panelView.toggleCaught();
 };
@@ -204,13 +199,12 @@ const controlAddCaught = function () {
 // To add Pokémon to our Favorite Pokémon
 const controlAddFavorite = function () {
   // To add/remove Caught status
-  if (!searchModel.state.pokemon.favorite)
-    searchModel.addFavoritePokemon(searchModel.state.pokemon);
-  else searchModel.removeFavoritePokemon(searchModel.state.pokemon);
+  if (!state.pokemon.favorite) searchModel.addFavoritePokemon(state.pokemon);
+  else searchModel.removeFavoritePokemon(state.pokemon);
 
   panelView.toggleFavorite();
-  console.log(searchModel.state.favorites);
-  profileModel.print();
+  console.log(state.favorites);
+  print(); //BUG delete later
 };
 
 // To initialize all Pokémon names to store in our state

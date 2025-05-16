@@ -1,3 +1,4 @@
+import { state } from './state.js';
 import {
   MAIN_API_URL,
   DETAILS_API_URL,
@@ -5,39 +6,13 @@ import {
   POKEMON_NAMES_API_URL,
   LIMIT,
 } from '../config.js';
-
 import { AJAX, capitalize, createPokemonPreviewObject } from '../helpers.js';
-
-// TODO Change this file to searchModel.js, implement models for other views (Map and Profile)
-
-export const state = {
-  loading: false,
-  allPokemon: {
-    pokemonDB: [],
-    loaded: false,
-  },
-  search: {
-    query: '',
-    queryResults: '',
-    results: [],
-    currentBatch: [], // For loading additional batches of Pokémon
-    offset: 0,
-    limit: LIMIT,
-    hasMoreResults: true,
-    currentRequestId: 0,
-    mode: 'id',
-  },
-  pokemon: {},
-  favorites: [],
-  caught: [],
-};
 
 // To store all Pokémon names in our state
 export const storeAllPokemon = async function () {
   const pokeAPIData = await AJAX(`${POKEMON_NAMES_API_URL}`);
   const { results } = pokeAPIData;
 
-  console.log(results);
   for (const result of results) {
     const pokemonName = result.name;
     const pokemonId = extractPokemonId(result.url);
@@ -45,8 +20,6 @@ export const storeAllPokemon = async function () {
   }
 
   state.allPokemon.pokemonDB.loaded = true;
-
-  console.log(state.allPokemon.pokemonDB);
 };
 
 // To create a Pokémon object after parsing PokéAPI data
@@ -119,8 +92,6 @@ export const loadPokemonResults = async function (
     } else {
       if (state.search.mode === 'id') {
         // Loading sorted by ID
-
-        console.log('loading sorted by id running');
         pokemonNames = state.allPokemon.pokemonDB.slice(
           state.search.offset,
           state.search.offset + LIMIT
@@ -313,6 +284,10 @@ export const loadPokemon = async function (pokemon) {
 // To store Pokémon details in Caught Pokémon
 export const addCaughtPokemon = function (pokemon) {
   pokemon.caught = true;
+
+  // Prevent adding duplicates, if already rendered from local storage
+  if (state.caught.find(p => p.name === pokemon.name)) return;
+
   state.caught.push(pokemon);
   persistData('caught', state.caught);
 };
@@ -327,6 +302,10 @@ export const removeCaughtPokemon = function (pokemon) {
 // To store Pokémon details in Favorite Pokémon
 export const addFavoritePokemon = function (pokemon) {
   pokemon.favorite = true;
+
+  // Prevent adding duplicates, if already rendered from local storage
+  if (state.favorites.find(p => p.name === pokemon.name)) return;
+
   state.favorites.push(pokemon);
   persistData('favorites', state.favorites);
 };

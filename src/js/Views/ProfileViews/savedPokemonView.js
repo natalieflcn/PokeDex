@@ -1,8 +1,8 @@
 import View from '../View.js';
-import previewView from './previewView.js';
+import previewView from '../previewView.js';
 import { observeSentinel } from '../../helpers.js';
 
-class CaughtView extends View {
+class savedPokemonView extends View {
   _parentEl = document.querySelector('.profile__preview--container');
 
   _errorMessage = 'We could not find any caught Pokémon! Please try again.';
@@ -29,4 +29,4 @@ class CaughtView extends View {
   }
 }
 
-export default new CaughtView();
+export default new savedPokemonView();
