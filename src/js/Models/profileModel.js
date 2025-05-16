@@ -21,12 +21,18 @@ export const loadPokemonResults = async function (
       pokemonNames = sortPokemonResults(state.favorites);
     }
 
+    for (const pokemon of pokemonNames) {
+      const { name, id, img } = pokemon;
+      if (requestId !== state.search.currentRequestId) return;
+      state.search.results.push({ name, id, img });
+    }
+
     // if (state.search.mode === 'id') pokemonNames = sortPokemonID(pokemonNames);
-    // else if (state.search.mode === 'name
+    // else if (state.search.mode === 'name')
     //   pokemonNames = sortPokemonName(pokemonNames);
 
     if (requestId !== state.search.currentRequestId) return;
-    state.search.results.push(pokemonNames);
+    console.log(state.search.results);
   } catch (err) {
     console.error(err);
   }

@@ -12,7 +12,7 @@ const controlSavedResults = async function () {
     restartSearchResults();
     const query = searchView.getQuery();
     const requestId = ++state.search.currentRequestId;
-
+    console.log('running again');
     savedPokemonView.renderSpinner();
 
     if (query) {
@@ -26,11 +26,11 @@ const controlSavedResults = async function () {
     } else if (!query && state.profile.view === 'caught') {
       categoryView.toggleCaught();
       await loadPokemonResults(requestId);
-      savedPokemonView.render(state.caught);
+      savedPokemonView.render(state.search.results);
     } else if (!query && state.profile.view === 'favorites') {
       categoryView.toggleFavorites();
       await loadPokemonResults(requestId);
-      savedPokemonView.render(state.favorites);
+      savedPokemonView.render(state.search.results);
     }
   } catch (err) {
     console.error(err);

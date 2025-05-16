@@ -710,20 +710,24 @@ class NavView extends (0, _viewJsDefault.default) {
             if (!page) return;
             document.querySelectorAll('.screen__1--search, .screen__2--search, .screen__1--map, .screen__2--map, .screen__1--profile, .screen__2--profile').forEach((page)=>page.classList.add('hidden'));
             document.querySelectorAll('.lights__inner--blue, .lights__inner--yellow, .lights__inner--green').forEach((light)=>light.classList.remove('lights__inner--active'));
+            document.querySelectorAll('.header__btn--search, .header__btn--map, .header__btn--profile').forEach((btn)=>btn.classList.remove('btn--active'));
             handler(page);
         });
     }
     search() {
         document.querySelectorAll('.screen__1--search, .screen__2--search').forEach((screen)=>screen.classList.remove('hidden'));
         document.querySelector('.lights__inner--blue').classList.add('lights__inner--active');
+        document.querySelector('.header__btn--search').classList.add('btn--active');
     }
     map() {
         document.querySelectorAll('.screen__1--map, .screen__2--map').forEach((screen)=>screen.classList.remove('hidden'));
         document.querySelector('.lights__inner--yellow').classList.add('lights__inner--active');
+        document.querySelector('.header__btn--map').classList.add('btn--active');
     }
     profile() {
         document.querySelectorAll('.screen__1--profile, .screen__2--profile').forEach((screen)=>screen.classList.remove('hidden'));
         document.querySelector('.lights__inner--green').classList.add('lights__inner--active');
+        document.querySelector('.header__btn--profile').classList.add('btn--active');
     }
 }
 exports.default = new NavView();
@@ -826,6 +830,7 @@ const controlSavedResults = async function() {
         (0, _helpersJs.restartSearchResults)();
         const query = (0, _searchViewJsDefault.default).getQuery();
         const requestId = ++(0, _stateJs.state).search.currentRequestId;
+        console.log('running again');
         (0, _savedPokemonViewJsDefault.default).renderSpinner();
         if (query) {
             console.log(query);
@@ -835,11 +840,11 @@ const controlSavedResults = async function() {
         } else if (!query && (0, _stateJs.state).profile.view === 'caught') {
             (0, _categoryViewJsDefault.default).toggleCaught();
             await (0, _profileModelJs.loadPokemonResults)(requestId);
-            (0, _savedPokemonViewJsDefault.default).render((0, _stateJs.state).caught);
+            (0, _savedPokemonViewJsDefault.default).render((0, _stateJs.state).search.results);
         } else if (!query && (0, _stateJs.state).profile.view === 'favorites') {
             (0, _categoryViewJsDefault.default).toggleFavorites();
             await (0, _profileModelJs.loadPokemonResults)(requestId);
-            (0, _savedPokemonViewJsDefault.default).render((0, _stateJs.state).favorites);
+            (0, _savedPokemonViewJsDefault.default).render((0, _stateJs.state).search.results);
         }
     } catch (err) {
         console.error(err);
@@ -889,11 +894,20 @@ const loadPokemonResults = async function(requestId = (0, _stateJs.state).search
     try {
         if ((0, _stateJs.state).profile.view === 'caught') pokemonNames = (0, _helpersJs.sortPokemonResults)((0, _stateJs.state).caught);
         else if ((0, _stateJs.state).profile.view === 'favorites') pokemonNames = (0, _helpersJs.sortPokemonResults)((0, _stateJs.state).favorites);
+        for (const pokemon of pokemonNames){
+            const { name, id, img } = pokemon;
+            if (requestId !== (0, _stateJs.state).search.currentRequestId) return;
+            (0, _stateJs.state).search.results.push({
+                name,
+                id,
+                img
+            });
+        }
         // if (state.search.mode === 'id') pokemonNames = sortPokemonID(pokemonNames);
-        // else if (state.search.mode === 'name
+        // else if (state.search.mode === 'name')
         //   pokemonNames = sortPokemonName(pokemonNames);
         if (requestId !== (0, _stateJs.state).search.currentRequestId) return;
-        (0, _stateJs.state).search.results.push(pokemonNames);
+        console.log((0, _stateJs.state).search.results);
     } catch (err) {
         console.error(err);
     }

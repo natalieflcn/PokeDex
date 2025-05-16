@@ -22,6 +22,13 @@ class NavView extends View {
           '.lights__inner--blue, .lights__inner--yellow, .lights__inner--green'
         )
         .forEach(light => light.classList.remove('lights__inner--active'));
+
+      document
+        .querySelectorAll(
+          '.header__btn--search, .header__btn--map, .header__btn--profile'
+        )
+        .forEach(btn => btn.classList.remove('btn--active'));
+
       handler(page);
     });
   }
@@ -34,6 +41,8 @@ class NavView extends View {
     document
       .querySelector('.lights__inner--blue')
       .classList.add('lights__inner--active');
+
+    document.querySelector('.header__btn--search').classList.add('btn--active');
   }
 
   map() {
@@ -44,6 +53,8 @@ class NavView extends View {
     document
       .querySelector('.lights__inner--yellow')
       .classList.add('lights__inner--active');
+
+    document.querySelector('.header__btn--map').classList.add('btn--active');
   }
 
   profile() {
@@ -54,6 +65,10 @@ class NavView extends View {
     document
       .querySelector('.lights__inner--green')
       .classList.add('lights__inner--active');
+
+    document
+      .querySelector('.header__btn--profile')
+      .classList.add('btn--active');
   }
 }
 
