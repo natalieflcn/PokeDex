@@ -818,10 +818,10 @@ var _savedPokemonViewJsDefault = parcelHelpers.interopDefault(_savedPokemonViewJ
 var _stateJs = require("../Models/state.js");
 var _categoryViewJs = require("../Views/ProfileViews/categoryView.js");
 var _categoryViewJsDefault = parcelHelpers.interopDefault(_categoryViewJs);
-var _panelViewJs = require("../Views/SearchViews/panelView.js");
-var _panelViewJsDefault = parcelHelpers.interopDefault(_panelViewJs);
 var _helpersJs = require("../helpers.js");
-const controlSavedResults = function() {
+var _sortViewJs = require("../Views/ProfileViews/sortView.js");
+var _sortViewJsDefault = parcelHelpers.interopDefault(_sortViewJs);
+const controlSavedResults = async function() {
     try {
         (0, _helpersJs.restartSearchResults)();
         const query = (0, _searchViewJsDefault.default).getQuery();
@@ -834,10 +834,12 @@ const controlSavedResults = function() {
             else (0, _savedPokemonViewJsDefault.default).render((0, _stateJs.state).search.results);
         } else if (!query && (0, _stateJs.state).profile.view === 'caught') {
             (0, _categoryViewJsDefault.default).toggleCaught();
+            await (0, _profileModelJs.loadPokemonResults)(requestId);
             (0, _savedPokemonViewJsDefault.default).render((0, _stateJs.state).caught);
         } else if (!query && (0, _stateJs.state).profile.view === 'favorites') {
-            (0, _savedPokemonViewJsDefault.default).render((0, _stateJs.state).favorites);
             (0, _categoryViewJsDefault.default).toggleFavorites();
+            await (0, _profileModelJs.loadPokemonResults)(requestId);
+            (0, _savedPokemonViewJsDefault.default).render((0, _stateJs.state).favorites);
         }
     } catch (err) {
         console.error(err);
@@ -851,30 +853,51 @@ const controlCategoryView = function(view) {
     else (0, _stateJs.state).profile.view = 'favorites';
     controlSavedResults();
 };
+// To sort Pokémon data by name
+const controlSortName = function() {
+    (0, _sortViewJsDefault.default).toggleSortName();
+    if ((0, _stateJs.state).search.results.length <= 1) return;
+    (0, _stateJs.state).search.mode = 'name';
+    controlSavedResults();
+};
+// To sort Pokémon by ID
+const controlSortId = function() {
+    (0, _sortViewJsDefault.default).toggleSortId();
+    if ((0, _stateJs.state).search.results.length <= 1) return;
+    (0, _stateJs.state).search.mode = 'id';
+    controlSavedResults();
+};
 const controlProfileInit = function() {
     (0, _searchViewJsDefault.default).addHandlerSearch(controlSavedResults);
     (0, _categoryViewJsDefault.default).addHandlerBtns(controlCategoryView);
+    (0, _sortViewJsDefault.default).addHandlerSortName(controlSortName);
+    (0, _sortViewJsDefault.default).addHandlerSortId(controlSortId);
 };
 
-},{"../Models/profileModel.js":"f8YrZ","../Views/ProfileViews/searchView.js":"c7GlQ","../Models/state.js":"chdR2","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","../Views/ProfileViews/savedPokemonView.js":"gM0wI","../Views/ProfileViews/categoryView.js":"koTpj","../Views/SearchViews/panelView.js":"4OGMv","../helpers.js":"7nL9P"}],"f8YrZ":[function(require,module,exports,__globalThis) {
+},{"../Models/profileModel.js":"f8YrZ","../Views/ProfileViews/searchView.js":"c7GlQ","../Views/ProfileViews/savedPokemonView.js":"gM0wI","../Models/state.js":"chdR2","../Views/ProfileViews/categoryView.js":"koTpj","../helpers.js":"7nL9P","../Views/ProfileViews/sortView.js":"4Esi9","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"f8YrZ":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "loadPokemonResults", ()=>loadPokemonResults);
 parcelHelpers.export(exports, "loadQueryResults", ()=>loadQueryResults);
 parcelHelpers.export(exports, "print", ()=>print);
-var _configJs = require("../config.js");
 var _stateJs = require("./state.js");
 var _helpersJs = require("../helpers.js");
 const loadPokemonResults = async function(requestId = (0, _stateJs.state).search.currentRequestId) {
     (0, _stateJs.state).loading = true;
+    (0, _helpersJs.restartSearchResults)();
     let pokemonNames;
-    if ((0, _stateJs.state).profile.view === 'caught') {
-        pokemonNames = (0, _stateJs.state).caught;
-        console.log(pokemonNames);
-    } else if ((0, _stateJs.state).profile.view === 'favorites') pokemonNames = (0, _stateJs.state).favorites;
-    if (requestId !== (0, _stateJs.state).search.currentRequestId) return;
-    (0, _stateJs.state).search.results.push(pokemonNames);
-    (0, _stateJs.state).search.offset += pokemonNames.length;
+    try {
+        if ((0, _stateJs.state).profile.view === 'caught') pokemonNames = (0, _helpersJs.sortPokemonResults)((0, _stateJs.state).caught);
+        else if ((0, _stateJs.state).profile.view === 'favorites') pokemonNames = (0, _helpersJs.sortPokemonResults)((0, _stateJs.state).favorites);
+        // if (state.search.mode === 'id') pokemonNames = sortPokemonID(pokemonNames);
+        // else if (state.search.mode === 'name
+        //   pokemonNames = sortPokemonName(pokemonNames);
+        if (requestId !== (0, _stateJs.state).search.currentRequestId) return;
+        (0, _stateJs.state).search.results.push(pokemonNames);
+    } catch (err) {
+        console.error(err);
+    }
+    console.log((0, _stateJs.state).search.results);
     (0, _stateJs.state).loading = false;
 };
 const loadQueryResults = function(query, requestId = (0, _stateJs.state).search.currentRequestId) {
@@ -887,7 +910,7 @@ const loadQueryResults = function(query, requestId = (0, _stateJs.state).search.
         if ((0, _stateJs.state).search.queryResults.length === 0) return;
         console.log((0, _helpersJs.possiblePokemon)(query, currentData));
         console.log((0, _stateJs.state).search.queryResults);
-        const pokemonNames = (0, _helpersJs.sortQueryResults)();
+        const pokemonNames = (0, _helpersJs.sortPokemonResults)((0, _stateJs.state).search.queryResults);
         for (const pokemon of pokemonNames){
             const { name, id, img } = pokemon;
             if (requestId !== (0, _stateJs.state).search.currentRequestId) return;
@@ -909,7 +932,39 @@ const print = function() {
     console.log((0, _stateJs.state).favorites);
 };
 
-},{"../config.js":"2hPh4","./state.js":"chdR2","../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2hPh4":[function(require,module,exports,__globalThis) {
+},{"./state.js":"chdR2","../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"chdR2":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "state", ()=>state);
+var _config = require("../config");
+const state = {
+    loading: false,
+    allPokemon: {
+        pokemonDB: [],
+        loaded: false
+    },
+    search: {
+        query: '',
+        queryResults: '',
+        results: [],
+        currentBatch: [],
+        offset: 0,
+        limit: (0, _config.LIMIT),
+        hasMoreResults: true,
+        currentRequestId: 0,
+        mode: 'id'
+    },
+    pokemon: {},
+    favorites: [],
+    caught: [],
+    profile: {
+        name: '',
+        typesCaught: {},
+        view: 'caught'
+    }
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","../config":"2hPh4"}],"2hPh4":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "MAIN_API_URL", ()=>MAIN_API_URL);
@@ -947,39 +1002,7 @@ const LIMIT = 21; /**
  * Base Stats -- HP, ATK, DEF, SATK, SDEF, SPO -- https://pokeapi.co/api/v2/pokemon/1/ -->  "stats":[{"base_stat":45,"effort":0,"stat":{"name":"hp","url":"https://pokeapi.co/api/v2/stat/1/"}},{"base_stat":49,"effort":0,"stat":{"name":"attack","url":"https://pokeapi.co/api/v2/stat/2/"}},{"base_stat":49,"effort":0,"stat":{"name":"defense","url":"https://pokeapi.co/api/v2/stat/3/"}},{"base_stat":65,"effort":1,"stat":{"name":"special-attack","url":"https://pokeapi.co/api/v2/stat/4/"}},{"base_stat":65,"effort":0,"stat":{"name":"special-defense","url":"https://pokeapi.co/api/v2/stat/5/"}},{"base_stat":45,"effort":0,"stat":{"name":"speed","url":"https://pokeapi.co/api/v2/stat/6/"}}]
  **/ 
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"chdR2":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "state", ()=>state);
-var _config = require("../config");
-const state = {
-    loading: false,
-    allPokemon: {
-        pokemonDB: [],
-        loaded: false
-    },
-    search: {
-        query: '',
-        queryResults: '',
-        results: [],
-        currentBatch: [],
-        offset: 0,
-        limit: (0, _config.LIMIT),
-        hasMoreResults: true,
-        currentRequestId: 0,
-        mode: 'id'
-    },
-    pokemon: {},
-    favorites: [],
-    caught: [],
-    profile: {
-        name: '',
-        typesCaught: {},
-        view: 'caught'
-    }
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","../config":"2hPh4"}],"7nL9P":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7nL9P":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AJAX", ()=>AJAX);
@@ -988,8 +1011,10 @@ parcelHelpers.export(exports, "debounce", ()=>debounce);
 parcelHelpers.export(exports, "observeSentinel", ()=>observeSentinel);
 parcelHelpers.export(exports, "createPokemonPreviewObject", ()=>createPokemonPreviewObject);
 parcelHelpers.export(exports, "restartSearchResults", ()=>restartSearchResults);
-parcelHelpers.export(exports, "sortQueryResults", ()=>sortQueryResults);
+parcelHelpers.export(exports, "sortPokemonResults", ()=>sortPokemonResults);
 parcelHelpers.export(exports, "possiblePokemon", ()=>possiblePokemon);
+parcelHelpers.export(exports, "sortPokemonName", ()=>sortPokemonName);
+parcelHelpers.export(exports, "sortPokemonID", ()=>sortPokemonID);
 var _configJs = require("./config.js");
 var _stateJs = require("./Models/state.js");
 const timeout = function(s) {
@@ -1052,19 +1077,29 @@ const restartSearchResults = function() {
     (0, _stateJs.state).search.queryResults = '';
     (0, _stateJs.state).search.hasMoreResults = true;
 };
-const sortQueryResults = function() {
+const sortPokemonResults = function(pokemonSet) {
     let sort;
     console.log((0, _stateJs.state).search.queryResults);
     // Sorting the Pokémon results
     if ((0, _stateJs.state).search.mode === 'name') // Sorting my name
-    sort = (0, _stateJs.state).search.queryResults.sort((a, b)=>a.name.localeCompare(b.name));
+    sort = pokemonSet.sort((a, b)=>a.name.localeCompare(b.name));
     else if ((0, _stateJs.state).search.mode === 'id') // Sorting by ID
-    sort = (0, _stateJs.state).search.queryResults.sort((a, b)=>a.id - b.id);
+    sort = pokemonSet.sort((a, b)=>a.id - b.id);
     console.log(sort);
     return sort;
 };
 const possiblePokemon = function(substring, pokemonSet) {
-    return pokemonSet.filter((pokemon)=>pokemon.name.startsWith(capitalize(substring)));
+    return pokemonSet.filter((pokemon)=>capitalize(pokemon.name).startsWith(capitalize(substring)));
+};
+const sortPokemonName = function(pokemonSet) {
+    const names = pokemonSet.map((p)=>p.name);
+    const sortedNames = names.sort((a, b)=>a.localeCompare(b));
+    return sortedNames;
+};
+const sortPokemonID = function(pokemonSet) {
+    const ids = pokemonSet.map((p)=>p.id);
+    const sortedIds = ids.sort((a, b)=>a.id - b.id);
+    return sortedIds;
 };
 
 },{"./config.js":"2hPh4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./Models/state.js":"chdR2"}],"c7GlQ":[function(require,module,exports,__globalThis) {
@@ -1099,7 +1134,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-var _previewViewJs = require("../previewView.js");
+var _previewViewJs = require("../ProfileViews/previewView.js");
 var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
 class savedPokemonView extends (0, _viewJsDefault.default) {
     _parentEl = document.querySelector('.profile__preview--container');
@@ -1114,22 +1149,22 @@ class savedPokemonView extends (0, _viewJsDefault.default) {
 }
 exports.default = new savedPokemonView();
 
-},{"../View.js":"YJQ6Q","../previewView.js":"hoVX0","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hoVX0":[function(require,module,exports,__globalThis) {
+},{"../View.js":"YJQ6Q","../ProfileViews/previewView.js":"fZGgr","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fZGgr":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _viewJs = require("./View.js");
+var _viewJs = require("../View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
 class PreviewView extends (0, _viewJsDefault.default) {
-    _parentEl = document.querySelector('.search__preview--container');
+    _parentEl = document.querySelector('.profile__preview--container');
     addHandlerActive(handler) {
         this._parentEl.addEventListener('click', function(e) {
-            const clicked = e.target.closest('.search__preview');
+            const clicked = e.target.closest('.profile__preview');
             if (!clicked) return;
             //If there's already an active item, remove its class
-            const currentlyActive = document.querySelector('.search__preview--active');
-            if (currentlyActive && currentlyActive !== clicked) currentlyActive.classList.remove('search__preview--active');
-            clicked.classList.add('search__preview--active');
-            handler(clicked.querySelector('.search__preview--name').textContent);
+            const currentlyActive = document.querySelector('.profile__preview--active');
+            if (currentlyActive && currentlyActive !== clicked) currentlyActive.classList.remove('profile__preview--active');
+            clicked.classList.add('profile__preview--active');
+            handler(clicked.querySelector('.profile__preview--name').textContent);
         });
     }
     addHandlerHashChange(handler) {
@@ -1138,25 +1173,26 @@ class PreviewView extends (0, _viewJsDefault.default) {
             'load'
         ].forEach((ev)=>window.addEventListener(ev, handler));
     }
+    clearActive() {}
     _generateMarkup() {
         const id = window.location.hash.slice(1);
         console.log(this._data.name, this._data.id, this._data.img);
         return `
-            <div class="search__preview ${this._data.name === id ? 'search__preview--active' : ''}">
-                <span class="pokemon__id search__preview--id">#${this._data.id}</span
+            <div class="profile__preview ">
+                <span class="pokemon__id profile__preview--id">#${this._data.id}</span
                 ><img
-                  class="search__preview--img"
+                  class="profile__preview--img"
                   src=${this._data.img}
                   alt=""
                 />
-                <p class="search__preview--name">${this._data.name}</p>
+                <p class="profile__preview--name">${this._data.name}</p>
             </div>
             `;
     }
 }
 exports.default = new PreviewView();
 
-},{"./View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"koTpj":[function(require,module,exports,__globalThis) {
+},{"../View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"koTpj":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../View.js");
@@ -1193,205 +1229,47 @@ class CategoryView extends (0, _viewJsDefault.default) {
 }
 exports.default = new CategoryView();
 
-},{"../View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4OGMv":[function(require,module,exports,__globalThis) {
+},{"../View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4Esi9":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _viewJs = require("../View.js");
-var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-class PanelView extends (0, _viewJsDefault.default) {
-    _parentEl = document.querySelector('.screen__2--search');
-    _errorMessage = "There was an error loading this Pok\xe9mon!";
-    addHandlerRender(handler) {
-        [
-            'hashchange',
-            'load'
-        ].forEach((e)=>window.addEventListener(e, handler));
-    }
-    addHandlerCaught(handler) {
+var _view = require("../View");
+var _viewDefault = parcelHelpers.interopDefault(_view);
+class SortView extends (0, _viewDefault.default) {
+    _parentEl = document.querySelector('.profile__form');
+    _mode = 'id';
+    addHandlerSortName(handler) {
         this._parentEl.addEventListener('click', function(e) {
-            const btn = e.target.closest('.search__btn--caught');
-            if (!btn) return;
-            console.log('caught clicked');
+            e.preventDefault();
+            const btn = e.target.closest('.profile__btn--name');
+            if (!btn || btn.classList.contains('btn--active')) return;
+            console.log('addhandlersortname running');
+            this._mode = 'name';
+            handler('name');
+        });
+    }
+    addHandlerSortId(handler) {
+        this._parentEl.addEventListener('click', function(e) {
+            e.preventDefault();
+            const btn = e.target.closest('.profile__btn--id');
+            if (!btn || btn.classList.contains('btn--active')) return;
+            console.log('addhandlersortid running');
+            this._mode = 'id';
             handler();
         });
     }
-    addHandlerFavorite(handler) {
-        this._parentEl.addEventListener('click', function(e) {
-            const btn = e.target.closest('.search__btn--favorite');
-            if (!btn) return;
-            handler();
-        });
+    toggleSortName() {
+        document.querySelector('.profile__btn--name').classList.add('btn--active');
+        document.querySelector('.profile__btn--id').classList.remove('btn--active');
     }
-    toggleCaught() {
-        const btn = document.querySelector('.search__btn--caught');
-        btn.classList.toggle('btn--active');
+    toggleSortId() {
+        document.querySelector('.profile__btn--id').classList.add('btn--active');
+        document.querySelector('.profile__btn--name').classList.remove('btn--active');
     }
-    toggleFavorite() {
-        const btn = document.querySelector('.search__btn--favorite');
-        btn.classList.toggle('btn--active');
-    }
-    _generateMarkup() {
-        return `
-    <div class="search__panel">
-              <img
-                class="img__display"
-                src=${this._data.img}
-                alt="Fletchinder"
-              />
-              <header class="search__panel--header">
-                <h2 class="heading">
-                  ${this._data.name}<span class="pokemon__id">#${this._data.id}</span>
-                </h2>
-
-                <div class="search__panel--types">
-                  <span
-                    class="profile__stats--type pokemon__type"
-                    style="background-color: var(--type--${this._data.types[0]})"
-                    >${this._data.types[0]}</span
-                  >${this._data.types.length == 2 ? `<span class="profile__stats--type pokemon__type" style="background-color: var(--type--${this._data.types[1]})">${this._data.types[1]}</span>` : ''}
-                </div>
-
-                <div class="search__panel--measurements">
-                  <p>Height <span class="label--inset">${this._data.height}m</span></p>
-                  <p>Weight <span class="label--inset">${this._data.weight}kg</span></p>
-                </div>
-                <p class="search__panel--bio bio">
-                  ${this._data.desc}
-                </p>
-              </header>
-            </div>
-
-            <div class="search__abilities">
-              <div class="search__stats">
-                <h2 class="heading--2">Base Stats</h2>
-                <div class="search__stats--row">
-                  <p>HP</p>
-                  <span class="label--inset">${this._data.stats[0][1]}</span>
-                  <div
-                    class="progress__outer"
-                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[0][1] / 255 * 100}%"></div></div>
-                </div>
-                <div class="search__stats--row">
-                  <p>ATK</p>
-                  <span class="label--inset">${this._data.stats[1][1]}</span>
-                  <div
-                    class="progress__outer"
-                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[1][1] / 255 * 100}%"></div></div>
-                </div>
-                <div class="search__stats--row">
-                  <p>DEF</p>
-                  <span class="label--inset">${this._data.stats[2][1]}</span>
-                  <div
-                    class="progress__outer"
-                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[2][1] / 255 * 100}%"></div></div>
-                </div>
-                <div class="search__stats--row">
-                  <p>SATK</p>
-                  <span class="label--inset">${this._data.stats[3][1]}</span>
-                  <div
-                    class="progress__outer"
-                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[3][1] / 255 * 100}%"></div></div>
-                </div>
-                <div class="search__stats--row">
-                  <p>SDEF</p>
-                  <span class="label--inset">${this._data.stats[4][1]}</span>
-                  <div
-                    class="progress__outer"
-                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[4][1] / 255 * 100}%"></div></div>
-                </div>
-                <div class="search__stats--row">
-                  <p>SPD</p>
-                  <span class="label--inset">${this._data.stats[5][1]}</span>
-                  <div
-                    class="progress__outer"
-                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[5][1] / 255 * 100}%"></div></div>
-                </div>
-              </div>
-
-              <div class="search__moves">
-                <h2 class="heading--2">Moves</h2>
-                <p>1<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[0]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[0]?.[0] || '???'}</span></p>
-
-                <p>2<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[1]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[1]?.[0] || '???'}</span></p>
-
-                <p>3<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[2]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[2]?.[0] || '???'}</span></p>
-
-                <p>4<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[3]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[3]?.[0] || '???'}</span></p>
-
-                <p>5<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[4]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[4]?.[0] || '???'}</span></p>
-
-                <p>6<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[5]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[5]?.[0] || '???'}</span></p>
-              </div>
-            </div>
-
-            <div class="search__pagination">
-              <button class="btn search__btn--prev btn--blue">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="25"
-                  fill="currentColor"
-                  class="bi bi-arrow-left-short"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"
-                  />
-                </svg>
-              </button>
-              <button class="btn search__btn--favorite btn--red ${this._data.favorite ? 'btn--active' : ''}">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="13"
-                  height="13"
-                  fill="currentColor"
-                  class="bi bi-suit-heart-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1"
-                  />
-                </svg>
-                Favorite
-              </button>
-              <button class="btn search__btn--caught btn--yellow ${this._data.caught ? 'btn--active' : ''}">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="13"
-                  height="13"
-                  fill="currentColor"
-                  class="bi bi-geo-alt-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"
-                  />
-                </svg>
-                Caught This Pok\xe9mon
-              </button>
-              <button class="btn search__btn--next btn--blue">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="25"
-                  fill="currentColor"
-                  class="bi bi-arrow-right-short"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"
-                  />
-                </svg>
-              </button>
-            </div>
-    `;
-    }
+    clearActive() {}
 }
-exports.default = new PanelView();
+exports.default = new SortView();
 
-},{"../View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"dyxD2":[function(require,module,exports,__globalThis) {
+},{"../View":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"dyxD2":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "controlSearchInit", ()=>controlSearchInit);
@@ -1404,7 +1282,7 @@ var _sortViewJs = require("../Views/SearchViews/sortView.js");
 var _sortViewJsDefault = parcelHelpers.interopDefault(_sortViewJs);
 var _resultsViewJs = require("../Views/SearchViews/resultsView.js");
 var _resultsViewJsDefault = parcelHelpers.interopDefault(_resultsViewJs);
-var _previewViewJs = require("../Views/previewView.js");
+var _previewViewJs = require("../Views/SearchViews/previewView.js");
 var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
 var _panelViewJs = require("../Views/SearchViews/panelView.js");
 var _panelViewJsDefault = parcelHelpers.interopDefault(_panelViewJs);
@@ -1422,6 +1300,7 @@ const controlSearchResults = async function() {
         console.log('running');
         if ((0, _resultsViewJsDefault.default)._observer) (0, _resultsViewJsDefault.default).unobserve();
         const query = (0, _searchViewJsDefault.default).getQuery();
+        console.log(query);
         const requestId = ++(0, _stateJs.state).search.currentRequestId;
         (0, _resultsViewJsDefault.default).renderSpinner();
         // If there's a query, render all existing Pokémon for that query
@@ -1559,7 +1438,7 @@ const controlSearchInit = function() {
     (0, _paginationViewJsDefault.default).addHandlerClick(controlSearchPagination);
 };
 
-},{"core-js/modules/web.immediate.js":"bzsBv","../Models/state.js":"chdR2","../Models/searchModel.js":"2TIqY","../Views/SearchViews/searchView.js":"75HfK","../Views/SearchViews/sortView.js":"iE8OC","../Views/SearchViews/resultsView.js":"6zZCJ","../Views/previewView.js":"hoVX0","../Views/SearchViews/panelView.js":"4OGMv","../Views/SearchViews/paginationView.js":"hOwzG","../Models/profileModel.js":"f8YrZ","regenerator-runtime/runtime":"f6ot0","../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bzsBv":[function(require,module,exports,__globalThis) {
+},{"core-js/modules/web.immediate.js":"bzsBv","../Models/state.js":"chdR2","../Models/searchModel.js":"2TIqY","../Views/SearchViews/searchView.js":"75HfK","../Views/SearchViews/sortView.js":"iE8OC","../Views/SearchViews/resultsView.js":"6zZCJ","../Views/SearchViews/panelView.js":"4OGMv","../Views/SearchViews/paginationView.js":"hOwzG","../Models/profileModel.js":"f8YrZ","regenerator-runtime/runtime":"f6ot0","../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","../Views/SearchViews/previewView.js":"6yia0"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("52e9b3eefbbce1ed");
@@ -2820,7 +2699,6 @@ parcelHelpers.export(exports, "loadPokemonResults", ()=>loadPokemonResults);
 parcelHelpers.export(exports, "loadAdditionalBatch", ()=>loadAdditionalBatch);
 parcelHelpers.export(exports, "loadQueryResults", ()=>loadQueryResults);
 parcelHelpers.export(exports, "loadAdditionalQuery", ()=>loadAdditionalQuery);
-parcelHelpers.export(exports, "sortPokemonName", ()=>sortPokemonName);
 parcelHelpers.export(exports, "loadPokemon", ()=>loadPokemon);
 parcelHelpers.export(exports, "addCaughtPokemon", ()=>addCaughtPokemon);
 parcelHelpers.export(exports, "removeCaughtPokemon", ()=>removeCaughtPokemon);
@@ -2894,7 +2772,7 @@ const loadPokemonResults = async function(requestId = (0, _stateJs.state).search
         else {
             console.log('loading sorte dby name running');
             // Loading sorted by Name
-            pokemonNames = sortPokemonName().slice((0, _stateJs.state).search.offset, (0, _stateJs.state).search.offset + (0, _configJs.LIMIT));
+            pokemonNames = (0, _helpersJs.sortPokemonName)((0, _stateJs.state).allPokemon.pokemonDB).slice((0, _stateJs.state).search.offset, (0, _stateJs.state).search.offset + (0, _configJs.LIMIT));
         }
         for (const pokemon of pokemonNames)try {
             const pokemonName = pokemon.name || pokemon;
@@ -2924,7 +2802,7 @@ const loadAdditionalBatch = async function() {
         } else {
             console.log('loading sorte dby name running');
             // Loading sorted by Name
-            pokemonNames = sortPokemonName().slice((0, _stateJs.state).search.offset, (0, _stateJs.state).search.offset + (0, _configJs.LIMIT));
+            pokemonNames = (0, _helpersJs.sortPokemonName)((0, _stateJs.state).allPokemon.pokemonDB).slice((0, _stateJs.state).search.offset, (0, _stateJs.state).search.offset + (0, _configJs.LIMIT));
         }
         for (const pokemon of pokemonNames)try {
             const pokemonName = pokemon.name || pokemon;
@@ -2946,7 +2824,8 @@ const loadQueryResults = async function(query, requestId) {
     (0, _helpersJs.restartSearchResults)();
     (0, _stateJs.state).search.query = query;
     (0, _stateJs.state).search.queryResults = (0, _helpersJs.possiblePokemon)(query, (0, _stateJs.state).allPokemon.pokemonDB);
-    const sorted = (0, _helpersJs.sortQueryResults)();
+    console.log((0, _stateJs.state).allPokemon.pokemonDB);
+    const sorted = (0, _helpersJs.sortPokemonResults)((0, _stateJs.state).search.queryResults);
     console.log(sorted);
     const pokemonNames = (0, _stateJs.state).search.queryResults.slice((0, _stateJs.state).search.offset, (0, _stateJs.state).search.offset + (0, _configJs.LIMIT));
     console.log(pokemonNames);
@@ -2980,11 +2859,6 @@ const loadAdditionalQuery = async function(requestId) {
     (0, _stateJs.state).search.results.push(...(0, _stateJs.state).search.currentBatch);
     (0, _stateJs.state).search.offset += (0, _configJs.LIMIT);
     (0, _stateJs.state).loading = false;
-};
-const sortPokemonName = function() {
-    const names = (0, _stateJs.state).allPokemon.pokemonDB.map((p)=>p.name);
-    const sortedNames = names.sort((a, b)=>a.localeCompare(b));
-    return sortedNames;
 };
 const loadPokemon = async function(pokemon) {
     try {
@@ -3109,7 +2983,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-var _previewViewJs = require("../previewView.js");
+var _previewViewJs = require("./previewView.js");
 var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
 var _helpersJs = require("../../helpers.js");
 class ResultsView extends (0, _viewJsDefault.default) {
@@ -3136,7 +3010,248 @@ class ResultsView extends (0, _viewJsDefault.default) {
 }
 exports.default = new ResultsView();
 
-},{"../View.js":"YJQ6Q","../previewView.js":"hoVX0","../../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hOwzG":[function(require,module,exports,__globalThis) {
+},{"../View.js":"YJQ6Q","../../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./previewView.js":"6yia0"}],"6yia0":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("../View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class PreviewView extends (0, _viewJsDefault.default) {
+    _parentEl = document.querySelector('.search__preview--container');
+    addHandlerActive(handler) {
+        this._parentEl.addEventListener('click', function(e) {
+            const clicked = e.target.closest('.search__preview');
+            if (!clicked) return;
+            //If there's already an active item, remove its class
+            const currentlyActive = document.querySelector('.search__preview--active');
+            if (currentlyActive && currentlyActive !== clicked) currentlyActive.classList.remove('search__preview--active');
+            clicked.classList.add('search__preview--active');
+            handler(clicked.querySelector('.search__preview--name').textContent);
+        });
+    }
+    addHandlerHashChange(handler) {
+        [
+            'hashchange',
+            'load'
+        ].forEach((ev)=>window.addEventListener(ev, handler));
+    }
+    clearActive() {}
+    _generateMarkup() {
+        const id = window.location.hash.slice(1);
+        console.log(this._data.name, this._data.id, this._data.img);
+        return `
+            <div class="search__preview ${this._data.name === id ? 'search__preview--active' : ''}">
+                <span class="pokemon__id search__preview--id">#${this._data.id}</span
+                ><img
+                  class="search__preview--img"
+                  src=${this._data.img}
+                  alt=""
+                />
+                <p class="search__preview--name">${this._data.name}</p>
+            </div>
+            `;
+    }
+}
+exports.default = new PreviewView();
+
+},{"../View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4OGMv":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("../View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class PanelView extends (0, _viewJsDefault.default) {
+    _parentEl = document.querySelector('.screen__2--search');
+    _errorMessage = "There was an error loading this Pok\xe9mon!";
+    addHandlerRender(handler) {
+        [
+            'hashchange',
+            'load'
+        ].forEach((e)=>window.addEventListener(e, handler));
+    }
+    addHandlerCaught(handler) {
+        this._parentEl.addEventListener('click', function(e) {
+            const btn = e.target.closest('.search__btn--caught');
+            if (!btn) return;
+            console.log('caught clicked');
+            handler();
+        });
+    }
+    addHandlerFavorite(handler) {
+        this._parentEl.addEventListener('click', function(e) {
+            const btn = e.target.closest('.search__btn--favorite');
+            if (!btn) return;
+            handler();
+        });
+    }
+    toggleCaught() {
+        const btn = document.querySelector('.search__btn--caught');
+        btn.classList.toggle('btn--active');
+    }
+    toggleFavorite() {
+        const btn = document.querySelector('.search__btn--favorite');
+        btn.classList.toggle('btn--active');
+    }
+    _generateMarkup() {
+        return `
+    <div class="search__panel">
+              <img
+                class="img__display"
+                src=${this._data.img}
+                alt="Fletchinder"
+              />
+              <header class="search__panel--header">
+                <h2 class="heading">
+                  ${this._data.name}<span class="pokemon__id">#${this._data.id}</span>
+                </h2>
+
+                <div class="search__panel--types">
+                  <span
+                    class="profile__stats--type pokemon__type"
+                    style="background-color: var(--type--${this._data.types[0]})"
+                    >${this._data.types[0]}</span
+                  >${this._data.types.length == 2 ? `<span class="profile__stats--type pokemon__type" style="background-color: var(--type--${this._data.types[1]})">${this._data.types[1]}</span>` : ''}
+                </div>
+
+                <div class="search__panel--measurements">
+                  <p>Height <span class="label--inset">${this._data.height}m</span></p>
+                  <p>Weight <span class="label--inset">${this._data.weight}kg</span></p>
+                </div>
+                <p class="search__panel--bio bio">
+                  ${this._data.desc}
+                </p>
+              </header>
+            </div>
+
+            <div class="search__abilities">
+              <div class="search__stats">
+                <h2 class="heading--2">Base Stats</h2>
+                <div class="search__stats--row">
+                  <p>HP</p>
+                  <span class="label--inset">${this._data.stats[0][1]}</span>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[0][1] / 255 * 100}%"></div></div>
+                </div>
+                <div class="search__stats--row">
+                  <p>ATK</p>
+                  <span class="label--inset">${this._data.stats[1][1]}</span>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[1][1] / 255 * 100}%"></div></div>
+                </div>
+                <div class="search__stats--row">
+                  <p>DEF</p>
+                  <span class="label--inset">${this._data.stats[2][1]}</span>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[2][1] / 255 * 100}%"></div></div>
+                </div>
+                <div class="search__stats--row">
+                  <p>SATK</p>
+                  <span class="label--inset">${this._data.stats[3][1]}</span>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[3][1] / 255 * 100}%"></div></div>
+                </div>
+                <div class="search__stats--row">
+                  <p>SDEF</p>
+                  <span class="label--inset">${this._data.stats[4][1]}</span>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[4][1] / 255 * 100}%"></div></div>
+                </div>
+                <div class="search__stats--row">
+                  <p>SPD</p>
+                  <span class="label--inset">${this._data.stats[5][1]}</span>
+                  <div
+                    class="progress__outer"
+                  ><div class="progress__inner" style="background-color: var(--type--${this._data.types[0]}); width: ${this._data.stats[5][1] / 255 * 100}%"></div></div>
+                </div>
+              </div>
+
+              <div class="search__moves">
+                <h2 class="heading--2">Moves</h2>
+                <p>1<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[0]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[0]?.[0] || '???'}</span></p>
+
+                <p>2<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[1]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[1]?.[0] || '???'}</span></p>
+
+                <p>3<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[2]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[2]?.[0] || '???'}</span></p>
+
+                <p>4<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[3]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[3]?.[0] || '???'}</span></p>
+
+                <p>5<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[4]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[4]?.[0] || '???'}</span></p>
+
+                <p>6<span class="search__moves--known" style="background-color: var(${this._data.moves?.[0]?.[1] ? '--type--' : ''}${this._data.moves?.[5]?.[1] || '--secondary-color--grey-gradient'});">${this._data.moves?.[5]?.[0] || '???'}</span></p>
+              </div>
+            </div>
+
+            <div class="search__pagination">
+              <button class="btn search__btn--prev btn--blue">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="25"
+                  fill="currentColor"
+                  class="bi bi-arrow-left-short"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"
+                  />
+                </svg>
+              </button>
+              <button class="btn search__btn--favorite btn--red ${this._data.favorite ? 'btn--active' : ''}">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="13"
+                  height="13"
+                  fill="currentColor"
+                  class="bi bi-suit-heart-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1"
+                  />
+                </svg>
+                Favorite
+              </button>
+              <button class="btn search__btn--caught btn--yellow ${this._data.caught ? 'btn--active' : ''}">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="13"
+                  height="13"
+                  fill="currentColor"
+                  class="bi bi-geo-alt-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"
+                  />
+                </svg>
+                Caught This Pok\xe9mon
+              </button>
+              <button class="btn search__btn--next btn--blue">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="25"
+                  fill="currentColor"
+                  class="bi bi-arrow-right-short"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"
+                  />
+                </svg>
+              </button>
+            </div>
+    `;
+    }
+}
+exports.default = new PanelView();
+
+},{"../View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hOwzG":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../View.js");

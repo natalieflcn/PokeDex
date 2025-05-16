@@ -1,5 +1,5 @@
 import View from '../View.js';
-import previewView from '../previewView.js';
+import previewView from './previewView.js';
 import { observeSentinel } from '../../helpers.js';
 
 class ResultsView extends View {

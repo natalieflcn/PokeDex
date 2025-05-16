@@ -3,10 +3,11 @@ import searchView from '../Views/ProfileViews/searchView.js';
 import savedPokemonView from '../Views/ProfileViews/savedPokemonView.js';
 import { state } from '../Models/state.js';
 import categoryView from '../Views/ProfileViews/categoryView.js';
-import panelView from '../Views/SearchViews/panelView.js';
 import { restartSearchResults } from '../helpers.js';
+import sortView from '../Views/ProfileViews/sortView.js';
+import { loadPokemonResults } from '../Models/profileModel.js';
 
-const controlSavedResults = function () {
+const controlSavedResults = async function () {
   try {
     restartSearchResults();
     const query = searchView.getQuery();
@@ -24,10 +25,12 @@ const controlSavedResults = function () {
       }
     } else if (!query && state.profile.view === 'caught') {
       categoryView.toggleCaught();
+      await loadPokemonResults(requestId);
       savedPokemonView.render(state.caught);
     } else if (!query && state.profile.view === 'favorites') {
-      savedPokemonView.render(state.favorites);
       categoryView.toggleFavorites();
+      await loadPokemonResults(requestId);
+      savedPokemonView.render(state.favorites);
     }
   } catch (err) {
     console.error(err);
@@ -43,7 +46,29 @@ const controlCategoryView = function (view) {
   controlSavedResults();
 };
 
+// To sort Pokémon data by name
+const controlSortName = function () {
+  sortView.toggleSortName();
+
+  if (state.search.results.length <= 1) return;
+
+  state.search.mode = 'name';
+  controlSavedResults();
+};
+
+// To sort Pokémon by ID
+const controlSortId = function () {
+  sortView.toggleSortId();
+
+  if (state.search.results.length <= 1) return;
+
+  state.search.mode = 'id';
+  controlSavedResults();
+};
+
 export const controlProfileInit = function () {
   searchView.addHandlerSearch(controlSavedResults);
   categoryView.addHandlerBtns(controlCategoryView);
+  sortView.addHandlerSortName(controlSortName);
+  sortView.addHandlerSortId(controlSortId);
 };

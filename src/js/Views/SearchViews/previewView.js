@@ -1,4 +1,4 @@
-import View from './View.js';
+import View from '../View.js';
 
 class PreviewView extends View {
   _parentEl = document.querySelector('.search__preview--container');
@@ -25,6 +25,7 @@ class PreviewView extends View {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 
+  clearActive() {}
   _generateMarkup() {
     const id = window.location.hash.slice(1);
     console.log(this._data.name, this._data.id, this._data.img);

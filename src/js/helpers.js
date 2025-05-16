@@ -82,19 +82,18 @@ export const restartSearchResults = function () {
 };
 
 // To sort Pokémon search results by name OR id -- for queries ONLY
-export const sortQueryResults = function () {
+export const sortPokemonResults = function (pokemonSet) {
   let sort;
   console.log(state.search.queryResults);
+
   // Sorting the Pokémon results
   if (state.search.mode === 'name') {
     // Sorting my name
 
-    sort = state.search.queryResults.sort((a, b) =>
-      a.name.localeCompare(b.name)
-    );
+    sort = pokemonSet.sort((a, b) => a.name.localeCompare(b.name));
   } else if (state.search.mode === 'id') {
     // Sorting by ID
-    sort = state.search.queryResults.sort((a, b) => a.id - b.id);
+    sort = pokemonSet.sort((a, b) => a.id - b.id);
   }
   console.log(sort);
   return sort;
@@ -103,6 +102,20 @@ export const sortQueryResults = function () {
 // To find Pokémon that begin with the passed-in substring
 export const possiblePokemon = function (substring, pokemonSet) {
   return pokemonSet.filter(pokemon =>
-    pokemon.name.startsWith(capitalize(substring))
+    capitalize(pokemon.name).startsWith(capitalize(substring))
   );
+};
+
+// To return sorted general Pokémon results by name
+export const sortPokemonName = function (pokemonSet) {
+  const names = pokemonSet.map(p => p.name);
+  const sortedNames = names.sort((a, b) => a.localeCompare(b));
+  return sortedNames;
+};
+
+// To return sorted general Pokémon results by ID
+export const sortPokemonID = function (pokemonSet) {
+  const ids = pokemonSet.map(p => p.id);
+  const sortedIds = ids.sort((a, b) => a.id - b.id);
+  return sortedIds;
 };

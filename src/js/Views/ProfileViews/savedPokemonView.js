@@ -1,5 +1,5 @@
 import View from '../View.js';
-import previewView from '../previewView.js';
+import previewView from '../ProfileViews/previewView.js';
 
 class savedPokemonView extends View {
   _parentEl = document.querySelector('.profile__preview--container');

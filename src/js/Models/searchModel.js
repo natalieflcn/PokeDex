@@ -11,8 +11,9 @@ import {
   capitalize,
   createPokemonPreviewObject,
   restartSearchResults,
-  sortQueryResults,
+  sortPokemonResults,
   possiblePokemon,
+  sortPokemonName,
 } from '../helpers.js';
 
 // To store all Pokémon names in our state
@@ -106,7 +107,7 @@ export const loadPokemonResults = async function (
       } else {
         console.log('loading sorte dby name running');
         // Loading sorted by Name
-        pokemonNames = sortPokemonName().slice(
+        pokemonNames = sortPokemonName(state.allPokemon.pokemonDB).slice(
           state.search.offset,
           state.search.offset + LIMIT
         );
@@ -154,7 +155,7 @@ export const loadAdditionalBatch = async function () {
     } else {
       console.log('loading sorte dby name running');
       // Loading sorted by Name
-      pokemonNames = sortPokemonName().slice(
+      pokemonNames = sortPokemonName(state.allPokemon.pokemonDB).slice(
         state.search.offset,
         state.search.offset + LIMIT
       );
@@ -193,8 +194,11 @@ export const loadQueryResults = async function (query, requestId) {
     state.allPokemon.pokemonDB
   );
 
-  const sorted = sortQueryResults();
+  console.log(state.allPokemon.pokemonDB);
+
+  const sorted = sortPokemonResults(state.search.queryResults);
   console.log(sorted);
+
   const pokemonNames = state.search.queryResults.slice(
     state.search.offset,
     state.search.offset + LIMIT
@@ -250,13 +254,6 @@ export const loadAdditionalQuery = async function (requestId) {
   state.search.results.push(...state.search.currentBatch);
   state.search.offset += LIMIT;
   state.loading = false;
-};
-
-// To return sorted general Pokémon results by name
-export const sortPokemonName = function () {
-  const names = state.allPokemon.pokemonDB.map(p => p.name);
-  const sortedNames = names.sort((a, b) => a.localeCompare(b));
-  return sortedNames;
 };
 
 // To load Pokémon details for the search panel [screen 2]

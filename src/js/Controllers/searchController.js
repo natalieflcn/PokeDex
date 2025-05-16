@@ -4,7 +4,7 @@ import * as searchModel from '../Models/searchModel.js';
 import searchView from '../Views/SearchViews/searchView.js';
 import sortView from '../Views/SearchViews/sortView.js';
 import resultsView from '../Views/SearchViews/resultsView.js';
-import previewView from '../Views/previewView.js';
+import previewView from '../Views/SearchViews/previewView.js';
 import panelView from '../Views/SearchViews/panelView.js';
 import paginationView from '../Views/SearchViews/paginationView.js';
 
@@ -26,6 +26,7 @@ const controlSearchResults = async function () {
     if (resultsView._observer) resultsView.unobserve();
 
     const query = searchView.getQuery();
+    console.log(query);
     const requestId = ++state.search.currentRequestId;
 
     resultsView.renderSpinner();

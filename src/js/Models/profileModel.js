@@ -1,35 +1,37 @@
-import { LIMIT } from '../config.js';
 import { state } from './state.js';
 import {
-  AJAX,
-  capitalize,
-  createPokemonPreviewObject,
-  sortQueryResults,
-} from '../helpers.js';
-import {
   restartSearchResults,
-  sortQueryResults,
+  sortPokemonResults,
   possiblePokemon,
+  sortPokemonName,
+  sortPokemonID,
 } from '../helpers.js';
 
 export const loadPokemonResults = async function (
   requestId = state.search.currentRequestId
 ) {
   state.loading = true;
-
+  restartSearchResults();
   let pokemonNames;
 
-  if (state.profile.view === 'caught') {
-    pokemonNames = state.caught;
+  try {
+    if (state.profile.view === 'caught') {
+      pokemonNames = sortPokemonResults(state.caught);
+    } else if (state.profile.view === 'favorites') {
+      pokemonNames = sortPokemonResults(state.favorites);
+    }
 
-    console.log(pokemonNames);
-  } else if (state.profile.view === 'favorites') {
-    pokemonNames = state.favorites;
+    // if (state.search.mode === 'id') pokemonNames = sortPokemonID(pokemonNames);
+    // else if (state.search.mode === 'name
+    //   pokemonNames = sortPokemonName(pokemonNames);
+
+    if (requestId !== state.search.currentRequestId) return;
+    state.search.results.push(pokemonNames);
+  } catch (err) {
+    console.error(err);
   }
 
-  if (requestId !== state.search.currentRequestId) return;
-  state.search.results.push(pokemonNames);
-  state.search.offset += pokemonNames.length;
+  console.log(state.search.results);
   state.loading = false;
 };
 
@@ -51,7 +53,7 @@ export const loadQueryResults = function (
 
     console.log(possiblePokemon(query, currentData));
     console.log(state.search.queryResults);
-    const pokemonNames = sortQueryResults();
+    const pokemonNames = sortPokemonResults(state.search.queryResults);
 
     for (const pokemon of pokemonNames) {
       const { name, id, img } = pokemon;
