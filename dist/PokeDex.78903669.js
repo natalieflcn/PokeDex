@@ -825,6 +825,10 @@ var _categoryViewJsDefault = parcelHelpers.interopDefault(_categoryViewJs);
 var _helpersJs = require("../helpers.js");
 var _sortViewJs = require("../Views/ProfileViews/sortView.js");
 var _sortViewJsDefault = parcelHelpers.interopDefault(_sortViewJs);
+var _navViewJs = require("../Views/navView.js");
+var _navViewJsDefault = parcelHelpers.interopDefault(_navViewJs);
+var _previewViewJs = require("../Views/ProfileViews/previewView.js");
+var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
 const controlSavedResults = async function() {
     try {
         (0, _helpersJs.restartSearchResults)();
@@ -872,14 +876,25 @@ const controlSortId = function() {
     (0, _stateJs.state).search.mode = 'id';
     controlSavedResults();
 };
+const controlClickedPreview = function(pokemon) {
+    (0, _navViewJsDefault.default).search();
+    window.location.hash = pokemon;
+    // Remove Profile page styling
+    document.querySelector('.lights__inner--green').classList.remove('lights__inner--active');
+    document.querySelector('.header__btn--profile').classList.remove('btn--active');
+    // Add Search page styling
+    document.querySelector('.lights__inner--blue').classList.add('lights__inner--active');
+    document.querySelector('.header__btn--search').classList.add('btn--active');
+};
 const controlProfileInit = function() {
     (0, _searchViewJsDefault.default).addHandlerSearch(controlSavedResults);
     (0, _categoryViewJsDefault.default).addHandlerBtns(controlCategoryView);
     (0, _sortViewJsDefault.default).addHandlerSortName(controlSortName);
     (0, _sortViewJsDefault.default).addHandlerSortId(controlSortId);
+    (0, _previewViewJsDefault.default).addHandlerRedirect(controlClickedPreview);
 };
 
-},{"../Models/profileModel.js":"f8YrZ","../Views/ProfileViews/searchView.js":"c7GlQ","../Views/ProfileViews/savedPokemonView.js":"gM0wI","../Models/state.js":"chdR2","../Views/ProfileViews/categoryView.js":"koTpj","../helpers.js":"7nL9P","../Views/ProfileViews/sortView.js":"4Esi9","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"f8YrZ":[function(require,module,exports,__globalThis) {
+},{"../Models/profileModel.js":"f8YrZ","../Views/ProfileViews/searchView.js":"c7GlQ","../Views/ProfileViews/savedPokemonView.js":"gM0wI","../Models/state.js":"chdR2","../Views/ProfileViews/categoryView.js":"koTpj","../helpers.js":"7nL9P","../Views/ProfileViews/sortView.js":"4Esi9","../Views/navView.js":"l5NeQ","../Views/ProfileViews/previewView.js":"fZGgr","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"f8YrZ":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "loadPokemonResults", ()=>loadPokemonResults);
@@ -1166,19 +1181,25 @@ exports.default = new savedPokemonView();
 },{"../View.js":"YJQ6Q","../ProfileViews/previewView.js":"fZGgr","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fZGgr":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
+var _navViewJs = require("../navView.js");
+var _navViewJsDefault = parcelHelpers.interopDefault(_navViewJs);
 var _viewJs = require("../View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
 class PreviewView extends (0, _viewJsDefault.default) {
     _parentEl = document.querySelector('.profile__preview--container');
-    addHandlerActive(handler) {
+    addHandlerRedirect(handler) {
         this._parentEl.addEventListener('click', function(e) {
             const clicked = e.target.closest('.profile__preview');
             if (!clicked) return;
             //If there's already an active item, remove its class
-            const currentlyActive = document.querySelector('.profile__preview--active');
-            if (currentlyActive && currentlyActive !== clicked) currentlyActive.classList.remove('profile__preview--active');
-            clicked.classList.add('profile__preview--active');
+            // const currentlyActive = document.querySelector(
+            //   '.profile__preview--active'
+            // );
+            // if (currentlyActive && currentlyActive !== clicked)
+            //   currentlyActive.classList.remove('profile__preview--active');
+            // clicked.classList.add('profile__preview--active');
             handler(clicked.querySelector('.profile__preview--name').textContent);
+        ///
         });
     }
     addHandlerHashChange(handler) {
@@ -1206,7 +1227,7 @@ class PreviewView extends (0, _viewJsDefault.default) {
 }
 exports.default = new PreviewView();
 
-},{"../View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"koTpj":[function(require,module,exports,__globalThis) {
+},{"../navView.js":"l5NeQ","../View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"koTpj":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../View.js");
@@ -2755,6 +2776,8 @@ const createPokemonObject = async function(data) {
     }
     // Loaded from DETAILS_API_URL
     const [{ flavor_text }] = data[1].flavor_text_entries;
+    // find eng flav text
+    console.log(data[1].flavor_text_entries);
     // Properties created from Caught and Favorites in state
     const caught = (0, _stateJs.state).caught.some((p)=>p.id === id) ? true : false;
     const favorite = (0, _stateJs.state).favorites.some((p)=>p.id === id) ? true : false;

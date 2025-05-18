@@ -6,6 +6,8 @@ import categoryView from '../Views/ProfileViews/categoryView.js';
 import { restartSearchResults } from '../helpers.js';
 import sortView from '../Views/ProfileViews/sortView.js';
 import { loadPokemonResults } from '../Models/profileModel.js';
+import navView from '../Views/navView.js';
+import previewView from '../Views/ProfileViews/previewView.js';
 
 const controlSavedResults = async function () {
   try {
@@ -66,9 +68,31 @@ const controlSortId = function () {
   controlSavedResults();
 };
 
+const controlClickedPreview = function (pokemon) {
+  navView.search();
+  window.location.hash = pokemon;
+
+  // Remove Profile page styling
+  document
+    .querySelector('.lights__inner--green')
+    .classList.remove('lights__inner--active');
+
+  document
+    .querySelector('.header__btn--profile')
+    .classList.remove('btn--active');
+
+  // Add Search page styling
+  document
+    .querySelector('.lights__inner--blue')
+    .classList.add('lights__inner--active');
+
+  document.querySelector('.header__btn--search').classList.add('btn--active');
+};
+
 export const controlProfileInit = function () {
   searchView.addHandlerSearch(controlSavedResults);
   categoryView.addHandlerBtns(controlCategoryView);
   sortView.addHandlerSortName(controlSortName);
   sortView.addHandlerSortId(controlSortId);
+  previewView.addHandlerRedirect(controlClickedPreview);
 };
