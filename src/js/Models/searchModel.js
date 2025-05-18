@@ -57,7 +57,10 @@ const createPokemonObject = async function (data) {
   }
 
   // Loaded from DETAILS_API_URL
-  const [{ flavor_text }] = data[1].flavor_text_entries;
+  const eng = data[1].flavor_text_entries.find(
+    entry => entry.language.name === 'en'
+  );
+  const flavor_text = eng?.flavor_text || data[1].flavor_text;
   // find eng flav text
 
   console.log(data[1].flavor_text_entries);
