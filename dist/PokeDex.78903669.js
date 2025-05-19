@@ -829,6 +829,8 @@ var _navViewJs = require("../Views/navView.js");
 var _navViewJsDefault = parcelHelpers.interopDefault(_navViewJs);
 var _previewViewJs = require("../Views/ProfileViews/previewView.js");
 var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
+var _profileViewJs = require("../Views/ProfileViews/profileView.js");
+var _profileViewJsDefault = parcelHelpers.interopDefault(_profileViewJs);
 const controlSavedResults = async function() {
     try {
         (0, _helpersJs.restartSearchResults)();
@@ -886,15 +888,25 @@ const controlClickedPreview = function(pokemon) {
     document.querySelector('.lights__inner--blue').classList.add('lights__inner--active');
     document.querySelector('.header__btn--search').classList.add('btn--active');
 };
+const controlProfile = function() {
+    const profileData = {
+        ...(0, _stateJs.state).profile,
+        caught: (0, _stateJs.state).caught,
+        favorites: (0, _stateJs.state).favorites.length
+    };
+    console.log(profileData);
+    (0, _profileViewJsDefault.default).render(profileData);
+};
 const controlProfileInit = function() {
     (0, _searchViewJsDefault.default).addHandlerSearch(controlSavedResults);
     (0, _categoryViewJsDefault.default).addHandlerBtns(controlCategoryView);
     (0, _sortViewJsDefault.default).addHandlerSortName(controlSortName);
     (0, _sortViewJsDefault.default).addHandlerSortId(controlSortId);
     (0, _previewViewJsDefault.default).addHandlerRedirect(controlClickedPreview);
+    (0, _profileViewJsDefault.default).addHandlerLoad(controlProfile);
 };
 
-},{"../Models/profileModel.js":"f8YrZ","../Views/ProfileViews/searchView.js":"c7GlQ","../Views/ProfileViews/savedPokemonView.js":"gM0wI","../Models/state.js":"chdR2","../Views/ProfileViews/categoryView.js":"koTpj","../helpers.js":"7nL9P","../Views/ProfileViews/sortView.js":"4Esi9","../Views/navView.js":"l5NeQ","../Views/ProfileViews/previewView.js":"fZGgr","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"f8YrZ":[function(require,module,exports,__globalThis) {
+},{"../Models/profileModel.js":"f8YrZ","../Views/ProfileViews/searchView.js":"c7GlQ","../Views/ProfileViews/savedPokemonView.js":"gM0wI","../Models/state.js":"chdR2","../Views/ProfileViews/categoryView.js":"koTpj","../helpers.js":"7nL9P","../Views/ProfileViews/sortView.js":"4Esi9","../Views/navView.js":"l5NeQ","../Views/ProfileViews/previewView.js":"fZGgr","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","../Views/ProfileViews/profileView.js":"fBJoQ"}],"f8YrZ":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "loadPokemonResults", ()=>loadPokemonResults);
@@ -987,13 +999,15 @@ const state = {
     favorites: [],
     caught: [],
     profile: {
-        name: '',
+        name: 'Naty',
+        bio: "Grew up catching Pok\xe9mon in the Bronx, now training to catch Pok\xe9mon around Dyckman.",
+        profileImg: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ce59ab1e-3349-49ea-a021-e0fc8c0dc054/dau5pmk-ff876a20-b483-4ed0-8968-29b4648e5fe1.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2NlNTlhYjFlLTMzNDktNDllYS1hMDIxLWUwZmM4YzBkYzA1NFwvZGF1NXBtay1mZjg3NmEyMC1iNDgzLTRlZDAtODk2OC0yOWI0NjQ4ZTVmZTEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.vnqf14GGZS1KBdD7b8MbxK4RX957bZwVMIH6PmxCo9I',
         typesCaught: {},
         view: 'caught'
     }
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","../config":"2hPh4"}],"2hPh4":[function(require,module,exports,__globalThis) {
+},{"../config":"2hPh4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2hPh4":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "MAIN_API_URL", ()=>MAIN_API_URL);
@@ -1131,7 +1145,7 @@ const sortPokemonID = function(pokemonSet) {
     return sortedIds;
 };
 
-},{"./config.js":"2hPh4","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./Models/state.js":"chdR2"}],"c7GlQ":[function(require,module,exports,__globalThis) {
+},{"./config.js":"2hPh4","./Models/state.js":"chdR2","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"c7GlQ":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../View.js");
@@ -1181,8 +1195,6 @@ exports.default = new savedPokemonView();
 },{"../View.js":"YJQ6Q","../ProfileViews/previewView.js":"fZGgr","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fZGgr":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _navViewJs = require("../navView.js");
-var _navViewJsDefault = parcelHelpers.interopDefault(_navViewJs);
 var _viewJs = require("../View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
 class PreviewView extends (0, _viewJsDefault.default) {
@@ -1227,7 +1239,7 @@ class PreviewView extends (0, _viewJsDefault.default) {
 }
 exports.default = new PreviewView();
 
-},{"../navView.js":"l5NeQ","../View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"koTpj":[function(require,module,exports,__globalThis) {
+},{"../View.js":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"koTpj":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../View.js");
@@ -1304,7 +1316,311 @@ class SortView extends (0, _viewDefault.default) {
 }
 exports.default = new SortView();
 
-},{"../View":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"dyxD2":[function(require,module,exports,__globalThis) {
+},{"../View":"YJQ6Q","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fBJoQ":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("../View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _stateJs = require("../../Models/state.js");
+class ProfileView extends (0, _viewJsDefault.default) {
+    _parentEl = document.querySelector('.screen__1--profile');
+    addHandlerLoad(handler) {
+        window.addEventListener('load', handler);
+    }
+    _generateMarkup() {
+        return `
+            <header class="profile__header">
+              <img
+                class="profile__img img__display"
+                src= "${this._data.profileImg}"
+              />
+              <div class="profile__header--details">
+                <h2 class="heading">${this._data.name}'s Pok\xe9dex</h2>
+
+                <div class="profile__header--labels">
+                  <p class="profile__header--label">
+                    Pok\xe9mon Caught<span
+                      class="profile__header--label label--inset"
+                      >${this._data.caught.length}</span
+                    >
+                  </p>
+                  <p class="profile__header--label">
+                    Pok\xe9mon Favorited<span
+                      class="profile__header--label label--inset"
+                      >${this._data.favorites}</span
+                    >
+                  </p>
+                </div>
+
+                <p class="profile__header--bio bio">
+                  ${this._data.bio}
+                </p>
+              </div>
+            </header>
+
+            <h2>Types of Pok\xe9mon Caught</h2>
+            <div class="profile__stats">
+              <div class="profile__stats--column">
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Normal"
+                    style="background-color: var(--type--Normal)"
+                  >
+                    Normal
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="25"
+                    max="100"
+                  >
+                    <span class="profile__progress progress__inner"></span>
+                  </div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Fire" style="background-color: var(--type--Fire)""
+                  >
+                    Fire
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="30"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Water" style="background-color: var(--type--Water)"
+                  >
+                    Water
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="2"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Electric" style="background-color: var(--type--Electric)"
+                  >
+                    Electric
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="80"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Grass" style="background-color: var(--type--Grass)"
+                  >
+                    Grass
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="55"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="ice" style="background-color: var(--type--Ice)">
+                    Ice
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="23"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Fighting" style="background-color: var(--type--Fighting)"
+                  >
+                    Fighting
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="23"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Poison" style="background-color: var(--type--Poison)"
+                  >
+                    Poison
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="23"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Ground" style="background-color: var(--type--Ground)"
+                  >
+                    Ground
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="23"
+                    max="100"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="profile__stats--column">
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Flying" style="background-color: var(--type--Flying)"
+                  >
+                    Flying
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="25"
+                    max="100" 
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Psychic" style="background-color: var(--type--Psychic)"
+                  >
+                    Psychic
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="30"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p class="profile__stats--type pokemon__type" data-type="Bug" style="background-color: var(--type--Bug)"> 
+                    Bug
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="2"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Rock" style="background-color: var(--type--Rock)"
+                  >
+                    Rock
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="80"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Ghost" style="background-color: var(--type--Ghost)"
+                  >
+                    Ghost
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="55"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Dragon" style="background-color: var(--type--Dragon)"
+                  >
+                    Dragon
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="23"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Dark" style="background-color: var(--type--Dark)"
+                  >
+                    Dark
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="23"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Steel" style="background-color: var(--type--Steel)"
+                  >
+                    Steel
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="23"
+                    max="100"
+                  ></div>
+                </div>
+                <div class="profile__stats--row">
+                  <p
+                    class="profile__stats--type pokemon__type"
+                    data-type="Fairy" style="background-color: var(--type--Fairy)"
+                  >
+                    Fairy
+                  </p>
+                  <span class="profile__label label--inset">0</span>
+                  <div
+                    class="profile__progress progress__outer"
+                    value="23"
+                    max="100"
+                  ></div>
+                </div>
+              </div>
+            </div>
+            `;
+    }
+}
+exports.default = new ProfileView();
+
+},{"../View.js":"YJQ6Q","../../Models/state.js":"chdR2","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"dyxD2":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "controlSearchInit", ()=>controlSearchInit);
@@ -1473,7 +1789,7 @@ const controlSearchInit = function() {
     (0, _paginationViewJsDefault.default).addHandlerClick(controlSearchPagination);
 };
 
-},{"core-js/modules/web.immediate.js":"bzsBv","../Models/state.js":"chdR2","../Models/searchModel.js":"2TIqY","../Views/SearchViews/searchView.js":"75HfK","../Views/SearchViews/sortView.js":"iE8OC","../Views/SearchViews/resultsView.js":"6zZCJ","../Views/SearchViews/panelView.js":"4OGMv","../Views/SearchViews/paginationView.js":"hOwzG","../Models/profileModel.js":"f8YrZ","regenerator-runtime/runtime":"f6ot0","../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","../Views/SearchViews/previewView.js":"6yia0"}],"bzsBv":[function(require,module,exports,__globalThis) {
+},{"core-js/modules/web.immediate.js":"bzsBv","../Models/state.js":"chdR2","../Models/searchModel.js":"2TIqY","../Views/SearchViews/searchView.js":"75HfK","../Views/SearchViews/sortView.js":"iE8OC","../Views/SearchViews/resultsView.js":"6zZCJ","../Views/SearchViews/previewView.js":"6yia0","../Views/SearchViews/panelView.js":"4OGMv","../Views/SearchViews/paginationView.js":"hOwzG","../Models/profileModel.js":"f8YrZ","regenerator-runtime/runtime":"f6ot0","../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bzsBv":[function(require,module,exports,__globalThis) {
 'use strict';
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
 require("52e9b3eefbbce1ed");
@@ -3048,7 +3364,7 @@ class ResultsView extends (0, _viewJsDefault.default) {
 }
 exports.default = new ResultsView();
 
-},{"../View.js":"YJQ6Q","../../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","./previewView.js":"6yia0"}],"6yia0":[function(require,module,exports,__globalThis) {
+},{"../View.js":"YJQ6Q","./previewView.js":"6yia0","../../helpers.js":"7nL9P","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"6yia0":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../View.js");

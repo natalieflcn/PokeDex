@@ -1,4 +1,3 @@
-import navView from '../navView.js';
 import View from '../View.js';
 
 class PreviewView extends View {

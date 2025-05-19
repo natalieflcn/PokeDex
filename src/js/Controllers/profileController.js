@@ -8,6 +8,7 @@ import sortView from '../Views/ProfileViews/sortView.js';
 import { loadPokemonResults } from '../Models/profileModel.js';
 import navView from '../Views/navView.js';
 import previewView from '../Views/ProfileViews/previewView.js';
+import profileView from '../Views/ProfileViews/profileView.js';
 
 const controlSavedResults = async function () {
   try {
@@ -89,10 +90,21 @@ const controlClickedPreview = function (pokemon) {
   document.querySelector('.header__btn--search').classList.add('btn--active');
 };
 
+const controlProfile = function () {
+  const profileData = {
+    ...state.profile,
+    caught: state.caught,
+    favorites: state.favorites.length,
+  };
+  console.log(profileData);
+  profileView.render(profileData);
+};
+
 export const controlProfileInit = function () {
   searchView.addHandlerSearch(controlSavedResults);
   categoryView.addHandlerBtns(controlCategoryView);
   sortView.addHandlerSortName(controlSortName);
   sortView.addHandlerSortId(controlSortId);
   previewView.addHandlerRedirect(controlClickedPreview);
+  profileView.addHandlerLoad(controlProfile);
 };
