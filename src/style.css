@@ -1049,6 +1049,7 @@ body {
   left: 1%;
   height: 0.45rem;
   border-radius: 1px;
+  width: 0%;
 }
 
 .profile__stats--row .progress__inner:last-child {
