@@ -4,7 +4,7 @@
   "description": "A PokeDex that allows users to search for Pokemon and their stats, track where they've seen/caught Pokemon on a map, and view their favorited/seen/caught Pokemon in their profile.",
   "scripts": {
     "start": "parcel src/index.html",
-    "build": "parcel build src/index.html"
+    "build": "parcel build src/index.html --dist-dir ./dist"
   },
   "repository": {
     "type": "git",
