@@ -15,7 +15,7 @@ const controlSavedResults = async function () {
     restartSearchResults();
     const query = searchView.getQuery();
     const requestId = ++state.search.currentRequestId;
-    console.log('running again');
+
     savedPokemonView.renderSpinner();
 
     if (query) {
@@ -103,7 +103,6 @@ const controlProfile = function () {
     caught: state.caught,
     favorites: state.favorites.length,
   };
-  console.log(profileData);
   profileView.render(profileData);
 };
 

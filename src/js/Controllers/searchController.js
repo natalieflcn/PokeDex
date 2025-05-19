@@ -22,11 +22,11 @@ const controlSearchResults = async function () {
   try {
     // Retrieve query from user input
     restartSearchResults();
-    console.log('running');
+
     if (resultsView._observer) resultsView.unobserve();
 
     const query = searchView.getQuery();
-    console.log(query);
+
     const requestId = ++state.search.currentRequestId;
 
     resultsView.renderSpinner();
@@ -86,7 +86,6 @@ const controlInfiniteScroll = async function () {
 
 // To sort Pokémon data by name
 const controlSortName = function () {
-  console.log('sorting by name');
   sortView.toggleSortName();
 
   if (state.search.results.length <= 1) return;
@@ -97,7 +96,6 @@ const controlSortName = function () {
 
 // To sort Pokémon data by ID
 const controlSortId = function () {
-  console.log('sorting by id');
   sortView.toggleSortId();
 
   if (state.search.results.length <= 1) return;
@@ -205,7 +203,6 @@ const controlAddFavorite = function () {
   else searchModel.removeFavoritePokemon(state.pokemon);
 
   panelView.toggleFavorite();
-  console.log(state.favorites);
 };
 
 // To initialize all Pokémon names to store in our state

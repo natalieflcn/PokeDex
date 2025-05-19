@@ -30,7 +30,7 @@ class PreviewView extends View {
   clearActive() {}
   _generateMarkup() {
     const id = window.location.hash.slice(1);
-    console.log(this._data.name, this._data.id, this._data.img);
+
     return `
             <div class="profile__preview ">
                 <span class="pokemon__id profile__preview--id">#${this._data.id}</span

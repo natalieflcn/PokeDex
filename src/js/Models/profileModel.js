@@ -32,12 +32,10 @@ export const loadPokemonResults = async function (
     //   pokemonNames = sortPokemonName(pokemonNames);
 
     if (requestId !== state.search.currentRequestId) return;
-    console.log(state.search.results);
   } catch (err) {
     console.error(err);
   }
 
-  console.log(state.search.results);
   state.loading = false;
 };
 
@@ -57,8 +55,6 @@ export const loadQueryResults = function (
 
     if (state.search.queryResults.length === 0) return;
 
-    console.log(possiblePokemon(query, currentData));
-    console.log(state.search.queryResults);
     const pokemonNames = sortPokemonResults(state.search.queryResults);
 
     for (const pokemon of pokemonNames) {
@@ -71,11 +67,4 @@ export const loadQueryResults = function (
   }
 
   state.loading = false;
-};
-
-export const print = function () {
-  console.log('CAUGHT');
-  console.log(state.caught);
-  console.log('FAVORITE');
-  console.log(state.favorites);
 };

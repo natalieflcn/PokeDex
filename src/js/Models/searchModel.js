@@ -64,7 +64,6 @@ const createPokemonObject = async function (data) {
   const flavor_text = eng?.flavor_text || data[1].flavor_text;
   // find eng flav text
 
-  console.log(data[1].flavor_text_entries);
   // Properties created from Caught and Favorites in state
   const caught = state.caught.some(p => p.id === id) ? true : false;
   const favorite = state.favorites.some(p => p.id === id) ? true : false;
@@ -111,7 +110,6 @@ export const loadPokemonResults = async function (
           state.search.offset + LIMIT
         );
       } else {
-        console.log('loading sorte dby name running');
         // Loading sorted by Name
         pokemonNames = sortPokemonName(state.allPokemon.pokemonDB).slice(
           state.search.offset,
@@ -153,13 +151,12 @@ export const loadAdditionalBatch = async function () {
 
     if (state.search.mode === 'id') {
       // Loading sorted by ID
-      console.log('loading sorted by id running');
+
       pokemonNames = state.allPokemon.pokemonDB.slice(
         state.search.offset,
         state.search.offset + LIMIT
       );
     } else {
-      console.log('loading sorte dby name running');
       // Loading sorted by Name
       pokemonNames = sortPokemonName(state.allPokemon.pokemonDB).slice(
         state.search.offset,
@@ -200,17 +197,13 @@ export const loadQueryResults = async function (query, requestId) {
     state.allPokemon.pokemonDB
   );
 
-  console.log(state.allPokemon.pokemonDB);
-
   const sorted = sortPokemonResults(state.search.queryResults);
-  console.log(sorted);
 
   const pokemonNames = state.search.queryResults.slice(
     state.search.offset,
     state.search.offset + LIMIT
   );
 
-  console.log(pokemonNames);
   for (const pokemon of pokemonNames) {
     try {
       if (requestId !== state.search.currentRequestId) return;
@@ -219,7 +212,6 @@ export const loadQueryResults = async function (query, requestId) {
         pokemon.name,
         pokemonDetails
       );
-      console.log(pokemonPreview);
 
       //   if(!pokemonPreview.id || pokemonPreview.img) return;
       if (requestId !== state.search.currentRequestId) return;
@@ -239,7 +231,6 @@ export const loadAdditionalQuery = async function (requestId) {
   state.loading = true;
   state.search.currentBatch = [];
 
-  console.log(state.search.queryResults);
   const pokemonNames = state.search.queryResults.slice(
     state.search.offset,
     state.search.offset + LIMIT
