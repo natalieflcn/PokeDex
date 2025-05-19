@@ -124,7 +124,7 @@
             <header class="map__header">
               <h2 class="heading">Caught Pokémon</h2>
               <p>
-                <span class="map__header--summary label--inset">25</span>Pokémon
+                <span class="map__header--summary label--inset">??</span>Pokémon
                 Caught
               </p>
             </header>
@@ -185,7 +185,7 @@
             </div>
 
             <div class="map__entry--container">
-              <div class="map__entry">
+              <!-- <div class="map__entry">
                 <img
                   class="map__entry--img img__display"
                   src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
@@ -287,59 +287,9 @@
                     <p>Caught on<span>08/14/25</span>at<span>11:20AM</span></p>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
-              <div class="map__entry">
-                <img
-                  class="map__entry--img img__display"
-                  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
-                  alt=""
-                />
-
-                <div class="map__entry--details">
-                  <header class="map__entry--header">
-                    <h2 class="map__entry--name">
-                      Bulbasaur<span class="map__entry--id pokemon__id"
-                        >#400</span
-                      >
-                    </h2>
-
-                    <div class="dropdown">
-                      <button class="map__entry--options">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="13"
-                          height="10"
-                          fill="currentColor"
-                          class="bi bi-three-dots-vertical"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"
-                          />
-                        </svg>
-                      </button>
-                      <div class="map__dropdown">
-                        <button class="btn map__dropdown--edit btn--grey">
-                          Edit Log Entry
-                        </button>
-                        <button class="btn map__dropdown--delete btn--red">
-                          Delete Log Entry
-                        </button>
-                      </div>
-                    </div>
-                  </header>
-
-                  <div class="map__entry--types">
-                    <p class="profile__stats--type pokemon__type">Grass</p>
-                    <p class="profile__stats--type pokemon__type">Poison</p>
-                  </div>
-
-                  <div class="map__entry--timestamp">
-                    <p>Caught on<span>08/14/25</span>at<span>11:20AM</span></p>
-                  </div>
-                </div>
-              </div>
+              <h1>Map Feature Coming Soon</h1>
             </div>
           </section>
 
@@ -351,182 +301,12 @@
 
         <section class="screen__2">
           <!-- Perspective: Search -->
-          <section class="screen__2--search">
-            <!-- <div class="search__panel">
-              <img
-                class="img__display"
-                src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png"
-                alt="Fletchinder"
-              />
-              <header class="search__panel--header">
-                <h2 class="heading">
-                  Fletchicdcdr<span class="pokemon__id">#1000</span>
-                </h2>
-
-                <div class="search__panel--types">
-                  <span
-                    class="profile__stats--type pokemon__type"
-                    style="background-color: green"
-                    >Grass</span
-                  ><span
-                    class="profile__stats--type pokemon__type"
-                    style="background-color: purple"
-                    >Poison</span
-                  >
-                </div>
-
-                <div class="search__panel--measurements">
-                  <p>Height <span class="label--inset">7m</span></p>
-                  <p>Weight <span class="label--inset">600kg</span></p>
-                </div>
-                <p class="search__panel--bio bio">
-                  Obviously prefers\nhot places. When\nit rains, steam\fis said
-                  to spout\nfrom the tip of\nits tail.
-                </p>
-              </header>
-            </div>
-
-            <div class="search__abilities">
-              <div class="search__stats">
-                <h2 class="heading--2">Base Stats</h2>
-                <div class="search__stats--row">
-                  <p>HP</p>
-                  <span class="label--inset">255</span>
-                  <div
-                    class="profile__progress progress"
-                    value="25"
-                    max="100"
-                  ></div>
-                </div>
-                <div class="search__stats--row">
-                  <p>ATK</p>
-                  <span class="label--inset">255</span>
-                  <div
-                    class="profile__progress progress"
-                    value="30"
-                    max="100"
-                  ></div>
-                </div>
-                <div class="search__stats--row">
-                  <p>DEF</p>
-                  <span class="label--inset">255</span>
-                  <div
-                    class="profile__progress progress"
-                    value="2"
-                    max="100"
-                  ></div>
-                </div>
-                <div class="search__stats--row">
-                  <p>SATK</p>
-                  <span class="label--inset">255</span>
-                  <div
-                    class="profile__progress progress"
-                    value="80"
-                    max="100"
-                  ></div>
-                </div>
-                <div class="search__stats--row">
-                  <p>SDEF</p>
-                  <span class="label--inset">255</span>
-                  <div
-                    class="profile__progress progress"
-                    value="55"
-                    max="100"
-                  ></div>
-                </div>
-                <div class="search__stats--row">
-                  <p>SPD</p>
-                  <span class="label--inset">255</span>
-                  <div
-                    class="profile__progress progress"
-                    value="23"
-                    max="100"
-                  ></div>
-                </div>
-              </div>
-
-              <div class="search__moves">
-                <h2 class="heading--2">Moves</h2>
-                <p>1<span class="search__moves--known">Razor-Wind</span></p>
-
-                <p>2<span class="search__moves--known">Cut</span></p>
-
-                <p>3<span class="search__moves--known">Bind</span></p>
-
-                <p>4<span class="search__moves--known">Vine-Whip</span></p>
-
-                <p>5<span class="search__moves--known">Tackle</span></p>
-
-                <p>6<span class="search__moves--unknown">???</span></p>
-              </div>
-            </div>
-
-            <div class="search__pagination">
-              <button class="btn search__btn--prev btn--blue">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="25"
-                  fill="currentColor"
-                  class="bi bi-arrow-left-short"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"
-                  />
-                </svg>
-              </button>
-              <button class="btn search__btn--favorite btn--red">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="13"
-                  height="13"
-                  fill="currentColor"
-                  class="bi bi-suit-heart-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1"
-                  />
-                </svg>
-                Favorite
-              </button>
-              <button class="btn search__btn--caught btn--yellow">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="13"
-                  height="13"
-                  fill="currentColor"
-                  class="bi bi-geo-alt-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"
-                  />
-                </svg>
-                Caught This Pokémon
-              </button>
-              <button class="btn search__btn--next btn--blue">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="25"
-                  fill="currentColor"
-                  class="bi bi-arrow-right-short"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"
-                  />
-                </svg>
-              </button>
-            </div> -->
-          </section>
+          <section class="screen__2--search"></section>
 
           <!-- Perspective: Map -->
-          <section class="screen__2--map hidden"></section>
+          <section class="screen__2--map hidden">
+            <h1>Map Feature Coming Soon</h1>
+          </section>
 
           <!-- Perspective: Profile -->
           <section class="screen__2--profile hidden">
