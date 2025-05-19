@@ -9,6 +9,10 @@ for any Pokémon and view detailed information presented in an interactive and u
 ---
 **Key features include**:
 
+**DOM Manipulation**: Rendered and updated the DOM dynamically, based on user interaction and inputs.
+
+**Live Search**: Search for Pokémon, by name, from the PokéAPI -- sort results by name or ID. 
+
 **API Integration**: Fetching and parsing external JSON data from PokéAPI.
 
 **Dynamic Rendering**: Displaying Pokémon data such as types, stats, and abilities based on user selection.
