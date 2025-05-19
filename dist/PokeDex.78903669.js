@@ -673,6 +673,7 @@ var _navViewJsDefault = parcelHelpers.interopDefault(_navViewJs);
 var _profileControllerJs = require("./profileController.js");
 var _searchControllerJs = require("./searchController.js");
 const controlNav = function(page) {
+    window.location.hash = '';
     switch(page){
         case 'search':
             (0, _navViewJsDefault.default).search();
@@ -813,6 +814,7 @@ exports.export = function(dest, destName, get) {
 },{}],"gWKuf":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "newPokemonResult", ()=>newPokemonResult);
 parcelHelpers.export(exports, "controlProfileInit", ()=>controlProfileInit);
 var _profileModelJs = require("../Models/profileModel.js");
 var _searchViewJs = require("../Views/ProfileViews/searchView.js");
@@ -856,6 +858,9 @@ const controlSavedResults = async function() {
         console.error(err);
     }
 };
+const newPokemonResult = async function() {
+    await controlSavedResults();
+};
 const controlCategoryView = function(view) {
     (0, _searchViewJsDefault.default).clearInput();
     (0, _savedPokemonViewJsDefault.default)._clear();
@@ -887,6 +892,8 @@ const controlClickedPreview = function(pokemon) {
     // Add Search page styling
     document.querySelector('.lights__inner--blue').classList.add('lights__inner--active');
     document.querySelector('.header__btn--search').classList.add('btn--active');
+    // Hide profile screen
+    document.querySelector('.screen__2--profile').classList.add('hidden');
 };
 const controlProfile = function() {
     const profileData = {
@@ -1002,7 +1009,26 @@ const state = {
         name: 'Naty',
         bio: "Grew up catching Pok\xe9mon in the Bronx, now training to catch Pok\xe9mon around Dyckman.",
         profileImg: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ce59ab1e-3349-49ea-a021-e0fc8c0dc054/dau5pmk-ff876a20-b483-4ed0-8968-29b4648e5fe1.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2NlNTlhYjFlLTMzNDktNDllYS1hMDIxLWUwZmM4YzBkYzA1NFwvZGF1NXBtay1mZjg3NmEyMC1iNDgzLTRlZDAtODk2OC0yOWI0NjQ4ZTVmZTEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.vnqf14GGZS1KBdD7b8MbxK4RX957bZwVMIH6PmxCo9I',
-        typesCaught: {},
+        typesCaught: {
+            Normal: 10,
+            Fire: 10,
+            Water: 10,
+            Electric: 10,
+            Grass: 10,
+            Ice: 10,
+            Fighting: 10,
+            Poison: 10,
+            Ground: 10,
+            Flying: 10,
+            Psychic: 10,
+            Bug: 10,
+            Rock: 10,
+            Ghost: 10,
+            Dragon: 10,
+            Dark: 10,
+            Steel: 10,
+            Fairy: 10
+        },
         view: 'caught'
     }
 };
@@ -1058,6 +1084,7 @@ parcelHelpers.export(exports, "sortPokemonResults", ()=>sortPokemonResults);
 parcelHelpers.export(exports, "possiblePokemon", ()=>possiblePokemon);
 parcelHelpers.export(exports, "sortPokemonName", ()=>sortPokemonName);
 parcelHelpers.export(exports, "sortPokemonID", ()=>sortPokemonID);
+parcelHelpers.export(exports, "updateCaughtPokemonTypes", ()=>updateCaughtPokemonTypes);
 var _configJs = require("./config.js");
 var _stateJs = require("./Models/state.js");
 const timeout = function(s) {
@@ -1144,6 +1171,32 @@ const sortPokemonID = function(pokemonSet) {
     const sortedIds = ids.sort((a, b)=>a.id - b.id);
     return sortedIds;
 };
+const updateCaughtPokemonTypes = function() {
+    resetCaughtPokemonTypes();
+    const types = (0, _stateJs.state).caught.flatMap((pokemon)=>pokemon.types).forEach((type)=>(0, _stateJs.state).profile.typesCaught[type]++);
+};
+const resetCaughtPokemonTypes = function() {
+    (0, _stateJs.state).profile.typesCaught = {
+        Normal: 0,
+        Fire: 0,
+        Water: 0,
+        Electric: 0,
+        Grass: 0,
+        Ice: 0,
+        Fighting: 0,
+        Poison: 0,
+        Ground: 0,
+        Flying: 0,
+        Psychic: 0,
+        Bug: 0,
+        Rock: 0,
+        Ghost: 0,
+        Dragon: 0,
+        Dark: 0,
+        Steel: 0,
+        Fairy: 0
+    };
+};
 
 },{"./config.js":"2hPh4","./Models/state.js":"chdR2","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"c7GlQ":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -1154,7 +1207,10 @@ class SearchView extends (0, _viewJsDefault.default) {
     _parentEl = document.querySelector('.profile__input');
     _errorMessage = "We could not find that Pok\xe9mon! Please try again.";
     addHandlerSearch(handler) {
-        window.addEventListener('load', handler);
+        [
+            'hashchange',
+            'load'
+        ].forEach((e)=>window.addEventListener(e, handler));
         this._parentEl.addEventListener('input', handler);
         this._parentEl.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1322,10 +1378,15 @@ parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
 var _stateJs = require("../../Models/state.js");
+var _helpersJs = require("../../helpers.js");
 class ProfileView extends (0, _viewJsDefault.default) {
     _parentEl = document.querySelector('.screen__1--profile');
     addHandlerLoad(handler) {
-        window.addEventListener('load', handler);
+        (0, _helpersJs.updateCaughtPokemonTypes)();
+        [
+            'hashchange',
+            'load'
+        ].forEach((e)=>window.addEventListener(e, handler));
     }
     _generateMarkup() {
         return `
@@ -1369,13 +1430,11 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Normal
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Normal}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="25"
-                    max="100"
                   >
-                    <span class="profile__progress progress__inner"></span>
+                    <span class="profile__progress progress__inner" style="background-color: var(--type--Normal); width:${this._data.typesCaught.Normal / this._data.caught.length * 100}%"></span>
                   </div>
                 </div>
                 <div class="profile__stats--row">
@@ -1385,12 +1444,12 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Fire
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Fire}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="30"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Fire); width:${this._data.typesCaught.Fire / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -1399,12 +1458,11 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Water
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Water}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="2"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Water); width:${this._data.typesCaught.Water / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -1413,12 +1471,11 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Electric
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Electric}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="80"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Electric); width:${this._data.typesCaught.Electric / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -1427,23 +1484,21 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Grass
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Grass}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="55"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Grass); width:${this._data.typesCaught.Grass / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p class="profile__stats--type pokemon__type" data-type="ice" style="background-color: var(--type--Ice)">
                     Ice
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Ice}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Ice); width:${this._data.typesCaught.Ice / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -1452,12 +1507,11 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Fighting
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Fighting}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Fighting); width:${this._data.typesCaught.Fighting / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -1466,12 +1520,11 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Poison
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Poison}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Poison); width:${this._data.typesCaught.Poison / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -1480,12 +1533,11 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Ground
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Ground}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Ground); width:${this._data.typesCaught.Ground / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
               </div>
 
@@ -1497,12 +1549,11 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Flying
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Flying}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="25"
-                    max="100" 
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Flying); width:${this._data.typesCaught.Flying / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -1511,23 +1562,22 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Psychic
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Psychic}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="30"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Psychic); width:${this._data.typesCaught.Psychic / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p class="profile__stats--type pokemon__type" data-type="Bug" style="background-color: var(--type--Bug)"> 
                     Bug
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Bug}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="2"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Bug); width:${this._data.typesCaught.Bug / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -1536,12 +1586,12 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Rock
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Rock}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="80"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Rock); width:${this._data.typesCaught.Rock / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -1550,12 +1600,12 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Ghost
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Ghost}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="55"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Ghost); width:${this._data.typesCaught.Ghost / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -1564,12 +1614,12 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Dragon
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Dragon}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Dragon); width:${this._data.typesCaught.Dragon / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -1578,12 +1628,12 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Dark
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Dark}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Dark); width:${this._data.typesCaught.Dark / this._data.caught.length}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -1592,12 +1642,12 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Steel
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Steel}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Steel); width:${this._data.typesCaught.Steel / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -1606,12 +1656,12 @@ class ProfileView extends (0, _viewJsDefault.default) {
                   >
                     Fairy
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${this._data.typesCaught.Fairy}</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Fairy); width:${this._data.typesCaught.Fairy / this._data.caught.length * 100}%"></span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1620,7 +1670,7 @@ class ProfileView extends (0, _viewJsDefault.default) {
 }
 exports.default = new ProfileView();
 
-},{"../View.js":"YJQ6Q","../../Models/state.js":"chdR2","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"dyxD2":[function(require,module,exports,__globalThis) {
+},{"../View.js":"YJQ6Q","../../Models/state.js":"chdR2","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","../../helpers.js":"7nL9P"}],"dyxD2":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "controlSearchInit", ()=>controlSearchInit);
@@ -1770,7 +1820,6 @@ const controlAddFavorite = function() {
     else _searchModelJs.removeFavoritePokemon((0, _stateJs.state).pokemon);
     (0, _panelViewJsDefault.default).toggleFavorite();
     console.log((0, _stateJs.state).favorites);
-    (0, _profileModelJs.print)(); //BUG delete later
 };
 // To initialize all Pokémon names to store in our state
 const initPokemonData = async function() {
@@ -3231,12 +3280,14 @@ const addCaughtPokemon = function(pokemon) {
     if ((0, _stateJs.state).caught.find((p)=>p.name === pokemon.name)) return;
     (0, _stateJs.state).caught.push(pokemon);
     persistData('caught', (0, _stateJs.state).caught);
+    (0, _helpersJs.updateCaughtPokemonTypes)();
 };
 const removeCaughtPokemon = function(pokemon) {
     pokemon.caught = false;
     const index = (0, _stateJs.state).caught.find((p)=>p.name === pokemon.name);
     (0, _stateJs.state).caught.splice(index, 1);
     persistData('caught', (0, _stateJs.state).caught);
+    (0, _helpersJs.updateCaughtPokemonTypes)();
 };
 const addFavoritePokemon = function(pokemon) {
     pokemon.favorite = true;

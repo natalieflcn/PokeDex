@@ -14,6 +14,7 @@ import {
   sortPokemonResults,
   possiblePokemon,
   sortPokemonName,
+  updateCaughtPokemonTypes,
 } from '../helpers.js';
 
 // To store all Pokémon names in our state
@@ -284,6 +285,7 @@ export const addCaughtPokemon = function (pokemon) {
 
   state.caught.push(pokemon);
   persistData('caught', state.caught);
+  updateCaughtPokemonTypes();
 };
 
 export const removeCaughtPokemon = function (pokemon) {
@@ -291,6 +293,7 @@ export const removeCaughtPokemon = function (pokemon) {
   const index = state.caught.find(p => p.name === pokemon.name);
   state.caught.splice(index, 1);
   persistData('caught', state.caught);
+  updateCaughtPokemonTypes();
 };
 
 // To store Pokémon details in Favorite Pokémon

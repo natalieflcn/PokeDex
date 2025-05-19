@@ -1,11 +1,13 @@
 import View from '../View.js';
 import { state } from '../../Models/state.js';
+import { updateCaughtPokemonTypes } from '../../helpers.js';
 
 class ProfileView extends View {
   _parentEl = document.querySelector('.screen__1--profile');
 
   addHandlerLoad(handler) {
-    window.addEventListener('load', handler);
+    updateCaughtPokemonTypes();
+    ['hashchange', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
   _generateMarkup() {
@@ -50,13 +52,17 @@ class ProfileView extends View {
                   >
                     Normal
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Normal
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="25"
-                    max="100"
                   >
-                    <span class="profile__progress progress__inner"></span>
+                    <span class="profile__progress progress__inner" style="background-color: var(--type--Normal); width:${
+                      (this._data.typesCaught.Normal /
+                        this._data.caught.length) *
+                      100
+                    }%"></span>
                   </div>
                 </div>
                 <div class="profile__stats--row">
@@ -66,12 +72,17 @@ class ProfileView extends View {
                   >
                     Fire
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Fire
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="30"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Fire); width:${
+                    (this._data.typesCaught.Fire / this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -80,12 +91,16 @@ class ProfileView extends View {
                   >
                     Water
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Water
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="2"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Water); width:${
+                    (this._data.typesCaught.Water / this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -94,12 +109,17 @@ class ProfileView extends View {
                   >
                     Electric
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Electric
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="80"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Electric); width:${
+                    (this._data.typesCaught.Electric /
+                      this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -108,23 +128,31 @@ class ProfileView extends View {
                   >
                     Grass
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Grass
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="55"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Grass); width:${
+                    (this._data.typesCaught.Grass / this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p class="profile__stats--type pokemon__type" data-type="ice" style="background-color: var(--type--Ice)">
                     Ice
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Ice
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Ice); width:${
+                    (this._data.typesCaught.Ice / this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -133,12 +161,17 @@ class ProfileView extends View {
                   >
                     Fighting
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Fighting
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Fighting); width:${
+                    (this._data.typesCaught.Fighting /
+                      this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -147,12 +180,16 @@ class ProfileView extends View {
                   >
                     Poison
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Poison
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Poison); width:${
+                    (this._data.typesCaught.Poison / this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -161,12 +198,16 @@ class ProfileView extends View {
                   >
                     Ground
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Ground
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Ground); width:${
+                    (this._data.typesCaught.Ground / this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
               </div>
 
@@ -178,12 +219,16 @@ class ProfileView extends View {
                   >
                     Flying
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Flying
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="25"
-                    max="100" 
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Flying); width:${
+                    (this._data.typesCaught.Flying / this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -192,23 +237,33 @@ class ProfileView extends View {
                   >
                     Psychic
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Psychic
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="30"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Psychic); width:${
+                    (this._data.typesCaught.Psychic /
+                      this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p class="profile__stats--type pokemon__type" data-type="Bug" style="background-color: var(--type--Bug)"> 
                     Bug
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Bug
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="2"
-                    max="100"
-                  ></div>
+                  ><span class="profile__progress progress__inner" style="background-color: var(--type--Bug); width:${
+                    (this._data.typesCaught.Bug / this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -217,12 +272,17 @@ class ProfileView extends View {
                   >
                     Rock
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Rock
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="80"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Rock); width:${
+                    (this._data.typesCaught.Rock / this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -231,12 +291,17 @@ class ProfileView extends View {
                   >
                     Ghost
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Ghost
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="55"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Ghost); width:${
+                    (this._data.typesCaught.Ghost / this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -245,12 +310,17 @@ class ProfileView extends View {
                   >
                     Dragon
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Dragon
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Dragon); width:${
+                    (this._data.typesCaught.Dragon / this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -259,12 +329,16 @@ class ProfileView extends View {
                   >
                     Dark
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Dark
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Dark); width:${
+                    this._data.typesCaught.Dark / this._data.caught.length
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -273,12 +347,17 @@ class ProfileView extends View {
                   >
                     Steel
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Steel
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Steel); width:${
+                    (this._data.typesCaught.Steel / this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
                 <div class="profile__stats--row">
                   <p
@@ -287,12 +366,17 @@ class ProfileView extends View {
                   >
                     Fairy
                   </p>
-                  <span class="profile__label label--inset">0</span>
+                  <span class="profile__label label--inset">${
+                    this._data.typesCaught.Fairy
+                  }</span>
                   <div
                     class="profile__progress progress__outer"
-                    value="23"
-                    max="100"
-                  ></div>
+                  >
+                  <span class="profile__progress progress__inner" style="background-color: var(--type--Fairy); width:${
+                    (this._data.typesCaught.Fairy / this._data.caught.length) *
+                    100
+                  }%"></span>
+                  </div>
                 </div>
               </div>
             </div>

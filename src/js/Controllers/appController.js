@@ -3,6 +3,8 @@ import { controlProfileInit } from './profileController.js';
 import { controlSearchInit } from './searchController.js';
 
 const controlNav = function (page) {
+  window.location.hash = '';
+
   switch (page) {
     case 'search':
       navView.search();

@@ -40,6 +40,10 @@ const controlSavedResults = async function () {
   }
 };
 
+export const newPokemonResult = async function () {
+  await controlSavedResults();
+};
+
 const controlCategoryView = function (view) {
   searchView.clearInput();
   savedPokemonView._clear();
@@ -88,6 +92,9 @@ const controlClickedPreview = function (pokemon) {
     .classList.add('lights__inner--active');
 
   document.querySelector('.header__btn--search').classList.add('btn--active');
+
+  // Hide profile screen
+  document.querySelector('.screen__2--profile').classList.add('hidden');
 };
 
 const controlProfile = function () {

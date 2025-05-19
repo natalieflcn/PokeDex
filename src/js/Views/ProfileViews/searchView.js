@@ -5,7 +5,7 @@ class SearchView extends View {
   _errorMessage = 'We could not find that Pokémon! Please try again.';
 
   addHandlerSearch(handler) {
-    window.addEventListener('load', handler);
+    ['hashchange', 'load'].forEach(e => window.addEventListener(e, handler));
 
     this._parentEl.addEventListener('input', handler);
 

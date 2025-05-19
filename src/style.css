@@ -1043,7 +1043,17 @@ body {
 }
 
 .profile__stats--row .progress__inner {
+  display: inline-block;
+  position: relative;
+  bottom: 55%;
+  left: 1%;
   height: 0.45rem;
+  border-radius: 1px;
+}
+
+.profile__stats--row .progress__inner:last-child {
+  left: 0%;
+  bottom: 60%;
 }
 
 /* PERSPECTIVE -- Profile (Screen 2) */

@@ -206,7 +206,6 @@ const controlAddFavorite = function () {
 
   panelView.toggleFavorite();
   console.log(state.favorites);
-  print(); //BUG delete later
 };
 
 // To initialize all Pokémon names to store in our state

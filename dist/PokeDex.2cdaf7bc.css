@@ -898,7 +898,17 @@ body {
 }
 
 .profile__stats--row .progress__inner {
+  border-radius: 1px;
   height: .45rem;
+  display: inline-block;
+  position: relative;
+  bottom: 55%;
+  left: 1%;
+}
+
+.profile__stats--row .progress__inner:last-child {
+  bottom: 60%;
+  left: 0%;
 }
 
 .profile__categories {
