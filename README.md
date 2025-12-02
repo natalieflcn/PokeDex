@@ -1,17 +1,17 @@
-**Naty's Pokédex**
----
-Naty's Pokédex is a web application built using vanilla HTML, CSS, and JavaScript, created to reinforce and demonstrate my understanding 
+## **Naty's Pokédex**
+
+Naty's Pokédex is a web application built using vanilla HTML, CSS, and JavaScript, created to reinforce and demonstrate my understanding
 of core front-end development principles without relying on frameworks.
 
-The app fetches data from the PokéAPI and dynamically renders Pokémon stats, moves, and details based on user input. Users can search 
-for any Pokémon and view detailed information presented in an interactive and user-friendly interface.
+The app fetches data from the PokéAPI and dynamically renders Pokémon stats, moves, and details based on user input. Users can search for any Pokémon and view detailed information presented in an interactive, user-friendly, and nostalgic interface.
 
 ---
+
 **Key features include**:
 
 **DOM Manipulation**: Rendered and updated the DOM dynamically, based on user interaction and inputs.
 
-**Live Search**: Search for Pokémon, by name, from the PokéAPI -- sort results by name or ID. 
+**Live Search**: Search for Pokémon, by name, from the PokéAPI -- sort results by name or ID.
 
 **API Integration**: Fetching and parsing external JSON data from PokéAPI.
 
@@ -23,12 +23,14 @@ for any Pokémon and view detailed information presented in an interactive and u
 
 **Modular Codebase with MVC Pattern**: Organized code using the Model-View-Controller (MVC) architecture to ensure clean code separation, scalability, and maintainability:
 
-- Model handles data fetching, state logic, and transformations.
+- Models handle data fetching, state logic, and transformations.
 
-- View manages all UI updates and DOM rendering.
+- Views manage all UI updates and DOM rendering.
 
-- Controller handles user input and orchestrates interactions between the Model and View.
+- Controllers handles user input and orchestrates interactions between the Model and View.
+
 ---
+
 **Upcoming Features**:
 
 **Geolocation Module**: Incorporating the Geolocation API to allow users to store details of where and when they caught each Pokémon.
