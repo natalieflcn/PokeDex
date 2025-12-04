@@ -1,11 +1,16 @@
 # Pokédex (Version 2) Roadmap
 
+---
+
 ## Objectives
 
 - Improve user experience and interface of the Pokédex (for all devices)
-- Refactor codebase for maintainability and scalability
 - Polish existing features and optimize performance (i.e. Search module)
-- Introduce long-awaited key module (i.e. Map module) and new features (i.e. About the Project)
+- Develop a long-awaited key module (i.e. Map module)
+- Introduce new features to the platform (i.e. About the Project)
+- Refactor codebase for maintainability and scalability
+
+---
 
 ## Milestones
 
@@ -41,5 +46,7 @@
 - [ ] Optimize performance of the Pokédex
 - [ ] Polish UI/UX of the Pokédex
 - [ ] Deploy the final version to Netlify
+
+---
 
 ## Additional Notes
