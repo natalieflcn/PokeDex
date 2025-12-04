@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "A PokeDex that allows users to search for Pokemon and their stats, track where they've seen/caught Pokemon on a map, and view their favorited/seen/caught Pokemon in their profile.",
   "scripts": {
-    "start": "parcel src/index.html",
-    "build": "parcel build src/index.html --dist-dir ./dist"
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -17,8 +17,15 @@
   },
   "homepage": "https://github.com/natalieflcn/PokeDex#readme",
   "devDependencies": {
-    "parcel": "^2.14.4",
-    "svgo": "^3.3.2"
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "babel-loader": "^10.0.0",
+    "css-loader": "^7.1.2",
+    "style-loader": "^4.0.0",
+    "svgo": "^3.3.2",
+    "webpack": "^5.103.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
   },
   "dependencies": {
     "core-js": "^3.42.0",
