@@ -1,4 +1,4 @@
-import pokeball from 'url:../../imgs/pokeball-favicon.svg';
+import pokeball from '../../../public/imgs/logo.svg';
 
 export default class View {
   _data;

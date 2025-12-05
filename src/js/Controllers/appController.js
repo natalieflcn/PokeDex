@@ -1,6 +1,7 @@
 import navView from '../Views/navView.js';
 import { controlProfileInit } from './profileController.js';
 import { controlSearchInit } from './searchController.js';
+import '../../css/style.css';
 
 const controlNav = function (page) {
   window.location.hash = '';

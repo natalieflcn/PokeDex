@@ -103,12 +103,12 @@ table {
 /* Custom Fonts */
 @font-face {
   font-family: Gameboy;
-  src: url('fonts/gameboy-font.ttf');
+  src: url('../../public/fonts/gameboy-font.ttf');
 }
 
 @font-face {
   font-family: Pokemon Solid;
-  src: url('fonts/pokemon-font.ttf');
+  src: url('../../public/fonts/pokemon-font.ttf');
 }
 
 /* General Formatting */
@@ -552,7 +552,7 @@ body {
   background-repeat: no-repeat;
   background-size: 40%;
   background-color: var(--secondary-color--grey);
-  background-image: url(imgs/pokeball.svg);
+  background-image: url(../../public/imgs/pokeball.svg);
   background-blend-mode: soft-light;
 }
 
@@ -580,7 +580,7 @@ body {
 .search__preview:hover,
 .profile__preview:hover {
   background-color: var(--text--light);
-  background-image: url(imgs/pokeball-red.svg);
+  background-image: url(../../public/imgs/pokeball-red.svg);
   background-blend-mode: normal;
   box-shadow: 0px 0px 4px 3px var(--secondary-color--red-gradient--2);
 }
