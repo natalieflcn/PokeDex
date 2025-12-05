@@ -1,6 +1,7 @@
 const path = require('path');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'development',
@@ -9,7 +10,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
   },
-  devtool: 'eval-cheap-source-map',
+  devtool: 'source-map',
   devServer: {
     static: { directory: path.join(__dirname, 'dist') },
     open: true,
@@ -18,8 +19,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.js$/,
@@ -40,5 +41,6 @@ module.exports = {
   plugins: [
     new FaviconsWebpackPlugin({ logo: 'public/imgs/logo.svg' }),
     new HtmlWebpackPlugin({ template: './dist/index.html' }),
+    new MiniCssExtractPlugin(),
   ],
 };
