@@ -15,9 +15,9 @@
 - [~] Refactor MVC system architecture implementation
   - [~] Review, assess, and modify code for the overlapping responsiblities currently shared between Model and Controller layers
   - [ ] Refactor the current Model structure into domain-driven Models: pokemonModel, favoritesModel, caughtModel
-  - [ ] Refactor state.js into domain-driven State files: pokemonState, favoritesStates, caughtState, searchState, routerState
+  - [ ] Refactor state.js into domain-driven State files: pokemonState, favoritesStates, caughtState, searchState, navState
   - [x] Move Profile state into config file (ENV variables)
-  - [ ] Refactor the current Controllers structure into domain-driven Controllers: pokemonController, favoritesController, caughtController, searchController, routerController, appController
+  - [ ] Refactor the current Controllers structure into domain-driven Controllers: pokemonController, favoritesController, caughtController, searchController, navController, appController
   - [ ] Create a services folder: pokemonService, favoritesService, caughtService, searchService
   - [ ] Offload controller functionality into the services -- follow fat models, skinny controllers guideline
   - [ ] Review the relationship between controllers and views and ensure that the publisher-subscriber pattern is being enforced
