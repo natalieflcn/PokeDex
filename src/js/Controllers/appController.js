@@ -1,4 +1,4 @@
-import navView from '../Views/navView.js';
+import navView from '../views/navView.js';
 import { controlProfileInit } from './profileController.js';
 import { controlSearchInit } from './searchController.js';
 import '../../css/style.css';

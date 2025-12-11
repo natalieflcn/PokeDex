@@ -1,14 +1,14 @@
-import { state } from '../Models/state.js';
-import * as searchModel from '../Models/searchModel.js';
+import { state } from '../models/state.js';
+import * as searchModel from '../models/searchModel.js';
 
-import searchView from '../Views/SearchViews/searchView.js';
-import sortView from '../Views/SearchViews/sortView.js';
-import resultsView from '../Views/SearchViews/resultsView.js';
-import previewView from '../Views/SearchViews/previewView.js';
-import panelView from '../Views/SearchViews/panelView.js';
-import paginationView from '../Views/SearchViews/paginationView.js';
+import searchView from '../views/SearchViews/searchView.js';
+import sortView from '../views/SearchViews/sortView.js';
+import resultsView from '../views/SearchViews/resultsView.js';
+import previewView from '../views/SearchViews/previewView.js';
+import panelView from '../views/SearchViews/panelView.js';
+import paginationView from '../views/SearchViews/paginationView.js';
 
-import { print } from '../Models/profileModel.js';
+import { print } from '../models/profileModel.js';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';

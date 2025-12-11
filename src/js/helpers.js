@@ -1,5 +1,5 @@
 import { TIMEOUT_SEC } from './config.js';
-import { state } from './Models/state.js';
+import { state } from './models/state.js';
 
 const timeout = function (s) {
   return new Promise(function (_, reject) {

@@ -1,6 +1,7 @@
 import View from '../View.js';
-import { state } from '../../Models/state.js';
+import { state } from '../../models/state.js';
 import { updateCaughtPokemonTypes } from '../../helpers.js';
+import { PROFILE_IMG, PROFILE_NAME, PROFILE_BIO } from '../../config.js';
 
 class ProfileView extends View {
   _parentEl = document.querySelector('.screen__1--profile');
@@ -15,10 +16,10 @@ class ProfileView extends View {
             <header class="profile__header">
               <img
                 class="profile__img img__display"
-                src= "${this._data.profileImg}"
+                src= "${PROFILE_IMG}"
               />
               <div class="profile__header--details">
-                <h2 class="heading">${this._data.name}'s Pokédex</h2>
+                <h2 class="heading">${PROFILE_NAME}'s Pokédex</h2>
 
                 <div class="profile__header--labels">
                   <p class="profile__header--label">
@@ -36,7 +37,7 @@ class ProfileView extends View {
                 </div>
 
                 <p class="profile__header--bio bio">
-                  ${this._data.bio}
+                  ${PROFILE_BIO}
                 </p>
               </div>
             </header>

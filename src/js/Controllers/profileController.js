@@ -1,14 +1,14 @@
-import * as profileModel from '../Models/profileModel.js';
-import searchView from '../Views/ProfileViews/searchView.js';
-import savedPokemonView from '../Views/ProfileViews/savedPokemonView.js';
-import { state } from '../Models/state.js';
-import categoryView from '../Views/ProfileViews/categoryView.js';
+import * as profileModel from '../models/profileModel.js';
+import searchView from '../views/ProfileViews/searchView.js';
+import savedPokemonView from '../views/ProfileViews/savedPokemonView.js';
+import { state } from '../models/state.js';
+import categoryView from '../views/ProfileViews/categoryView.js';
 import { restartSearchResults } from '../helpers.js';
-import sortView from '../Views/ProfileViews/sortView.js';
-import { loadPokemonResults } from '../Models/profileModel.js';
-import navView from '../Views/navView.js';
-import previewView from '../Views/ProfileViews/previewView.js';
-import profileView from '../Views/ProfileViews/profileView.js';
+import sortView from '../views/ProfileViews/sortView.js';
+import { loadPokemonResults } from '../models/profileModel.js';
+import navView from '../views/navView.js';
+import previewView from '../views/ProfileViews/previewView.js';
+import profileView from '../views/ProfileViews/profileView.js';
 
 const controlSavedResults = async function () {
   try {
