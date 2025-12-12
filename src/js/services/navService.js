@@ -32,7 +32,7 @@ export const search = function () {
   document.querySelector('.header__btn--search').classList.add('btn--active');
 };
 
-// Adds active classes to Search module indicators and reveals Search module screens
+// Adds active classes to Map module indicators and reveals Map module screens
 export const map = function () {
   document
     .querySelectorAll('.screen__1--map, .screen__2--map')
@@ -45,7 +45,7 @@ export const map = function () {
   document.querySelector('.header__btn--map').classList.add('btn--active');
 };
 
-// Adds active classes to Search module indicators and reveals Search module screens
+// Adds active classes to Profile module indicators and reveals Profile module screens
 export const profile = function () {
   document
     .querySelectorAll('.screen__1--profile, .screen__2--profile')

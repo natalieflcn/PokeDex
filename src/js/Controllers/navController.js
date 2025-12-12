@@ -1,35 +1,9 @@
+import { BASE_POKEDEX_URL } from '../config';
 import { reset, search, map, profile } from '../services/navService';
 import navView from '../views/navView';
 
-const routes = {
-  search: '/',
-  map: '/map',
-  profile: '/profile',
-  about: '/about',
-}; // change routes to call navServies method based on url path
-
-// / -- Home/Search
-// /map -- Map
-// /profile -- Profile
-// /about -- About
-
-// Refactor navView, remove orchestration  !!
-// Move orchestration details from navView to navServices !!
-// When button is clicked, navController should call services
-// navController should also implement hash change (pushState)
-// When url is typed in, page should also be routed appropriately
-
-// Implement hash change when button is clicked
-// When page is reloaded, change UI based on url
-
-// Implement WebAPI history
-
-// //let contentDiv = document.getElementById('content');
-// contentDiv.innerHTML = routes[window.location.pathname];
-
-const controlNavBtn = function (page) {
-  window.location.hash = '';
-
+// Renders the appropriate module by calling their respective navService (based on the URL path)
+const controlRenderNavView = function (page) {
   reset();
 
   switch (page) {
@@ -51,6 +25,23 @@ const controlNavBtn = function (page) {
   }
 };
 
+const controlNavBtn = function (page) {
+  controlRenderNavView(page);
+
+  window.history.pushState(
+    { page: page },
+    '',
+    new URL(page.toString(), BASE_POKEDEX_URL)
+  );
+};
+
+//handled in the controller
+const controlNavBrowser = function (e) {
+  const path = window.location.pathname.replace('/', '');
+  controlRenderNavView(path);
+};
+
 export const controlNavInit = function () {
-  navView.addHandlerClickNavBtn(controlNavBtn);
+  navView.addHandlerNavigateBtn(controlNavBtn);
+  navView.addHandlerBrowser(controlNavBrowser);
 };

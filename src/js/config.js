@@ -1,4 +1,7 @@
-// API URLS
+// POKEDEX URL
+export const BASE_POKEDEX_URL = 'http://localhost:8080/';
+
+// EXTERNAL API URLS
 export const MAIN_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
 export const DETAILS_API_URL = 'https://pokeapi.co/api/v2/pokemon-species/';
 export const MOVE_TYPE_URL = 'https://pokeapi.co/api/v2/move/';
@@ -15,6 +18,7 @@ export const PROFILE_BIO =
   'Grew up catching Pokémon in the Bronx, now training to catch Pokémon around Dyckman.';
 export const PROFILE_IMG =
   'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ce59ab1e-3349-49ea-a021-e0fc8c0dc054/dau5pmk-ff876a20-b483-4ed0-8968-29b4648e5fe1.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2NlNTlhYjFlLTMzNDktNDllYS1hMDIxLWUwZmM4YzBkYzA1NFwvZGF1NXBtay1mZjg3NmEyMC1iNDgzLTRlZDAtODk2OC0yOWI0NjQ4ZTVmZTEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.vnqf14GGZS1KBdD7b8MbxK4RX957bZwVMIH6PmxCo9I';
+
 /**
  * Pokemon Name (https://pokeapi.co/api/v2/pokemon-form/1/ --> "name":"bulbasaur"
  *
