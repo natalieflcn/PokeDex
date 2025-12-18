@@ -28,7 +28,7 @@ class PreviewView extends View {
   clearActive() {}
   _generateMarkup() {
     const id = window.location.hash.slice(1);
-    console.log(this._data.name, this._data.id, this._data.img);
+    // console.log(this._data.name, this._data.id, this._data.img);
     return `
             <div class="search__preview ${
               this._data.name === id ? 'search__preview--active' : ''

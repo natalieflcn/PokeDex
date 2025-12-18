@@ -1,4 +1,7 @@
-import { state } from './state.js';
+import favoritesState from './state/favoritesState.js';
+import caughtState from './state/caughtState.js';
+import searchState from './state/searchState.js';
+
 import {
   restartSearchResults,
   sortPokemonResults,
@@ -8,63 +11,66 @@ import {
 } from '../helpers.js';
 
 export const loadPokemonResults = async function (
-  requestId = state.search.currentRequestId
+  requestId = searchState.currentRequestId
 ) {
-  state.loading = true;
+  searchState.loading = true;
+  console.log('loadPokemonResults running');
   restartSearchResults();
   let pokemonNames;
 
   try {
-    if (state.profile.view === 'caught') {
-      pokemonNames = sortPokemonResults(state.caught);
-    } else if (state.profile.view === 'favorites') {
-      pokemonNames = sortPokemonResults(state.favorites);
+    if (searchState.view === 'caught') {
+      pokemonNames = sortPokemonResults(caughtState.caught);
+    } else if (searchState.view === 'favorites') {
+      pokemonNames = sortPokemonResults(favoritesState.favorites);
     }
 
     for (const pokemon of pokemonNames) {
       const { name, id, img } = pokemon;
-      if (requestId !== state.search.currentRequestId) return;
-      state.search.results.push({ name, id, img });
+      if (requestId !== searchState.currentRequestId) return;
+      searchState.results.push({ name, id, img });
     }
 
     // if (state.search.mode === 'id') pokemonNames = sortPokemonID(pokemonNames);
     // else if (state.search.mode === 'name')
     //   pokemonNames = sortPokemonName(pokemonNames);
 
-    if (requestId !== state.search.currentRequestId) return;
+    if (requestId !== searchState.currentRequestId) return;
   } catch (err) {
     console.error(err);
   }
 
-  state.loading = false;
+  searchState.loading = false;
 };
 
 export const loadQueryResults = function (
   query,
-  requestId = state.search.currentRequestId
+  requestId = searchState.currentRequestId
 ) {
-  state.loading = true;
+  searchState.loading = true;
   restartSearchResults();
-  state.search.query = query;
+  searchState.query = query;
 
   try {
     const currentData =
-      state.profile.view == 'caught' ? state.caught : state.favorites;
+      searchState.view == 'caught'
+        ? caughtState.caught
+        : favoritesState.favorites;
 
-    state.search.queryResults = possiblePokemon(query, currentData);
+    search.queryResults = possiblePokemon(query, currentData);
 
-    if (state.search.queryResults.length === 0) return;
+    if (searchState.queryResults.length === 0) return;
 
-    const pokemonNames = sortPokemonResults(state.search.queryResults);
+    const pokemonNames = sortPokemonResults(searchState.queryResults);
 
     for (const pokemon of pokemonNames) {
       const { name, id, img } = pokemon;
-      if (requestId !== state.search.currentRequestId) return;
-      state.search.results.push({ name, id, img });
+      if (requestId !== searchState.currentRequestId) return;
+      searchState.results.push({ name, id, img });
     }
   } catch (err) {
     console.error(err);
   }
 
-  state.loading = false;
+  searchState.loading = false;
 };

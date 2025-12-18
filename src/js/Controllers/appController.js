@@ -4,9 +4,13 @@ import '../../css/style.css';
 import { controlNavInit } from './navController.js';
 
 const init = function () {
+  if (window.appInitialized) return;
+
   controlNavInit();
   controlSearchInit();
   controlProfileInit();
+
+  window.appInitialized = true;
 };
 
 init();

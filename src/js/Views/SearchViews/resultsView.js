@@ -15,12 +15,10 @@ class ResultsView extends View {
       threshold: 0.01,
       rootMargin: '100%',
     });
-    console.log('RV observe is running');
   }
 
   unobserve() {
     this._observer.unobserve(this._sentinel);
-    console.log('RV unobserve is running');
   }
 
   _generateMarkup() {

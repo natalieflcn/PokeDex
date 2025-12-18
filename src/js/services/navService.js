@@ -1,5 +1,5 @@
 // Removes all active classes and hides the current screens, prepping to instantiate a module
-export const reset = function () {
+export const navReset = function () {
   document
     .querySelectorAll(
       '.screen__1--search, .screen__2--search, .screen__1--map, .screen__2--map, .screen__1--profile, .screen__2--profile'
@@ -20,7 +20,7 @@ export const reset = function () {
 };
 
 // Adds active classes to Search module indicators and reveals Search module screens
-export const search = function () {
+export const navSearch = function () {
   document
     .querySelectorAll('.screen__1--search, .screen__2--search')
     .forEach(screen => screen.classList.remove('hidden'));
@@ -33,7 +33,7 @@ export const search = function () {
 };
 
 // Adds active classes to Map module indicators and reveals Map module screens
-export const map = function () {
+export const navMap = function () {
   document
     .querySelectorAll('.screen__1--map, .screen__2--map')
     .forEach(screen => screen.classList.remove('hidden'));
@@ -46,7 +46,7 @@ export const map = function () {
 };
 
 // Adds active classes to Profile module indicators and reveals Profile module screens
-export const profile = function () {
+export const navProfile = function () {
   document
     .querySelectorAll('.screen__1--profile, .screen__2--profile')
     .forEach(screen => screen.classList.remove('hidden'));
@@ -56,4 +56,22 @@ export const profile = function () {
     .classList.add('lights__inner--active');
 
   document.querySelector('.header__btn--profile').classList.add('btn--active');
+};
+
+// Adds active classes to visually toggle the Caught Pokemon list on the Profile module
+export const navCaught = function () {
+  document.querySelector('.profile__btn--caught').classList.add('btn--active');
+  document
+    .querySelector('.profile__btn--favorites')
+    .classList.remove('btn--active');
+};
+
+// Adds active classes to visually toggle the Favorites Pokemon list on the Profile module
+export const navFavorites = function () {
+  document
+    .querySelector('.profile__btn--favorites')
+    .classList.add('btn--active');
+  document
+    .querySelector('.profile__btn--caught')
+    .classList.remove('btn--active');
 };

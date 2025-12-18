@@ -84,7 +84,6 @@ export const restartSearchResults = function () {
 // To sort Pokémon search results by name OR id -- for queries ONLY
 export const sortPokemonResults = function (pokemonSet) {
   let sort;
-  console.log(state.search.queryResults);
 
   // Sorting the Pokémon results
   if (state.search.mode === 'name') {
@@ -95,7 +94,7 @@ export const sortPokemonResults = function (pokemonSet) {
     // Sorting by ID
     sort = pokemonSet.sort((a, b) => a.id - b.id);
   }
-  console.log(sort);
+
   return sort;
 };
 

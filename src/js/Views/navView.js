@@ -18,6 +18,10 @@ class NavView extends View {
   addHandlerBrowser(handler) {
     ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
   }
+
+  addHandlerInitialLoad(handler) {
+    document.addEventListener('DOMContentLoaded', handler);
+  }
 }
 
 export default new NavView();

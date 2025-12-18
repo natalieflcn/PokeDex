@@ -1,4 +1,3 @@
-import { state } from './state.js';
 import {
   MAIN_API_URL,
   DETAILS_API_URL,
@@ -16,6 +15,10 @@ import {
   sortPokemonName,
   updateCaughtPokemonTypes,
 } from '../helpers.js';
+import pokemonState from './state/pokemonState.js';
+import caughtState from './state/caughtState.js';
+import favoritesState from './state/favoritesState.js';
+import searchState from './state/searchState.js';
 
 // To store all Pokémon names in our state
 export const storeAllPokemon = async function () {
@@ -25,10 +28,13 @@ export const storeAllPokemon = async function () {
   for (const result of results) {
     const pokemonName = result.name;
     const pokemonId = extractPokemonId(result.url);
-    state.allPokemon.pokemonDB.push({ name: pokemonName, id: pokemonId });
+    pokemonState.allPokemon.pokemonDB.push({
+      name: pokemonName,
+      id: pokemonId,
+    });
   }
 
-  state.allPokemon.pokemonDB.loaded = true;
+  pokemonState.allPokemon.pokemonDB.loaded = true;
 };
 
 // To create a Pokémon object after parsing PokéAPI data
@@ -65,8 +71,10 @@ const createPokemonObject = async function (data) {
   // find eng flav text
 
   // Properties created from Caught and Favorites in state
-  const caught = state.caught.some(p => p.id === id) ? true : false;
-  const favorite = state.favorites.some(p => p.id === id) ? true : false;
+  const caught = caughtState.caught.some(p => p.id === id) ? true : false;
+  const favorite = favoritesState.favorites.some(p => p.id === id)
+    ? true
+    : false;
 
   return {
     name: capitalize(name),
@@ -87,33 +95,33 @@ const createPokemonObject = async function (data) {
 
 // To load Pokémon details for the current batch rendered in search results [screen 1]
 export const loadPokemonResults = async function (
-  requestId = state.search.currentRequestId
+  requestId = searchState.currentRequestId
 ) {
   try {
-    state.loading = true;
+    searchState.loading = true;
 
     // restartSearchResults();
 
     let pokemonNames;
 
     // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
-    if (!state.allPokemon.pokemonDB.loaded) {
+    if (!pokemonState.allPokemon.pokemonDB.loaded) {
       const pokemon = await AJAX(
-        `${DETAILS_API_URL}?limit=${state.search.limit}&offset=${0}`
+        `${DETAILS_API_URL}?limit=${searchState.limit}&offset=${0}`
       );
       pokemonNames = pokemon.results;
     } else {
-      if (state.search.mode === 'id') {
+      if (searchState.mode === 'id') {
         // Loading sorted by ID
-        pokemonNames = state.allPokemon.pokemonDB.slice(
-          state.search.offset,
-          state.search.offset + LIMIT
+        pokemonNames = pokemonState.allPokemon.pokemonDB.slice(
+          searchState.offset,
+          searchState.offset + LIMIT
         );
       } else {
         // Loading sorted by Name
-        pokemonNames = sortPokemonName(state.allPokemon.pokemonDB).slice(
-          state.search.offset,
-          state.search.offset + LIMIT
+        pokemonNames = sortPokemonName(pokemonState.allPokemon.pokemonDB).slice(
+          searchState.offset,
+          searchState.offset + LIMIT
         );
       }
     }
@@ -121,22 +129,22 @@ export const loadPokemonResults = async function (
     for (const pokemon of pokemonNames) {
       try {
         const pokemonName = pokemon.name || pokemon;
-        if (requestId !== state.search.currentRequestId) return;
+        if (requestId !== searchState.currentRequestId) return;
         const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemonName}`);
         const pokemonPreview = createPokemonPreviewObject(
           pokemonName,
           pokemonDetails
         );
 
-        if (requestId !== state.search.currentRequestId) return;
-        state.search.results.push(pokemonPreview);
+        if (requestId !== searchState.currentRequestId) return;
+        searchState.results.push(pokemonPreview);
       } catch (err) {
         console.error(err);
       }
     }
 
-    state.search.offset += LIMIT;
-    state.loading = false;
+    searchState.offset += LIMIT;
+    searchState.loading = false;
   } catch (err) {
     throw err;
   }
@@ -145,22 +153,22 @@ export const loadPokemonResults = async function (
 // To load additional Pokémon results
 export const loadAdditionalBatch = async function () {
   try {
-    state.loading = true;
-    state.search.currentBatch = [];
+    searchState.loading = true;
+    searchState.currentBatch = [];
     let pokemonNames = [];
 
-    if (state.search.mode === 'id') {
+    if (searchState.mode === 'id') {
       // Loading sorted by ID
 
-      pokemonNames = state.allPokemon.pokemonDB.slice(
-        state.search.offset,
-        state.search.offset + LIMIT
+      pokemonNames = pokemonState.allPokemon.pokemonDB.slice(
+        searchState.offset,
+        searchState.offset + LIMIT
       );
     } else {
       // Loading sorted by Name
-      pokemonNames = sortPokemonName(state.allPokemon.pokemonDB).slice(
-        state.search.offset,
-        state.search.offset + LIMIT
+      pokemonNames = sortPokemonName(pokemonState.allPokemon.pokemonDB).slice(
+        searchState.offset,
+        searchState.offset + LIMIT
       );
     }
 
@@ -172,16 +180,16 @@ export const loadAdditionalBatch = async function () {
           pokemonName,
           pokemonDetails
         );
-        state.search.currentBatch.push(pokemonPreview);
+        searchState.currentBatch.push(pokemonPreview);
       } catch (err) {
         console.error(err);
       }
     }
 
-    state.search.results.push(...state.search.currentBatch);
+    searchState.results.push(...searchState.currentBatch);
 
-    state.search.offset += LIMIT;
-    state.loading = false;
+    searchState.offset += LIMIT;
+    searchState.loading = false;
   } catch (err) {
     throw err;
   }
@@ -189,24 +197,24 @@ export const loadAdditionalBatch = async function () {
 
 // To load Pokémon previews in the search results screen [screen 1]
 export const loadQueryResults = async function (query, requestId) {
-  state.loading = true;
+  searchState.loading = true;
   restartSearchResults();
-  state.search.query = query;
-  state.search.queryResults = possiblePokemon(
+  searchState.query = query;
+  searchState.queryResults = possiblePokemon(
     query,
-    state.allPokemon.pokemonDB
+    pokemonState.allPokemon.pokemonDB
   );
 
-  const sorted = sortPokemonResults(state.search.queryResults);
+  const sorted = sortPokemonResults(searchState.queryResults);
 
-  const pokemonNames = state.search.queryResults.slice(
-    state.search.offset,
-    state.search.offset + LIMIT
+  const pokemonNames = searchState.queryResults.slice(
+    searchState.offset,
+    searchState.offset + LIMIT
   );
 
   for (const pokemon of pokemonNames) {
     try {
-      if (requestId !== state.search.currentRequestId) return;
+      if (requestId !== searchState.currentRequestId) return;
       const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon.name}`);
       const pokemonPreview = createPokemonPreviewObject(
         pokemon.name,
@@ -214,26 +222,26 @@ export const loadQueryResults = async function (query, requestId) {
       );
 
       //   if(!pokemonPreview.id || pokemonPreview.img) return;
-      if (requestId !== state.search.currentRequestId) return;
-      state.search.results.push(pokemonPreview);
+      if (requestId !== searchState.currentRequestId) return;
+      searchState.results.push(pokemonPreview);
     } catch (err) {
       console.error(err);
     }
   }
 
   //   sortSearchResults(state.search.mode);
-  state.search.offset += LIMIT;
-  state.loading = false;
+  searchState.offset += LIMIT;
+  searchState.loading = false;
 };
 
 // To load additional query results
 export const loadAdditionalQuery = async function (requestId) {
-  state.loading = true;
-  state.search.currentBatch = [];
+  searchState.loading = true;
+  searchState.currentBatch = [];
 
-  const pokemonNames = state.search.queryResults.slice(
-    state.search.offset,
-    state.search.offset + LIMIT
+  const pokemonNames = searchState.queryResults.slice(
+    searchState.offset,
+    searchState.offset + LIMIT
   );
 
   for (const pokemon of pokemonNames) {
@@ -243,14 +251,14 @@ export const loadAdditionalQuery = async function (requestId) {
         pokemon.name,
         pokemonDetails
       );
-      state.search.currentBatch.push(pokemonPreview);
+      searchState.currentBatch.push(pokemonPreview);
     } catch (err) {
       console.error(err);
     }
   }
-  state.search.results.push(...state.search.currentBatch);
-  state.search.offset += LIMIT;
-  state.loading = false;
+  searchState.results.push(...searchState.currentBatch);
+  searchState.offset += LIMIT;
+  searchState.loading = false;
 };
 
 // To load Pokémon details for the search panel [screen 2]
@@ -261,7 +269,7 @@ export const loadPokemon = async function (pokemon) {
       AJAX(`${DETAILS_API_URL}${pokemon}`),
     ]);
 
-    state.pokemon = await createPokemonObject(data);
+    pokemonState.pokemon = await createPokemonObject(data);
   } catch (err) {
     console.error(err);
   }
@@ -272,18 +280,18 @@ export const addCaughtPokemon = function (pokemon) {
   pokemon.caught = true;
 
   // Prevent adding duplicates, if already rendered from local storage
-  if (state.caught.find(p => p.name === pokemon.name)) return;
+  if (caughtState.caught.find(p => p.name === pokemon.name)) return;
 
-  state.caught.push(pokemon);
-  persistData('caught', state.caught);
+  caughtState.caught.push(pokemon);
+  persistData('caught', caughtState.caught);
   updateCaughtPokemonTypes();
 };
 
 export const removeCaughtPokemon = function (pokemon) {
   pokemon.caught = false;
-  const index = state.caught.find(p => p.name === pokemon.name);
-  state.caught.splice(index, 1);
-  persistData('caught', state.caught);
+  const index = caughtState.caught.find(p => p.name === pokemon.name);
+  caughtState.caught.splice(index, 1);
+  persistData('caught', caughtState.caught);
   updateCaughtPokemonTypes();
 };
 
@@ -292,17 +300,18 @@ export const addFavoritePokemon = function (pokemon) {
   pokemon.favorite = true;
 
   // Prevent adding duplicates, if already rendered from local storage
-  if (state.favorites.find(p => p.name === pokemon.name)) return;
+  if (favoritesState.favorites.find(p => p.name === pokemon.name)) return;
 
-  state.favorites.push(pokemon);
-  persistData('favorites', state.favorites);
+  favoritesState.favorites.push(pokemon);
+  console.log(`favorites state is now ${favoritesState.favorites}`);
+  persistData('favorites', favoritesState.favorites);
 };
 
 export const removeFavoritePokemon = function (pokemon) {
   pokemon.favorite = false;
-  const index = state.favorites.find(p => p.name === pokemon.name);
-  state.favorites.splice(index, 1);
-  persistData('favorites', state.favorites);
+  const index = favoritesState.favorites.find(p => p.name === pokemon.name);
+  favoritesState.favorites.splice(index, 1);
+  persistData('favorites', favoritesState.favorites);
 };
 
 // Search -- HELPER METHODS
@@ -316,10 +325,10 @@ const extractPokemonId = function (url) {
 };
 
 // To export Caught Pokémon for Map and Profile View
-export const getCaughtPokemon = () => state.caught;
+export const getCaughtPokemon = () => caughtState.caught;
 
 // To export Favorite Pokémon for Profile View
-export const getFavoritePokemon = () => state.favorites;
+export const getFavoritePokemon = () => favoritesState.favorites;
 // To store Caught Pokémon and Favorite Pokémon in Local Storage
 const persistData = function (type, data) {
   localStorage.setItem(type, JSON.stringify(data));
@@ -328,9 +337,9 @@ const persistData = function (type, data) {
 // To check local storage and update Caught/Favorite Pokémon with persisted data
 const init = function () {
   const storageCaught = localStorage.getItem('caught');
-  if (storageCaught) state.caught = JSON.parse(storageCaught);
+  if (storageCaught) caughtState.caught = JSON.parse(storageCaught);
 
   const storageFavorites = localStorage.getItem('favorites');
-  if (storageCaught) state.favorites = JSON.parse(storageFavorites);
+  if (storageCaught) favoritesState.favorites = JSON.parse(storageFavorites);
 };
 init();
