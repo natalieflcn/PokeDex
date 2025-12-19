@@ -6,6 +6,8 @@ import {
   navProfile,
   navFavorites,
   navCaught,
+  navProfileRoute,
+  navResolveRoute,
 } from '../services/navService';
 import navView from '../views/navView';
 
@@ -13,6 +15,7 @@ import navView from '../views/navView';
 const controlNavRenderView = function (page) {
   navReset();
 
+  console.log(page);
   switch (page) {
     case 'search':
       navSearch();
@@ -22,15 +25,10 @@ const controlNavRenderView = function (page) {
       navMap();
       break;
 
-    // RENDERING SUB ROUTES
+    case 'profile':
     case 'profile/caught':
-      navProfile();
-      navCaught();
-      break;
-
     case 'profile/favorites':
       navProfile();
-      navFavorites();
       break;
 
     default:
@@ -44,17 +42,17 @@ const controlNavBtn = function (page) {
   controlNavRenderView(page);
 
   window.history.pushState(
-    { page: page },
+    { page: navResolveRoute(page) },
     '',
-    new URL(page.toString(), BASE_POKEDEX_URL)
+    new URL(navResolveRoute(page).toString(), BASE_POKEDEX_URL)
   );
 };
 
 // Reads the URL and navigates to appropriate module when user navigates around browser history stack
 const controlNavBrowser = function () {
-  const path = window.location.pathname.replace('/', '');
+  const page = window.location.pathname.replace('/', '');
 
-  controlNavRenderView(path);
+  controlNavRenderView(page);
 };
 
 // Rewrites the root URL '/' to '/search' to maintain URL consistency across page loads

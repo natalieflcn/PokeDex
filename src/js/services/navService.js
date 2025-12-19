@@ -75,3 +75,11 @@ export const navFavorites = function () {
     .querySelector('.profile__btn--caught')
     .classList.remove('btn--active');
 };
+
+//
+export const navResolveRoute = function (page) {
+  console.log('page is ' + page);
+  if (page === 'profile') return '/profile/caught';
+
+  return `/${page}`;
+};

@@ -19,7 +19,11 @@ class CategoryView extends View {
     });
   }
 
-  addHandlerInitialLoad(handler) {
+  addHandlerCategory(handler) {
+    ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
+  }
+
+  addHandlerCategoryLoad(handler) {
     document.addEventListener('DOMContentLoaded', handler);
   }
 }

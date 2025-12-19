@@ -14,9 +14,8 @@ import searchState from '../models/state/searchState.js';
 import favoritesState from '../models/state/favoritesState.js';
 import caughtState from '../models/state/caughtState.js';
 import { navCaught, navFavorites } from '../services/navService.js';
-import { BASE_POKEDEX_URL } from '../config.js';
 
-// PROFILE CATEGORY ROUTING AND RENDERING (Caught/Favorites)
+// PROFILE CATEGORY RENDERING AND ROUTING (Caught/Favorites)
 
 // Renders the appropriate category view by calling their respective navService (based on the URL path)
 const controlProfileRenderCategory = function (view) {
@@ -42,13 +41,21 @@ const controlProfileCategoryBtn = function (view) {
   window.history.pushState({ page: `profile/${view}` }, '', `/profile/${view}`);
 };
 
-// Rewrites the URL '/profile' to 'profile/caught' to maintain URL consistency across page loads
-const controlProfileLoadCategory = function () {
-  window.history.replaceState(
-    { page: 'profile/caught' },
-    '',
-    '/profile/caught'
-  );
+// Reads the URL and navigates to appropriate view when user navigates around browser history stack
+const controlProfileCategory = function () {
+  const view = window.location.pathname.replace('/profile/', '');
+  controlProfileRenderCategory(view);
+};
+
+// Redirects 'profile' to '/profile/caught' to maintain URL consistency across page loads
+const controlProfileCategoryLoad = function () {
+  if (window.location.pathname === '/profile') {
+    window.history.replaceState(
+      { page: 'profile/caught' },
+      '',
+      '/profile/caught'
+    );
+  }
 };
 
 // to refactor later
@@ -153,7 +160,7 @@ const controlProfile = function () {
 };
 
 export const controlProfileInit = function () {
-  controlProfileLoadCategory();
+  //refactored controllers
 
   searchView.addHandlerSearch(controlSavedResults);
   sortView.addHandlerSortName(controlSortName);
@@ -161,6 +168,7 @@ export const controlProfileInit = function () {
   previewView.addHandlerRedirect(controlClickedPreview);
   profileView.addHandlerLoad(controlProfile);
 
-  //refactored controllers
   categoryView.addHandlerCategoryBtn(controlProfileCategoryBtn);
+  categoryView.addHandlerCategory(controlProfileCategory);
+  categoryView.addHandlerCategoryLoad(controlProfileCategoryLoad);
 };

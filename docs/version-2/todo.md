@@ -50,11 +50,12 @@
   - [ ] Offload controller functionality into the services -- follow fat models, skinny controllers guideline
   - [ ] Review the relationship between controllers and views and ensure that the publisher-subscriber pattern is being enforced
     - [ ] Clean up Views and ensure there is no application logic within them (views should only be responsible for adding event handlers)
-- [~] Implement sub-routes for filtered (caught/favorites) and sorted (name/id) lists of Pokemon with Browser History API
+- [x] Implement sub-routes for filtered (Caught/Favorites) lists of Pokemon on the Profile with Browser History API
 
 ### Notes
 
 - Need to split savedPokemonView into caughtPokemonView and favoritesPokemonView for better readability
 - Need to render newly Caught/Favorite Pokémon instantly, without module reload
+- TODO: Need to redirect /profile to /profile/caught for url consistency
 
 - BUG: Caught/Favorites Pokémon are being inserted into the general AllPokemon list that is rendered in the Search module
