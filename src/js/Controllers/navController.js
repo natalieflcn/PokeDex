@@ -8,6 +8,7 @@ import {
   navCaught,
   navProfileRoute,
   navResolveRoute,
+  navCheckRoute,
 } from '../services/navService';
 import navView from '../views/navView';
 
@@ -15,7 +16,6 @@ import navView from '../views/navView';
 const controlNavRenderView = function (page) {
   navReset();
 
-  console.log(page);
   switch (page) {
     case 'search':
       navSearch();
@@ -41,10 +41,14 @@ const controlNavRenderView = function (page) {
 const controlNavBtn = function (page) {
   controlNavRenderView(page);
 
+  const route = navCheckRoute(page);
+  console.log(route);
+  if (!route) return;
+
   window.history.pushState(
-    { page: navResolveRoute(page) },
+    { page: route },
     '',
-    new URL(navResolveRoute(page).toString(), BASE_POKEDEX_URL)
+    new URL(route.toString(), BASE_POKEDEX_URL)
   );
 };
 

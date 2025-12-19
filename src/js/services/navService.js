@@ -1,3 +1,5 @@
+// DOM MANIPULATION FUNCTIONS
+
 // Removes all active classes and hides the current screens, prepping to instantiate a module
 export const navReset = function () {
   document
@@ -76,10 +78,19 @@ export const navFavorites = function () {
     .classList.remove('btn--active');
 };
 
-//
-export const navResolveRoute = function (page) {
-  console.log('page is ' + page);
-  if (page === 'profile') return '/profile/caught';
+// ROUTE MANIPULATION FUNCTIONS
+
+// Resolves routes to appropriate subroutes (if necessary) to maintain URL consistency
+const navResolveRoute = function (page) {
+  if (page === 'profile') return 'profile/caught';
 
   return `/${page}`;
+};
+
+// Checks to see if requested route matches to current route to prevent duplicate entries in the browser history stack
+export const navCheckRoute = function (page) {
+  const currentURL = window.location.pathname.split('/').at(1);
+
+  if (currentURL === page) return null;
+  return navResolveRoute(page);
 };
