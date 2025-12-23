@@ -1,13 +1,10 @@
 import View from '../View.js';
-import { state } from '../../models/state.js';
-import { updateCaughtPokemonTypes } from '../../helpers.js';
 import { PROFILE_IMG, PROFILE_NAME, PROFILE_BIO } from '../../config.js';
 
 class ProfileView extends View {
   _parentEl = document.querySelector('.screen__1--profile');
 
-  addHandlerLoad(handler) {
-    updateCaughtPokemonTypes();
+  addHandlerLoadProfile(handler) {
     ['hashchange', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 

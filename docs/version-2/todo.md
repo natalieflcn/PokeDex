@@ -44,18 +44,39 @@
 - [x] BUG: Favorites/Caught Pokemon are not rendering respective lists
 
 - [~] Refactor MVC system architecture implementation
-  - [ ] Review, assess, and modify code for the overlapping responsiblities currently shared between Model and Controller layers
-  - [ ] Refactor the current Model structure into domain-driven Models: pokemonModel, favoritesModel, caughtModel
-  - [ ] Refactor the current Controllers structure into domain-driven Controllers: pokemonController, favoritesController, caughtController, searchController, navController, appController
-  - [ ] Offload controller functionality into the services -- follow fat models, skinny controllers guideline
-  - [ ] Review the relationship between controllers and views and ensure that the publisher-subscriber pattern is being enforced
-    - [ ] Clean up Views and ensure there is no application logic within them (views should only be responsible for adding event handlers)
+  - [~] Offload controller functionality into the services -- follow fat models, skinny controllers guideline
+  - [~] Review the relationship between controllers and views and ensure that the publisher-subscriber pattern is being enforced
 - [x] Implement sub-routes for filtered (Caught/Favorites) lists of Pokemon on the Profile with Browser History API
+  - [x] Redirect /profile to /profile/caught for url consistency
 
 ### Notes
 
-- Need to split savedPokemonView into caughtPokemonView and favoritesPokemonView for better readability
+- Consider splitting savedPokemonView into caughtPokemonView and favoritesPokemonView for better readability
 - Need to render newly Caught/Favorite Pokémon instantly, without module reload
-- TODO: Need to redirect /profile to /profile/caught for url consistency
 
 - BUG: Caught/Favorites Pokémon are being inserted into the general AllPokemon list that is rendered in the Search module
+
+## Week: December 7 – December 12
+
+### Goals
+
+- [ ] BUG: Favorites button event handler is running twice, on every other click
+- [ ] BUG: Caught button event handler is running twice on every click, but not saving the Pokemon into Caught state
+- [ ] BUG: Caught and Favorite buttons are not working on Profile section
+- [ ] BUG: /profile/favorites is not immediately rendering Favorties Pokémon on profile
+- [ ] BUG: The entire Favorites Pokémon array isn't rendering (2 out of 6 Pokémon before reload, 4 out of 6 Pokémon after reload)
+- [ ] BUG: Querying on Profile for Caught Pokémon is querying out of general Pokémon array
+
+- [~] Refactor MVC system architecture implementation
+  - [ ] Modify code for the overlapping responsiblities currently shared between Model and Controller layers
+  - [ ] Refactor the current Model structure into domain-driven Models: pokemonModel, favoritesModel, caughtModel
+  - [~] Offload controller functionality into the services -- follow fat models, skinny controllers guideline
+  - [~] Review the relationship between controllers and views and ensure that the publisher-subscriber pattern is being enforced
+    - [ ] Clean up Views and ensure there is no application logic within them (views should only be responsible for ADDING event handlers)
+
+### Notes
+
+- ProfileViews/previewView.js and SearchViews/previewView.js is the same -- refactor into one previewView file for the search domain later
+  - The addHandlerActive() (SearchView) and addHandlerRedirect() (ProfileView) can be consolidated into one handler that behaves differently based on the current module that the user is in
+- Removed updateCaughtPokemonTypes function call from Profile View... need to update the # of types caught in caughtState automatically when caught Pokémon are added/removed
+- Need to revise all error messages for each view and create an appropriate message for each situation

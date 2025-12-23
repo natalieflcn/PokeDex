@@ -3,7 +3,7 @@ import searchView from '../views/ProfileViews/searchView.js';
 import savedPokemonView from '../views/ProfileViews/savedPokemonView.js';
 
 import categoryView from '../views/ProfileViews/categoryView.js';
-import { restartSearchResults } from '../helpers.js';
+import { restartSearchResults, updateCaughtPokemonTypes } from '../helpers.js';
 import sortView from '../views/ProfileViews/sortView.js';
 import { loadPokemonResults } from '../models/profileModel.js';
 import navView from '../views/navView.js';
@@ -151,6 +151,7 @@ const controlClickedPreview = function (pokemon) {
 };
 
 const controlProfile = function () {
+  updateCaughtPokemonTypes();
   const profileData = {
     typesCaught: caughtState.profile.typesCaught,
     caught: caughtState.caught,
@@ -161,12 +162,12 @@ const controlProfile = function () {
 
 export const controlProfileInit = function () {
   //refactored controllers
+  profileView.addHandlerLoadProfile(controlProfile);
 
   searchView.addHandlerSearch(controlSavedResults);
   sortView.addHandlerSortName(controlSortName);
   sortView.addHandlerSortId(controlSortId);
   previewView.addHandlerRedirect(controlClickedPreview);
-  profileView.addHandlerLoad(controlProfile);
 
   categoryView.addHandlerCategoryBtn(controlProfileCategoryBtn);
   categoryView.addHandlerCategory(controlProfileCategory);

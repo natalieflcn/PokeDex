@@ -303,7 +303,10 @@ export const addFavoritePokemon = function (pokemon) {
   if (favoritesState.favorites.find(p => p.name === pokemon.name)) return;
 
   favoritesState.favorites.push(pokemon);
-  console.log(`favorites state is now ${favoritesState.favorites}`);
+  for (const pokemon of favoritesState.favorites) {
+    console.log(pokemon);
+  }
+  console.log(favoritesState.favorites.length);
   persistData('favorites', favoritesState.favorites);
 };
 
@@ -329,6 +332,7 @@ export const getCaughtPokemon = () => caughtState.caught;
 
 // To export Favorite Pokémon for Profile View
 export const getFavoritePokemon = () => favoritesState.favorites;
+
 // To store Caught Pokémon and Favorite Pokémon in Local Storage
 const persistData = function (type, data) {
   localStorage.setItem(type, JSON.stringify(data));
