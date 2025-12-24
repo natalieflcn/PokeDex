@@ -24,10 +24,11 @@ class CategoryView extends View {
     ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
-  //TODO - may remove this, doesnt matter if /caught doesnt immediately load
+  // //TODO - may remove this, doesnt matter if /caught doesnt immediately load
   addHandlerCategoryLoad(handler) {
     document.addEventListener('DOMContentLoaded', handler);
   }
+  // }
 }
 
 export default new CategoryView();

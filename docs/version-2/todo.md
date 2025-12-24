@@ -66,6 +66,8 @@
 - [ ] BUG: /profile/favorites is not immediately rendering Favorties Pokémon on profile
 - [ ] BUG: The entire Favorites Pokémon array isn't rendering (2 out of 6 Pokémon before reload, 4 out of 6 Pokémon after reload)
 - [ ] BUG: Querying on Profile for Caught Pokémon is querying out of general Pokémon array
+- [ ] BUG: Sorting functionality is no longer working (name/id)
+- [ ] BUG: Caught/Favorites Pokémon is rendering before all Pokémon in general search query
 
 - [~] Refactor MVC system architecture implementation
   - [ ] Modify code for the overlapping responsiblities currently shared between Model and Controller layers
@@ -80,3 +82,7 @@
   - The addHandlerActive() (SearchView) and addHandlerRedirect() (ProfileView) can be consolidated into one handler that behaves differently based on the current module that the user is in
 - Removed updateCaughtPokemonTypes function call from Profile View... need to update the # of types caught in caughtState automatically when caught Pokémon are added/removed
 - Need to revise all error messages for each view and create an appropriate message for each situation
+- Need to decide how routes should be maintained in the history stack for profile/caught, profile/favorites, profile...?sort=name/id. Should these routes be explicitly kept in the global url state at all times?
+  - [x] One history entry in the stack for the filtered /profile history entries
+  - [x] A user should always be navigated to either /caught or /favorites
+  - [x] Sorting will be reset to Name after leaving Profile module

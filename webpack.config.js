@@ -11,7 +11,7 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: '/',
   },
-  devtool: 'source-map',
+  devtool: 'eval-source-map',
   devServer: {
     historyApiFallback: true,
     static: { directory: path.join(__dirname, 'dist') },

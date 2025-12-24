@@ -102,7 +102,10 @@ export const navProfileSortId = function () {
 
 // Resolves routes to appropriate subroutes (if necessary) to maintain URL consistency
 const navResolveRoute = function (page) {
-  if (page === 'profile') return 'profile/caught';
+  if (page === 'profile') {
+    navCaught();
+    return 'profile/caught';
+  }
 
   return `/${page}`;
 };
@@ -110,7 +113,15 @@ const navResolveRoute = function (page) {
 // Checks to see if requested route matches to current route to prevent duplicate entries in the browser history stack
 export const navCheckRoute = function (page) {
   const currentURL = window.location.pathname.split('/').at(1);
+  console.log(window.location.pathname);
 
   if (currentURL === page) return null;
   return navResolveRoute(page);
+};
+
+export const navProfileSanitizeSort = function () {
+  const currentURL = new URL(window.location.href);
+  currentURL.searchParams.delete('sort');
+  window.history.replaceState({}, '', currentURL);
+  navProfileSortName();
 };

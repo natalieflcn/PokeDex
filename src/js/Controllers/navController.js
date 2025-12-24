@@ -9,6 +9,8 @@ import {
   navProfileRoute,
   navResolveRoute,
   navCheckRoute,
+  navProfileSanitizeFilters,
+  navProfileSanitizeSort,
 } from '../services/navService';
 import navView from '../views/navView';
 
@@ -29,6 +31,7 @@ const controlNavRenderView = function (page) {
     case 'profile/caught':
     case 'profile/favorites':
       navProfile();
+      navProfileSanitizeSort();
       break;
 
     default:
@@ -39,11 +42,11 @@ const controlNavRenderView = function (page) {
 
 // Updates the URL and navigates to appropriate module when user clicks a navigation button
 const controlNavBtn = function (page) {
-  controlNavRenderView(page);
-
   const route = navCheckRoute(page);
-  console.log(route);
+
   if (!route) return;
+
+  controlNavRenderView(page);
 
   window.history.pushState(
     { page: route },

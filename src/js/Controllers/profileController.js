@@ -10,6 +10,8 @@ import navView from '../views/navView.js';
 import previewView from '../views/ProfileViews/previewView.js';
 import profileView from '../views/ProfileViews/profileView.js';
 import {
+  navProfileSanitizeFilters,
+  navProfileSanitizeSort,
   navProfileSortId,
   navProfileSortName,
   navSearch,
@@ -23,6 +25,7 @@ import { navCaught, navFavorites } from '../services/navService.js';
 
 // Renders the appropriate category view by calling their respective navService (based on the URL path)
 const controlProfileRenderCategory = function (view) {
+  console.log(view);
   switch (view) {
     case 'caught':
       navCaught();
@@ -32,9 +35,9 @@ const controlProfileRenderCategory = function (view) {
       navFavorites();
       break;
 
-    default:
-      navCaught();
-      break;
+    // default:
+    //   navCaught();
+    //   break;
   }
 };
 
@@ -42,7 +45,11 @@ const controlProfileRenderCategory = function (view) {
 const controlProfileCategoryBtn = function (view) {
   controlProfileRenderCategory(view);
 
-  window.history.pushState({ page: `profile/${view}` }, '', `/profile/${view}`);
+  window.history.replaceState(
+    { page: `profile/${view}` },
+    '',
+    `/profile/${view}`
+  );
 };
 
 // Reads the URL and navigates to appropriate view when user navigates around browser history stack
@@ -51,16 +58,12 @@ const controlProfileCategory = function () {
   controlProfileRenderCategory(view);
 };
 
-//TODO
-// Redirects 'profile' to '/profile/caught' to maintain URL consistency across page loads
 const controlProfileCategoryLoad = function () {
-  if (window.location.pathname === '/profile') {
-    window.history.replaceState(
-      { page: 'profile/caught' },
-      '',
-      '/profile/caught'
-    );
-  }
+  window.history.replaceState(
+    { page: `profile/caught` },
+    '',
+    `/profile/caught`
+  );
 };
 
 // PROFILE SORTING RENDERING AND ROUTING (Name/Id)
@@ -80,46 +83,19 @@ const controlProfileRenderSort = function (sort) {
   }
 };
 
-// const controlProfileSortName = function () {
-//   const currentURL = new URL(window.location.href);
-//   currentURL.searchParams.set('sort', 'name');
-//   window.history.pushState({}, '', currentURL);
-
-//   controlProfileRenderSort('name');
-// };
-
-// const controlProfileSortId = function () {
-//   const currentURL = new URL(window.location.href);
-//   currentURL.searchParams.set('sort', 'id');
-//   window.history.pushState({}, '', currentURL);
-
-//   navProfileSortId();
-// };
-
 const controlProfileSortBtn = function (sort) {
-  controlProfileRenderSort(sort);
-
   const currentURL = new URL(window.location.href);
   currentURL.searchParams.set('sort', sort);
-  window.history.pushState({}, '', currentURL);
+  window.history.replaceState({}, '', currentURL);
+  controlProfileRenderSort(sort);
 };
 
 const controlProfileSortLoad = function () {
-  let sortBy = 'name';
+  const sort = new URL(window.location.href).searchParams.get('sort');
 
-  const currentURL = new URL(window.location.href);
-  if (currentURL.searchParams) {
-    const sort = currentURL.search.split('?sort=')[1];
+  if (sort && sort !== 'name' && sort !== 'id') navProfileSanitizeSort();
 
-    if (sort === 'name' || sort === 'id') sortBy = sort;
-    else {
-      currentURL.searchParams.delete('sort');
-      console.log(currentURL.search);
-      window.history.pushState({}, '', currentURL);
-    }
-  }
-
-  controlProfileRenderSort(sortBy);
+  controlProfileRenderSort(sort);
 };
 
 // to refactor later -----
