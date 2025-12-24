@@ -16,7 +16,7 @@
 
 ### Phase 1: Patching Version One of Pokédex
 
-- [ ] Review codebase from Version 1 and polish the implementation of the MVC architecture, if necessary
+- [~] Review codebase from Version 1 and polish the implementation of the MVC architecture
 - [ ] Make the platform responsive for smaller devices
 - [ ] Patch lingering bugs from Version 1
 

@@ -56,7 +56,7 @@
 
 - BUG: Caught/Favorites Pokémon are being inserted into the general AllPokemon list that is rendered in the Search module
 
-## Week: December 7 – December 12
+## Week: December 22 – December 27
 
 ### Goals
 

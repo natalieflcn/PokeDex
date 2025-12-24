@@ -10,7 +10,7 @@ import navView from '../views/navView.js';
 import previewView from '../views/ProfileViews/previewView.js';
 import profileView from '../views/ProfileViews/profileView.js';
 import { navSearch } from '../services/navService.js';
-import searchState from '../models/state/searchState.js';
+import searchState from '../models/state/queryState.js';
 import favoritesState from '../models/state/favoritesState.js';
 import caughtState from '../models/state/caughtState.js';
 import { navCaught, navFavorites } from '../services/navService.js';

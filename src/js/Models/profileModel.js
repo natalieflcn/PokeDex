@@ -1,6 +1,6 @@
 import favoritesState from './state/favoritesState.js';
 import caughtState from './state/caughtState.js';
-import searchState from './state/searchState.js';
+import searchState from './state/queryState.js';
 
 import {
   restartSearchResults,
