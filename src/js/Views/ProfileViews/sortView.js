@@ -4,46 +4,22 @@ class SortView extends View {
   _parentEl = document.querySelector('.profile__form');
   _mode = 'id';
 
-  addHandlerSortName(handler) {
+  addHandlerSortBtn(handler) {
     this._parentEl.addEventListener('click', function (e) {
       e.preventDefault();
-      const btn = e.target.closest('.profile__btn--name');
+
+      const btn = e.target.closest('.profile__btn--name, .profile__btn--id');
       if (!btn || btn.classList.contains('btn--active')) return;
 
-      console.log('addhandlersortname running');
-      this._mode = 'name';
+      const sort = btn.dataset.sort;
 
-      handler('name');
+      handler(sort);
     });
   }
 
-  addHandlerSortId(handler) {
-    this._parentEl.addEventListener('click', function (e) {
-      e.preventDefault();
-      const btn = e.target.closest('.profile__btn--id');
-      if (!btn || btn.classList.contains('btn--active')) return;
-
-      console.log('addhandlersortid running');
-
-      this._mode = 'id';
-
-      handler();
-    });
+  addHandlerSortLoad(handler) {
+    ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
   }
-
-  toggleSortName() {
-    document.querySelector('.profile__btn--name').classList.add('btn--active');
-    document.querySelector('.profile__btn--id').classList.remove('btn--active');
-  }
-
-  toggleSortId() {
-    document.querySelector('.profile__btn--id').classList.add('btn--active');
-    document
-      .querySelector('.profile__btn--name')
-      .classList.remove('btn--active');
-  }
-
-  clearActive() {}
 }
 
 export default new SortView();

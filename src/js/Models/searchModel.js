@@ -18,7 +18,7 @@ import {
 import pokemonState from './state/pokemonState.js';
 import caughtState from './state/caughtState.js';
 import favoritesState from './state/favoritesState.js';
-import searchState from './state/searchState.js';
+import searchState from './state/queryState.js';
 
 // To store all Pokémon names in our state
 export const storeAllPokemon = async function () {

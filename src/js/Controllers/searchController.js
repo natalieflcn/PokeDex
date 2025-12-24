@@ -1,6 +1,6 @@
 import * as searchModel from '../models/searchModel.js';
 
-import searchView from '../views/SearchViews/searchView.js';
+import queryView from '../views/SearchViews/queryView.js';
 import sortView from '../views/SearchViews/sortView.js';
 import resultsView from '../views/SearchViews/resultsView.js';
 import previewView from '../views/SearchViews/previewView.js';
@@ -13,7 +13,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 import { debounce, restartSearchResults } from '../helpers.js';
-import searchState from '../models/state/searchState.js';
+import searchState from '../models/state/queryState.js';
 import pokemonState from '../models/state/pokemonState.js';
 import favoritesState from '../models/state/favoritesState.js';
 import caughtState from '../models/state/caughtState.js';
@@ -28,7 +28,7 @@ const controlSearchResults = async function () {
 
     if (resultsView._observer) resultsView.unobserve();
 
-    const query = searchView.getQuery();
+    const query = queryView.getQuery();
 
     const requestId = ++searchState.currentRequestId;
 
@@ -52,7 +52,7 @@ const controlSearchResults = async function () {
     // Render Pokémon search results (screen 1 -- search)
     resultsView.render(searchState.results);
   } catch (err) {
-    searchView.renderError();
+    queryView.renderError();
   }
 };
 const debouncedControlSearchResults = debounce(controlSearchResults, 300); // Debounce search results to reduce redundant queries
@@ -217,7 +217,7 @@ const initPokemonData = async function () {
 
 export const controlSearchInit = function () {
   initPokemonData();
-  searchView.addHandlerSearch(debouncedControlSearchResults);
+  queryView.addHandlerQuery(debouncedControlSearchResults);
   sortView.addHandlerSortName(controlSortName);
   sortView.addHandlerSortId(controlSortId);
   previewView.addHandlerActive(controlClickActivePreview);

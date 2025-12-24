@@ -1,4 +1,4 @@
-// DOM MANIPULATION FUNCTIONS
+// DOM MANIPULATION FUNCTIONS -----
 
 // Removes all active classes and hides the current screens, prepping to instantiate a module
 export const navReset = function () {
@@ -20,6 +20,8 @@ export const navReset = function () {
     )
     .forEach(btn => btn.classList.remove('btn--active'));
 };
+
+// POKEDEX MAIN ROUTES (MODULES)
 
 // Adds active classes to Search module indicators and reveals Search module screens
 export const navSearch = function () {
@@ -60,6 +62,8 @@ export const navProfile = function () {
   document.querySelector('.header__btn--profile').classList.add('btn--active');
 };
 
+// POKEDEX SUBROUTES
+
 // Adds active classes to visually toggle the Caught Pokemon list on the Profile module
 export const navCaught = function () {
   document.querySelector('.profile__btn--caught').classList.add('btn--active');
@@ -78,7 +82,23 @@ export const navFavorites = function () {
     .classList.remove('btn--active');
 };
 
-// ROUTE MANIPULATION FUNCTIONS
+// Adds active classes to visually toggle the Sort Name button on the Search module
+
+// Adds active classes to visually toggle the Sort ID button on the Search module
+
+// Adds active classes to visually toggle the Sort Name button on the Profile module
+export const navProfileSortName = function () {
+  document.querySelector('.profile__btn--name').classList.add('btn--active');
+  document.querySelector('.profile__btn--id').classList.remove('btn--active');
+};
+
+// Adds active classes to visually toggle the Sort ID button on the Profile module
+export const navProfileSortId = function () {
+  document.querySelector('.profile__btn--id').classList.add('btn--active');
+  document.querySelector('.profile__btn--name').classList.remove('btn--active');
+};
+
+// ROUTE MANIPULATION FUNCTIONS -----
 
 // Resolves routes to appropriate subroutes (if necessary) to maintain URL consistency
 const navResolveRoute = function (page) {

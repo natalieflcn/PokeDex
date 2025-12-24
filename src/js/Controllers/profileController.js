@@ -1,5 +1,5 @@
 import * as profileModel from '../models/profileModel.js';
-import searchView from '../views/ProfileViews/searchView.js';
+import queryView from '../views/ProfileViews/queryView.js';
 import savedPokemonView from '../views/ProfileViews/savedPokemonView.js';
 
 import categoryView from '../views/ProfileViews/categoryView.js';
@@ -9,7 +9,11 @@ import { loadPokemonResults } from '../models/profileModel.js';
 import navView from '../views/navView.js';
 import previewView from '../views/ProfileViews/previewView.js';
 import profileView from '../views/ProfileViews/profileView.js';
-import { navSearch } from '../services/navService.js';
+import {
+  navProfileSortId,
+  navProfileSortName,
+  navSearch,
+} from '../services/navService.js';
 import searchState from '../models/state/queryState.js';
 import favoritesState from '../models/state/favoritesState.js';
 import caughtState from '../models/state/caughtState.js';
@@ -47,6 +51,7 @@ const controlProfileCategory = function () {
   controlProfileRenderCategory(view);
 };
 
+//TODO
 // Redirects 'profile' to '/profile/caught' to maintain URL consistency across page loads
 const controlProfileCategoryLoad = function () {
   if (window.location.pathname === '/profile') {
@@ -58,11 +63,70 @@ const controlProfileCategoryLoad = function () {
   }
 };
 
-// to refactor later
+// PROFILE SORTING RENDERING AND ROUTING (Name/Id)
+const controlProfileRenderSort = function (sort) {
+  switch (sort) {
+    case 'name':
+      navProfileSortName();
+      break;
+
+    case 'id':
+      navProfileSortId();
+      break;
+
+    default:
+      navProfileSortName();
+      break;
+  }
+};
+
+// const controlProfileSortName = function () {
+//   const currentURL = new URL(window.location.href);
+//   currentURL.searchParams.set('sort', 'name');
+//   window.history.pushState({}, '', currentURL);
+
+//   controlProfileRenderSort('name');
+// };
+
+// const controlProfileSortId = function () {
+//   const currentURL = new URL(window.location.href);
+//   currentURL.searchParams.set('sort', 'id');
+//   window.history.pushState({}, '', currentURL);
+
+//   navProfileSortId();
+// };
+
+const controlProfileSortBtn = function (sort) {
+  controlProfileRenderSort(sort);
+
+  const currentURL = new URL(window.location.href);
+  currentURL.searchParams.set('sort', sort);
+  window.history.pushState({}, '', currentURL);
+};
+
+const controlProfileSortLoad = function () {
+  let sortBy = 'name';
+
+  const currentURL = new URL(window.location.href);
+  if (currentURL.searchParams) {
+    const sort = currentURL.search.split('?sort=')[1];
+
+    if (sort === 'name' || sort === 'id') sortBy = sort;
+    else {
+      currentURL.searchParams.delete('sort');
+      console.log(currentURL.search);
+      window.history.pushState({}, '', currentURL);
+    }
+  }
+
+  controlProfileRenderSort(sortBy);
+};
+
+// to refactor later -----
 const controlSavedResults = async function () {
   try {
     restartSearchResults();
-    const query = searchView.getQuery();
+    const query = queryView.getQuery();
     const requestId = ++searchState.currentRequestId;
 
     savedPokemonView.renderSpinner();
@@ -96,7 +160,7 @@ export const newPokemonResult = async function () {
 };
 
 const controlCategoryView = function (view) {
-  searchView.clearInput(); //fix later
+  queryView.clearInput(); //fix later
   savedPokemonView._clear(); //fix later
   restartSearchResults(); //fix later
 
@@ -108,7 +172,9 @@ const controlCategoryView = function (view) {
 
 // To sort Pokémon data by name
 const controlSortName = function () {
-  sortView.toggleSortName();
+  // sortView.toggleSortName();
+
+  controlProfileSortBtn();
 
   if (searchState.results.length <= 1) return;
 
@@ -118,7 +184,9 @@ const controlSortName = function () {
 
 // To sort Pokémon by ID
 const controlSortId = function () {
-  sortView.toggleSortId();
+  // sortView.toggleSortId();
+
+  controlProfileSortBtn();
 
   if (searchState.results.length <= 1) return;
 
@@ -164,10 +232,12 @@ export const controlProfileInit = function () {
   //refactored controllers
   profileView.addHandlerLoadProfile(controlProfile);
 
-  searchView.addHandlerSearch(controlSavedResults);
-  sortView.addHandlerSortName(controlSortName);
-  sortView.addHandlerSortId(controlSortId);
-  previewView.addHandlerRedirect(controlClickedPreview);
+  sortView.addHandlerSortBtn(controlProfileSortBtn);
+  sortView.addHandlerSortLoad(controlProfileSortLoad);
+
+  queryView.addHandlerQuery(controlSavedResults);
+  // sortView.addHandlerSortName(controlSortName);
+  // sortView.addHandlerSortId(controlSortId);
 
   categoryView.addHandlerCategoryBtn(controlProfileCategoryBtn);
   categoryView.addHandlerCategory(controlProfileCategory);

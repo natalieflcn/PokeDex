@@ -1,10 +1,10 @@
 import View from '../View.js';
 
-class SearchView extends View {
+class QueryView extends View {
   _parentEl = document.querySelector('.search__input');
   _errorMessage = 'We could not find that Pokémon! Please try again.';
 
-  addHandlerSearch(handler) {
+  addHandlerQuery(handler) {
     window.addEventListener('load', handler);
 
     this._parentEl.addEventListener('input', handler);
@@ -25,4 +25,4 @@ class SearchView extends View {
   }
 }
 
-export default new SearchView();
+export default new QueryView();
