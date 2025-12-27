@@ -4,39 +4,26 @@ class PanelView extends View {
   _parentEl = document.querySelector('.screen__2--search');
   _errorMessage = 'There was an error loading this Pokémon!';
 
-  addHandlerRender(handler) {
+  addHandlerRenderPanel(handler) {
     ['hashchange', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
-  addHandlerCaught(handler) {
+  addHandlerCaughtBtn(handler) {
     this._parentEl.addEventListener('click', function (e) {
       const btn = e.target.closest('.search__btn--caught');
 
       if (!btn) return;
-      console.log('caught clicked');
       handler();
     });
   }
 
-  addHandlerFavorite(handler) {
+  addHandlerFavoriteBtn(handler) {
     this._parentEl.addEventListener('click', function (e) {
       const btn = e.target.closest('.search__btn--favorite');
 
       if (!btn) return;
       handler();
     });
-  }
-
-  toggleCaught() {
-    const btn = document.querySelector('.search__btn--caught');
-
-    btn.classList.toggle('btn--active');
-  }
-
-  toggleFavorite() {
-    const btn = document.querySelector('.search__btn--favorite');
-
-    btn.classList.toggle('btn--active');
   }
 
   _generateMarkup() {
@@ -194,7 +181,7 @@ class PanelView extends View {
             </div>
 
             <div class="search__pagination">
-              <button class="btn search__btn--prev btn--blue">
+              <button class="btn search__btn--prev btn--blue" data-page="prev">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="25"
@@ -243,7 +230,7 @@ class PanelView extends View {
                 </svg>
                 Caught This Pokémon
               </button>
-              <button class="btn search__btn--next btn--blue">
+              <button class="btn search__btn--next btn--blue" data-page="next">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="25"

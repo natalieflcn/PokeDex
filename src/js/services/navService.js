@@ -119,9 +119,8 @@ export const navCheckRoute = function (page) {
   return navResolveRoute(page);
 };
 
-export const navProfileSanitizeSort = function () {
+export const navSanitizeSort = function (module) {
   const currentURL = new URL(window.location.href);
   currentURL.searchParams.delete('sort');
   window.history.replaceState({}, '', currentURL);
-  navProfileSortName();
 };

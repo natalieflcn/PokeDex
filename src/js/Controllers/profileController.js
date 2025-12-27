@@ -11,7 +11,7 @@ import previewView from '../views/ProfileViews/previewView.js';
 import profileView from '../views/ProfileViews/profileView.js';
 import {
   navProfileSanitizeFilters,
-  navProfileSanitizeSort,
+  navSanitizeSort,
   navProfileSortId,
   navProfileSortName,
   navSearch,
@@ -59,11 +59,12 @@ const controlProfileCategory = function () {
 };
 
 const controlProfileCategoryLoad = function () {
-  window.history.replaceState(
-    { page: `profile/caught` },
-    '',
-    `/profile/caught`
-  );
+  if (window.location.pathname === '/profile')
+    window.history.replaceState(
+      { page: `profile/caught` },
+      '',
+      `/profile/caught`
+    );
 };
 
 // PROFILE SORTING RENDERING AND ROUTING (Name/Id)
@@ -93,7 +94,8 @@ const controlProfileSortBtn = function (sort) {
 const controlProfileSortLoad = function () {
   const sort = new URL(window.location.href).searchParams.get('sort');
 
-  if (sort && sort !== 'name' && sort !== 'id') navProfileSanitizeSort();
+  if (sort && sort !== 'name' && sort !== 'id') navSanitizeSort();
+  navProfileSortName();
 
   controlProfileRenderSort(sort);
 };

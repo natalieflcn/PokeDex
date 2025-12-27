@@ -2,7 +2,6 @@ import View from '../View';
 
 class SortView extends View {
   _parentEl = document.querySelector('.profile__form');
-  _mode = 'id';
 
   addHandlerSortBtn(handler) {
     this._parentEl.addEventListener('click', function (e) {

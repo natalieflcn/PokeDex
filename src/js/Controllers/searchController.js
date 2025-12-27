@@ -17,8 +17,24 @@ import searchState from '../models/state/queryState.js';
 import pokemonState from '../models/state/pokemonState.js';
 import favoritesState from '../models/state/favoritesState.js';
 import caughtState from '../models/state/caughtState.js';
+import { togglePanelFavoriteBtn } from '../services/favoritesService.js';
+import { togglePanelCaughtBtn } from '../services/caughtService.js';
+import { navSanitizeSort } from '../services/navService.js';
 
 // SEARCH CONTROLLER ---
+
+// REFACTORED HANDLERS
+const controlSearchDisablePaginationBtn = function (btn) {
+  // btn.disabled = true; refactor later, these functions should actually accept the button itself instead of the direction
+  document.querySelector(`.search__btn--${btn}`).classList.add('btn--disabled');
+};
+
+const controlSearchEnablePaginationBtn = function (btn) {
+  // btn.disabled = false;
+  document
+    .querySelector(`.search__btn--${btn}`)
+    .classList.remove('btn--disabled');
+};
 
 // To coordinate rendering of the search results [Screen 1]
 const controlSearchResults = async function () {
@@ -26,7 +42,7 @@ const controlSearchResults = async function () {
     // Retrieve query from user input
     restartSearchResults();
 
-    if (resultsView._observer) resultsView.unobserve();
+    if (resultsView._observer) resultsView.unobserveSentinel();
 
     const query = queryView.getQuery();
 
@@ -45,7 +61,8 @@ const controlSearchResults = async function () {
     }
 
     // If there's  additional results
-    if (searchState.hasMoreResults) resultsView.observe(controlInfiniteScroll);
+    if (searchState.hasMoreResults)
+      resultsView.observeSentinel(controlInfiniteScroll);
 
     if (searchState.currentRequestId !== requestId) return; // Abort render if the requestId is not up-to-date
 
@@ -73,7 +90,7 @@ const controlInfiniteScroll = async function () {
   // Determine if this is the end of current Pokémon search results
   if (searchState.currentBatch.length === 0) {
     searchState.hasMoreResults = false;
-    resultsView.unobserve();
+    resultsView.unobserveSentinel();
     return;
   }
 
@@ -85,6 +102,39 @@ const controlInfiniteScroll = async function () {
   // Return Pokémon data to controlSearchResults
   resultsView.render(searchState.currentBatch, true, true);
   return searchState.results;
+};
+
+const controlSearchRenderSort = function (sort) {
+  switch (sort) {
+    case 'name':
+      sortView.toggleSortName();
+      break;
+
+    case 'id':
+      sortView.toggleSortId();
+      break;
+
+    default:
+      sortView.toggleSortId();
+      break;
+  }
+};
+
+const controlSearchSortBtn = function (sort) {
+  const currentURL = new URL(window.location.href);
+  currentURL.searchParams.set('sort', sort);
+  window.history.replaceState({}, '', currentURL);
+  controlSearchRenderSort(sort);
+};
+
+const controlSearchSortLoad = function () {
+  const sort = new URL(window.location.href).searchParams.get('sort');
+
+  if (sort && sort !== 'name' && sort !== 'id') navSanitizeSort();
+
+  sortView.toggleSortId();
+
+  controlSearchRenderSort(sort);
 };
 
 // To sort Pokémon data by name
@@ -108,8 +158,8 @@ const controlSortId = function () {
 };
 
 // To highlight active search results [screen 1]
-const controlClickActivePreview = function (pokemonName) {
-  window.location.hash = pokemonName;
+const controlClickActivePreview = function (preview) {
+  window.location.pathname = preview;
 };
 
 const controlPageActivePreview = function () {
@@ -148,9 +198,9 @@ const controlPokemonPanel = async function () {
       pokemon => pokemon.name === pokemonState.pokemon.name
     );
 
-    if (currIndex === 0) paginationView.disableButton('prev');
+    if (currIndex === 0) controlSearchDisablePaginationBtn('prev');
     if (currIndex === searchState.results.length - 1)
-      paginationView.disableButton('next');
+      controlSearchDisablePaginationBtn('next');
   } catch (err) {
     panelView.renderError(err);
   }
@@ -168,14 +218,14 @@ const controlSearchPagination = async function (direction) {
     currIndex < 0 ||
     (currIndex >= searchState.results.length && !searchState.hasMoreResults)
   ) {
-    paginationView.disableButton(direction);
-    resultsView.unobserve();
+    controlSearchDisablePaginationBtn(direction);
+    resultsView.unobserveSentinel();
 
     return;
   }
 
   if (currIndex >= searchState.results.length && searchState.hasMoreResults) {
-    paginationView.enableButton('next');
+    controlSearchEnablePaginationBtn('next');
 
     panelView.renderSpinner();
 
@@ -197,7 +247,7 @@ const controlAddCaught = function () {
     searchModel.addCaughtPokemon(pokemonState.pokemon);
   else searchModel.removeCaughtPokemon(pokemonState.pokemon);
 
-  panelView.toggleCaught();
+  togglePanelCaughtBtn();
 };
 
 // To add Pokémon to our Favorite Pokémon
@@ -207,7 +257,7 @@ const controlAddFavorite = function () {
     searchModel.addFavoritePokemon(pokemonState.pokemon);
   else searchModel.removeFavoritePokemon(pokemonState.pokemon);
 
-  panelView.toggleFavorite();
+  togglePanelFavoriteBtn();
 };
 
 // To initialize all Pokémon names to store in our state
@@ -218,14 +268,14 @@ const initPokemonData = async function () {
 export const controlSearchInit = function () {
   initPokemonData();
   queryView.addHandlerQuery(debouncedControlSearchResults);
-  sortView.addHandlerSortName(controlSortName);
-  sortView.addHandlerSortId(controlSortId);
-  previewView.addHandlerActive(controlClickActivePreview);
+  sortView.addHandlerSortBtn(controlSearchSortBtn);
+  sortView.addHandlerSortLoad(controlSearchSortLoad);
+  previewView.addHandlerActivePreview(controlClickActivePreview);
   previewView.addHandlerHashChange(controlPageActivePreview);
-  panelView.addHandlerRender(controlPokemonPanel);
-  panelView.addHandlerCaught(controlAddCaught);
-  panelView.addHandlerFavorite(controlAddFavorite);
-  paginationView.addHandlerClick(controlSearchPagination);
+  panelView.addHandlerRenderPanel(controlPokemonPanel);
+  panelView.addHandlerCaughtBtn(controlAddCaught);
+  panelView.addHandlerFavoriteBtn(controlAddFavorite);
+  paginationView.addHandlerPaginationClick(controlSearchPagination);
 };
 
 // MAP CONTROLLER ---

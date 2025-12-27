@@ -51,7 +51,6 @@
 
 ### Notes
 
-- Consider splitting savedPokemonView into caughtPokemonView and favoritesPokemonView for better readability
 - Need to render newly Caught/Favorite Pokémon instantly, without module reload
 
 - BUG: Caught/Favorites Pokémon are being inserted into the general AllPokemon list that is rendered in the Search module
@@ -60,21 +59,25 @@
 
 ### Goals
 
-- [ ] BUG: Favorites button event handler is running twice, on every other click
-- [ ] BUG: Caught button event handler is running twice on every click, but not saving the Pokemon into Caught state
-- [ ] BUG: Caught and Favorite buttons are not working on Profile section
-- [ ] BUG: /profile/favorites is not immediately rendering Favorties Pokémon on profile
-- [ ] BUG: The entire Favorites Pokémon array isn't rendering (2 out of 6 Pokémon before reload, 4 out of 6 Pokémon after reload)
-- [ ] BUG: Querying on Profile for Caught Pokémon is querying out of general Pokémon array
-- [ ] BUG: Sorting functionality is no longer working (name/id)
-- [ ] BUG: Caught/Favorites Pokémon is rendering before all Pokémon in general search query
-
 - [~] Refactor MVC system architecture implementation
+
   - [ ] Modify code for the overlapping responsiblities currently shared between Model and Controller layers
   - [ ] Refactor the current Model structure into domain-driven Models: pokemonModel, favoritesModel, caughtModel
   - [~] Offload controller functionality into the services -- follow fat models, skinny controllers guideline
   - [~] Review the relationship between controllers and views and ensure that the publisher-subscriber pattern is being enforced
-    - [ ] Clean up Views and ensure there is no application logic within them (views should only be responsible for ADDING event handlers)
+    - [~] Clean up Views and ensure there is no application logic within them (views should only be responsible for ADDING event handlers)
+      - [x] Profile Views
+      - [~] Search Views
+
+- [x] BUG: Favorites button event handler is running twice, on every other click (Search View)
+- [ ] BUG: Caught button event handler is running twice on every click, but not saving the Pokemon into Caught state (Search View)
+- [x] BUG: Caught and Favorite buttons are not working on Profile section
+- [ ] BUG: /profile/favorites is not immediately rendering newly added Favorties Pokémon on profile
+- [ ] BUG: The entire Favorites Pokémon array isn't rendering (2 out of 6 Pokémon before reload, 4 out of 6 Pokémon after reload)
+- [ ] BUG: Querying on Profile for Caught Pokémon is querying out of general Pokémon array
+- [ ] BUG: Sorting functionality is no longer working (name/id)
+- [ ] BUG: Caught/Favorites Pokémon is rendering before all Pokémon in general search query
+- [x] BUG: '/' route redirects to 'profile/caught'
 
 ### Notes
 
@@ -85,4 +88,4 @@
 - Need to decide how routes should be maintained in the history stack for profile/caught, profile/favorites, profile...?sort=name/id. Should these routes be explicitly kept in the global url state at all times?
   - [x] One history entry in the stack for the filtered /profile history entries
   - [x] A user should always be navigated to either /caught or /favorites
-  - [x] Sorting will be reset to Name after leaving Profile module
+  - [x] Sorting will be reset to Name after leaving Profile module and params will be sanitized from url

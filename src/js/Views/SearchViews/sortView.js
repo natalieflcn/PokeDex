@@ -2,28 +2,22 @@ import View from '../View.js';
 
 class SortView extends View {
   _parentEl = document.querySelector('.search__form--sort');
-  _mode = 'id';
 
-  addHandlerSortName(handler) {
+  addHandlerSortBtn(handler) {
     this._parentEl.addEventListener('click', function (e) {
-      const btn = e.target.closest('.search__btn--name');
+      e.preventDefault();
+
+      const btn = e.target.closest('.search__btn--name, .search__btn--id');
       if (!btn || btn.classList.contains('btn--active')) return;
 
-      this._mode = 'name';
+      const sort = btn.dataset.sort;
 
-      handler();
+      handler(sort);
     });
   }
 
-  addHandlerSortId(handler) {
-    this._parentEl.addEventListener('click', function (e) {
-      const btn = e.target.closest('.search__btn--id');
-      if (!btn || btn.classList.contains('btn--active')) return;
-
-      this._mode = 'id';
-
-      handler();
-    });
+  addHandlerSortLoad(handler) {
+    ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
   toggleSortName() {

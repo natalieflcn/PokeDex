@@ -24,6 +24,8 @@ class PreviewView extends View {
   //   });
   // }
 
+  addHandlerRedirect(handler) {}
+
   addHandlerHashChange(handler) {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }

@@ -3,21 +3,25 @@ import View from '../View.js';
 class PreviewView extends View {
   _parentEl = document.querySelector('.search__preview--container');
 
-  addHandlerActive(handler) {
+  addHandlerActivePreview(handler) {
     this._parentEl.addEventListener('click', function (e) {
-      const clicked = e.target.closest('.search__preview');
-      if (!clicked) return;
+      const preview = e.target.closest('.search__preview');
+      if (!preview) return;
 
-      //If there's already an active item, remove its class
+      // If there's already an active Pokémon preview, remove its active class
       const currentlyActive = document.querySelector(
         '.search__preview--active'
       );
-      if (currentlyActive && currentlyActive !== clicked)
+      if (currentlyActive && currentlyActive !== preview)
         currentlyActive.classList.remove('search__preview--active');
 
-      clicked.classList.add('search__preview--active');
+      // Setting the selected Pokémon preview as the active preview
+      preview.classList.add('search__preview--active');
 
-      handler(clicked.querySelector('.search__preview--name').textContent);
+      const pokemonName = preview.querySelector(
+        '.search__preview--name'
+      ).textContent;
+      handler(pokemonName);
     });
   }
 

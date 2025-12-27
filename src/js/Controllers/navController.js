@@ -9,8 +9,7 @@ import {
   navProfileRoute,
   navResolveRoute,
   navCheckRoute,
-  navProfileSanitizeFilters,
-  navProfileSanitizeSort,
+  navSanitizeSort,
 } from '../services/navService';
 import navView from '../views/navView';
 

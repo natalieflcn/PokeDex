@@ -4,20 +4,26 @@ import { observeSentinel } from '../../helpers.js';
 
 class ResultsView extends View {
   _parentEl = document.querySelector('.search__preview--container');
-
   _errorMessage = 'We could not find that Pokémon! Please try again.';
+
   _sentinel = document.querySelector('.search__sentinel');
   _observer = null;
 
-  observe(handler) {
-    this._observer = observeSentinel(this._sentinel, handler, {
-      root: null,
-      threshold: 0.01,
-      rootMargin: '100%',
-    });
+  observeSentinel(handler) {
+    this._observer = new IntersectionObserver(entries =>
+      entries.forEach(
+        entry => {
+          if (entry.isIntersecting) handler();
+        },
+        { root: null, threshold: 0.01, rootMargin: '100%' }
+      )
+    );
+
+    this._observer.observe(this._sentinel);
   }
 
-  unobserve() {
+  unobserveSentinel() {
+    if (!this._observer || !this._sentinel) return;
     this._observer.unobserve(this._sentinel);
   }
 

@@ -4,29 +4,15 @@ class PaginationView extends View {
   _parentEl = document.querySelector('.screen__2--search');
   _errorMessage = 'oops';
 
-  addHandlerClick(handler) {
+  addHandlerPaginationClick(handler) {
     this._parentEl.addEventListener('click', function (e) {
       const btn = e.target.closest('.search__btn--next, .search__btn--prev');
       if (!btn) return;
 
-      const direction = btn.classList.contains('search__btn--next')
-        ? 'next'
-        : 'prev';
+      const direction = btn.dataset.page;
 
       handler(direction);
     });
-  }
-
-  disableButton(btn) {
-    document
-      .querySelector(`.search__btn--${btn}`)
-      .classList.add('btn--disabled');
-  }
-
-  enableButton(btn) {
-    document
-      .querySelector(`.search__btn--${btn}`)
-      .classList.remove('btn--disabled');
   }
 }
 
