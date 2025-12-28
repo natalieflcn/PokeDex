@@ -4,27 +4,17 @@ class PreviewView extends View {
   _parentEl = document.querySelector('.profile__preview--container');
 
   //TODO -- consolidate this functionality into search previewView class
-  // addHandlerRedirect(handler) {
-  //   this._parentEl.addEventListener('click', function (e) {
-  //     const clicked = e.target.closest('.profile__preview');
-  //     if (!clicked) return;
+  addHandlerRedirect(handler) {
+    this._parentEl.addEventListener('click', function (e) {
+      const preview = e.target.closest('.profile__preview');
+      if (!preview) return;
 
-  //     //If there's already an active item, remove its class
-  //     // const currentlyActive = document.querySelector(
-  //     //   '.profile__preview--active'
-  //     // );
-  //     // if (currentlyActive && currentlyActive !== clicked)
-  //     //   currentlyActive.classList.remove('profile__preview--active');
-
-  //     // clicked.classList.add('profile__preview--active');
-
-  //     handler(clicked.querySelector('.profile__preview--name').textContent);
-
-  //     ///
-  //   });
-  // }
-
-  addHandlerRedirect(handler) {}
+      const pokemonName = preview.querySelector(
+        '.profile__preview--name'
+      ).textContent;
+      handler(pokemonName);
+    });
+  }
 
   addHandlerHashChange(handler) {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));

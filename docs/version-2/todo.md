@@ -69,6 +69,7 @@
       - [x] Profile Views
       - [x] Search Views
     - [x] Move all DOM manipulation logic from Services back into Views (This is actually not the appropriate folder)
+    - [ ] Remove any DOM manipulation logic from the Controllers, if any
     - [x] Strengthen encapsulation within Views by using \_parentEl as the scope, instead of calling querySelector on the document multiple times
 
 - [x] BUG: Favorites button event handler is running twice, on every other click (Search View)

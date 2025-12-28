@@ -163,26 +163,10 @@ const controlSortId = function () {
 
 const controlClickedPreview = function (pokemon) {
   sortView.toggleProfileSortName();
+
+  window.history.pushState({ page: `/search` }, '', `/search`);
   window.location.hash = pokemon;
-
-  // Remove Profile page styling
-  document
-    .querySelector('.lights__inner--green')
-    .classList.remove('lights__inner--active');
-
-  document
-    .querySelector('.header__btn--profile')
-    .classList.remove('btn--active');
-
-  // Add Search page styling
-  document
-    .querySelector('.lights__inner--blue')
-    .classList.add('lights__inner--active');
-
-  document.querySelector('.header__btn--search').classList.add('btn--active');
-
-  // Hide profile screen
-  document.querySelector('.screen__2--profile').classList.add('hidden');
+  navView.toggleNavSearch();
 };
 
 const controlProfile = function () {
@@ -198,7 +182,7 @@ const controlProfile = function () {
 export const controlProfileInit = function () {
   //refactored controllers
   profileView.addHandlerLoadProfile(controlProfile);
-
+  previewView.addHandlerRedirect(controlClickedPreview);
   sortView.addHandlerSortBtn(controlProfileSortBtn);
   sortView.addHandlerSortLoad(controlProfileSortLoad);
 

@@ -148,22 +148,22 @@ const controlClickActivePreview = function (preview) {
   window.location.hash = preview;
 };
 
-const controlPageActivePreview = function () {
-  // TODO Need to refactor DOM logic into Views
-  const currentlyActive = document.querySelector('.search__preview--active');
+// const controlPageActivePreview = function () {
+//   // TODO Need to refactor DOM logic into Views
+//   const currentlyActive = document.querySelector('.search__preview--active');
 
-  if (currentlyActive)
-    currentlyActive.classList.remove('search__preview--active');
+//   if (currentlyActive)
+//     currentlyActive.classList.remove('search__preview--active');
 
-  const previews = Array.from(document.querySelectorAll('.search__preview'));
+//   const previews = Array.from(document.querySelectorAll('.search__preview'));
 
-  const targetPreview = previews.find(preview => {
-    const nameEl = preview.querySelector('.search__preview--name');
-    return nameEl?.textContent === window.location.hash.slice(1);
-  });
+//   const targetPreview = previews.find(preview => {
+//     const nameEl = preview.querySelector('.search__preview--name');
+//     return nameEl?.textContent === window.location.hash.slice(1);
+//   });
 
-  if (targetPreview) targetPreview.classList.add('search__preview--active');
-};
+//   if (targetPreview) targetPreview.classList.add('search__preview--active');
+// };
 
 // To coordinate rendering of the Pokémon Panel [Screen 2]
 const controlPokemonPanel = async function () {
@@ -256,12 +256,10 @@ export const controlSearchInit = function () {
   queryView.addHandlerQuery(debouncedControlSearchResults);
   sortView.addHandlerSortBtn(controlSearchSortBtn);
   sortView.addHandlerSortLoad(controlSearchSortLoad);
-  previewView.addHandlerActivePreview(controlClickActivePreview);
-  previewView.addHandlerHashChange(controlPageActivePreview);
+  previewView.addHandlerClickActivePreview(controlClickActivePreview);
+  // previewView.addHandlerHashChange(controlPageActivePreview);
   panelView.addHandlerRenderPanel(controlPokemonPanel);
   panelView.addHandlerCaughtBtn(controlAddCaught);
   panelView.addHandlerFavoriteBtn(controlAddFavorite);
   paginationView.addHandlerPaginationClick(controlSearchPagination);
 };
-
-// MAP CONTROLLER ---

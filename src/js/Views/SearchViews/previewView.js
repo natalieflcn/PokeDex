@@ -3,8 +3,8 @@ import View from '../View.js';
 class PreviewView extends View {
   _parentEl = document.querySelector('.search__preview--container');
 
-  addHandlerActivePreview(handler) {
-    this._parentEl.addEventListener('click', function (e) {
+  addHandlerClickActivePreview(handler) {
+    this._parentEl.addEventListener('click', e => {
       const preview = e.target.closest('.search__preview');
       if (!preview) return;
 
@@ -23,10 +23,6 @@ class PreviewView extends View {
       ).textContent;
       handler(pokemonName);
     });
-  }
-
-  addHandlerHashChange(handler) {
-    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 
   _generateMarkup() {
