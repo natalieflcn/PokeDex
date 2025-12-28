@@ -27,13 +27,13 @@ class PanelView extends View {
   }
 
   toggleFavoriteBtn() {
-    document
+    this._parentEl
       .querySelector('.search__btn--favorite')
       .classList.toggle('btn--active');
   }
 
   toggleCaughtBtn() {
-    document
+    this._parentEl
       .querySelector('.search__btn--caught')
       .classList.toggle('btn--active');
   }

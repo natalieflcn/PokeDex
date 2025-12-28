@@ -28,7 +28,7 @@ class QueryView extends View {
   }
 
   clearInput() {
-    document.querySelector('.profile__input').value = '';
+    this._parentEl.value = '';
   }
 }
 

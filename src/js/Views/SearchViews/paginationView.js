@@ -16,13 +16,13 @@ class PaginationView extends View {
   }
 
   disablePaginationBtn(btn) {
-    document
+    this._parentEl
       .querySelector(`.search__btn--${btn}`)
       .classList.add('btn--disabled');
   }
 
   enablePaginationBtn(btn) {
-    document
+    this._parentEl
       .querySelector(`.search__btn--${btn}`)
       .classList.remove('btn--disabled');
   }

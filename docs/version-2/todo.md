@@ -65,10 +65,11 @@
   - [ ] Refactor the current Model structure into domain-driven Models: pokemonModel, favoritesModel, caughtModel
   - [~] Offload controller functionality into the services -- follow fat models, skinny controllers guideline
   - [~] Review the relationship between controllers and views and ensure that the publisher-subscriber pattern is being enforced
-    - [~] Clean up Views and ensure there is no application logic within them (views should only be responsible for ADDING event handlers)
+    - [x] Clean up Views and ensure there is no application logic within them (views should only be responsible for ADDING event handlers)
       - [x] Profile Views
       - [x] Search Views
-    - [ ] Move all DOM manipulation logic from Services back into Views (This is actually not the appropriate folder)
+    - [x] Move all DOM manipulation logic from Services back into Views (This is actually not the appropriate folder)
+    - [x] Strengthen encapsulation within Views by using \_parentEl as the scope, instead of calling querySelector on the document multiple times
 
 - [x] BUG: Favorites button event handler is running twice, on every other click (Search View)
 - [ ] BUG: Caught button event handler is running twice on every click, but not saving the Pokemon into Caught state (Search View)

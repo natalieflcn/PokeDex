@@ -9,7 +9,7 @@ class PreviewView extends View {
       if (!preview) return;
 
       // If there's already an active Pokémon preview, remove its active class
-      const currentlyActive = document.querySelector(
+      const currentlyActive = this._parentEl.querySelector(
         '.search__preview--active'
       );
       if (currentlyActive && currentlyActive !== preview)

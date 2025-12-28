@@ -30,20 +30,20 @@ class CategoryView extends View {
 
   // Adds active classes to visually toggle the Caught Pokemon list on the Profile module
   toggleCaughtCategory() {
-    document
+    this._parentEl
       .querySelector('.profile__btn--caught')
       .classList.add('btn--active');
-    document
+    this._parentEl
       .querySelector('.profile__btn--favorites')
       .classList.remove('btn--active');
   }
 
   // Adds active classes to visually toggle the Favorites Pokemon list on the Profile module
   toggleFavoritesCategory() {
-    document
+    this._parentEl
       .querySelector('.profile__btn--favorites')
       .classList.add('btn--active');
-    document
+    this._parentEl
       .querySelector('.profile__btn--caught')
       .classList.remove('btn--active');
   }

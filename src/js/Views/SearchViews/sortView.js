@@ -22,14 +22,20 @@ class SortView extends View {
 
   // Adds active classes to visually toggle the Sort Name button on the Search module
   toggleSearchSortName() {
-    document.querySelector('.search__btn--name').classList.add('btn--active');
-    document.querySelector('.search__btn--id').classList.remove('btn--active');
+    this._parentEl
+      .querySelector('.search__btn--name')
+      .classList.add('btn--active');
+    this._parentEl
+      .querySelector('.search__btn--id')
+      .classList.remove('btn--active');
   }
 
   // Adds active classes to visually toggle the Sort ID button on the Search module
   toggleSearchSortId() {
-    document.querySelector('.search__btn--id').classList.add('btn--active');
-    document
+    this._parentEl
+      .querySelector('.search__btn--id')
+      .classList.add('btn--active');
+    this._parentEl
       .querySelector('.search__btn--name')
       .classList.remove('btn--active');
   }
