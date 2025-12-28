@@ -67,7 +67,8 @@
   - [~] Review the relationship between controllers and views and ensure that the publisher-subscriber pattern is being enforced
     - [~] Clean up Views and ensure there is no application logic within them (views should only be responsible for ADDING event handlers)
       - [x] Profile Views
-      - [~] Search Views
+      - [x] Search Views
+    - [ ] Move all DOM manipulation logic from Services back into Views (This is actually not the appropriate folder)
 
 - [x] BUG: Favorites button event handler is running twice, on every other click (Search View)
 - [ ] BUG: Caught button event handler is running twice on every click, but not saving the Pokemon into Caught state (Search View)

@@ -1,40 +1,32 @@
 import { BASE_POKEDEX_URL } from '../config';
-import {
-  navReset,
-  navSearch,
-  navMap,
-  navProfile,
-  navFavorites,
-  navCaught,
-  navProfileRoute,
-  navResolveRoute,
-  navCheckRoute,
-  navSanitizeSort,
-} from '../services/navService';
+import { navCheckRoute, navSanitizeSort } from '../services/navService';
 import navView from '../views/navView';
+import categoryView from '../views/ProfileViews/categoryView';
 
 // Renders the appropriate module by calling their respective navService (based on the URL path)
 const controlNavRenderView = function (page) {
-  navReset();
+  navView.resetNav();
 
   switch (page) {
     case 'search':
-      navSearch();
+      navView.toggleNavSearch();
       break;
 
     case 'map':
-      navMap();
+      navView.toggleNavMap();
       break;
 
     case 'profile':
     case 'profile/caught':
+      categoryView.toggleCaughtCategory();
+
     case 'profile/favorites':
-      navProfile();
-      navProfileSanitizeSort();
+      navView.toggleNavProfile();
+      navSanitizeSort();
       break;
 
     default:
-      navSearch();
+      navView.toggleNavSearch();
       break;
   }
 };

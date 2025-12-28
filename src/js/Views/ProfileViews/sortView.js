@@ -19,6 +19,20 @@ class SortView extends View {
   addHandlerSortLoad(handler) {
     ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
   }
+
+  // Adds active classes to visually toggle the Sort Name button on the Profile module
+  toggleProfileSortName() {
+    document.querySelector('.profile__btn--name').classList.add('btn--active');
+    document.querySelector('.profile__btn--id').classList.remove('btn--active');
+  }
+
+  // Adds active classes to visually toggle the Sort ID button on the Profile module
+  toggleProfileSortId() {
+    document.querySelector('.profile__btn--id').classList.add('btn--active');
+    document
+      .querySelector('.profile__btn--name')
+      .classList.remove('btn--active');
+  }
 }
 
 export default new SortView();

@@ -24,11 +24,29 @@ class CategoryView extends View {
     ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
-  // //TODO - may remove this, doesnt matter if /caught doesnt immediately load
   addHandlerCategoryLoad(handler) {
     document.addEventListener('DOMContentLoaded', handler);
   }
-  // }
+
+  // Adds active classes to visually toggle the Caught Pokemon list on the Profile module
+  toggleCaughtCategory() {
+    document
+      .querySelector('.profile__btn--caught')
+      .classList.add('btn--active');
+    document
+      .querySelector('.profile__btn--favorites')
+      .classList.remove('btn--active');
+  }
+
+  // Adds active classes to visually toggle the Favorites Pokemon list on the Profile module
+  toggleFavoritesCategory() {
+    document
+      .querySelector('.profile__btn--favorites')
+      .classList.add('btn--active');
+    document
+      .querySelector('.profile__btn--caught')
+      .classList.remove('btn--active');
+  }
 }
 
 export default new CategoryView();

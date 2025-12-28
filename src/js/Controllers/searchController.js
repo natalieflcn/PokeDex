@@ -15,26 +15,12 @@ import 'regenerator-runtime/runtime';
 import { debounce, restartSearchResults } from '../helpers.js';
 import searchState from '../models/state/queryState.js';
 import pokemonState from '../models/state/pokemonState.js';
-import favoritesState from '../models/state/favoritesState.js';
-import caughtState from '../models/state/caughtState.js';
-import { togglePanelFavoriteBtn } from '../services/favoritesService.js';
-import { togglePanelCaughtBtn } from '../services/caughtService.js';
+
 import { navSanitizeSort } from '../services/navService.js';
 
 // SEARCH CONTROLLER ---
 
 // REFACTORED HANDLERS
-const controlSearchDisablePaginationBtn = function (btn) {
-  // btn.disabled = true; refactor later, these functions should actually accept the button itself instead of the direction
-  document.querySelector(`.search__btn--${btn}`).classList.add('btn--disabled');
-};
-
-const controlSearchEnablePaginationBtn = function (btn) {
-  // btn.disabled = false;
-  document
-    .querySelector(`.search__btn--${btn}`)
-    .classList.remove('btn--disabled');
-};
 
 // To coordinate rendering of the search results [Screen 1]
 const controlSearchResults = async function () {
@@ -107,15 +93,15 @@ const controlInfiniteScroll = async function () {
 const controlSearchRenderSort = function (sort) {
   switch (sort) {
     case 'name':
-      sortView.toggleSortName();
+      sortView.toggleSearchSortName();
       break;
 
     case 'id':
-      sortView.toggleSortId();
+      sortView.toggleSearchSortId();
       break;
 
     default:
-      sortView.toggleSortId();
+      sortView.toggleSearchSortId();
       break;
   }
 };
@@ -132,14 +118,14 @@ const controlSearchSortLoad = function () {
 
   if (sort && sort !== 'name' && sort !== 'id') navSanitizeSort();
 
-  sortView.toggleSortId();
+  sortView.toggleSearchSortId();
 
   controlSearchRenderSort(sort);
 };
 
 // To sort Pokémon data by name
 const controlSortName = function () {
-  sortView.toggleSortName();
+  // sortView.toggleSortName();
 
   if (searchState.results.length <= 1) return;
 
@@ -149,7 +135,7 @@ const controlSortName = function () {
 
 // To sort Pokémon data by ID
 const controlSortId = function () {
-  sortView.toggleSortId();
+  // sortView.toggleSortId();
 
   if (searchState.results.length <= 1) return;
 
@@ -159,7 +145,7 @@ const controlSortId = function () {
 
 // To highlight active search results [screen 1]
 const controlClickActivePreview = function (preview) {
-  window.location.pathname = preview;
+  window.location.hash = preview;
 };
 
 const controlPageActivePreview = function () {
@@ -198,9 +184,9 @@ const controlPokemonPanel = async function () {
       pokemon => pokemon.name === pokemonState.pokemon.name
     );
 
-    if (currIndex === 0) controlSearchDisablePaginationBtn('prev');
+    if (currIndex === 0) paginationView.disablePaginationBtn('prev');
     if (currIndex === searchState.results.length - 1)
-      controlSearchDisablePaginationBtn('next');
+      paginationView.disablePaginationBtn('next');
   } catch (err) {
     panelView.renderError(err);
   }
@@ -218,14 +204,14 @@ const controlSearchPagination = async function (direction) {
     currIndex < 0 ||
     (currIndex >= searchState.results.length && !searchState.hasMoreResults)
   ) {
-    controlSearchDisablePaginationBtn(direction);
+    paginationView.disablePaginationBtn(direction);
     resultsView.unobserveSentinel();
 
     return;
   }
 
   if (currIndex >= searchState.results.length && searchState.hasMoreResults) {
-    controlSearchEnablePaginationBtn('next');
+    paginationView.enablePaginationBtn('next');
 
     panelView.renderSpinner();
 
@@ -247,7 +233,7 @@ const controlAddCaught = function () {
     searchModel.addCaughtPokemon(pokemonState.pokemon);
   else searchModel.removeCaughtPokemon(pokemonState.pokemon);
 
-  togglePanelCaughtBtn();
+  panelView.toggleCaughtBtn();
 };
 
 // To add Pokémon to our Favorite Pokémon
@@ -257,7 +243,7 @@ const controlAddFavorite = function () {
     searchModel.addFavoritePokemon(pokemonState.pokemon);
   else searchModel.removeFavoritePokemon(pokemonState.pokemon);
 
-  togglePanelFavoriteBtn();
+  panelView.toggleFavoriteBtn();
 };
 
 // To initialize all Pokémon names to store in our state

@@ -20,12 +20,14 @@ class SortView extends View {
     ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
-  toggleSortName() {
+  // Adds active classes to visually toggle the Sort Name button on the Search module
+  toggleSearchSortName() {
     document.querySelector('.search__btn--name').classList.add('btn--active');
     document.querySelector('.search__btn--id').classList.remove('btn--active');
   }
 
-  toggleSortId() {
+  // Adds active classes to visually toggle the Sort ID button on the Search module
+  toggleSearchSortId() {
     document.querySelector('.search__btn--id').classList.add('btn--active');
     document
       .querySelector('.search__btn--name')

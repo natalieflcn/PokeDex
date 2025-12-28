@@ -14,6 +14,18 @@ class PaginationView extends View {
       handler(direction);
     });
   }
+
+  disablePaginationBtn(btn) {
+    document
+      .querySelector(`.search__btn--${btn}`)
+      .classList.add('btn--disabled');
+  }
+
+  enablePaginationBtn(btn) {
+    document
+      .querySelector(`.search__btn--${btn}`)
+      .classList.remove('btn--disabled');
+  }
 }
 
 export default new PaginationView();

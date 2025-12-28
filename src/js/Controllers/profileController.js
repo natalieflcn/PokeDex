@@ -9,17 +9,10 @@ import { loadPokemonResults } from '../models/profileModel.js';
 import navView from '../views/navView.js';
 import previewView from '../views/ProfileViews/previewView.js';
 import profileView from '../views/ProfileViews/profileView.js';
-import {
-  navProfileSanitizeFilters,
-  navSanitizeSort,
-  navProfileSortId,
-  navProfileSortName,
-  navSearch,
-} from '../services/navService.js';
+import { navSanitizeSort } from '../services/navService.js';
 import searchState from '../models/state/queryState.js';
 import favoritesState from '../models/state/favoritesState.js';
 import caughtState from '../models/state/caughtState.js';
-import { navCaught, navFavorites } from '../services/navService.js';
 
 // PROFILE CATEGORY RENDERING AND ROUTING (Caught/Favorites)
 
@@ -28,16 +21,12 @@ const controlProfileRenderCategory = function (view) {
   console.log(view);
   switch (view) {
     case 'caught':
-      navCaught();
+      categoryView.toggleCaughtCategory();
       break;
 
     case 'favorites':
-      navFavorites();
+      categoryView.toggleFavoritesCategory();
       break;
-
-    // default:
-    //   navCaught();
-    //   break;
   }
 };
 
@@ -71,15 +60,15 @@ const controlProfileCategoryLoad = function () {
 const controlProfileRenderSort = function (sort) {
   switch (sort) {
     case 'name':
-      navProfileSortName();
+      sortView.toggleProfileSortName();
       break;
 
     case 'id':
-      navProfileSortId();
+      sortView.toggleProfileSortId();
       break;
 
     default:
-      navProfileSortName();
+      sortView.toggleProfileSortName();
       break;
   }
 };
@@ -95,7 +84,7 @@ const controlProfileSortLoad = function () {
   const sort = new URL(window.location.href).searchParams.get('sort');
 
   if (sort && sort !== 'name' && sort !== 'id') navSanitizeSort();
-  navProfileSortName();
+  sortView.toggleProfileSortName();
 
   controlProfileRenderSort(sort);
 };
@@ -119,12 +108,12 @@ const controlSavedResults = async function () {
       }
     } else if (!query && searchState.view === 'caught') {
       //TODO
-      navCaught();
+      categoryView.toggleCaughtCategory();
       await loadPokemonResults(requestId);
       savedPokemonView.render(caughtState.caught || '');
     } else if (!query && searchState.view === 'favorites') {
       //TODO
-      navFavorites();
+      categoryView.toggleFavoritesCategory();
       await loadPokemonResults(requestId);
       savedPokemonView.render(favoritesState.favorites || '');
     }
@@ -173,7 +162,7 @@ const controlSortId = function () {
 };
 
 const controlClickedPreview = function (pokemon) {
-  navSearch();
+  sortView.toggleProfileSortName();
   window.location.hash = pokemon;
 
   // Remove Profile page styling

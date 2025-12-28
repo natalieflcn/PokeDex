@@ -26,6 +26,18 @@ class PanelView extends View {
     });
   }
 
+  toggleFavoriteBtn() {
+    document
+      .querySelector('.search__btn--favorite')
+      .classList.toggle('btn--active');
+  }
+
+  toggleCaughtBtn() {
+    document
+      .querySelector('.search__btn--caught')
+      .classList.toggle('btn--active');
+  }
+
   _generateMarkup() {
     return `
     <div class="search__panel">
