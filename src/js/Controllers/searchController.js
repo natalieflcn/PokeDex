@@ -28,6 +28,7 @@ import {
 } from '../models/favoritesModel.js';
 import panelState from '../models/state/panelState.js';
 import { loadPokemon } from '../models/panelModel.js';
+import pokemonState from '../models/state/pokemonState.js';
 
 // SEARCH CONTROLLER ---
 
@@ -44,8 +45,9 @@ const controlSearchResults = async function () {
     const query = queryView.getQuery();
     console.log(query);
 
-    const requestId = ++queryState.currentRequestId;
+    const requestId = ++queryState.currentQueryId;
 
+    console.log(requestId);
     resultsView.renderSpinner();
 
     // If there's a query, render all existing Pokémon for that query
@@ -63,10 +65,12 @@ const controlSearchResults = async function () {
     if (queryState.hasMoreResults)
       resultsView.observeSentinel(controlInfiniteScroll);
 
-    if (queryState.currentRequestId !== requestId) return; // Abort render if the requestId is not up-to-date
+    if (queryState.currentQueryId !== requestId) return; // Abort render if the requestId is not up-to-date
 
     // Render Pokémon search results (screen 1 -- search)
-    resultsView.render(queryState.results);
+
+    resultsView.render(pokemonState.results);
+    console.log('controlsearchresults ends here');
   } catch (err) {
     queryView.renderError();
   }
@@ -75,7 +79,7 @@ const debouncedControlSearchResults = debounce(controlSearchResults, 300); // De
 
 // To determine the scroll position of the client and to load more data, if necessary
 const controlInfiniteScroll = async function () {
-  const requestId = queryState.currentRequestId;
+  const requestId = queryState.currentQueryId;
   if (queryState.loading || !queryState.hasMoreResults) return;
 
   // Load additional query data
@@ -100,7 +104,7 @@ const controlInfiniteScroll = async function () {
 
   // Return Pokémon data to controlSearchResults
   resultsView.render(queryState.currentBatch, true, true);
-  return queryState.results;
+  return pokemonState.results;
 };
 
 const controlSearchRenderSort = function (sort) {
@@ -140,9 +144,9 @@ const controlSearchSortLoad = function () {
 const controlSortName = function () {
   // sortView.toggleSortName();
 
-  if (queryState.results.length <= 1) return;
+  if (pokemonState.results.length <= 1) return;
 
-  queryState.mode = 'name';
+  // queryState.mode = 'name';
   controlSearchResults();
 };
 
@@ -150,9 +154,9 @@ const controlSortName = function () {
 const controlSortId = function () {
   // sortView.toggleSortId();
 
-  if (queryState.results.length <= 1) return;
+  if (pokemonState.results.length <= 1) return;
 
-  queryState.mode = 'id';
+  // queryState.mode = 'id';
   controlSearchResults();
 };
 
@@ -195,12 +199,12 @@ const controlPokemonPanel = async function () {
     console.log(panelState.pokemon);
     panelView.render(panelState.pokemon);
     console.log('controlpokemon panel ends here');
-    const currIndex = queryState.results.findIndex(
+    const currIndex = pokemonState.results.findIndex(
       pokemon => pokemon.name === panelState.pokemon.name
     );
 
     if (currIndex === 0) paginationView.disablePaginationBtn('prev');
-    if (currIndex === queryState.results.length - 1)
+    if (currIndex === pokemonState.results.length - 1)
       paginationView.disablePaginationBtn('next');
   } catch (err) {
     panelView.renderError(err);
@@ -209,7 +213,7 @@ const controlPokemonPanel = async function () {
 
 // To control going back and forth between search results
 const controlSearchPagination = async function (direction) {
-  let currIndex = queryState.results.findIndex(
+  let currIndex = pokemonState.results.findIndex(
     p => p.name === panelState.pokemon.name
   );
 
@@ -217,7 +221,7 @@ const controlSearchPagination = async function (direction) {
 
   if (
     currIndex < 0 ||
-    (currIndex >= queryState.results.length && !queryState.hasMoreResults)
+    (currIndex >= pokemonState.results.length && !queryState.hasMoreResults)
   ) {
     paginationView.disablePaginationBtn(direction);
     resultsView.unobserveSentinel();
@@ -225,7 +229,7 @@ const controlSearchPagination = async function (direction) {
     return;
   }
 
-  if (currIndex >= queryState.results.length && queryState.hasMoreResults) {
+  if (currIndex >= pokemonState.results.length && queryState.hasMoreResults) {
     paginationView.enablePaginationBtn('next');
 
     panelView.renderSpinner();
@@ -237,7 +241,7 @@ const controlSearchPagination = async function (direction) {
     }
   }
 
-  const nextPokemon = queryState.results[currIndex];
+  const nextPokemon = pokemonState.results[currIndex];
   window.location.hash = nextPokemon.name;
 };
 

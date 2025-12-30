@@ -19,7 +19,7 @@ import queryState from './state/queryState';
 
 // To load Pokémon details for the current batch rendered in search results [screen 1]
 export const loadPokemonResults = async function (
-  requestId = queryState.currentRequestId
+  requestId = queryState.currentQueryId
 ) {
   try {
     queryState.loading = true;
@@ -28,6 +28,9 @@ export const loadPokemonResults = async function (
 
     let pokemonNames;
 
+    const currentURL = new URL(window.location.href);
+    console.log(currentURL);
+
     // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
     if (!pokemonState.loaded) {
       const pokemon = await AJAX(
@@ -35,13 +38,16 @@ export const loadPokemonResults = async function (
       );
       pokemonNames = pokemon.results;
     } else {
-      if (queryState.mode === 'id') {
+      if (
+        currentURL.searchParams.get('sort') === 'id' ||
+        !currentURL.searchParams.get('sort')
+      ) {
         // Loading sorted by ID
         pokemonNames = pokemonState.allPokemon.slice(
           queryState.offset,
           queryState.offset + LIMIT
         );
-      } else {
+      } else if (currentURL.searchParams.get('sort') === 'name') {
         // Loading sorted by Name
         pokemonNames = sortPokemonName(pokemonState.allPokemon).slice(
           queryState.offset,
@@ -53,15 +59,17 @@ export const loadPokemonResults = async function (
     for (const pokemon of pokemonNames) {
       try {
         const pokemonName = pokemon.name || pokemon;
-        if (requestId !== queryState.currentRequestId) return;
+        if (requestId !== queryState.currentQueryId) return;
+
+        // console.log(pokemon);
         const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemonName}`);
         const pokemonPreview = createPokemonPreviewObject(
           pokemonName,
           pokemonDetails
         );
 
-        if (requestId !== queryState.currentRequestId) return;
-        queryState.results.push(pokemonPreview);
+        if (requestId !== queryState.currentQueryId) return;
+        pokemonState.results.push(pokemonPreview);
       } catch (err) {
         console.error(err);
       }
@@ -81,7 +89,12 @@ export const loadAdditionalBatch = async function () {
     queryState.currentBatch = [];
     let pokemonNames = [];
 
-    if (queryState.mode === 'id') {
+    const currentURL = window.location.href;
+
+    if (
+      currentURL.searchParams.get('sort') === 'id' ||
+      !currentURL.searchParams.get('sort')
+    ) {
       // Loading sorted by ID
 
       pokemonNames = pokemonState.allPokemon.slice(
@@ -110,7 +123,7 @@ export const loadAdditionalBatch = async function () {
       }
     }
 
-    queryState.results.push(...queryState.currentBatch);
+    pokemonState.results.push(...queryState.currentBatch);
 
     queryState.offset += LIMIT;
     queryState.loading = false;

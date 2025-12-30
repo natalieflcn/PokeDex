@@ -31,7 +31,7 @@ export const loadQueryResults = async function (query, requestId) {
 
   for (const pokemon of pokemonNames) {
     try {
-      if (requestId !== queryState.currentRequestId) return;
+      if (requestId !== queryState.currentQueryId) return;
       const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon.name}`);
       const pokemonPreview = createPokemonPreviewObject(
         pokemon.name,
@@ -39,8 +39,8 @@ export const loadQueryResults = async function (query, requestId) {
       );
 
       //   if(!pokemonPreview.id || pokemonPreview.img) return;
-      if (requestId !== queryState.currentRequestId) return;
-      queryState.results.push(pokemonPreview);
+      if (requestId !== queryState.currentQueryId) return;
+      pokemonState.results.push(pokemonPreview);
     } catch (err) {
       console.error(err);
     }
@@ -73,7 +73,7 @@ export const loadAdditionalQuery = async function (requestId) {
       console.error(err);
     }
   }
-  queryState.results.push(...queryState.currentBatch);
+  pokemonState.results.push(...queryState.currentBatch);
   queryState.offset += LIMIT;
   queryState.loading = false;
 };
@@ -81,7 +81,7 @@ export const loadAdditionalQuery = async function (requestId) {
 // // profileModel.js methods
 // export const loadQueryResults = function (
 //   query,
-//   requestId = queryState.currentRequestId
+//   requestId = queryState.currentQueryId
 // ) {
 //   queryState.loading = true;
 //   restartSearchResults();
@@ -101,7 +101,7 @@ export const loadAdditionalQuery = async function (requestId) {
 
 //     for (const pokemon of pokemonNames) {
 //       const { name, id, img } = pokemon;
-//       if (requestId !== queryState.currentRequestId) return;
+//       if (requestId !== queryState.currentQueryId) return;
 //       queryState.results.push({ name, id, img });
 //     }
 //   } catch (err) {

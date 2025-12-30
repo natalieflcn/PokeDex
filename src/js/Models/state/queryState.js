@@ -2,16 +2,13 @@ import { LIMIT } from '../../config';
 
 const queryState = {
   loading: false,
+  currentQueryId: 0,
   query: '',
   queryResults: '',
-  results: [],
   currentBatch: [],
+  hasMoreResults: true,
   offset: 0,
   limit: LIMIT,
-  hasMoreResults: true,
-  currentRequestId: 0,
-  mode: 'id',
-  view: 'caught',
 };
 
 export default queryState;

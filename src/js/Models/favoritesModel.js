@@ -1,10 +1,12 @@
 // refactor to load all favorites pokemon
 
+import { restartSearchResults, sortPokemonResults } from '../helpers';
 import { persistData } from './pokemonModel';
 import favoriteState from './state/favoriteState';
+import queryState from './state/queryState';
 
-export const loadPokemonResults = async function (
-  requestId = queryState.currentRequestId
+export const loadFavoritePokemon = async function (
+  requestId = queryState.currentQueryId
 ) {
   queryState.loading = true;
   console.log('loadPokemonResults running');
@@ -12,23 +14,19 @@ export const loadPokemonResults = async function (
   let pokemonNames;
 
   try {
-    if (queryState.view === 'caught') {
-      pokemonNames = sortPokemonResults(caughtState.caughtPokemon);
-    } else if (queryState.view === 'favorites') {
-      pokemonNames = sortPokemonResults(favoriteState.favoritePokemon);
-    }
+    pokemonNames = sortPokemonResults(favoriteState.favoritePokemon);
 
     for (const pokemon of pokemonNames) {
       const { name, id, img } = pokemon;
-      if (requestId !== queryState.currentRequestId) return;
-      queryState.results.push({ name, id, img });
+      if (requestId !== queryState.currentQueryId) return;
+      pokemonState.results.push({ name, id, img });
     }
 
     // if (state.search.mode === 'id') pokemonNames = sortPokemonID(pokemonNames);
     // else if (state.search.mode === 'name')
     //   pokemonNames = sortPokemonName(pokemonNames);
 
-    if (requestId !== queryState.currentRequestId) return;
+    if (requestId !== queryState.currentQueryId) return;
   } catch (err) {
     console.error(err);
   }

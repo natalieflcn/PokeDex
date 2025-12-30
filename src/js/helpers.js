@@ -1,6 +1,7 @@
 import { TIMEOUT_SEC } from './config.js';
 
 import caughtState from './models/state/caughtState.js';
+import pokemonState from './models/state/pokemonState.js';
 import queryState from './models/state/queryState.js';
 
 const timeout = function (s) {
@@ -57,9 +58,9 @@ export const createPokemonPreviewObject = function (name, details) {
 
 export const restartSearchResults = function () {
   queryState.offset = 0;
-  queryState.results = [];
-  queryState.query = '';
+  pokemonState.results = [];
   queryState.queryResults = '';
+  queryState.query = '';
   queryState.hasMoreResults = true;
 };
 
@@ -67,12 +68,15 @@ export const restartSearchResults = function () {
 export const sortPokemonResults = function (pokemonSet) {
   let sort;
 
+  const currentURL = new URL(window.location.href);
   // Sorting the Pokémon results
-  if (queryState.mode === 'name') {
+
+  console.log(currentURL.searchParams.get('sort'));
+  if (currentURL.searchParams.get('sort') === 'name') {
     // Sorting my name
 
     sort = pokemonSet.sort((a, b) => a.name.localeCompare(b.name));
-  } else if (queryState.mode === 'id') {
+  } else {
     // Sorting by ID
     sort = pokemonSet.sort((a, b) => a.id - b.id);
   }

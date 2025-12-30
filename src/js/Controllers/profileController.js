@@ -14,6 +14,8 @@ import { navSanitizeSort } from '../services/navService.js';
 import queryState from '../models/state/queryState.js';
 import favoriteState from '../models/state/favoriteState.js';
 import caughtState from '../models/state/caughtState.js';
+import { loadCaughtPokemon } from '../models/caughtModel.js';
+import { loadFavoritePokemon } from '../models/favoritesModel.js';
 
 // PROFILE CATEGORY RENDERING AND ROUTING (Caught/Favorites)
 
@@ -95,27 +97,34 @@ const controlSavedResults = async function () {
   try {
     restartSearchResults();
     const query = queryView.getQuery();
-    const requestId = ++queryState.currentRequestId;
+    const requestId = ++queryState.currentQueryId;
 
     savedPokemonView.renderSpinner();
+
+    const currentURL = window.location.pathname;
+    console.log(currentURL);
 
     if (query) {
       console.log(query);
       loadQueryResults(query, requestId);
-      if (queryState.results.length === 0) {
+      //TODO
+      if (pokemonState.results.length === 0) {
         savedPokemonView._clear();
       } else {
-        savedPokemonView.render(queryState.results);
+        savedPokemonView.render(pokemonState.results);
       }
-    } else if (!query && queryState.view === 'caught') {
+    } else if (!query && currentURL === '/profile/caught') {
       //TODO
+
       categoryView.toggleCaughtCategory();
-      await loadPokemonResults(requestId);
+      await loadCaughtPokemon(requestId);
+      console.log('controlsavedresults stops working here');
       savedPokemonView.render(caughtState.caughtPokemon || '');
-    } else if (!query && queryState.view === 'favorites') {
+    } else if (!query && currentURL === '/profile/favorites') {
       //TODO
       categoryView.toggleFavoritesCategory();
-      await loadPokemonResults(requestId);
+      await loadFavoritePokemon(requestId);
+      console.log(favoriteState.favoritePokemon);
       savedPokemonView.render(favoriteState.favoritePokemon || '');
     }
   } catch (err) {
@@ -133,8 +142,8 @@ const controlCategoryView = function (view) {
   restartSearchResults(); //fix later
 
   //remove this state later, use url state instead
-  if (view === 'caught') queryState.view = 'caught';
-  else queryState.view = 'favorites';
+  // if (view === 'caught') queryState.view = 'caught';
+  // else queryState.view = 'favorites';
   controlSavedResults();
 };
 
@@ -144,9 +153,9 @@ const controlSortName = function () {
 
   controlProfileSortBtn();
 
-  if (queryState.results.length <= 1) return;
+  if (pokemonState.results.length <= 1) return;
 
-  queryState.mode = 'name';
+  // queryState.mode = 'name';
   controlSavedResults();
 };
 
@@ -156,9 +165,9 @@ const controlSortId = function () {
 
   controlProfileSortBtn();
 
-  if (queryState.results.length <= 1) return;
+  if (pokemonState.results.length <= 1) return;
 
-  queryState.mode = 'id';
+  // queryState.mode = 'id';
   controlSavedResults();
 };
 
