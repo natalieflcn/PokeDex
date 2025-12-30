@@ -1,17 +1,18 @@
-import * as profileModel from '../models/profileModel.js';
 import queryView from '../views/ProfileViews/queryView.js';
 import savedPokemonView from '../views/ProfileViews/savedPokemonView.js';
 
 import categoryView from '../views/ProfileViews/categoryView.js';
 import { restartSearchResults, updateCaughtPokemonTypes } from '../helpers.js';
 import sortView from '../views/ProfileViews/sortView.js';
-import { loadPokemonResults } from '../models/profileModel.js';
+import { loadQueryResults } from '../models/queryModel.js';
+
+import { loadPokemonResults } from '../models/pokemonModel.js';
 import navView from '../views/navView.js';
 import previewView from '../views/ProfileViews/previewView.js';
 import profileView from '../views/ProfileViews/profileView.js';
 import { navSanitizeSort } from '../services/navService.js';
-import searchState from '../models/state/queryState.js';
-import favoritesState from '../models/state/favoritesState.js';
+import queryState from '../models/state/queryState.js';
+import favoriteState from '../models/state/favoriteState.js';
 import caughtState from '../models/state/caughtState.js';
 
 // PROFILE CATEGORY RENDERING AND ROUTING (Caught/Favorites)
@@ -94,28 +95,28 @@ const controlSavedResults = async function () {
   try {
     restartSearchResults();
     const query = queryView.getQuery();
-    const requestId = ++searchState.currentRequestId;
+    const requestId = ++queryState.currentRequestId;
 
     savedPokemonView.renderSpinner();
 
     if (query) {
       console.log(query);
-      profileModel.loadQueryResults(query, requestId);
-      if (searchState.results.length === 0) {
+      loadQueryResults(query, requestId);
+      if (queryState.results.length === 0) {
         savedPokemonView._clear();
       } else {
-        savedPokemonView.render(searchState.results);
+        savedPokemonView.render(queryState.results);
       }
-    } else if (!query && searchState.view === 'caught') {
+    } else if (!query && queryState.view === 'caught') {
       //TODO
       categoryView.toggleCaughtCategory();
       await loadPokemonResults(requestId);
-      savedPokemonView.render(caughtState.caught || '');
-    } else if (!query && searchState.view === 'favorites') {
+      savedPokemonView.render(caughtState.caughtPokemon || '');
+    } else if (!query && queryState.view === 'favorites') {
       //TODO
       categoryView.toggleFavoritesCategory();
       await loadPokemonResults(requestId);
-      savedPokemonView.render(favoritesState.favorites || '');
+      savedPokemonView.render(favoriteState.favoritePokemon || '');
     }
   } catch (err) {
     console.error(err);
@@ -132,8 +133,8 @@ const controlCategoryView = function (view) {
   restartSearchResults(); //fix later
 
   //remove this state later, use url state instead
-  if (view === 'caught') searchState.view = 'caught';
-  else searchState.view = 'favorites';
+  if (view === 'caught') queryState.view = 'caught';
+  else queryState.view = 'favorites';
   controlSavedResults();
 };
 
@@ -143,9 +144,9 @@ const controlSortName = function () {
 
   controlProfileSortBtn();
 
-  if (searchState.results.length <= 1) return;
+  if (queryState.results.length <= 1) return;
 
-  searchState.mode = 'name';
+  queryState.mode = 'name';
   controlSavedResults();
 };
 
@@ -155,9 +156,9 @@ const controlSortId = function () {
 
   controlProfileSortBtn();
 
-  if (searchState.results.length <= 1) return;
+  if (queryState.results.length <= 1) return;
 
-  searchState.mode = 'id';
+  queryState.mode = 'id';
   controlSavedResults();
 };
 
@@ -172,9 +173,9 @@ const controlClickedPreview = function (pokemon) {
 const controlProfile = function () {
   updateCaughtPokemonTypes();
   const profileData = {
-    typesCaught: caughtState.profile.typesCaught,
-    caught: caughtState.caught,
-    favorites: favoritesState.favorites.length,
+    typesCaught: caughtState.typesCaught,
+    caught: caughtState.caughtPokemon,
+    favorites: favoriteState.favoritePokemon.length,
   };
   profileView.render(profileData);
 };

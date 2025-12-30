@@ -1,5 +1,3 @@
-// ROUTE MANIPULATION FUNCTIONS -----
-
 // Resolves routes to appropriate subroutes (if necessary) to maintain URL consistency
 const navResolveRoute = function (page) {
   if (page === 'profile') {

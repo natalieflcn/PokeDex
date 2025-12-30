@@ -3,7 +3,6 @@ import View from '../View.js';
 class PreviewView extends View {
   _parentEl = document.querySelector('.profile__preview--container');
 
-  //TODO -- consolidate this functionality into search previewView class
   addHandlerRedirect(handler) {
     this._parentEl.addEventListener('click', function (e) {
       const preview = e.target.closest('.profile__preview');

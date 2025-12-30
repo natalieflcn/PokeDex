@@ -1,9 +1,6 @@
 const pokemonState = {
-  allPokemon: {
-    pokemonDB: [],
-    loaded: false,
-  },
-  pokemon: {},
+  allPokemon: [],
+  loaded: false,
 };
 
 export default pokemonState;

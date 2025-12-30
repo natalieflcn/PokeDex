@@ -1,6 +1,6 @@
 import { LIMIT } from '../../config';
 
-const searchState = {
+const queryState = {
   loading: false,
   query: '',
   queryResults: '',
@@ -14,4 +14,4 @@ const searchState = {
   view: 'caught',
 };
 
-export default searchState;
+export default queryState;

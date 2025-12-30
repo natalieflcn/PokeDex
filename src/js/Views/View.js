@@ -23,6 +23,7 @@ export default class View {
       return this.renderError();
 
     this._data = data;
+    // console.log(data);
     const markup = this._generateMarkup();
 
     if (!render) return markup;
@@ -36,7 +37,6 @@ export default class View {
   }
 
   renderError(message = this._errorMessage) {
-    console.error(message);
     const markup = `
       <div class="error">
         <div>

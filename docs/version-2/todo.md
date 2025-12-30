@@ -61,34 +61,43 @@
 
 - [~] Refactor MVC system architecture implementation
 
-  - [ ] Modify code for the overlapping responsiblities currently shared between Model and Controller layers
-  - [ ] Refactor the current Model structure into domain-driven Models: pokemonModel, favoritesModel, caughtModel
   - [~] Offload controller functionality into the services -- follow fat models, skinny controllers guideline
-  - [~] Review the relationship between controllers and views and ensure that the publisher-subscriber pattern is being enforced
+  - [x] Review the relationship between controllers and views and ensure that the publisher-subscriber pattern is being enforced
     - [x] Clean up Views and ensure there is no application logic within them (views should only be responsible for ADDING event handlers)
       - [x] Profile Views
       - [x] Search Views
     - [x] Move all DOM manipulation logic from Services back into Views (This is actually not the appropriate folder)
-    - [ ] Remove any DOM manipulation logic from the Controllers, if any
+    - [x] Remove any DOM manipulation logic from the Controllers, if any
     - [x] Strengthen encapsulation within Views by using \_parentEl as the scope, instead of calling querySelector on the document multiple times
 
 - [x] BUG: Favorites button event handler is running twice, on every other click (Search View)
-- [ ] BUG: Caught button event handler is running twice on every click, but not saving the Pokemon into Caught state (Search View)
 - [x] BUG: Caught and Favorite buttons are not working on Profile section
-- [ ] BUG: /profile/favorites is not immediately rendering newly added Favorties Pokémon on profile
-- [ ] BUG: The entire Favorites Pokémon array isn't rendering (2 out of 6 Pokémon before reload, 4 out of 6 Pokémon after reload)
-- [ ] BUG: Querying on Profile for Caught Pokémon is querying out of general Pokémon array
-- [ ] BUG: Sorting functionality is no longer working (name/id)
-- [ ] BUG: Caught/Favorites Pokémon is rendering before all Pokémon in general search query
 - [x] BUG: '/' route redirects to 'profile/caught'
 
 ### Notes
 
-- ProfileViews/previewView.js and SearchViews/previewView.js is the same -- refactor into one previewView file for the search domain later
-  - The addHandlerActive() (SearchView) and addHandlerRedirect() (ProfileView) can be consolidated into one handler that behaves differently based on the current module that the user is in
 - Removed updateCaughtPokemonTypes function call from Profile View... need to update the # of types caught in caughtState automatically when caught Pokémon are added/removed
 - Need to revise all error messages for each view and create an appropriate message for each situation
 - Need to decide how routes should be maintained in the history stack for profile/caught, profile/favorites, profile...?sort=name/id. Should these routes be explicitly kept in the global url state at all times?
   - [x] One history entry in the stack for the filtered /profile history entries
   - [x] A user should always be navigated to either /caught or /favorites
   - [x] Sorting will be reset to Name after leaving Profile module and params will be sanitized from url
+
+## Week: December 28 – January 3
+
+### Goals
+
+- [~] Refactor MVC system architecture implementation
+
+  - [ ] Modify code for the overlapping responsiblities currently shared between Model and Controller layers TODO 3
+  - [ ] Refactor the current Model structure into domain-driven Models: pokemonModel, favoritesModel, caughtModel TODO 2
+  - [~] Offload controller functionality into the services -- follow fat models, skinny controllers guideline
+
+- [x] Rename all searchState.js imports into queryState.js
+
+- [x] BUG: Caught button event handler is running twice on every click, but not saving the Pokemon into Caught state (Search View)
+- [ ] BUG: /profile/favorites and /profile/caught is not immediately rendering newly added Favorties/Caught Pokémon on profile -- page needs to be reloaded for new Pokémon
+- [ ] BUG: When removing Caught Pokemon, the first index of the Caught array is being removed instead of the specific Pokemon selected
+- [ ] BUG: Querying on Profile for Caught/Favorite Pokémon is not querying anything
+- [ ] BUG: Sorting functionality is no longer working (name/id)
+- [x] BUG: Caught/Favorites Pokémon is rendering before all Pokémon in general search query

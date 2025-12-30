@@ -1,5 +1,7 @@
 import { TIMEOUT_SEC } from './config.js';
-import { state } from './models/state.js';
+
+import caughtState from './models/state/caughtState.js';
+import queryState from './models/state/queryState.js';
 
 const timeout = function (s) {
   return new Promise(function (_, reject) {
@@ -39,26 +41,6 @@ export const debounce = function (func, delay) {
   };
 };
 
-// To observe a sentinel with IntersectionObserverAPI
-export const observeSentinel = function (sentinel, handler, options) {
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(
-      entry => {
-        if (entry.isIntersecting) handler();
-      },
-      {
-        root: options.root,
-        threshold: options.threshold,
-        rootMargin: options.rootMargin,
-      }
-    );
-  });
-
-  observer.observe(sentinel);
-
-  return observer;
-};
-
 // To create a Pokémon preview object after parsing PokéAPI data
 export const createPokemonPreviewObject = function (name, details) {
   const {
@@ -74,11 +56,11 @@ export const createPokemonPreviewObject = function (name, details) {
 };
 
 export const restartSearchResults = function () {
-  state.search.offset = 0;
-  state.search.results = [];
-  state.search.query = '';
-  state.search.queryResults = '';
-  state.search.hasMoreResults = true;
+  queryState.offset = 0;
+  queryState.results = [];
+  queryState.query = '';
+  queryState.queryResults = '';
+  queryState.hasMoreResults = true;
 };
 
 // To sort Pokémon search results by name OR id -- for queries ONLY
@@ -86,11 +68,11 @@ export const sortPokemonResults = function (pokemonSet) {
   let sort;
 
   // Sorting the Pokémon results
-  if (state.search.mode === 'name') {
+  if (queryState.mode === 'name') {
     // Sorting my name
 
     sort = pokemonSet.sort((a, b) => a.name.localeCompare(b.name));
-  } else if (state.search.mode === 'id') {
+  } else if (queryState.mode === 'id') {
     // Sorting by ID
     sort = pokemonSet.sort((a, b) => a.id - b.id);
   }
@@ -121,13 +103,13 @@ export const sortPokemonID = function (pokemonSet) {
 
 export const updateCaughtPokemonTypes = function () {
   resetCaughtPokemonTypes();
-  const types = state.caught
+  const types = caughtState.caughtPokemon
     .flatMap(pokemon => pokemon.types)
-    .forEach(type => state.profile.typesCaught[type]++);
+    .forEach(type => caughtState.typesCaught[type]++);
 };
 
 const resetCaughtPokemonTypes = function () {
-  state.profile.typesCaught = {
+  caughtState.typesCaught = {
     Normal: 0,
     Fire: 0,
     Water: 0,
