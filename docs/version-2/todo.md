@@ -90,7 +90,7 @@
 - [~] Refactor MVC system architecture implementation
 
   - [ ] Modify code for the overlapping responsiblities currently shared between Model and Controller layers TODO 3
-  - [ ] Refactor the current Model structure into domain-driven Models: pokemonModel, favoritesModel, caughtModel TODO 2
+  - [x] Refactor the current Model structure into domain-driven Models: pokemonModel, favoritesModel, caughtModel TODO 2
   - [~] Offload controller functionality into the services -- follow fat models, skinny controllers guideline
 
 - [x] Rename all searchState.js imports into queryState.js

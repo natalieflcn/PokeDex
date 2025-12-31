@@ -1,7 +1,7 @@
 // refactor to load all favorites pokemon
 
-import { restartSearchResults, sortPokemonResults } from '../helpers';
-import { persistData } from './pokemonModel';
+import { clearQueryInput, persistData, sortPokemonResults } from '../helpers';
+
 import favoriteState from './state/favoriteState';
 import queryState from './state/queryState';
 
@@ -10,7 +10,7 @@ export const loadFavoritePokemon = async function (
 ) {
   queryState.loading = true;
   console.log('loadPokemonResults running');
-  restartSearchResults();
+  clearQueryInput();
   let pokemonNames;
 
   try {

@@ -6,7 +6,7 @@ import {
   AJAX,
   createPokemonPreviewObject,
   possiblePokemon,
-  restartSearchResults,
+  clearQueryInput,
   sortPokemonResults,
 } from '../helpers';
 import pokemonState from './state/pokemonState';
@@ -16,7 +16,7 @@ import queryState from './state/queryState';
 export const loadQueryResults = async function (query, requestId) {
   queryState.loading = true;
 
-  restartSearchResults();
+  clearQueryInput();
 
   queryState.query = query;
 
@@ -84,7 +84,7 @@ export const loadAdditionalQuery = async function (requestId) {
 //   requestId = queryState.currentQueryId
 // ) {
 //   queryState.loading = true;
-//   restartSearchResults();
+//   clearQueryInput();
 //   queryState.query = query;
 
 //   try {

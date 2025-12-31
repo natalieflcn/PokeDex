@@ -2,7 +2,7 @@ import queryView from '../views/ProfileViews/queryView.js';
 import savedPokemonView from '../views/ProfileViews/savedPokemonView.js';
 
 import categoryView from '../views/ProfileViews/categoryView.js';
-import { restartSearchResults, updateCaughtPokemonTypes } from '../helpers.js';
+import { clearQueryInput } from '../helpers.js';
 import sortView from '../views/ProfileViews/sortView.js';
 import { loadQueryResults } from '../models/queryModel.js';
 
@@ -14,8 +14,12 @@ import { navSanitizeSort } from '../services/navService.js';
 import queryState from '../models/state/queryState.js';
 import favoriteState from '../models/state/favoriteState.js';
 import caughtState from '../models/state/caughtState.js';
-import { loadCaughtPokemon } from '../models/caughtModel.js';
+import {
+  loadCaughtPokemon,
+  updateTypesPokemonCaught,
+} from '../models/caughtModel.js';
 import { loadFavoritePokemon } from '../models/favoritesModel.js';
+import pokemonState from '../models/state/pokemonState.js';
 
 // PROFILE CATEGORY RENDERING AND ROUTING (Caught/Favorites)
 
@@ -95,14 +99,13 @@ const controlProfileSortLoad = function () {
 // to refactor later -----
 const controlSavedResults = async function () {
   try {
-    restartSearchResults();
+    clearQueryInput();
     const query = queryView.getQuery();
     const requestId = ++queryState.currentQueryId;
 
     savedPokemonView.renderSpinner();
 
     const currentURL = window.location.pathname;
-    console.log(currentURL);
 
     if (query) {
       console.log(query);
@@ -117,9 +120,12 @@ const controlSavedResults = async function () {
       //TODO
 
       categoryView.toggleCaughtCategory();
-      await loadCaughtPokemon(requestId);
-      console.log('controlsavedresults stops working here');
-      savedPokemonView.render(caughtState.caughtPokemon || '');
+      console.log('controlsavedresults working until here');
+      const caughtPokemon = await loadCaughtPokemon();
+      console.log('controlsavedresults working until here');
+      console.log(caughtPokemon);
+
+      savedPokemonView.render(caughtPokemon || '');
     } else if (!query && currentURL === '/profile/favorites') {
       //TODO
       categoryView.toggleFavoritesCategory();
@@ -139,7 +145,7 @@ export const newPokemonResult = async function () {
 const controlCategoryView = function (view) {
   queryView.clearInput(); //fix later
   savedPokemonView._clear(); //fix later
-  restartSearchResults(); //fix later
+  clearQueryInput(); //fix later
 
   //remove this state later, use url state instead
   // if (view === 'caught') queryState.view = 'caught';
@@ -180,7 +186,7 @@ const controlClickedPreview = function (pokemon) {
 };
 
 const controlProfile = function () {
-  updateCaughtPokemonTypes();
+  // updateTypesPokemonCaught();
   const profileData = {
     typesCaught: caughtState.typesCaught,
     caught: caughtState.caughtPokemon,

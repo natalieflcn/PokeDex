@@ -56,7 +56,7 @@ export const createPokemonPreviewObject = function (name, details) {
   };
 };
 
-export const restartSearchResults = function () {
+export const clearQueryInput = function () {
   queryState.offset = 0;
   pokemonState.results = [];
   queryState.queryResults = '';
@@ -72,13 +72,13 @@ export const sortPokemonResults = function (pokemonSet) {
   // Sorting the Pokémon results
 
   console.log(currentURL.searchParams.get('sort'));
-  if (currentURL.searchParams.get('sort') === 'name') {
-    // Sorting my name
+  if (currentURL.searchParams.get('sort') === 'id') {
+    // Sorting my id
 
-    sort = pokemonSet.sort((a, b) => a.name.localeCompare(b.name));
-  } else {
-    // Sorting by ID
     sort = pokemonSet.sort((a, b) => a.id - b.id);
+  } else {
+    // Sorting by name
+    sort = pokemonSet.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   return sort;
@@ -105,32 +105,14 @@ export const sortPokemonID = function (pokemonSet) {
   return sortedIds;
 };
 
-export const updateCaughtPokemonTypes = function () {
-  resetCaughtPokemonTypes();
-  const types = caughtState.caughtPokemon
-    .flatMap(pokemon => pokemon.types)
-    .forEach(type => caughtState.typesCaught[type]++);
-};
+// export const updateCaughtPokemonTypes = function () {
+//   resetCaughtPokemonTypes();
+//   const types = caughtState.caughtPokemon
+//     .flatMap(pokemon => pokemon.types)
+//     .forEach(type => caughtState.typesCaught[type]++);
+// };
 
-const resetCaughtPokemonTypes = function () {
-  caughtState.typesCaught = {
-    Normal: 0,
-    Fire: 0,
-    Water: 0,
-    Electric: 0,
-    Grass: 0,
-    Ice: 0,
-    Fighting: 0,
-    Poison: 0,
-    Ground: 0,
-    Flying: 0,
-    Psychic: 0,
-    Bug: 0,
-    Rock: 0,
-    Ghost: 0,
-    Dragon: 0,
-    Dark: 0,
-    Steel: 0,
-    Fairy: 0,
-  };
+// To store Caught Pokémon and Favorite Pokémon in Local Storage
+export const persistData = function (type, data) {
+  localStorage.setItem(type, JSON.stringify(data));
 };

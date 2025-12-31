@@ -1,72 +1,75 @@
-// refactor to load all caught pokemon
-
-import {
-  restartSearchResults,
-  sortPokemonResults,
-  updateCaughtPokemonTypes,
-} from '../helpers';
-import { persistData } from './pokemonModel';
 import caughtState from './state/caughtState';
-import favoriteState from './state/favoriteState';
-import queryState from './state/queryState';
+import { clearQueryInput, persistData, sortPokemonResults } from '../helpers';
+import { resetTypesPokemonCaught } from '../services/pokemonService';
 
 // To retrieve Caught Pokémon (caughtState) for mapController and profileController
 export const getCaughtPokemon = () => caughtState.caughtPokemon;
 
-export const loadCaughtPokemon = async function (
-  requestId = queryState.currentQueryId
-) {
-  queryState.loading = true;
-  console.log('loadPokemonResults running');
-  restartSearchResults();
-  let pokemonNames;
+// To load Caught Pokémon (caughtState) for profileController
+export const loadCaughtPokemon = async function () {
+  clearQueryInput();
+
+  if (!caughtState.caughtPokemon) return;
+
+  const caughtPokemonPreviews = [];
 
   try {
-    pokemonNames = sortPokemonResults(caughtState.caughtPokemon);
+    const caughtPokemon = sortPokemonResults(caughtState.caughtPokemon);
 
-    for (const pokemon of pokemonNames) {
+    for (const pokemon of caughtPokemon) {
       const { name, id, img } = pokemon;
-      if (requestId !== queryState.currentQueryId) return;
-      pokemonState.results.push({ name, id, img });
+      caughtPokemonPreviews.push({ name, id, img });
     }
 
-    // if (state.search.mode === 'id') pokemonNames = sortPokemonID(pokemonNames);
-    // else if (state.search.mode === 'name')
-    //   pokemonNames = sortPokemonName(pokemonNames);
-
-    if (requestId !== queryState.currentQueryId) return;
+    return caughtPokemonPreviews;
   } catch (err) {
     console.error(err);
   }
-
-  queryState.loading = false;
 };
 
 // To store Pokémon details in Caught Pokémon (caughtState)
-export const addCaughtPokemon = function (pokemon) {
-  pokemon.caught = true;
+export const addCaughtPokemon = function (newPokemon) {
+  newPokemon.caught = true;
 
-  // Prevent adding duplicates, if already rendered from local storage
-  if (caughtState.caughtPokemon.find(p => p.name === pokemon.name)) return;
+  // Prevents user from adding duplicate Pokémon, if already rendered from local storage
+  if (
+    caughtState.caughtPokemon.find(pokemon => pokemon.name === newPokemon.name)
+  )
+    return;
 
-  caughtState.caughtPokemon.push(pokemon);
-  persistData('caught', caughtState.caughtPokemon);
-  updateCaughtPokemonTypes();
+  caughtState.caughtPokemon.push(newPokemon);
+  persistData('caughtPokemon', caughtState.caughtPokemon);
+  updateTypesPokemonCaught();
 };
 
 // To remove Pokémon details from Caught Pokémon (caughtState)
-export const removeCaughtPokemon = function (pokemon) {
-  pokemon.caught = false;
-  const index = caughtState.caughtPokemon.find(p => p.name === pokemon.name);
+export const removeCaughtPokemon = function (newPokemon) {
+  newPokemon.caught = false;
+
+  const index = caughtState.caughtPokemon.find(
+    pokemon => pokemon.name === newPokemon.name
+  );
+
   caughtState.caughtPokemon.splice(index, 1);
-  persistData('caught', caughtState.caughtPokemon);
-  updateCaughtPokemonTypes();
+  persistData('caughtPokemon', caughtState.caughtPokemon);
+  updateTypesPokemonCaught();
 };
 
-// To check local storage and update Caught/Favorite Pokémon with persisted data
+// To update the types of Pokémon caught for the Profile
+const updateTypesPokemonCaught = function () {
+  resetTypesPokemonCaught();
+
+  caughtState.caughtPokemon
+    .flatMap(pokemon => pokemon.types)
+    .forEach(type => caughtState.typesCaught[type]++);
+};
+
+// To check local storage upon initial load and update Caught Pokémon (caughtState) with persisted data
 const init = function () {
-  const storageCaught = localStorage.getItem('caught');
-  if (storageCaught) caughtState.caughtPokemon = JSON.parse(storageCaught);
+  const storageCaughtPokemon = localStorage.getItem('caughtPokemon');
+
+  if (storageCaughtPokemon)
+    caughtState.caughtPokemon = JSON.parse(storageCaughtPokemon);
 };
 
 init();

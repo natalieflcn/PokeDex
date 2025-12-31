@@ -17,6 +17,7 @@ import panelState from './state/panelState';
 import pokemonState from './state/pokemonState';
 import queryState from './state/queryState';
 
+//TODO pokemon results should be loaded from "cache" allPokemon array, not making new API calls
 // To load Pokémon details for the current batch rendered in search results [screen 1]
 export const loadPokemonResults = async function (
   requestId = queryState.currentQueryId
@@ -24,7 +25,7 @@ export const loadPokemonResults = async function (
   try {
     queryState.loading = true;
 
-    // restartSearchResults();
+    // clearQueryInput();
 
     let pokemonNames;
 
@@ -89,7 +90,7 @@ export const loadAdditionalBatch = async function () {
     queryState.currentBatch = [];
     let pokemonNames = [];
 
-    const currentURL = window.location.href;
+    const currentURL = new URL(window.location.href);
 
     if (
       currentURL.searchParams.get('sort') === 'id' ||
@@ -153,9 +154,4 @@ export const storeAllPokemon = async function () {
 const extractPokemonId = function (url) {
   const id = url.match(/\/(\d+)\/?$/);
   return id ? Number(id[1]) : null;
-};
-
-// To store Caught Pokémon and Favorite Pokémon in Local Storage
-export const persistData = function (type, data) {
-  localStorage.setItem(type, JSON.stringify(data));
 };

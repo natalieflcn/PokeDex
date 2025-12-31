@@ -8,7 +8,7 @@ import paginationView from '../views/SearchViews/paginationView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import { debounce, restartSearchResults } from '../helpers.js';
+import { debounce, clearQueryInput } from '../helpers.js';
 import queryState from '../models/state/queryState.js';
 
 import { navSanitizeSort } from '../services/navService.js';
@@ -38,7 +38,7 @@ import pokemonState from '../models/state/pokemonState.js';
 const controlSearchResults = async function () {
   try {
     // Retrieve query from user input
-    restartSearchResults();
+    clearQueryInput();
 
     if (resultsView._observer) resultsView.unobserveSentinel();
 
@@ -70,7 +70,6 @@ const controlSearchResults = async function () {
     // Render Pokémon search results (screen 1 -- search)
 
     resultsView.render(pokemonState.results);
-    console.log('controlsearchresults ends here');
   } catch (err) {
     queryView.renderError();
   }
