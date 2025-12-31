@@ -120,18 +120,23 @@ const controlSavedResults = async function () {
       //TODO
 
       categoryView.toggleCaughtCategory();
-      console.log('controlsavedresults working until here');
+
       const caughtPokemon = await loadCaughtPokemon();
-      console.log('controlsavedresults working until here');
+
       console.log(caughtPokemon);
 
-      savedPokemonView.render(caughtPokemon || '');
+      savedPokemonView.render(caughtPokemon.length > 0 ? caughtPokemon : '');
     } else if (!query && currentURL === '/profile/favorites') {
       //TODO
       categoryView.toggleFavoritesCategory();
-      await loadFavoritePokemon(requestId);
-      console.log(favoriteState.favoritePokemon);
-      savedPokemonView.render(favoriteState.favoritePokemon || '');
+
+      const favoritePokemon = await loadFavoritePokemon();
+      console.log(favoritePokemon.length);
+
+      //doesnt render empty string without error -- error coming from view
+      savedPokemonView.render(
+        favoritePokemon.length > 0 ? favoritePokemon : ''
+      );
     }
   } catch (err) {
     console.error(err);

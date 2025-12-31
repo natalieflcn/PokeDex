@@ -1,70 +1,68 @@
-// refactor to load all favorites pokemon
-
-import { clearQueryInput, persistData, sortPokemonResults } from '../helpers';
-
 import favoriteState from './state/favoriteState';
-import queryState from './state/queryState';
-
-export const loadFavoritePokemon = async function (
-  requestId = queryState.currentQueryId
-) {
-  queryState.loading = true;
-  console.log('loadPokemonResults running');
-  clearQueryInput();
-  let pokemonNames;
-
-  try {
-    pokemonNames = sortPokemonResults(favoriteState.favoritePokemon);
-
-    for (const pokemon of pokemonNames) {
-      const { name, id, img } = pokemon;
-      if (requestId !== queryState.currentQueryId) return;
-      pokemonState.results.push({ name, id, img });
-    }
-
-    // if (state.search.mode === 'id') pokemonNames = sortPokemonID(pokemonNames);
-    // else if (state.search.mode === 'name')
-    //   pokemonNames = sortPokemonName(pokemonNames);
-
-    if (requestId !== queryState.currentQueryId) return;
-  } catch (err) {
-    console.error(err);
-  }
-
-  queryState.loading = false;
-};
-
-// To store Pokémon details in Favorite Pokémon
-export const addFavoritePokemon = function (pokemon) {
-  pokemon.favorite = true;
-
-  // Prevent adding duplicates, if already rendered from local storage
-  if (favoriteState.favoritePokemon.find(p => p.name === pokemon.name)) return;
-
-  favoriteState.favoritePokemon.push(pokemon);
-  for (const pokemon of favoriteState.favoritePokemon) {
-    console.log(pokemon);
-  }
-  console.log(favoriteState.favoritePokemon.length);
-  persistData('favorites', favoriteState.favoritePokemon);
-};
-
-export const removeFavoritePokemon = function (pokemon) {
-  pokemon.favorite = false;
-  const index = favoriteState.favoritePokemon.find(
-    p => p.name === pokemon.name
-  );
-  favoriteState.favoritePokemon.splice(index, 1);
-  persistData('favorites', favoriteState.favoritePokemon);
-};
+import { clearQueryInput, persistData, sortPokemonResults } from '../helpers';
 
 // To export Favorite Pokémon for Profile View
 export const getFavoritePokemon = () => favoriteState.favoritePokemon;
 
-// To check local storage and update Caught/Favorite Pokémon with persisted data
-const init = function () {
-  const storageFavorites = localStorage.getItem('favorites');
-  if (storageFavorites)
-    favoriteState.favoritePokemon = JSON.parse(storageFavorites);
+// To load sorted Favorite Pokémon (favoriteState) for profileController
+export const loadFavoritePokemon = async function () {
+  clearQueryInput();
+
+  console.log(favoriteState.favoritePokemon);
+  if (favoriteState.favoritePokemon.length === 0) return [];
+
+  const favoritePokemonPreviews = [];
+
+  try {
+    const favoritePokemon = sortPokemonResults(favoriteState.favoritePokemon);
+
+    for (const pokemon of favoritePokemon) {
+      const { name, id, img } = pokemon;
+
+      favoritePokemonPreviews.push({ name, id, img });
+    }
+
+    console.log(favoriteState.favoritePokemon);
+    return favoritePokemonPreviews;
+  } catch (err) {
+    console.error(err);
+  }
 };
+
+// To store Pokémon details in Favorite Pokémon (favoriteState)
+export const addFavoritePokemon = function (newPokemon) {
+  newPokemon.favorite = true;
+
+  // Prevents user from adding duplicate Pokémon, if already rendered from local storage
+  if (
+    favoriteState.favoritePokemon.find(
+      pokemon => pokemon.name === newPokemon.name
+    )
+  )
+    return;
+
+  favoriteState.favoritePokemon.push(newPokemon);
+  persistData('favoritePokemon', favoriteState.favoritePokemon);
+};
+
+// To remove Pokémon details from Favorite Pokémon (favoriteState)
+export const removeFavoritePokemon = function (newPokemon) {
+  newPokemon.favorite = false;
+
+  const index = favoriteState.favoritePokemon.find(
+    pokemon => pokemon.name === newPokemon.name
+  );
+
+  favoriteState.favoritePokemon.splice(index, 1);
+  persistData('favoritePokemon', favoriteState.favoritePokemon);
+};
+
+// To check local storage and update Favorite Pokémon (favoriteState) with persisted data
+const init = function () {
+  const storageFavoritePokemon = localStorage.getItem('favoritePokemon');
+
+  if (storageFavoritePokemon)
+    favoriteState.favoritePokemon = JSON.parse(storageFavoritePokemon);
+};
+
 init();

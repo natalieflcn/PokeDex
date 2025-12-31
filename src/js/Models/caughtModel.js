@@ -1,15 +1,15 @@
 import caughtState from './state/caughtState';
 import { clearQueryInput, persistData, sortPokemonResults } from '../helpers';
-import { resetTypesPokemonCaught } from '../services/pokemonService';
+import { resetTypesPokemonCaught } from '../services/caughtService';
 
 // To retrieve Caught Pokémon (caughtState) for mapController and profileController
 export const getCaughtPokemon = () => caughtState.caughtPokemon;
 
-// To load Caught Pokémon (caughtState) for profileController
+// To load sorted Caught Pokémon (caughtState) for profileController
 export const loadCaughtPokemon = async function () {
   clearQueryInput();
 
-  if (!caughtState.caughtPokemon) return;
+  if (caughtState.caughtPokemon.length === 0) return [];
 
   const caughtPokemonPreviews = [];
 
