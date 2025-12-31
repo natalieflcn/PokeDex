@@ -1,13 +1,12 @@
-import { DETAILS_API_URL, MAIN_API_URL, MOVE_TYPE_URL } from '../config';
-import { AJAX, capitalize } from '../helpers';
-
+import panelState from './state/panelState';
 import caughtState from './state/caughtState';
 import favoriteState from './state/favoriteState';
-import panelState from './state/panelState';
+import { AJAX, capitalize } from '../helpers';
+import { DETAILS_API_URL, MAIN_API_URL, MOVE_TYPE_URL } from '../config';
 
-// To create a Pokémon object after parsing PokéAPI data
+// To create a detailed Pokémon object after parsing PokéAPI data
 export const createPokemonObject = async function (data) {
-  // Loaded from MAIN_API_URL
+  // Data loaded from MAIN_API_URL (data[0])
   const {
     name,
     id,
@@ -18,10 +17,11 @@ export const createPokemonObject = async function (data) {
 
   const types = data[0].types.map(entry => capitalize(entry.type.name));
   const stats = data[0].stats.map(stat => [stat.stat.name, stat.base_stat]);
-
   const moves = [];
+
   for (const move of data[0].moves.slice(13, 19)) {
     const moveType = await AJAX(`${MOVE_TYPE_URL}${move.move.name}`);
+
     moves.push([
       move.move.name
         .split('-')
@@ -31,18 +31,21 @@ export const createPokemonObject = async function (data) {
     ]);
   }
 
-  // Loaded from DETAILS_API_URL
-  const eng = data[1].flavor_text_entries.find(
+  // Data loaded from DETAILS_API_URL (data[1])
+  const language = data[1].flavor_text_entries.find(
     entry => entry.language.name === 'en'
   );
-  const flavor_text = eng?.flavor_text || data[1].flavor_text;
-  // find eng flav text
+  const flavor_text = language?.flavor_text || data[1].flavor_text;
 
-  // Properties created from Caught and Favorites in state
-  const caught = caughtState.caughtPokemon.some(p => p.id === id)
+  // Data fetched from caughtState
+  const caught = caughtState.caughtPokemon.some(pokemon => pokemon.id === id)
     ? true
     : false;
-  const favorite = favoriteState.favoritePokemon.some(p => p.id === id)
+
+  // Data fetched from favoriteState
+  const favorite = favoriteState.favoritePokemon.some(
+    pokemon => pokemon.id === id
+  )
     ? true
     : false;
 
@@ -61,7 +64,7 @@ export const createPokemonObject = async function (data) {
   };
 };
 
-// To load Pokémon details for the search panel [screen 2]
+// To load Pokémon details for the Search panel
 export const loadPokemon = async function (pokemon) {
   try {
     const data = await Promise.all([
@@ -69,11 +72,7 @@ export const loadPokemon = async function (pokemon) {
       AJAX(`${DETAILS_API_URL}${pokemon}`),
     ]);
 
-    console.log(data);
     panelState.pokemon = await createPokemonObject(data);
-    console.log(panelState.pokemon);
-
-    console.log(panelState.pokemon);
   } catch (err) {
     console.error(err);
   }
