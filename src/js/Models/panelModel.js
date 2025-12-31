@@ -4,6 +4,9 @@ import favoriteState from './state/favoriteState';
 import { AJAX, capitalize } from '../helpers';
 import { DETAILS_API_URL, MAIN_API_URL, MOVE_TYPE_URL } from '../config';
 
+// To retrieve the Pokémon to be rendered in the panel
+export const getPokemon = () => panelState.pokemon;
+
 // To create a detailed Pokémon object after parsing PokéAPI data
 export const createPokemonObject = async function (data) {
   // Data loaded from MAIN_API_URL (data[0])

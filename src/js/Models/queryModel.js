@@ -20,7 +20,10 @@ export const loadQueryResults = async function (query, requestId) {
 
   queryState.query = query;
 
-  queryState.queryResults = possiblePokemon(query, pokemonState.allPokemon);
+  queryState.queryResults = possiblePokemon(
+    query,
+    pokemonState.allPokemonReferences
+  );
 
   const sorted = sortPokemonResults(queryState.queryResults);
 

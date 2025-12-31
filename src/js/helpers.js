@@ -93,15 +93,19 @@ export const possiblePokemon = function (substring, pokemonSet) {
 
 // To return sorted general Pokémon results by name
 export const sortPokemonName = function (pokemonSet) {
-  const names = pokemonSet.map(p => p.name);
+  const names = pokemonSet.map(pokemon => pokemon.name);
   const sortedNames = names.sort((a, b) => a.localeCompare(b));
+
+  console.log(sortedNames);
   return sortedNames;
 };
 
 // To return sorted general Pokémon results by ID
 export const sortPokemonID = function (pokemonSet) {
-  const ids = pokemonSet.map(p => p.id);
+  const ids = pokemonSet.map(pokemon => pokemon.id);
   const sortedIds = ids.sort((a, b) => a.id - b.id);
+
+  console.log(sortedIds);
   return sortedIds;
 };
 

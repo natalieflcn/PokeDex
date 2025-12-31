@@ -1,11 +1,13 @@
 import caughtState from './state/caughtState';
 import { clearQueryInput, persistData, sortPokemonResults } from '../helpers';
-import { resetTypesPokemonCaught } from '../services/caughtService';
 
-// To retrieve Caught Pokémon (caughtState) for mapController and profileController
+// To retrieve Caught Pokémon (caughtState)
 export const getCaughtPokemon = () => caughtState.caughtPokemon;
 
-// To load sorted Caught Pokémon (caughtState) for profileController
+// To retrieve the types of Pokémon caught for the Profile module
+export const getTypesPokemonCaught = () => caughtState.typesCaught;
+
+// To load sorted Caught Pokémon (caughtState)
 export const loadCaughtPokemon = async function () {
   clearQueryInput();
 
@@ -53,6 +55,29 @@ export const removeCaughtPokemon = function (newPokemon) {
   caughtState.caughtPokemon.splice(index, 1);
   persistData('caughtPokemon', caughtState.caughtPokemon);
   updateTypesPokemonCaught();
+};
+
+const resetTypesPokemonCaught = function () {
+  caughtState.typesCaught = {
+    Normal: 0,
+    Fire: 0,
+    Water: 0,
+    Electric: 0,
+    Grass: 0,
+    Ice: 0,
+    Fighting: 0,
+    Poison: 0,
+    Ground: 0,
+    Flying: 0,
+    Psychic: 0,
+    Bug: 0,
+    Rock: 0,
+    Ghost: 0,
+    Dragon: 0,
+    Dark: 0,
+    Steel: 0,
+    Fairy: 0,
+  };
 };
 
 // To update the types of Pokémon caught for the Profile

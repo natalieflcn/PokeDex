@@ -1,157 +1,130 @@
-import {
-  DETAILS_API_URL,
-  LIMIT,
-  MAIN_API_URL,
-  MOVE_TYPE_URL,
-  POKEMON_NAMES_API_URL,
-} from '../config';
-import {
-  AJAX,
-  capitalize,
-  createPokemonPreviewObject,
-  sortPokemonName,
-} from '../helpers';
-import caughtState from './state/caughtState';
-import favoriteState from './state/favoriteState';
-import panelState from './state/panelState';
 import pokemonState from './state/pokemonState';
-import queryState from './state/queryState';
+import { extractPokemonId } from '../services/pokemonService';
+import { AJAX, createPokemonPreviewObject, sortPokemonName } from '../helpers';
+import { LIMIT, MAIN_API_URL, POKEMON_NAMES_API_URL } from '../config';
 
-//TODO pokemon results should be loaded from "cache" allPokemon array, not making new API calls
-// To load Pokémon details for the current batch rendered in search results [screen 1]
-export const loadPokemonResults = async function (
-  requestId = queryState.currentQueryId
-) {
-  try {
-    queryState.loading = true;
-
-    // clearQueryInput();
-
-    let pokemonNames;
-
-    const currentURL = new URL(window.location.href);
-    console.log(currentURL);
-
-    // Retrieving Pokémon Names -- If page is initially loading (prior to storing PokemonNames)
-    if (!pokemonState.loaded) {
-      const pokemon = await AJAX(
-        `${DETAILS_API_URL}?limit=${queryState.limit}&offset=${0}`
-      );
-      pokemonNames = pokemon.results;
-    } else {
-      if (
-        currentURL.searchParams.get('sort') === 'id' ||
-        !currentURL.searchParams.get('sort')
-      ) {
-        // Loading sorted by ID
-        pokemonNames = pokemonState.allPokemon.slice(
-          queryState.offset,
-          queryState.offset + LIMIT
-        );
-      } else if (currentURL.searchParams.get('sort') === 'name') {
-        // Loading sorted by Name
-        pokemonNames = sortPokemonName(pokemonState.allPokemon).slice(
-          queryState.offset,
-          queryState.offset + LIMIT
-        );
-      }
-    }
-
-    for (const pokemon of pokemonNames) {
-      try {
-        const pokemonName = pokemon.name || pokemon;
-        if (requestId !== queryState.currentQueryId) return;
-
-        // console.log(pokemon);
-        const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemonName}`);
-        const pokemonPreview = createPokemonPreviewObject(
-          pokemonName,
-          pokemonDetails
-        );
-
-        if (requestId !== queryState.currentQueryId) return;
-        pokemonState.results.push(pokemonPreview);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    queryState.offset += LIMIT;
-    queryState.loading = false;
-  } catch (err) {
-    throw err;
-  }
-};
-
-// To load additional Pokémon results
-export const loadAdditionalBatch = async function () {
-  try {
-    queryState.loading = true;
-    queryState.currentBatch = [];
-    let pokemonNames = [];
-
-    const currentURL = new URL(window.location.href);
-
-    if (
-      currentURL.searchParams.get('sort') === 'id' ||
-      !currentURL.searchParams.get('sort')
-    ) {
-      // Loading sorted by ID
-
-      pokemonNames = pokemonState.allPokemon.slice(
-        queryState.offset,
-        queryState.offset + LIMIT
-      );
-    } else {
-      // Loading sorted by Name
-      pokemonNames = sortPokemonName(pokemonState.allPokemon).slice(
-        queryState.offset,
-        queryState.offset + LIMIT
-      );
-    }
-
-    for (const pokemon of pokemonNames) {
-      try {
-        const pokemonName = pokemon.name || pokemon;
-        const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemonName}`);
-        const pokemonPreview = createPokemonPreviewObject(
-          pokemonName,
-          pokemonDetails
-        );
-        queryState.currentBatch.push(pokemonPreview);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    pokemonState.results.push(...queryState.currentBatch);
-
-    queryState.offset += LIMIT;
-    queryState.loading = false;
-  } catch (err) {
-    throw err;
-  }
-};
-
-// To store all Pokémon names in our state
-export const storeAllPokemon = async function () {
+// To store all Pokémon names and IDs in our state (This shallow dataset will later be referenced to fetch more Pokémon details as needed)
+export const storeAllPokemonReferences = async function () {
   const pokeAPIData = await AJAX(`${POKEMON_NAMES_API_URL}`);
   const { results } = pokeAPIData;
 
   for (const result of results) {
     const pokemonName = result.name;
     const pokemonId = extractPokemonId(result.url);
-    pokemonState.allPokemon.push({
+
+    pokemonState.allPokemonReferences.push({
       name: pokemonName,
       id: pokemonId,
     });
   }
 
-  pokemonState.loaded = true;
+  pokemonState.loadedReferences = true;
 };
 
-// To extract IDs for all Pokemon
-const extractPokemonId = function (url) {
-  const id = url.match(/\/(\d+)\/?$/);
-  return id ? Number(id[1]) : null;
+// To initiate a new request for general Pokémon
+export const startPokemonRequest = function () {
+  const requestId = ++pokemonState.currentRequestId;
+  return requestId;
 };
+
+// To determine whether the current request for general Pokémon is the latest request, preventing race conditions
+export const isStalePokemonRequest = function (requestId) {
+  return pokemonState.currentRequestId !== requestId;
+};
+
+// To load general Pokémon (preview) details for the current batch rendered in Search module results
+export const loadPokemonResults = async function (requestId) {
+  try {
+    pokemonState.loading = true;
+    pokemonState.currentBatch = [];
+
+    let pokemonBatch;
+
+    // Parsing the URL for any sorting parameters (name/id) to organize data accordingly
+    const sortParam = new URL(window.location.href).searchParams.get('sort');
+
+    if (sortParam === 'name') {
+      pokemonBatch = sortPokemonName(pokemonState.allPokemonReferences).slice(
+        pokemonState.offset,
+        pokemonState.offset + LIMIT
+      );
+    } else if (sortParam === 'id' || !sortParam) {
+      pokemonBatch = pokemonState.allPokemonReferences.slice(
+        pokemonState.offset,
+        pokemonState.offset + LIMIT
+      );
+    }
+
+    for (const pokemon of pokemonBatch) {
+      try {
+        if (isStalePokemonRequest(requestId)) return;
+
+        const pokemonName = pokemon.name || pokemon;
+        const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemonName}`);
+
+        const pokemonPreview = createPokemonPreviewObject(
+          pokemonName,
+          pokemonDetails
+        );
+
+        if (isStalePokemonRequest(requestId)) return;
+
+        pokemonState.currentBatch.push(pokemonPreview);
+        pokemonState.results.push(pokemonPreview);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    pokemonState.offset += LIMIT;
+    pokemonState.loading = false;
+  } catch (err) {
+    throw err;
+  }
+};
+
+// // To load additional Pokémon results
+// export const loadAdditionalBatch = async function () {
+//   // if (pokemonState.loading) return;
+
+//   try {
+//     pokemonState.loading = true;
+//     pokemonState.currentBatch = [];
+
+//     let pokemonBatch = [];
+
+//     const sortParam = new URL(window.location.href).searchParams.get('sort');
+
+//     if (sortParam === 'name') {
+//       pokemonBatch = sortPokemonName(pokemonState.allPokemonReferences).slice(
+//         pokemonState.offset,
+//         pokemonState.offset + LIMIT
+//       );
+//     } else {
+//       pokemonBatch = pokemonState.allPokemonReferences.slice(
+//         pokemonState.offset,
+//         pokemonState.offset + LIMIT
+//       );
+//     }
+
+//     for (const pokemon of pokemonBatch) {
+//       try {
+//         const pokemonName = pokemon.name || pokemon;
+//         const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemonName}`);
+//         const pokemonPreview = createPokemonPreviewObject(
+//           pokemonName,
+//           pokemonDetails
+//         );
+//         pokemonState.currentBatch.push(pokemonPreview);
+//       } catch (err) {
+//         console.error(err);
+//       }
+//     }
+
+//     pokemonState.results.push(...pokemonState.currentBatch);
+
+//     pokemonState.offset += LIMIT;
+//     pokemonState.loading = false;
+//   } catch (err) {
+//     throw err;
+//   }
+// };

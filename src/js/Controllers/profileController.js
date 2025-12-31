@@ -18,7 +18,7 @@ import {
   loadCaughtPokemon,
   updateTypesPokemonCaught,
 } from '../models/caughtModel.js';
-import { loadFavoritePokemon } from '../models/favoritesModel.js';
+import { loadFavoritePokemon } from '../models/favoriteModel.js';
 import pokemonState from '../models/state/pokemonState.js';
 
 // PROFILE CATEGORY RENDERING AND ROUTING (Caught/Favorites)

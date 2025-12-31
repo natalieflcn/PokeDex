@@ -1,10 +1,10 @@
 import favoriteState from './state/favoriteState';
 import { clearQueryInput, persistData, sortPokemonResults } from '../helpers';
 
-// To export Favorite Pokémon for Profile View
+// To retrieve Favorite Pokémon (favoriteState)
 export const getFavoritePokemon = () => favoriteState.favoritePokemon;
 
-// To load sorted Favorite Pokémon (favoriteState) for profileController
+// To load sorted Favorite Pokémon (favoriteState)
 export const loadFavoritePokemon = async function () {
   clearQueryInput();
 

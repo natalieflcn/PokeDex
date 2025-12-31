@@ -24,7 +24,7 @@
 
 - [ ] Load the Pokémon more smoothly and quickly from PokéAPI into search results
 - [ ] Implement feedback for users while search results are loading in the background
-- [ ] Define the routing for pages when user is switching between different views
+- [x] Define the routing for pages when user is switching between different views
 
 ### Phase 3: Introducing New Features to Existing Modules
 
