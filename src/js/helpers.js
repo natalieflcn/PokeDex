@@ -58,30 +58,24 @@ export const createPokemonPreviewObject = function (name, details) {
 
 export const clearQueryInput = function () {
   queryState.offset = 0;
-  pokemonState.results = [];
-  queryState.queryResults = '';
+  queryState.queryResults = [];
   queryState.query = '';
   queryState.hasMoreResults = true;
 };
 
 // To sort Pokémon search results by name OR id -- for queries ONLY
-export const sortPokemonResults = function (pokemonSet) {
-  let sort;
+export const sortPokemon = function (pokemon) {
+  let sortedPokemon;
 
-  const currentURL = new URL(window.location.href);
-  // Sorting the Pokémon results
+  const sortParam = new URL(window.location.href).searchParams.get('sort');
 
-  console.log(currentURL.searchParams.get('sort'));
-  if (currentURL.searchParams.get('sort') === 'id') {
-    // Sorting my id
-
-    sort = pokemonSet.sort((a, b) => a.id - b.id);
+  if (sortParam === 'name') {
+    sortedPokemon = pokemon.toSorted((a, b) => a.name.localeCompare(b.name));
   } else {
-    // Sorting by name
-    sort = pokemonSet.sort((a, b) => a.name.localeCompare(b.name));
+    sortedPokemon = pokemon.toSorted((a, b) => a.id - b.id);
   }
 
-  return sort;
+  return sortedPokemon;
 };
 
 // To find Pokémon that begin with the passed-in substring

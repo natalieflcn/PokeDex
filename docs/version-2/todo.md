@@ -89,9 +89,10 @@
 
 - [~] Refactor MVC system architecture implementation
 
-  - [~] Modify code for the overlapping responsiblities currently shared between Model and Controller layers TODO 3
-  - [x] Refactor the current Model structure into domain-driven Models: pokemonModel, favoritesModel, caughtModel TODO 2
-  - [~] Offload controller functionality into the services -- follow fat models, skinny controllers guideline
+  - [x] Modify code for the overlapping responsiblities currently shared between Model and Controller layers
+  - [x] Refactor the current Model structure into domain-driven Models: pokemonModel, favoritesModel, caughtModel
+  - [~] Offload controller functionality into the services or models -- follow fat models, skinny controllers guideline
+  - [~] Improve controller orchestration: searchController, profileController
 
 - [x] Rename all searchState.js imports into queryState.js
 
@@ -99,5 +100,23 @@
 - [ ] BUG: /profile/favorites and /profile/caught is not immediately rendering newly added Favorties/Caught Pokémon on profile -- page needs to be reloaded for new Pokémon
 - [ ] BUG: When removing Caught Pokemon, the first index of the Caught array is being removed instead of the specific Pokemon selected
 - [ ] BUG: Querying on Profile for Caught/Favorite Pokémon is not querying anything
-- [ ] BUG: Sorting functionality is no longer working (name/id)
+- [x] BUG: Sorting functionality is no longer working (name/id)
 - [x] BUG: Caught/Favorites Pokémon is rendering before all Pokémon in general search query
+- [ ] BUG: When continuing to scroll after querying for Pokémon but there's no more results, general Pokémon results are being rendered instead
+
+## Week: January 6 – January 9
+
+### Goals
+
+- [~] Refactor MVC system architecture implementation
+
+  - [~] Offload controller functionality into the services or models -- follow fat models, skinny controllers guideline
+  - [~] Improve controller orchestration: searchController, profileController
+
+- [ ] BUG: Platform crashes when querying for Pokémon that does not exist
+- [ ] BUG: Search module renders all Pokémon after query results
+- [ ] BUG: Platform crashes when using pagination buttons to navigate to Pokémon that exist, but are not rendered in the results yet (error most likely in controlSearchPagination method)
+- [ ] BUG: /profile/favorites and /profile/caught is not immediately rendering newly added Favorties/Caught Pokémon on profile -- page needs to be reloaded for new Pokémon
+- [ ] BUG: When removing Caught Pokemon, the first index of the Caught array is being removed instead of the specific Pokemon selected
+- [ ] BUG: Querying on Profile for Caught/Favorite Pokémon is not querying anything
+- [ ] BUG: When continuing to scroll after querying for Pokémon but there's no more results, general Pokémon results are being rendered instead

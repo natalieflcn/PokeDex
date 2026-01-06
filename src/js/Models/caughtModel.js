@@ -1,5 +1,10 @@
 import caughtState from './state/caughtState';
-import { clearQueryInput, persistData, sortPokemonResults } from '../helpers';
+import {
+  clearQueryInput,
+  persistData,
+  sortPokemon,
+  sortPokemonResults,
+} from '../helpers';
 
 // To retrieve Caught Pokémon (caughtState)
 export const getCaughtPokemon = () => caughtState.caughtPokemon;
@@ -16,7 +21,7 @@ export const loadCaughtPokemon = async function () {
   const caughtPokemonPreviews = [];
 
   try {
-    const caughtPokemon = sortPokemonResults(caughtState.caughtPokemon);
+    const caughtPokemon = sortPokemon(caughtState.caughtPokemon);
 
     for (const pokemon of caughtPokemon) {
       const { name, id, img } = pokemon;
@@ -81,7 +86,7 @@ const resetTypesPokemonCaught = function () {
 };
 
 // To update the types of Pokémon caught for the Profile
-const updateTypesPokemonCaught = function () {
+export const updateTypesPokemonCaught = function () {
   resetTypesPokemonCaught();
 
   caughtState.caughtPokemon

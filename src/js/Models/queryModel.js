@@ -1,115 +1,100 @@
-// searchModel.js methods
-// SEARCH: Rendering search results and Pokémon panel details
-
-import { LIMIT, MAIN_API_URL } from '../config';
+import queryState from './state/queryState';
+import pokemonState from './state/pokemonState';
 import {
   AJAX,
   createPokemonPreviewObject,
   possiblePokemon,
   clearQueryInput,
-  sortPokemonResults,
+  sortPokemon,
 } from '../helpers';
-import pokemonState from './state/pokemonState';
-import queryState from './state/queryState';
+import { LIMIT, MAIN_API_URL } from '../config';
+import {
+  fetchPokemon,
+  filterPokemonPreviews,
+  loadBatch,
+  loadPokemonPreviews,
+} from '../services/pokemonService';
 
-// To load Pokémon previews in the search results screen [screen 1]
-export const loadQueryResults = async function (query, requestId) {
+// To initiate a new request for a Pokémon query
+export const startPokemonQuery = function () {
+  const requestId = ++queryState.currentQueryId;
+  return requestId;
+};
+
+// To determine whether the current request for a queried Pokémon is the latest request, preventing race conditions
+export const isStalePokemonQuery = function (requestId) {
+  return queryState.currentQueryId !== requestId;
+};
+
+// To retrieve the queried Pokémon (queryState) results
+export const getQueryResults = function () {
+  return queryState.queryResults;
+};
+
+// To determine whether or not there are more queried Pokémon (queryState) results that can be rendered
+export const getHasMoreQueryResults = function () {
+  return queryState.hasMoreResults;
+};
+
+const addQueryPokemonToState = function (pokemon) {
+  queryState.currentBatch.push(...pokemon);
+  queryState.queryResults.push(...pokemon);
+};
+
+// To store all possible Pokémon references in the query results (queryState)
+export const storeQueryResults = async function (query, querySet) {
   queryState.loading = true;
 
   clearQueryInput();
 
   queryState.query = query;
+  console.log(query, querySet);
+  queryState.queryReferences = possiblePokemon(query, querySet);
 
-  queryState.queryResults = possiblePokemon(
-    query,
-    pokemonState.allPokemonReferences
-  );
-
-  const sorted = sortPokemonResults(queryState.queryResults);
-
-  const pokemonNames = queryState.queryResults.slice(
-    queryState.offset,
-    queryState.offset + LIMIT
-  );
-
-  for (const pokemon of pokemonNames) {
-    try {
-      if (requestId !== queryState.currentQueryId) return;
-      const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon.name}`);
-      const pokemonPreview = createPokemonPreviewObject(
-        pokemon.name,
-        pokemonDetails
-      );
-
-      //   if(!pokemonPreview.id || pokemonPreview.img) return;
-      if (requestId !== queryState.currentQueryId) return;
-      pokemonState.results.push(pokemonPreview);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  //   sortSearchResults(state.search.mode);
-  queryState.offset += LIMIT;
   queryState.loading = false;
 };
 
-// To load additional query results
-export const loadAdditionalQuery = async function (requestId) {
+// To load queried Pokémon (preview) details for the current batch to be rendered in the results
+export const loadQueryBatch = async function (requestId) {
   queryState.loading = true;
   queryState.currentBatch = [];
 
-  const pokemonNames = queryState.queryResults.slice(
+  const sortedPokemon = sortPokemon(queryState.queryReferences);
+
+  const pokemonBatch = sortedPokemon.slice(
     queryState.offset,
     queryState.offset + LIMIT
   );
 
-  for (const pokemon of pokemonNames) {
-    try {
-      const pokemonDetails = await AJAX(`${MAIN_API_URL}${pokemon.name}`);
-      const pokemonPreview = createPokemonPreviewObject(
-        pokemon.name,
-        pokemonDetails
-      );
-      queryState.currentBatch.push(pokemonPreview);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-  pokemonState.results.push(...queryState.currentBatch);
+  const pokemonRequests = loadBatch(pokemonBatch);
+  if (isStalePokemonQuery(requestId)) return;
+
+  const pokemonPreviews = await loadPokemonPreviews(pokemonRequests);
+
+  if (isStalePokemonQuery(requestId)) return;
+
+  const validPokemonPreviews = filterPokemonPreviews(pokemonPreviews);
+
+  addQueryPokemonToState(validPokemonPreviews);
   queryState.offset += LIMIT;
   queryState.loading = false;
 };
 
-// // profileModel.js methods
-// export const loadQueryResults = function (
-//   query,
-//   requestId = queryState.currentQueryId
-// ) {
-//   queryState.loading = true;
-//   clearQueryInput();
-//   queryState.query = query;
+// const pokemonRequests = pokemonBatch.map(pokemon => {
+//     const pokemonName = pokemon.name || pokemon;
 
-//   try {
-//     const currentData =
-//       queryState.view == 'caught'
-//         ? caughtState.caughtPokemon
-//         : favoritesState.favorites;
+//     return fetchPokemon(pokemonName)
+//       .then(pokemonDetails =>
+//         createPokemonPreviewObject(pokemonName, pokemonDetails)
+//       )
+//       .catch(err => {
+//         console.error(`Failed to load Pokémon: ${pokemonName}`, err);
+//         return null;
+//       });
+//   });
 
-//     search.queryResults = possiblePokemon(query, currentData);
+//   const pokemonPreviews = await Promise.all(pokemonRequests);
 
-//     if (queryState.queryResults.length === 0) return;
+//   if (isStalePokemonQuery(requestId)) return;
 
-//     const pokemonNames = sortPokemonResults(queryState.queryResults);
-
-//     for (const pokemon of pokemonNames) {
-//       const { name, id, img } = pokemon;
-//       if (requestId !== queryState.currentQueryId) return;
-//       queryState.results.push({ name, id, img });
-//     }
-//   } catch (err) {
-//     console.error(err);
-//   }
-
-//   queryState.loading = false;
-// };
+//   const validPokemonPreviews = pokemonPreviews.filter(Boolean);

@@ -22,6 +22,7 @@
 - [ ] Align the last Pokémon panels to the left, instead of the center
 - [ ] If the Pokémon data is already loaded into cache, do not render loading spinner
 - [ ] Implement CSS animations across Pokémon panels and menu buttons to create a smoother user experience
+- [ ] Use LocalStorageAPI to cache Pokémon previews and Pokémon details into local storage
 
 ---
 

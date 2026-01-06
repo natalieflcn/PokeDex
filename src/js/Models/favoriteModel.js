@@ -1,5 +1,10 @@
 import favoriteState from './state/favoriteState';
-import { clearQueryInput, persistData, sortPokemonResults } from '../helpers';
+import {
+  clearQueryInput,
+  persistData,
+  sortPokemon,
+  sortPokemonResults,
+} from '../helpers';
 
 // To retrieve Favorite Pokémon (favoriteState)
 export const getFavoritePokemon = () => favoriteState.favoritePokemon;
@@ -14,7 +19,7 @@ export const loadFavoritePokemon = async function () {
   const favoritePokemonPreviews = [];
 
   try {
-    const favoritePokemon = sortPokemonResults(favoriteState.favoritePokemon);
+    const favoritePokemon = sortPokemon(favoriteState.favoritePokemon);
 
     for (const pokemon of favoritePokemon) {
       const { name, id, img } = pokemon;
