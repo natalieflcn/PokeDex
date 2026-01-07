@@ -8,11 +8,12 @@ import paginationView from '../views/SearchViews/paginationView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import { debounce, clearQueryInput } from '../helpers.js';
+import { debounce } from '../helpers.js';
 import queryState from '../models/state/queryState.js';
 
 import { navSanitizeSort } from '../services/navService.js';
 import {
+  clearQueryInput,
   getHasMoreQueryResults,
   getQueryResults,
   isStalePokemonQuery,

@@ -1,18 +1,12 @@
 import pokemonState from './state/pokemonState';
 import {
-  extractPokemonId,
-  fetchPokemon,
   filterPokemonPreviews,
   loadBatch,
   loadPokemonPreviews,
-} from '../services/pokemonService';
-import {
-  AJAX,
-  createPokemonPreviewObject,
   sortPokemon,
-  sortPokemonName,
-} from '../helpers';
-import { LIMIT, MAIN_API_URL, POKEMON_NAMES_API_URL } from '../config';
+} from '../services/pokemonService';
+import { AJAX, extractPokemonId } from '../helpers';
+import { LIMIT, POKEMON_NAMES_API_URL } from '../config';
 
 // To initiate a new request for general Pokémon
 export const startPokemonRequest = function () {
@@ -60,26 +54,12 @@ export const storeAllPokemonReferences = async function () {
 };
 
 // To load general Pokémon (preview) details for the current batch to be rendered in Search module results
-export const loadPokemonBatch = async function (requestId, sortParam = 'id') {
+export const loadPokemonBatch = async function (requestId) {
   try {
     pokemonState.loading = true;
     pokemonState.currentBatch = [];
 
-    // let pokemonBatch;
-
-    // // fix later TODO
-    // if (sortParam === 'name') {
-    //   pokemonBatch = sortPokemonName(pokemonState.allPokemonReferences).slice(
-    //     pokemonState.offset,
-    //     pokemonState.offset + LIMIT
-    //   );
-    // } else if (sortParam === 'id' || !sortParam) {
-    //   pokemonBatch = pokemonState.allPokemonReferences.slice(
-    //     pokemonState.offset,
-    //     pokemonState.offset + LIMIT
-    //   );
-    // }
-
+    // Sort Pokémon by Name or ID according to (global) sort search param
     const sortedPokemon = sortPokemon(pokemonState.allPokemonReferences);
 
     const pokemonBatch = sortedPokemon.slice(
@@ -87,14 +67,17 @@ export const loadPokemonBatch = async function (requestId, sortParam = 'id') {
       pokemonState.offset + LIMIT
     );
 
-    const pokemonRequests = loadBatch(pokemonBatch);
+    // Fetch Pokémon name, ID, and img to later create Pokémon previews (this stores an array of promises)
+    const pokemonBatchDetails = loadBatch(pokemonBatch);
 
     if (isStalePokemonRequest(requestId)) return;
 
-    const pokemonPreviews = await loadPokemonPreviews(pokemonRequests);
+    // Resolves the aforementioned array of promises and creates Pokémon preview objects
+    const pokemonPreviews = await loadPokemonPreviews(pokemonBatchDetails);
 
     if (isStalePokemonRequest(requestId)) return;
 
+    // Removes the invalid (null, non-existent) entries from the array of Pokémon preview obejcts
     const validPokemonPreviews = filterPokemonPreviews(pokemonPreviews);
 
     addPokemonToState(validPokemonPreviews);

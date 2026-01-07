@@ -1,10 +1,7 @@
 import caughtState from './state/caughtState';
-import {
-  clearQueryInput,
-  persistData,
-  sortPokemon,
-  sortPokemonResults,
-} from '../helpers';
+import { persistData } from '../helpers';
+import { sortPokemon } from '../services/pokemonService';
+import { clearQueryInput } from './queryModel';
 
 // To retrieve Caught Pokémon (caughtState)
 export const getCaughtPokemon = () => caughtState.caughtPokemon;

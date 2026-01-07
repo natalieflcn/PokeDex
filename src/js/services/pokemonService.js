@@ -1,19 +1,48 @@
 import { MAIN_API_URL } from '../config';
-import { AJAX, createPokemonPreviewObject } from '../helpers';
+import { AJAX, capitalize } from '../helpers';
 
-// To extract ID (name) of Pokémon from the URL TODO move to helpers.js
-export const extractPokemonId = function (url) {
-  const id = url.match(/\/(\d+)\/?$/);
-  return id ? Number(id[1]) : null;
+// To find Pokémon that begin with the passed-in substring
+export const possiblePokemon = function (substring, pokemonSet) {
+  return pokemonSet.filter(pokemon =>
+    capitalize(pokemon.name).startsWith(capitalize(substring))
+  );
 };
 
-//
-export const fetchPokemon = async function (pokemonName) {
+const fetchPokemon = async function (pokemonName) {
   return await AJAX(`${MAIN_API_URL}${pokemonName}`);
 };
 
+// To create a Pokémon preview object after parsing PokéAPI data
+const createPokemonPreviewObject = function (name, details) {
+  const {
+    id,
+    sprites: { front_default: img },
+  } = details;
+
+  return {
+    name: capitalize(name),
+    id,
+    img,
+  };
+};
+
+// To sort Pokémon search results by name OR id -- for queries ONLY
+export const sortPokemon = function (pokemon) {
+  let sortedPokemon;
+
+  const sortParam = new URL(window.location.href).searchParams.get('sort');
+
+  if (sortParam === 'name') {
+    sortedPokemon = pokemon.toSorted((a, b) => a.name.localeCompare(b.name));
+  } else {
+    sortedPokemon = pokemon.toSorted((a, b) => a.id - b.id);
+  }
+
+  return sortedPokemon;
+};
+
 export const loadBatch = function (pokemonBatch) {
-  const pokemonRequests = pokemonBatch.map(pokemon => {
+  const pokemonBatchDetails = pokemonBatch.map(pokemon => {
     const pokemonName = pokemon.name || pokemon;
 
     return fetchPokemon(pokemonName)
@@ -26,7 +55,7 @@ export const loadBatch = function (pokemonBatch) {
       });
   });
 
-  return pokemonRequests;
+  return pokemonBatchDetails;
 };
 
 export const loadPokemonPreviews = async pokemonRequests => {

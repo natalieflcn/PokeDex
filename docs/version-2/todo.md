@@ -113,6 +113,13 @@
   - [~] Offload controller functionality into the services or models -- follow fat models, skinny controllers guideline
   - [~] Improve controller orchestration: searchController, profileController
 
+- [x] Refine loadPokemonResults logic in pokemonModel
+- [x] Refine loadQueryResults logic in queryModel
+- [x] Extract duplicate logic from loadPokemonResults and loadQueryResults into a shared service (pokemonService)
+- [ ] TODO Review all methods in helpers.js and distribute methods to models or services, where applicable
+- [ ] Review services and delete any services files that are unnecessary
+- [ ] Refine profileController and improve orchestration within functions
+
 - [ ] BUG: Platform crashes when querying for Pokémon that does not exist
 - [ ] BUG: Search module renders all Pokémon after query results
 - [ ] BUG: Platform crashes when using pagination buttons to navigate to Pokémon that exist, but are not rendered in the results yet (error most likely in controlSearchPagination method)
@@ -120,3 +127,7 @@
 - [ ] BUG: When removing Caught Pokemon, the first index of the Caught array is being removed instead of the specific Pokemon selected
 - [ ] BUG: Querying on Profile for Caught/Favorite Pokémon is not querying anything
 - [ ] BUG: When continuing to scroll after querying for Pokémon but there's no more results, general Pokémon results are being rendered instead
+
+### Notes
+
+- Consider using Local Storage API to store Pokémon into a cachedPokemon list and render Pokémon results and details directly from local storage instead

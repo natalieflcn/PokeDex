@@ -2,9 +2,10 @@ import queryView from '../views/ProfileViews/queryView.js';
 import savedPokemonView from '../views/ProfileViews/savedPokemonView.js';
 
 import categoryView from '../views/ProfileViews/categoryView.js';
-import { clearQueryInput } from '../helpers.js';
+
 import sortView from '../views/ProfileViews/sortView.js';
 import {
+  clearQueryInput,
   getQueryResults,
   loadQueryBatch,
   startPokemonQuery,
@@ -14,10 +15,7 @@ import {
 import navView from '../views/navView.js';
 import previewView from '../views/ProfileViews/previewView.js';
 import profileView from '../views/ProfileViews/profileView.js';
-import { navSanitizeSort } from '../services/navService.js';
-import queryState from '../models/state/queryState.js';
-import favoriteState from '../models/state/favoriteState.js';
-import caughtState from '../models/state/caughtState.js';
+
 import {
   getCaughtPokemon,
   getTypesPokemonCaught,
