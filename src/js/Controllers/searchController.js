@@ -29,6 +29,7 @@ import {
   isStalePokemonRequest,
   loadAdditionalBatch,
   loadPokemonBatch,
+  setPokemonSortBy,
   startPokemonRequest,
   storeAllPokemon,
   storeAllPokemonNames,
@@ -184,35 +185,40 @@ const controlInfiniteScroll = async function () {
   return pokemonState.results;
 };
 
-const controlSearchRenderSort = function (sort) {
+export const controlSearchRenderSort = function (sort) {
   switch (sort) {
     case 'name':
       sortView.toggleSearchSortName();
+      setPokemonSortBy(sort);
       break;
 
     case 'id':
-      sortView.toggleSearchSortId();
-      break;
-
     default:
       sortView.toggleSearchSortId();
+      setPokemonSortBy('id');
       break;
   }
 };
 
 const controlSearchSortBtn = function (sort) {
   const currentURL = new URL(window.location.href);
-  currentURL.searchParams.set('sort', sort);
-  window.history.replaceState({}, '', currentURL);
+
+  if (sort === 'name') {
+    currentURL.searchParams.set('sort', sort);
+    window.history.replaceState({}, '', currentURL);
+  } else if (sort === 'id') {
+    navSanitizeSort();
+  }
+
   controlSearchRenderSort(sort);
+  controlSearchResults();
 };
 
 const controlSearchSortLoad = function () {
   const sort = new URL(window.location.href).searchParams.get('sort');
 
-  if (sort && sort !== 'name' && sort !== 'id') navSanitizeSort();
-
-  sortView.toggleSearchSortId();
+  if (!sort) return;
+  if ((sort !== 'name' && sort !== 'id') || sort === 'id') navSanitizeSort();
 
   controlSearchRenderSort(sort);
 };

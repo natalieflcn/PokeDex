@@ -1,3 +1,6 @@
+import { BASE_POKEDEX_URL } from '../config';
+import { getPokemonSortBy } from '../models/pokemonModel';
+
 // Resolves routes to appropriate subroutes (if necessary) to maintain URL consistency
 const navResolveRoute = function (page) {
   if (page === 'profile') {
@@ -21,4 +24,14 @@ export const navSanitizeSort = function (module) {
   const currentURL = new URL(window.location.href);
   currentURL.searchParams.delete('sort');
   window.history.replaceState({}, '', currentURL);
+};
+
+export const navResolveSortParams = function (route) {
+  const currentURL = new URL(route.toString(), BASE_POKEDEX_URL);
+  const sortBy = getPokemonSortBy();
+
+  if (route === '/search')
+    if (sortBy !== 'id') currentURL.searchParams.set('sort', sortBy);
+
+  return currentURL;
 };

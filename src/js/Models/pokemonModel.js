@@ -29,6 +29,14 @@ export const getHasMoreResults = function () {
   return pokemonState.hasMoreResults;
 };
 
+export const getPokemonSortBy = function () {
+  return pokemonState.sortBy;
+};
+
+export const setPokemonSortBy = function (sortBy) {
+  pokemonState.sortBy = sortBy;
+};
+
 // To add general Pokémon to our state (pokemonState)
 const addPokemonToState = function (pokemon) {
   pokemonState.currentBatch.push(...pokemon);

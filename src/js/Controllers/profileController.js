@@ -26,7 +26,6 @@ import {
   getFavoritePokemon,
   loadFavoritePokemon,
 } from '../models/favoriteModel.js';
-import pokemonState from '../models/state/pokemonState.js';
 
 // GENERAL PROFILE CONTROLLER FUNCTIONS
 
@@ -45,10 +44,8 @@ const controlProfileLoad = function () {
 
 // To redirect user to the Search Module with the selected Pokémon's details rendered in the panel
 const controlProfileClickPreview = function (pokemon) {
-  // sortView.toggleProfileSortName();
-
   window.history.pushState({ page: `/search` }, '', `/search`);
-  window.location.hash = pokemon;
+  window.location.hash = pokemon; //TODO
   navView.toggleNavSearch();
 };
 

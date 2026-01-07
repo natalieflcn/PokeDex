@@ -97,12 +97,8 @@
 - [x] Rename all searchState.js imports into queryState.js
 
 - [x] BUG: Caught button event handler is running twice on every click, but not saving the Pokemon into Caught state (Search View)
-- [ ] BUG: /profile/favorites and /profile/caught is not immediately rendering newly added Favorties/Caught Pokémon on profile -- page needs to be reloaded for new Pokémon
-- [ ] BUG: When removing Caught Pokemon, the first index of the Caught array is being removed instead of the specific Pokemon selected
-- [ ] BUG: Querying on Profile for Caught/Favorite Pokémon is not querying anything
 - [x] BUG: Sorting functionality is no longer working (name/id)
 - [x] BUG: Caught/Favorites Pokémon is rendering before all Pokémon in general search query
-- [ ] BUG: When continuing to scroll after querying for Pokémon but there's no more results, general Pokémon results are being rendered instead
 
 ## Week: January 6 – January 9
 
@@ -116,9 +112,12 @@
 - [x] Refine loadPokemonResults logic in pokemonModel
 - [x] Refine loadQueryResults logic in queryModel
 - [x] Extract duplicate logic from loadPokemonResults and loadQueryResults into a shared service (pokemonService)
-- [ ] TODO Review all methods in helpers.js and distribute methods to models or services, where applicable
-- [ ] Review services and delete any services files that are unnecessary
-- [ ] Refine profileController and improve orchestration within functions
+- [x] Review all methods in helpers.js and distribute methods to models or services, where applicable
+- [~] Refine profileController and improve orchestration within functions
+- [ ] Maintain sorting mode in pokemonState (string), caughtState (boolean, string), and favoriteState (boolean, string) to reinforce url-driven UI state
+
+  - [ ] Sorting method should be persisted across page reloads, navigating around browser history stack, and accessing modules via UI buttons
+  - [ ] Default sorting method should be by ID. This should not be reflected in the url (i.e. /search, /profile/category). Only /name (and potential future sorting params) should be reflected in the url.
 
 - [ ] BUG: Platform crashes when querying for Pokémon that does not exist
 - [ ] BUG: Search module renders all Pokémon after query results

@@ -20,6 +20,10 @@ const caughtState = {
     Steel: 0,
     Fairy: 0,
   },
+  profile: {
+    render: true,
+    sortBy: 'id',
+  },
 };
 
 export default caughtState;

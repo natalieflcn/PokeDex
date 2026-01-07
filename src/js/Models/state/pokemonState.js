@@ -10,6 +10,7 @@ const pokemonState = {
   hasMoreResults: true,
   offset: 0,
   limit: LIMIT,
+  sortBy: 'id',
 };
 
 export default pokemonState;

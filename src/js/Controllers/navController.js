@@ -1,7 +1,13 @@
-import { BASE_POKEDEX_URL } from '../config';
-import { navCheckRoute, navSanitizeSort } from '../services/navService';
+import { getPokemonSortBy } from '../models/pokemonModel';
+import {
+  navCheckRoute,
+  navResolveSortParams,
+  navSanitizeSort,
+} from '../services/navService';
 import navView from '../views/navView';
 import categoryView from '../views/ProfileViews/categoryView';
+import sortView from '../views/SearchViews/sortView';
+import { controlSearchRenderSort } from './searchController';
 
 // Renders the appropriate module by calling their respective navService (based on the URL path)
 const controlNavRenderView = function (page) {
@@ -10,6 +16,9 @@ const controlNavRenderView = function (page) {
   switch (page) {
     case 'search':
       navView.toggleNavSearch();
+      controlSearchRenderSort(getPokemonSortBy());
+      navResolveSortParams(getPokemonSortBy());
+
       break;
 
     case 'map':
@@ -37,13 +46,10 @@ const controlNavBtn = function (page) {
 
   if (!route) return;
 
-  controlNavRenderView(page);
+  const currentURL = navResolveSortParams(route);
 
-  window.history.pushState(
-    { page: route },
-    '',
-    new URL(route.toString(), BASE_POKEDEX_URL)
-  );
+  window.history.pushState({ page: route }, '', currentURL);
+  controlNavRenderView(page);
 };
 
 // Reads the URL and navigates to appropriate module when user navigates around browser history stack
