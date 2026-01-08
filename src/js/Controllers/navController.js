@@ -1,3 +1,4 @@
+import { getCaughtRender } from '../models/caughtModel';
 import { getPokemonSortBy } from '../models/pokemonModel';
 import {
   navCheckRoute,
@@ -7,6 +8,7 @@ import {
 import navView from '../views/navView';
 import categoryView from '../views/ProfileViews/categoryView';
 import sortView from '../views/SearchViews/sortView';
+import { controlProfileRenderCategory } from './profileController';
 import { controlSearchRenderSort } from './searchController';
 
 // Renders the appropriate module by calling their respective navService (based on the URL path)
@@ -16,9 +18,9 @@ const controlNavRenderView = function (page) {
   switch (page) {
     case 'search':
       navView.toggleNavSearch();
+
       controlSearchRenderSort(getPokemonSortBy());
       navResolveSortParams(getPokemonSortBy());
-
       break;
 
     case 'map':
@@ -26,12 +28,20 @@ const controlNavRenderView = function (page) {
       break;
 
     case 'profile':
+      navView.toggleNavProfile();
+
+      const category = getCaughtRender() ? 'caught' : 'favorites';
+      controlProfileRenderCategory(category);
+      break;
+
     case 'profile/caught':
+      navView.toggleNavProfile();
       categoryView.toggleCaughtCategory();
+      break;
 
     case 'profile/favorites':
       navView.toggleNavProfile();
-      navSanitizeSort();
+      categoryView.toggleFavoritesCategory();
       break;
 
     default:

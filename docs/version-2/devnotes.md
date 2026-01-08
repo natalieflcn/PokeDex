@@ -15,14 +15,16 @@
 - [~] Ensure the current file system properly reflects the MVC model before building off this system architecture
 - [ ] Make the platform responsive for tablet and mobile users
 - [ ] Make it clear that the user is intially loaded onto the Search module
+- [ ] Disable buttons that are already active
 - [ ] Hyperlink the Pokédex menu buttons to the Pokédex circular lights
-- [ ] Improve the loading speed of the Pokémon from the PokéAPI
+- [x] Improve the loading speed of the Pokémon from the PokéAPI
 - [ ] Render visual feedback while additional Pokémon is loading
-- [ ] Define the routing for pages while the user is navigating between modules
+- [x] Define the routing for pages while the user is navigating between modules
 - [ ] Align the last Pokémon panels to the left, instead of the center
 - [ ] If the Pokémon data is already loaded into cache, do not render loading spinner
 - [ ] Implement CSS animations across Pokémon panels and menu buttons to create a smoother user experience
 - [ ] Use LocalStorageAPI to cache Pokémon previews and Pokémon details into local storage
+- [ ] Make input field, sort buttons, category buttons sticky at the top of the form
 
 ---
 
@@ -33,6 +35,9 @@
 - [ ] Create an About module to discuss the project's purpose, objectives, functionality, technical details, challenges and solutions, and lessons learned.
 - [ ] Add a "Type" sorting algorithm to the Search and Profile modules
 - [ ] Create a personal Pokémon Trainer GIF to use on the Profile page
+- [ ] Create "Page Not Found" page
+- [ ] Create an error page for the user, redirect them to Search module
+- [ ] Create "Types of Pokémon Favorited" on Profile module, that renders when accessing Favorite Pokémon
 
 ### Map Module
 

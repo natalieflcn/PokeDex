@@ -75,7 +75,6 @@ const controlSearchResults = async function () {
     } else {
       pokemonResults = await controlSearchGeneralPokemon();
     }
-    console.log(pokemonResults);
 
     if (!pokemonResults) return;
     /// refactoring above here
@@ -279,9 +278,9 @@ const controlPokemonPanel = async function () {
     await loadPokemon(id);
 
     // Render Pokémon panel (screen 2 -- search)
-    console.log(panelState.pokemon);
+
     panelView.render(panelState.pokemon);
-    console.log('controlpokemon panel ends here');
+
     const currIndex = pokemonState.results.findIndex(
       pokemon => pokemon.name === panelState.pokemon.name
     );

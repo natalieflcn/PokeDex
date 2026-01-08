@@ -2,12 +2,19 @@ import caughtState from './state/caughtState';
 import { persistData } from '../helpers';
 import { sortPokemon } from '../services/pokemonService';
 import { clearQueryInput } from './queryModel';
+import favoriteState from './state/favoriteState';
 
 // To retrieve Caught Pokémon (caughtState)
 export const getCaughtPokemon = () => caughtState.caughtPokemon;
 
 // To retrieve the types of Pokémon caught for the Profile module
 export const getTypesPokemonCaught = () => caughtState.typesCaught;
+
+export const getCaughtRender = () => caughtState.profile.render;
+
+export const setCaughtRender = function (value) {
+  caughtState.profile.render = value;
+};
 
 // To load sorted Caught Pokémon (caughtState)
 export const loadCaughtPokemon = async function () {

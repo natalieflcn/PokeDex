@@ -6,11 +6,16 @@ import { clearQueryInput } from './queryModel';
 // To retrieve Favorite Pokémon (favoriteState)
 export const getFavoritePokemon = () => favoriteState.favoritePokemon;
 
+export const getFavoriteRender = () => favoriteState.profile.render;
+
+export const setFavoriteRender = function (value) {
+  favoriteState.profile.render = value;
+};
+
 // To load sorted Favorite Pokémon (favoriteState)
 export const loadFavoritePokemon = async function () {
   clearQueryInput();
 
-  console.log(favoriteState.favoritePokemon);
   if (favoriteState.favoritePokemon.length === 0) return [];
 
   const favoritePokemonPreviews = [];

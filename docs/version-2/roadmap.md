@@ -31,8 +31,6 @@
 - [ ] Add sorting by "Type" for the Search and Profile views
 - [ ] Create an "About the Project" section for visitors to learn more
 - [ ] Create a custom Pokémon Trainer GIF for Profile view
-- [ ] Create "Page Not Found" page
-- [ ] Create an error page for the user, redirect them to Search module
 
 ### Phase 4: Implementing the Map Module
 

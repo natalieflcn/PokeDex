@@ -1,10 +1,13 @@
 import { BASE_POKEDEX_URL } from '../config';
+import { getCaughtRender } from '../models/caughtModel';
 import { getPokemonSortBy } from '../models/pokemonModel';
 
 // Resolves routes to appropriate subroutes (if necessary) to maintain URL consistency
 const navResolveRoute = function (page) {
   if (page === 'profile') {
-    return 'profile/caught';
+    const category = getCaughtRender() ? 'caught' : 'favorites';
+    console.log(category);
+    return `profile/${category}`;
   }
 
   return `/${page}`;

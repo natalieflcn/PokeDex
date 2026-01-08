@@ -18,13 +18,17 @@ import profileView from '../views/ProfileViews/profileView.js';
 
 import {
   getCaughtPokemon,
+  getCaughtRender,
   getTypesPokemonCaught,
   loadCaughtPokemon,
+  setCaughtRender,
   updateTypesPokemonCaught,
 } from '../models/caughtModel.js';
 import {
   getFavoritePokemon,
+  getFavoriteRender,
   loadFavoritePokemon,
+  setFavoriteRender,
 } from '../models/favoriteModel.js';
 
 // GENERAL PROFILE CONTROLLER FUNCTIONS
@@ -52,14 +56,20 @@ const controlProfileClickPreview = function (pokemon) {
 // RENDERING AND ROUTING PROFILE CATEGORY (Caught/Favorite)
 
 // Renders the appropriate category view (Caught/Favorites)
-const controlProfileRenderCategory = function (view) {
+export const controlProfileRenderCategory = function (view) {
   switch (view) {
     case 'caught':
       categoryView.toggleCaughtCategory();
+
+      setCaughtRender(true);
+      setFavoriteRender(false);
       break;
 
     case 'favorites':
       categoryView.toggleFavoritesCategory();
+
+      setFavoriteRender(true);
+      setCaughtRender(false);
       break;
   }
 };
@@ -88,12 +98,15 @@ const controlProfileCategory = function () {
 
 // Replaces the URL with /profile/caught route if user navigates to /profile route to maintain URL consistency
 const controlProfileCategoryLoad = function () {
-  if (window.location.pathname === '/profile')
+  if (window.location.pathname === '/profile') {
+    const category = getCaughtRender() ? 'caught' : 'favorites';
+
     window.history.replaceState(
-      { page: `profile/caught` },
+      { page: `profile/${category}` },
       '',
-      `/profile/caught`
+      `/profile/${category}`
     );
+  }
 };
 
 // RENDERING AND ROUTING PROFILE SORTING VIEW (Name/Id)
