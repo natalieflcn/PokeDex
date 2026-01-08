@@ -188,13 +188,13 @@ export const controlSearchRenderSort = function (sort) {
   switch (sort) {
     case 'name':
       sortView.toggleSearchSortName();
-      setPokemonSortBy(sort);
+
       break;
 
     case 'id':
     default:
       sortView.toggleSearchSortId();
-      setPokemonSortBy('id');
+      // setPokemonSortBy('id');
       break;
   }
 };
@@ -209,6 +209,7 @@ const controlSearchSortBtn = function (sort) {
     navSanitizeSort();
   }
 
+  setPokemonSortBy(sort);
   controlSearchRenderSort(sort);
   controlSearchResults();
 };
@@ -216,8 +217,7 @@ const controlSearchSortBtn = function (sort) {
 const controlSearchSortLoad = function () {
   const sort = new URL(window.location.href).searchParams.get('sort');
 
-  if (!sort) return;
-  if ((sort !== 'name' && sort !== 'id') || sort === 'id') navSanitizeSort();
+  if (!sort || sort !== 'name') navSanitizeSort();
 
   controlSearchRenderSort(sort);
 };

@@ -8,8 +8,14 @@ export const getFavoritePokemon = () => favoriteState.favoritePokemon;
 
 export const getFavoriteRender = () => favoriteState.profile.render;
 
+export const getFavoriteSortBy = () => favoriteState.profile.sortBy;
+
 export const setFavoriteRender = function (value) {
   favoriteState.profile.render = value;
+};
+
+export const setFavoriteSortBy = function (sort) {
+  favoriteState.profile.sortBy = sort;
 };
 
 // To load sorted Favorite Pokémon (favoriteState)

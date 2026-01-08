@@ -22,6 +22,7 @@ import {
   getTypesPokemonCaught,
   loadCaughtPokemon,
   setCaughtRender,
+  setCaughtSortBy,
   updateTypesPokemonCaught,
 } from '../models/caughtModel.js';
 import {
@@ -29,7 +30,12 @@ import {
   getFavoriteRender,
   loadFavoritePokemon,
   setFavoriteRender,
+  setFavoriteSortBy,
 } from '../models/favoriteModel.js';
+import {
+  navResolveSortParams,
+  navSanitizeSort,
+} from '../services/navService.js';
 
 // GENERAL PROFILE CONTROLLER FUNCTIONS
 
@@ -80,11 +86,9 @@ const controlProfileCategoryBtn = function (view) {
   savedPokemonView._clear();
   clearQueryInput();
 
-  window.history.replaceState(
-    { page: `profile/${view}` },
-    '',
-    `/profile/${view}`
-  );
+  const currentURL = navResolveSortParams(`/profile/${view}`);
+
+  window.history.replaceState({ page: `profile/${view}` }, '', currentURL);
 
   controlProfileRenderCategory(view);
   controlProfileSavedResults();
@@ -131,8 +135,16 @@ const controlProfileRenderSort = function (sort) {
 // Updates the URL search params and renders appropriate view when user clicks a sort button
 const controlProfileSortBtn = function (sort) {
   const currentURL = new URL(window.location.href);
-  currentURL.searchParams.set('sort', sort);
-  window.history.replaceState({}, '', currentURL);
+
+  if (sort === 'name') {
+    currentURL.searchParams.set('sort', sort);
+    window.history.replaceState({}, '', currentURL);
+  } else if (sort === 'id') {
+    navSanitizeSort();
+  }
+
+  setFavoriteSortBy(sort);
+  setCaughtSortBy(sort);
 
   controlProfileRenderSort(sort);
   controlProfileSavedResults();

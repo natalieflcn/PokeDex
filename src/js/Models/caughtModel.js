@@ -12,8 +12,14 @@ export const getTypesPokemonCaught = () => caughtState.typesCaught;
 
 export const getCaughtRender = () => caughtState.profile.render;
 
+export const getCaughtSortBy = () => caughtState.profile.sortBy;
+
 export const setCaughtRender = function (value) {
   caughtState.profile.render = value;
+};
+
+export const setCaughtSortBy = function (sort) {
+  caughtState.profile.sortBy = sort;
 };
 
 // To load sorted Caught Pokémon (caughtState)

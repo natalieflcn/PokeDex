@@ -1,4 +1,5 @@
 import { getCaughtRender } from '../models/caughtModel';
+import { getPokemon } from '../models/panelModel';
 import { getPokemonSortBy } from '../models/pokemonModel';
 import {
   navCheckRoute,
@@ -20,7 +21,6 @@ const controlNavRenderView = function (page) {
       navView.toggleNavSearch();
 
       controlSearchRenderSort(getPokemonSortBy());
-      navResolveSortParams(getPokemonSortBy());
       break;
 
     case 'map':
@@ -36,11 +36,13 @@ const controlNavRenderView = function (page) {
 
     case 'profile/caught':
       navView.toggleNavProfile();
+
       categoryView.toggleCaughtCategory();
       break;
 
     case 'profile/favorites':
       navView.toggleNavProfile();
+
       categoryView.toggleFavoritesCategory();
       break;
 
@@ -56,6 +58,7 @@ const controlNavBtn = function (page) {
 
   if (!route) return;
 
+  console.log(route);
   const currentURL = navResolveSortParams(route);
 
   window.history.pushState({ page: route }, '', currentURL);
