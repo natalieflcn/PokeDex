@@ -1,7 +1,7 @@
 import favoriteState from './state/favoriteState';
 import { persistData } from '../helpers';
 import { sortPokemon } from '../services/pokemonService';
-import { clearQueryInput } from './queryModel';
+import { resetQueryState } from './queryModel';
 
 // To retrieve Favorite Pokémon (favoriteState)
 export const getFavoritePokemon = () => favoriteState.favoritePokemon;
@@ -20,7 +20,7 @@ export const setFavoriteSortBy = function (sort) {
 
 // To load sorted Favorite Pokémon (favoriteState)
 export const loadFavoritePokemon = async function () {
-  clearQueryInput();
+  resetQueryState();
 
   if (favoriteState.favoritePokemon.length === 0) return [];
 

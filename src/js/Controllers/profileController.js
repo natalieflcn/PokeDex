@@ -1,21 +1,14 @@
-import queryView from '../views/ProfileViews/queryView.js';
-import savedPokemonView from '../views/ProfileViews/savedPokemonView.js';
-
-import categoryView from '../views/ProfileViews/categoryView.js';
-
-import sortView from '../views/ProfileViews/sortView.js';
 import {
-  clearQueryInput,
+  navResolveSortParams,
+  navSanitizeSort,
+} from '../services/navService.js';
+import {
   getQueryResults,
   loadQueryBatch,
+  resetQueryState,
   startPokemonQuery,
   storeQueryResults,
 } from '../models/queryModel.js';
-
-import navView from '../views/navView.js';
-import previewView from '../views/ProfileViews/previewView.js';
-import profileView from '../views/ProfileViews/profileView.js';
-
 import {
   getCaughtPokemon,
   getCaughtRender,
@@ -27,15 +20,17 @@ import {
 } from '../models/caughtModel.js';
 import {
   getFavoritePokemon,
-  getFavoriteRender,
   loadFavoritePokemon,
   setFavoriteRender,
   setFavoriteSortBy,
 } from '../models/favoriteModel.js';
-import {
-  navResolveSortParams,
-  navSanitizeSort,
-} from '../services/navService.js';
+import profileView from '../views/ProfileViews/profileView.js';
+import navView from '../views/navView.js';
+import previewView from '../views/ProfileViews/previewView.js';
+import savedPokemonView from '../views/ProfileViews/savedPokemonView.js';
+import categoryView from '../views/ProfileViews/categoryView.js';
+import sortView from '../views/ProfileViews/sortView.js';
+import queryView from '../views/ProfileViews/queryView.js';
 
 // GENERAL PROFILE CONTROLLER FUNCTIONS
 
@@ -50,6 +45,46 @@ const controlProfileLoad = function () {
   };
 
   profileView.render(profileData);
+};
+
+// To populate the savedPokemonView with either all Caught/Favorite Pokémon or queried Caught/Favorite Pokémon
+const controlProfilePokemonResults = async function () {
+  try {
+    resetQueryState();
+
+    const requestId = startPokemonQuery();
+
+    const query = queryView.getQuery();
+
+    savedPokemonView.renderSpinner();
+
+    // Loading all of the Caught/Favorite Pokémon before working with the query
+    const profileCategory = window.location.pathname.split('/profile/')[1];
+    console.log(profileCategory);
+
+    const pokemonBatch =
+      profileCategory === 'caught'
+        ? await loadCaughtPokemon()
+        : await loadFavoritePokemon();
+
+    // Rendering all of the Caught/Favorite Pokémon results if there is no query
+    if (!query && pokemonBatch.length > 0)
+      savedPokemonView.render(pokemonBatch);
+    else if (!query && pokemonBatch.length < 1) savedPokemonView._clear();
+
+    // Rendering Pokémon query results
+    if (query) {
+      storeQueryResults(query, pokemonBatch);
+      await loadQueryBatch(requestId);
+      const queryBatch = getQueryResults();
+
+      if (queryBatch.length > 0) savedPokemonView.render(queryBatch);
+      else savedPokemonView._clear();
+      //TODO Render message that informs user to begin adding Pokemon to Profile
+    }
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 // To redirect user to the Search Module with the selected Pokémon's details rendered in the panel
@@ -84,14 +119,14 @@ export const controlProfileRenderCategory = function (view) {
 const controlProfileCategoryBtn = function (view) {
   queryView.clearInput();
   savedPokemonView._clear();
-  clearQueryInput();
+  resetQueryState();
 
   const currentURL = navResolveSortParams(`/profile/${view}`);
 
   window.history.replaceState({ page: `profile/${view}` }, '', currentURL);
 
   controlProfileRenderCategory(view);
-  controlProfileSavedResults();
+  controlProfilePokemonResults();
 };
 
 // Reads the URL and navigates to appropriate view when user navigates around browser history stack
@@ -147,7 +182,7 @@ const controlProfileSortBtn = function (sort) {
   setCaughtSortBy(sort);
 
   controlProfileRenderSort(sort);
-  controlProfileSavedResults();
+  controlProfilePokemonResults();
 };
 
 // Sets the sorting mode to 'id' upon load/reload of the platform
@@ -157,113 +192,10 @@ const controlProfileSortLoad = function () {
   controlProfileRenderSort(sort);
 };
 
-// to refactor later -----
-const controlProfileSavedResults = async function () {
-  try {
-    clearQueryInput();
-    const query = queryView.getQuery();
-    console.log(query);
-    const requestId = startPokemonQuery();
-
-    savedPokemonView.renderSpinner();
-
-    // Rendering all of the caught/favorite Pokémon before working with the query
-    const profileCategory = window.location.pathname;
-    const pokemonBatch =
-      profileCategory === '/profile/caught'
-        ? await loadCaughtPokemon()
-        : await loadFavoritePokemon();
-    savedPokemonView.render(pokemonBatch.length > 0 ? pokemonBatch : '');
-
-    console.log(pokemonBatch);
-    // Rendering query results
-    if (query) {
-      storeQueryResults(query, pokemonBatch);
-      loadQueryBatch(requestId, query, true, pokemonBatch);
-
-      const queryBatch = getQueryResults();
-      console.log(queryBatch);
-
-      if (queryBatch.length > 0) savedPokemonView.render(queryBatch);
-      else savedPokemonView._clear();
-
-      // //TODO
-      // if (queryState.queryResults.length === 0) {
-      //   savedPokemonView._clear();
-      // } else {
-      //   savedPokemonView.render(pokemonState.results);
-      // }
-      // } else if (!query && profileCategory === '/profile/caught') {
-      //   //TODO
-
-      //   // categoryView.toggleCaughtCategory();
-
-      //   const caughtPokemon = await loadCaughtPokemon();
-
-      //   console.log(caughtPokemon);
-
-      //   savedPokemonView.render(caughtPokemon.length > 0 ? caughtPokemon : '');
-      // } else if (!query && profileCategory === '/profile/favorites') {
-      //   //TODO
-      //   // categoryView.toggleFavoritesCategory();
-
-      //   const favoritePokemon = await loadFavoritePokemon();
-      //   console.log(favoritePokemon.length);
-
-      //   //doesnt render empty string without error -- error coming from view
-      //   savedPokemonView.render(
-      //     favoritePokemon.length > 0 ? favoritePokemon : ''
-      //   );
-      // }
-    }
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-// export const newPokemonResult = async function () {
-//   await controlProfileSavedResults();
-// };
-
-// const controlCategoryView = function (view) {
-//   queryView.clearInput(); //fix later
-//   savedPokemonView._clear(); //fix later
-//   clearQueryInput(); //fix later
-
-//   //remove this state later, use url state instead
-//   // if (view === 'caught') queryState.view = 'caught';
-//   // else queryState.view = 'favorites';
-//   controlProfileSavedResults();
-// };
-
-// To sort Pokémon data by name
-// const controlSortName = function () {
-//   // sortView.toggleSortName();
-
-//   controlProfileSortBtn();
-
-//   if (pokemonState.results.length <= 1) return;
-
-//   // queryState.mode = 'name';
-//   controlProfileSavedResults();
-// };
-
-// // To sort Pokémon by ID
-// const controlSortId = function () {
-//   // sortView.toggleSortId();
-
-//   controlProfileSortBtn();
-
-//   if (pokemonState.results.length <= 1) return;
-
-//   // queryState.mode = 'id';
-//   controlProfileSavedResults();
-// };
-
+// To initialize Profile Controller event handlers and attach them to Profile Views
 export const controlProfileInit = function () {
   profileView.addHandlerLoadProfile(controlProfileLoad);
-
-  queryView.addHandlerQuery(controlProfileSavedResults);
+  queryView.addHandlerQuery(controlProfilePokemonResults);
   previewView.addHandlerRedirect(controlProfileClickPreview);
 
   categoryView.addHandlerCategoryBtn(controlProfileCategoryBtn);

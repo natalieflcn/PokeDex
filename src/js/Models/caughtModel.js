@@ -1,8 +1,9 @@
 import caughtState from './state/caughtState';
 import { persistData } from '../helpers';
 import { sortPokemon } from '../services/pokemonService';
-import { clearQueryInput } from './queryModel';
+
 import favoriteState from './state/favoriteState';
+import { resetQueryState } from './queryModel';
 
 // To retrieve Caught Pokémon (caughtState)
 export const getCaughtPokemon = () => caughtState.caughtPokemon;
@@ -24,7 +25,7 @@ export const setCaughtSortBy = function (sort) {
 
 // To load sorted Caught Pokémon (caughtState)
 export const loadCaughtPokemon = async function () {
-  clearQueryInput();
+  resetQueryState();
 
   if (caughtState.caughtPokemon.length === 0) return [];
 

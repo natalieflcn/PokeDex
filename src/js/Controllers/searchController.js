@@ -13,12 +13,12 @@ import queryState from '../models/state/queryState.js';
 
 import { navSanitizeSort } from '../services/navService.js';
 import {
-  clearQueryInput,
   getHasMoreQueryResults,
   getQueryResults,
   isStalePokemonQuery,
   loadAdditionalQuery,
   loadQueryBatch,
+  resetQueryState,
   startPokemonQuery,
   storeQueryResults,
 } from '../models/queryModel.js';
@@ -55,7 +55,7 @@ import pokemonState from '../models/state/pokemonState.js';
 const controlSearchResults = async function () {
   try {
     // Retrieve query from user input
-    clearQueryInput();
+    resetQueryState();
 
     if (resultsView._observer) resultsView.unobserveSentinel();
 

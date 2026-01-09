@@ -44,7 +44,7 @@ const addQueryPokemonToState = function (pokemon) {
 export const storeQueryResults = async function (query, querySet) {
   queryState.loading = true;
 
-  clearQueryInput();
+  resetQueryState();
 
   queryState.query = query;
   queryState.queryReferences = possiblePokemon(query, querySet);
@@ -83,7 +83,7 @@ export const loadQueryBatch = async function (requestId) {
   queryState.loading = false;
 };
 
-export const clearQueryInput = function () {
+export const resetQueryState = function () {
   queryState.offset = 0;
   queryState.queryResults = [];
   queryState.query = '';

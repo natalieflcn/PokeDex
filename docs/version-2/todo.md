@@ -113,11 +113,10 @@
 - [x] Refine loadQueryResults logic in queryModel
 - [x] Extract duplicate logic from loadPokemonResults and loadQueryResults into a shared service (pokemonService)
 - [x] Review all methods in helpers.js and distribute methods to models or services, where applicable
-- [~] Refine profileController and improve orchestration within functions
-- [ ] Maintain sorting mode in pokemonState (string), caughtState (boolean, string), and favoriteState (boolean, string) to reinforce url-driven UI state
+- [x] Maintain sorting mode in pokemonState (string), caughtState (boolean, string), and favoriteState (boolean, string) to reinforce url-driven UI state
 
-  - [ ] Sorting method should be persisted across page reloads, navigating around browser history stack, and accessing modules via UI buttons
-  - [ ] Default sorting method should be by ID. This should not be reflected in the url (i.e. /search, /profile/category). Only /name (and potential future sorting params) should be reflected in the url.
+  - [x] Sorting method should be persisted across page reloads, navigating around browser history stack, and accessing modules via UI buttons
+  - [x] Default sorting method should be by ID. This should not be reflected in the url (i.e. /search, /profile/category). Only /name (and potential future sorting params) should be reflected in the url.
 
 - [ ] BUG: Platform crashes when querying for Pokémon that does not exist
 - [ ] BUG: Search module renders all Pokémon after query results
@@ -130,3 +129,6 @@
 ### Notes
 
 - Consider using Local Storage API to store Pokémon into a cachedPokemon list and render Pokémon results and details directly from local storage instead
+- Need to refactor current sorting logic into reusable methods that manipulate search params on the url; make code more readable and dry
+- Need to centralize and improve error handling
+- Render message to inform user to begin adding Caught/Favorite Pokémon to the Profile if there are no results

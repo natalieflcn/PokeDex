@@ -7,7 +7,6 @@ class savedPokemonView extends View {
   _errorMessage = 'We could not find any caught Pokémon! Please try again.';
 
   _generateMarkup() {
-    console.log(this._data);
     return this._data.map(result => previewView.render(result, false)).join('');
   }
 
