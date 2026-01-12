@@ -95,24 +95,3 @@ export const loadPokemonBatch = async function (requestId) {
     throw err;
   }
 };
-
-// // Parallel fetching Pokémon details and creating Pokémon previews
-// const pokemonRequests = pokemonBatch.map(pokemon => {
-//   const pokemonName = pokemon.name || pokemon;
-
-//   return fetchPokemon(pokemonName)
-//     .then(pokemonDetails =>
-//       createPokemonPreviewObject(pokemonName, pokemonDetails)
-//     )
-//     .catch(err => {
-//       console.error(`Failed to load Pokémon: ${pokemonName}`, err);
-//       return null;
-//     });
-// });
-
-// const pokemonPreviews = await Promise.all(pokemonRequests);
-
-// if (isStalePokemonRequest(requestId)) return;
-
-// // Filtering out failed Pokémon preview objects
-// const validPokemonPreviews = pokemonPreviews.filter(Boolean);

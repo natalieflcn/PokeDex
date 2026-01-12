@@ -107,7 +107,7 @@
 - [~] Refactor MVC system architecture implementation
 
   - [~] Offload controller functionality into the services or models -- follow fat models, skinny controllers guideline
-  - [~] Improve controller orchestration: searchController, profileController
+  - [x] Improve controller orchestration within profileController
 
 - [x] Refine loadPokemonResults logic in pokemonModel
 - [x] Refine loadQueryResults logic in queryModel
@@ -118,13 +118,7 @@
   - [x] Sorting method should be persisted across page reloads, navigating around browser history stack, and accessing modules via UI buttons
   - [x] Default sorting method should be by ID. This should not be reflected in the url (i.e. /search, /profile/category). Only /name (and potential future sorting params) should be reflected in the url.
 
-- [ ] BUG: Platform crashes when querying for Pokémon that does not exist
-- [ ] BUG: Search module renders all Pokémon after query results
-- [ ] BUG: Platform crashes when using pagination buttons to navigate to Pokémon that exist, but are not rendered in the results yet (error most likely in controlSearchPagination method)
-- [ ] BUG: /profile/favorites and /profile/caught is not immediately rendering newly added Favorties/Caught Pokémon on profile -- page needs to be reloaded for new Pokémon
-- [ ] BUG: When removing Caught Pokemon, the first index of the Caught array is being removed instead of the specific Pokemon selected
-- [ ] BUG: Querying on Profile for Caught/Favorite Pokémon is not querying anything
-- [ ] BUG: When continuing to scroll after querying for Pokémon but there's no more results, general Pokémon results are being rendered instead
+- [x] BUG: Querying on Profile for Caught/Favorite Pokémon is not querying anything
 
 ### Notes
 
@@ -132,3 +126,20 @@
 - Need to refactor current sorting logic into reusable methods that manipulate search params on the url; make code more readable and dry
 - Need to centralize and improve error handling
 - Render message to inform user to begin adding Caught/Favorite Pokémon to the Profile if there are no results
+
+## Week: January 12 - January 17
+
+### Goals
+
+- [~] Refactor MVC system architecture implementation
+
+  - [~] Offload controller functionality into the services or models -- follow fat models, skinny controllers guideline
+  - [~] Improve controller orchestration within searchController
+
+- [ ] BUG: Platform crashes when querying for Pokémon that does not exist
+- [ ] BUG: Search module renders all Pokémon after query results
+- [ ] BUG: Platform crashes when using pagination buttons to navigate to Pokémon that exist, but are not rendered in the results yet (error most likely in controlSearchPagination method)
+- [ ] BUG: /profile/favorites and /profile/caught is not immediately rendering newly added Favorties/Caught Pokémon on profile -- page needs to be reloaded for new Pokémon
+- [x] BUG: When removing Caught Pokemon, the first index of the Caught array is being removed instead of the specific Pokemon selected
+
+### Notes

@@ -44,8 +44,9 @@ import {
   removeFavoritePokemon,
 } from '../models/favoriteModel.js';
 import panelState from '../models/state/panelState.js';
-import { loadPokemon } from '../models/panelModel.js';
+import { getPokemon, loadPokemon } from '../models/panelModel.js';
 import pokemonState from '../models/state/pokemonState.js';
+import favoriteState from '../models/state/favoriteState.js';
 
 // SEARCH CONTROLLER ---
 
@@ -188,19 +189,18 @@ export const controlSearchRenderSort = function (sort) {
   switch (sort) {
     case 'name':
       sortView.toggleSearchSortName();
-
       break;
 
     case 'id':
     default:
       sortView.toggleSearchSortId();
-      // setPokemonSortBy('id');
       break;
   }
 };
 
 const controlSearchSortBtn = function (sort) {
   const currentURL = new URL(window.location.href);
+  console.log(currentURL);
 
   if (sort === 'name') {
     currentURL.searchParams.set('sort', sort);
@@ -242,47 +242,40 @@ const controlSortId = function () {
   controlSearchResults();
 };
 
-// To highlight active search results [screen 1]
-const controlClickActivePreview = function (preview) {
-  window.location.hash = preview;
+// To render the respective Pokémon panel details and URL changes when a Pokémon preview is clicked by the user
+const controlSearchClickPreview = function (pokemon) {
+  const pokemonName = pokemon.toLowerCase();
+
+  window.history.replaceState(
+    { page: `search/pokemonName` },
+    '',
+    `/search/${pokemonName}`
+  );
+
+  controlSearchPokemonPanel();
 };
 
-// const controlPageActivePreview = function () {
-//   // TODO Need to refactor DOM logic into Views
-//   const currentlyActive = document.querySelector('.search__preview--active');
-
-//   if (currentlyActive)
-//     currentlyActive.classList.remove('search__preview--active');
-
-//   const previews = Array.from(document.querySelectorAll('.search__preview'));
-
-//   const targetPreview = previews.find(preview => {
-//     const nameEl = preview.querySelector('.search__preview--name');
-//     return nameEl?.textContent === window.location.hash.slice(1);
-//   });
-
-//   if (targetPreview) targetPreview.classList.add('search__preview--active');
-// };
-
-// To coordinate rendering of the Pokémon Panel [Screen 2]
-const controlPokemonPanel = async function () {
+// To render Pokémon details (desc, stats, moves) for the Pokémon panel
+const controlSearchPokemonPanel = async function () {
   try {
-    // Retrieve hash from URL
-    const id = window.location.hash.slice(1);
-    if (!id) return;
+    // Retrieve Pokémon name from URL
+    const pokemonName = window.location.pathname.split('/search/')[1];
 
-    panelView.renderSpinner();
+    if (!pokemonName) return;
 
     // Load Pokémon (data) panel details
+    panelView.renderSpinner();
 
-    await loadPokemon(id);
+    await loadPokemon(pokemonName);
 
-    // Render Pokémon panel (screen 2 -- search)
+    // Render Pokémon panel
+    const pokemon = getPokemon();
 
-    panelView.render(panelState.pokemon);
+    panelView.render(pokemon);
 
+    // TODO Fix pagination logic later, centralize pagination logic into a service
     const currIndex = pokemonState.results.findIndex(
-      pokemon => pokemon.name === panelState.pokemon.name
+      currPokemon => currPokemon.name === pokemon.name
     );
 
     if (currIndex === 0) paginationView.disablePaginationBtn('prev');
@@ -327,25 +320,32 @@ const controlSearchPagination = async function (direction) {
   window.location.hash = nextPokemon.name;
 };
 
-// To add Pokémon to our Caught Pokémon
-const controlAddCaught = function () {
+// To add Pokémon from our active Pokémon panel to our Caught Pokémon
+const controlSearchCaughtBtn = function () {
+  // Retrieve Pokémon that is highlighted on the Pokémon Panel
+  const pokemon = getPokemon();
+
   // To add/remove Caught status
-  if (!panelState.pokemon.caught) addCaughtPokemon(panelState.pokemon);
-  else removeCaughtPokemon(panelState.pokemon);
+  if (!pokemon.caught) addCaughtPokemon(pokemon);
+  else removeCaughtPokemon(pokemon);
 
   panelView.toggleCaughtBtn();
 };
 
-// To add Pokémon to our Favorite Pokémon
-const controlAddFavorite = function () {
-  // To add/remove Caught status
-  if (!panelState.pokemon.favorite) addFavoritePokemon(panelState.pokemon);
-  else removeFavoritePokemon(panelState.pokemon);
+// To add Pokémon from our active Pokémon panel to our Favorite Pokémon
+const controlSearchFavoriteBtn = function () {
+  // Retrieve Pokémon that is highlighted on the Pokémon Panel
+  const pokemon = getPokemon();
 
+  // To add/remove Favorite status
+  if (!pokemon.favorite) addFavoritePokemon(pokemon);
+  else removeFavoritePokemon(pokemon);
+
+  console.log(favoriteState.favoritePokemon);
   panelView.toggleFavoriteBtn();
 };
 
-// To initialize all Pokémon names to store in our state
+// To initialize all Pokémon references to store in our state (pokemonState)
 const initPokemonData = async function () {
   await storeAllPokemonReferences();
 };
@@ -355,10 +355,13 @@ export const controlSearchInit = function () {
   queryView.addHandlerQuery(debouncedControlSearchResults);
   sortView.addHandlerSortBtn(controlSearchSortBtn);
   sortView.addHandlerSortLoad(controlSearchSortLoad);
-  previewView.addHandlerClickActivePreview(controlClickActivePreview);
+  previewView.addHandlerClickActivePreview(controlSearchClickPreview);
   // previewView.addHandlerHashChange(controlPageActivePreview);
-  panelView.addHandlerRenderPanel(controlPokemonPanel);
-  panelView.addHandlerCaughtBtn(controlAddCaught);
-  panelView.addHandlerFavoriteBtn(controlAddFavorite);
+
+  panelView.addHandlerRenderPanel(controlSearchPokemonPanel);
+
+  panelView.addHandlerCaughtBtn(controlSearchCaughtBtn);
+  panelView.addHandlerFavoriteBtn(controlSearchFavoriteBtn);
+
   paginationView.addHandlerPaginationClick(controlSearchPagination);
 };

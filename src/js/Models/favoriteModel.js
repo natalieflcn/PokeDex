@@ -59,14 +59,15 @@ export const addFavoritePokemon = function (newPokemon) {
 };
 
 // To remove Pokémon details from Favorite Pokémon (favoriteState)
-export const removeFavoritePokemon = function (newPokemon) {
-  newPokemon.favorite = false;
+export const removeFavoritePokemon = function (pokemon) {
+  pokemon.favorite = false;
 
-  const index = favoriteState.favoritePokemon.find(
-    pokemon => pokemon.name === newPokemon.name
+  const index = favoriteState.favoritePokemon.findIndex(
+    currPokemon => currPokemon.name === pokemon.name
   );
 
   favoriteState.favoritePokemon.splice(index, 1);
+
   persistData('favoritePokemon', favoriteState.favoritePokemon);
 };
 

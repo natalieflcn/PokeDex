@@ -61,14 +61,15 @@ export const addCaughtPokemon = function (newPokemon) {
 };
 
 // To remove Pokémon details from Caught Pokémon (caughtState)
-export const removeCaughtPokemon = function (newPokemon) {
-  newPokemon.caught = false;
+export const removeCaughtPokemon = function (pokemon) {
+  pokemon.caught = false;
 
-  const index = caughtState.caughtPokemon.find(
-    pokemon => pokemon.name === newPokemon.name
+  const index = caughtState.caughtPokemon.findIndex(
+    currPokemon => currPokemon.name === pokemon.name
   );
 
   caughtState.caughtPokemon.splice(index, 1);
+
   persistData('caughtPokemon', caughtState.caughtPokemon);
   updateTypesPokemonCaught();
 };

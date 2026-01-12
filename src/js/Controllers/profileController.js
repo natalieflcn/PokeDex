@@ -60,7 +60,6 @@ const controlProfilePokemonResults = async function () {
 
     // Loading all of the Caught/Favorite Pokémon before working with the query
     const profileCategory = window.location.pathname.split('/profile/')[1];
-    console.log(profileCategory);
 
     const pokemonBatch =
       profileCategory === 'caught'
@@ -89,8 +88,15 @@ const controlProfilePokemonResults = async function () {
 
 // To redirect user to the Search Module with the selected Pokémon's details rendered in the panel
 const controlProfileClickPreview = function (pokemon) {
-  window.history.pushState({ page: `/search` }, '', `/search`);
-  window.location.hash = pokemon; //TODO
+  const pokemonName = pokemon.toLowerCase();
+
+  window.history.pushState(
+    { page: `search/${pokemonName}` },
+    '',
+    `/search/${pokemonName}`
+  );
+
+  savedPokemonView._clear();
   navView.toggleNavSearch();
 };
 
