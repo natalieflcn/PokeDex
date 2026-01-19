@@ -7,6 +7,7 @@ import {
 } from '../services/pokemonService';
 import { AJAX, extractPokemonId } from '../helpers';
 import { LIMIT, POKEMON_NAMES_API_URL } from '../config';
+import { getPokemon } from './panelModel';
 
 // To initiate a new request for general Pokémon
 export const startPokemonRequest = function () {
@@ -22,6 +23,14 @@ export const isStalePokemonRequest = function (requestId) {
 // To retrieve the general Pokémon (pokemonState) results
 export const getPokemonResults = function () {
   return pokemonState.results;
+};
+
+export const getPokemonCurrentBatch = function () {
+  return pokemonState.currentBatch;
+};
+
+export const getPokemonLoading = function () {
+  return pokemonState.loading;
 };
 
 // To determine whether or not there are more general Pokémon (pokemonState) results that can be rendered
@@ -41,6 +50,11 @@ export const setPokemonSortBy = function (sortBy) {
 const addPokemonToState = function (pokemon) {
   pokemonState.currentBatch.push(...pokemon);
   pokemonState.results.push(...pokemon);
+};
+
+export const updateHasMoreResults = function () {
+  if (pokemonState.results.length === pokemonState.allPokemonReferences.length)
+    pokemonState.hasMoreResults = false;
 };
 
 // To store all Pokémon names and IDs in our state (This shallow dataset will later be referenced to fetch more Pokémon details as needed)
@@ -89,9 +103,36 @@ export const loadPokemonBatch = async function (requestId) {
     const validPokemonPreviews = filterPokemonPreviews(pokemonPreviews);
 
     addPokemonToState(validPokemonPreviews);
+    updateHasMoreResults();
+
     pokemonState.offset += LIMIT;
     pokemonState.loading = false;
   } catch (err) {
     throw err;
+  }
+};
+
+export const loadNextPokemon = function (direction, pokemonResults) {
+  const activePokemon = getPokemon();
+
+  console.log(activePokemon, pokemonResults);
+
+  let currIndex = pokemonResults.findIndex(
+    pokemon => pokemon.name === activePokemon.name
+  );
+  console.log(currIndex);
+  // To increment/decrement the index based on next/prev direction (passed from button dataset property)
+  direction === 'next' ? currIndex++ : currIndex--;
+
+  // If there are no more results in that direction (first result of the array or last result of the array)
+  if (currIndex < 0 || currIndex >= pokemonResults.length) {
+    return null;
+  }
+
+  // If there is a Pokémon to be loaded in the respective direction
+  else {
+    //  && pokemonResults.hasMoreResults)
+    // loadMoreResults = true;
+    return pokemonResults[currIndex];
   }
 };

@@ -25,6 +25,7 @@
 - [ ] Implement CSS animations across Pokémon panels and menu buttons to create a smoother user experience
 - [ ] Use LocalStorageAPI to cache Pokémon previews and Pokémon details into local storage
 - [ ] Make input field, sort buttons, category buttons sticky at the top of the form
+- [ ] If a Pokémon panel is loaded from the url, the Pokémon should automatically have its name rendered in the input search field (Search Module)
 
 ---
 

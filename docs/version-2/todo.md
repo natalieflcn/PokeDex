@@ -137,8 +137,8 @@
   - [~] Improve controller orchestration within searchController
 
 - [ ] BUG: Platform crashes when querying for Pokémon that does not exist
-- [ ] BUG: Search module renders all Pokémon after query results
-- [ ] BUG: Platform crashes when using pagination buttons to navigate to Pokémon that exist, but are not rendered in the results yet (error most likely in controlSearchPagination method)
+- [x] BUG: Search module renders all Pokémon after query results
+- [x] BUG: Platform crashes when using pagination buttons to navigate to Pokémon that exist, but are not rendered in the results yet (error most likely in controlSearchPagination method)
 - [ ] BUG: /profile/favorites and /profile/caught is not immediately rendering newly added Favorties/Caught Pokémon on profile -- page needs to be reloaded for new Pokémon
 - [x] BUG: When removing Caught Pokemon, the first index of the Caught array is being removed instead of the specific Pokemon selected
 

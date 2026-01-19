@@ -64,3 +64,24 @@ export const loadPokemonPreviews = async pokemonRequests => {
 
 export const filterPokemonPreviews = pokemonPreviews =>
   pokemonPreviews.filter(Boolean);
+
+export const getPokemonPagination = function (
+  pokemonName,
+  pokemonResults,
+  loadMoreResults
+) {
+  console.log(pokemonName, pokemonResults, loadMoreResults);
+  let prev = true,
+    next = true;
+
+  const currIndex = pokemonResults.findIndex(
+    currPokemon => currPokemon.name === pokemonName
+  );
+
+  console.log(currIndex);
+  if (currIndex === 0) prev = false;
+  if (currIndex === pokemonResults.length - 1 && !loadMoreResults) next = false;
+
+  console.log(prev, next);
+  return { prev, next };
+};

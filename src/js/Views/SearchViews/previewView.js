@@ -25,6 +25,10 @@ class PreviewView extends View {
     });
   }
 
+  // addHandlerURLChange(handler) {
+  //   window.
+  // }
+
   _generateMarkup() {
     const id = window.location.hash.slice(1);
     // console.log(this._data.name, this._data.id, this._data.img);

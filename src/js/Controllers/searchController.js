@@ -14,25 +14,25 @@ import queryState from '../models/state/queryState.js';
 import { navSanitizeSort } from '../services/navService.js';
 import {
   getHasMoreQueryResults,
+  getQuery,
+  getQueryCurrentBatch,
+  getQueryLoading,
   getQueryResults,
-  isStalePokemonQuery,
-  loadAdditionalQuery,
   loadQueryBatch,
   resetQueryState,
   startPokemonQuery,
   storeQueryResults,
+  updateHasMoreQueryResults,
 } from '../models/queryModel.js';
 import {
   getHasMoreResults,
+  getPokemonCurrentBatch,
+  getPokemonLoading,
   getPokemonResults,
-  isLatestPokemonRequest,
-  isStalePokemonRequest,
-  loadAdditionalBatch,
+  loadNextPokemon,
   loadPokemonBatch,
   setPokemonSortBy,
   startPokemonRequest,
-  storeAllPokemon,
-  storeAllPokemonNames,
   storeAllPokemonReferences,
 } from '../models/pokemonModel.js';
 import {
@@ -47,6 +47,7 @@ import panelState from '../models/state/panelState.js';
 import { getPokemon, loadPokemon } from '../models/panelModel.js';
 import pokemonState from '../models/state/pokemonState.js';
 import favoriteState from '../models/state/favoriteState.js';
+import { getPokemonPagination } from '../services/pokemonService.js';
 
 // SEARCH CONTROLLER ---
 
@@ -62,47 +63,33 @@ const controlSearchResults = async function () {
 
     const query = queryView.getQuery();
 
-    // const requestId = ++pokemonState.currentRequestId;
-    // const queryId = ++queryState.currentQueryId;
+    let requestId, pokemonResults, hasMoreResults;
+
+    if (query) {
+      requestId = startPokemonQuery();
+
+      storeQueryResults(query, pokemonState.allPokemonReferences);
+      await loadQueryBatch(requestId);
+
+      pokemonResults = getQueryResults();
+      hasMoreResults = getHasMoreQueryResults();
+    } else {
+      requestId = startPokemonRequest();
+
+      await loadPokemonBatch(requestId);
+
+      pokemonResults = getPokemonResults();
+      hasMoreResults = getHasMoreQueryResults();
+    }
 
     resultsView.renderSpinner();
 
-    let pokemonResults;
-
-    if (query) {
-      storeQueryResults(query, pokemonState.allPokemonReferences);
-
-      pokemonResults = await controlSearchQueryPokemon(query);
-    } else {
-      pokemonResults = await controlSearchGeneralPokemon();
-    }
-
+    console.log(pokemonResults);
     if (!pokemonResults) return;
-    /// refactoring above here
-    // const requestId = startPokemonRequest();
 
-    // console.log(requestId);
-    // resultsView.renderSpinner();
-
-    // If there's a query, render all existing Pokémon for that query
-    // if (query) {
-    //   console.log('query is running');
-    //   panelView._clear();
-    //   await loadQueryBatch(requestId, query, true);
-
-    //   // If there's NO query, render all existing Pokémon from PokéAPI database
-    // } else if (!query) {
-    //   await loadPokemonBatch(requestId);
-    //   console.log('searchrseults working until here');
-    // }
-
-    // // If there's  additional results
-    // if (queryState.hasMoreResults)
-    //   resultsView.observeSentinel(controlInfiniteScroll);
-
-    // if (isStalePokemonRequest(requestId)) return; // Abort render if the requestId is not up-to-date
-
-    // Render Pokémon search results (screen 1 -- search)
+    if (hasMoreResults) {
+      resultsView.observeSentinel(controlInfiniteScroll);
+    }
 
     resultsView.render(pokemonResults);
   } catch (err) {
@@ -110,79 +97,47 @@ const controlSearchResults = async function () {
   }
 };
 
-const controlSearchGeneralPokemon = async function () {
-  const requestId = startPokemonRequest();
-
-  // Parsing the URL for any sorting parameters (name/id) to organize data accordingly
-  const sortParam = new URL(window.location.href).searchParams.get('sort');
-
-  await loadPokemonBatch(requestId, sortParam);
-
-  const pokemonResults = getPokemonResults();
-  const hasMoreResults = getHasMoreResults();
-
-  if (hasMoreResults) {
-    resultsView.observeSentinel(controlInfiniteScroll);
-  }
-
-  if (isStalePokemonRequest(requestId)) return null;
-  return pokemonResults;
-};
-
-const controlSearchQueryPokemon = async function (query) {
-  panelView._clear();
-
-  const requestId = startPokemonQuery();
-  await loadQueryBatch(requestId, query, true);
-
-  const pokemonResults = getQueryResults();
-
-  const hasMoreResults = getHasMoreQueryResults();
-
-  if (hasMoreResults) {
-    resultsView.observeSentinel(controlInfiniteScroll);
-  }
-
-  if (isStalePokemonQuery(requestId)) return null;
-  return pokemonResults;
-};
-// loadAllPokemon, loadQueryPokemon
-
 const debouncedControlSearchResults = debounce(controlSearchResults, 300); // Debounce search results to reduce redundant queries
 
 // To determine the scroll position of the client and to load more data, if necessary
 const controlInfiniteScroll = async function () {
-  const requestId = startPokemonRequest();
+  const query = getQuery();
 
-  // Parsing the URL for any sorting parameters (name/id) to organize data accordingly
-  const sortParam = new URL(window.location.href).searchParams.get('sort');
+  let requestId,
+    loading,
+    hasMoreResults,
+    currentBatch,
+    loadBatch,
+    updateHasMoreResults;
 
-  if (pokemonState.loading || !pokemonState.hasMoreResults) return;
-
-  // Load additional query data
-  if (queryState.query) {
-    await loadQueryBatch(requestId);
-    // Load additional Pokémon data
+  if (query) {
+    requestId = startPokemonQuery();
+    loading = getQueryLoading();
+    hasMoreResults = getHasMoreQueryResults();
+    loadBatch = loadQueryBatch;
+    updateHasMoreResults = updateHasMoreQueryResults;
   } else {
-    const newRequestId = startPokemonRequest();
-    await loadPokemonBatch(newRequestId, sortParam);
+    requestId = startPokemonRequest();
+    loading = getPokemonLoading();
+    hasMoreResults = getHasMoreResults();
+    loadBatch = loadPokemonBatch;
+    updateHasMoreResults = updateHasMoreResults;
   }
 
-  // Determine if this is the end of current Pokémon search results
-  if (pokemonState.currentBatch.length === 0) {
-    queryState.hasMoreResults = false;
+  if (loading || !hasMoreResults) return;
+
+  await loadBatch(requestId);
+
+  currentBatch = query ? getQueryCurrentBatch() : getPokemonCurrentBatch();
+
+  if (currentBatch.length === 0) {
+    updateHasMoreResults();
     resultsView.unobserveSentinel();
     return;
   }
 
-  // Sort data before rendering
-  if (sortView._mode === 'name') {
-  } else {
-  }
-
   // Return Pokémon data to controlSearchResults
-  resultsView.render(pokemonState.currentBatch, true, true);
-  return pokemonState.results;
+  resultsView.render(currentBatch, true, true);
 };
 
 export const controlSearchRenderSort = function (sort) {
@@ -222,32 +177,12 @@ const controlSearchSortLoad = function () {
   controlSearchRenderSort(sort);
 };
 
-// To sort Pokémon data by name
-const controlSortName = function () {
-  // sortView.toggleSortName();
-
-  if (pokemonState.results.length <= 1) return;
-
-  // queryState.mode = 'name';
-  controlSearchResults();
-};
-
-// To sort Pokémon data by ID
-const controlSortId = function () {
-  // sortView.toggleSortId();
-
-  if (pokemonState.results.length <= 1) return;
-
-  // queryState.mode = 'id';
-  controlSearchResults();
-};
-
 // To render the respective Pokémon panel details and URL changes when a Pokémon preview is clicked by the user
 const controlSearchClickPreview = function (pokemon) {
   const pokemonName = pokemon.toLowerCase();
 
   window.history.replaceState(
-    { page: `search/pokemonName` },
+    { page: `search/${pokemonName}` },
     '',
     `/search/${pokemonName}`
   );
@@ -273,51 +208,83 @@ const controlSearchPokemonPanel = async function () {
 
     panelView.render(pokemon);
 
-    // TODO Fix pagination logic later, centralize pagination logic into a service
-    const currIndex = pokemonState.results.findIndex(
-      currPokemon => currPokemon.name === pokemon.name
-    );
+    // Configuring pagination buttons of Pokémon panel
 
-    if (currIndex === 0) paginationView.disablePaginationBtn('prev');
-    if (currIndex === pokemonState.results.length - 1)
-      paginationView.disablePaginationBtn('next');
+    let pokemonResults, loadMoreResults;
+
+    if (getQuery()) {
+      pokemonResults = getQueryResults();
+      loadMoreResults = getHasMoreQueryResults();
+    } else {
+      pokemonResults = getPokemonResults();
+      loadMoreResults = getHasMoreResults();
+    }
+
+    const { prev, next } = getPokemonPagination(
+      pokemon.name,
+      pokemonResults,
+      loadMoreResults
+    );
+    if (!prev) paginationView.disablePaginationBtn('prev');
+    if (!next) paginationView.disablePaginationBtn('next');
   } catch (err) {
     panelView.renderError(err);
   }
 };
 
-// To control going back and forth between search results
 const controlSearchPagination = async function (direction) {
-  let currIndex = pokemonState.results.findIndex(
-    p => p.name === panelState.pokemon.name
-  );
+  const query = getQuery();
+  let pokemonResults, loadMoreResults;
 
-  direction === 'next' ? currIndex++ : currIndex--;
-
-  if (
-    currIndex < 0 ||
-    (currIndex >= pokemonState.results.length && !queryState.hasMoreResults)
-  ) {
-    paginationView.disablePaginationBtn(direction);
-    resultsView.unobserveSentinel();
-
-    return;
+  // Determining if the pokemonResults should reflect the entire Pokémon database or the query results
+  if (query) {
+    pokemonResults = getQueryResults();
+    loadMoreResults = getHasMoreQueryResults();
+  } else {
+    pokemonResults = getPokemonResults();
+    loadMoreResults = getHasMoreResults();
   }
 
-  if (currIndex >= pokemonState.results.length && queryState.hasMoreResults) {
-    paginationView.enablePaginationBtn('next');
+  // Loading the prev/next Pokémon based on the user-selected direction
+  let nextPokemon = loadNextPokemon(direction, pokemonResults);
 
+  // Loading more Pokémon preview results (if the user navigates to a Pokémon that hasn't been rendered yet)
+
+  // if (!loadMoreResults) {
+  //   paginationView.disablePaginationBtn(direction);
+  //   resultsView.unobserveSentinel();
+  // } else
+
+  if (!nextPokemon && loadMoreResults) {
+    paginationView.enablePaginationBtn('next');
     panelView.renderSpinner();
 
-    if (queryState.query) {
-      await loadQueryBatch();
-    } else {
-      await loadPokemonBatch();
-    }
+    const numResults = getPokemonResults().length;
+
+    // Loading the next appropriate Pokémon batch
+    if (query) await loadQueryBatch();
+    else await loadPokemonBatch();
+
+    // Updating the Pokémon preview search results
+    await controlSearchResults();
+
+    // Manually setting the next Pokémon to the first element of the updated Pokémon preview search results
+    nextPokemon = getPokemonResults()[numResults];
   }
 
-  const nextPokemon = pokemonState.results[currIndex];
-  window.location.hash = nextPokemon.name;
+  // Updating the url to reflect the Pokémon that will be navigated to via pagination button
+  if (nextPokemon) {
+    const pokemonName = nextPokemon.name.toLowerCase();
+
+    window.history.replaceState(
+      { page: `search/${pokemonName}` },
+      '',
+      `/search/${pokemonName}`
+    );
+  }
+
+  // Updating the Pokémon panel (for the Pokémon that has been navigated to via pagination button, now reflected in the url)
+  // await controlSearchPokemonPanel();
 };
 
 // To add Pokémon from our active Pokémon panel to our Caught Pokémon

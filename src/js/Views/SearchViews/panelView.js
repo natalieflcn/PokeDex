@@ -5,7 +5,7 @@ class PanelView extends View {
   _errorMessage = 'There was an error loading this Pokémon!';
 
   addHandlerRenderPanel(handler) {
-    ['hashchange', 'load'].forEach(e => window.addEventListener(e, handler));
+    ['load', 'popstate'].forEach(e => window.addEventListener(e, handler));
   }
 
   addHandlerCaughtBtn(handler) {
