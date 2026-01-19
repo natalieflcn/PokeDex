@@ -115,12 +115,10 @@ export const loadPokemonBatch = async function (requestId) {
 export const loadNextPokemon = function (direction, pokemonResults) {
   const activePokemon = getPokemon();
 
-  console.log(activePokemon, pokemonResults);
-
   let currIndex = pokemonResults.findIndex(
     pokemon => pokemon.name === activePokemon.name
   );
-  console.log(currIndex);
+
   // To increment/decrement the index based on next/prev direction (passed from button dataset property)
   direction === 'next' ? currIndex++ : currIndex--;
 

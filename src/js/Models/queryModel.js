@@ -82,20 +82,15 @@ export const loadQueryBatch = async function (requestId) {
   const pokemonBatchDetails = loadBatch(pokemonBatch);
 
   if (isStalePokemonQuery(requestId)) return;
-  console.log('console 1');
-  console.log(requestId);
 
   // Resolves the aforementioned array of promises and creates Pokémon preview objects
   const pokemonPreviews = await loadPokemonPreviews(pokemonBatchDetails);
 
   if (isStalePokemonQuery(requestId)) return;
-  console.log('console 2');
-  console.log(requestId);
 
   // Removes the invalid (null, non-existent) entries from the array of Pokémon preview obejcts
   const validPokemonPreviews = filterPokemonPreviews(pokemonPreviews);
 
-  console.log(validPokemonPreviews);
   addQueryPokemonToState(validPokemonPreviews);
   updateHasMoreQueryResults();
 

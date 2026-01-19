@@ -31,6 +31,7 @@ import savedPokemonView from '../views/ProfileViews/savedPokemonView.js';
 import categoryView from '../views/ProfileViews/categoryView.js';
 import sortView from '../views/ProfileViews/sortView.js';
 import queryView from '../views/ProfileViews/queryView.js';
+import { controlSearchRedirect } from './searchController.js';
 
 // GENERAL PROFILE CONTROLLER FUNCTIONS
 
@@ -87,7 +88,7 @@ const controlProfilePokemonResults = async function () {
 };
 
 // To redirect user to the Search Module with the selected Pokémon's details rendered in the panel
-const controlProfileClickPreview = function (pokemon) {
+const controlProfileClickPreview = async function (pokemon) {
   const pokemonName = pokemon.toLowerCase();
 
   window.history.pushState(
@@ -97,7 +98,8 @@ const controlProfileClickPreview = function (pokemon) {
   );
 
   savedPokemonView._clear();
-  navView.toggleNavSearch();
+
+  await controlSearchRedirect();
 };
 
 // RENDERING AND ROUTING PROFILE CATEGORY (Caught/Favorite)
@@ -119,6 +121,8 @@ export const controlProfileRenderCategory = function (view) {
       setCaughtRender(false);
       break;
   }
+
+  controlProfilePokemonResults();
 };
 
 // Updates the URL and renders appropriate view when user clicks a category button

@@ -7,7 +7,7 @@ import { getPokemonSortBy } from '../models/pokemonModel';
 const navResolveRoute = function (page) {
   if (page === 'profile') {
     const category = getCaughtRender() ? 'caught' : 'favorites';
-    console.log(category);
+
     return `/profile/${category}`;
   }
 
@@ -17,7 +17,6 @@ const navResolveRoute = function (page) {
 // Checks to see if requested route matches to current route to prevent duplicate entries in the browser history stack
 export const navCheckRoute = function (page) {
   const currentURL = window.location.pathname.split('/').at(1);
-  console.log(window.location.pathname);
 
   if (currentURL === page) return null;
   return navResolveRoute(page);
@@ -35,12 +34,9 @@ export const navResolveSortParams = function (route) {
 
   let sortBy;
 
-  console.log(route);
   if (route === '/search') sortBy = getPokemonSortBy();
   else if (route === '/profile/caught') sortBy = getCaughtSortBy();
   else if (route === '/profile/favorites') sortBy = getFavoriteSortBy();
-
-  console.log(sortBy);
 
   if (sortBy === 'name') currentURL.searchParams.set('sort', sortBy);
   if (sortBy === 'id') navSanitizeSort();

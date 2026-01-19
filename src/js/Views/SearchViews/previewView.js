@@ -1,3 +1,4 @@
+import { capitalize } from '../../helpers.js';
 import View from '../View.js';
 
 class PreviewView extends View {
@@ -25,13 +26,9 @@ class PreviewView extends View {
     });
   }
 
-  // addHandlerURLChange(handler) {
-  //   window.
-  // }
-
   _generateMarkup() {
-    const id = window.location.hash.slice(1);
-    // console.log(this._data.name, this._data.id, this._data.img);
+    const id = capitalize(window.location.pathname.split('/search/')[1]);
+
     return `
             <div class="search__preview ${
               this._data.name === id ? 'search__preview--active' : ''

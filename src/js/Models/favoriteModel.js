@@ -35,7 +35,6 @@ export const loadFavoritePokemon = async function () {
       favoritePokemonPreviews.push({ name, id, img });
     }
 
-    console.log(favoriteState.favoritePokemon);
     return favoritePokemonPreviews;
   } catch (err) {
     console.error(err);

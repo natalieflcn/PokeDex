@@ -1,6 +1,5 @@
 import View from '../View.js';
 import previewView from './previewView.js';
-import { observeSentinel } from '../../helpers.js';
 
 class ResultsView extends View {
   _parentEl = document.querySelector('.search__preview--container');

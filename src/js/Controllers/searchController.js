@@ -9,7 +9,6 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 import { debounce } from '../helpers.js';
-import queryState from '../models/state/queryState.js';
 
 import { navSanitizeSort } from '../services/navService.js';
 import {
@@ -43,11 +42,13 @@ import {
   addFavoritePokemon,
   removeFavoritePokemon,
 } from '../models/favoriteModel.js';
-import panelState from '../models/state/panelState.js';
+
 import { getPokemon, loadPokemon } from '../models/panelModel.js';
 import pokemonState from '../models/state/pokemonState.js';
 import favoriteState from '../models/state/favoriteState.js';
 import { getPokemonPagination } from '../services/pokemonService.js';
+import navView from '../views/navView.js';
+import caughtState from '../models/state/caughtState.js';
 
 // SEARCH CONTROLLER ---
 
@@ -84,8 +85,10 @@ const controlSearchResults = async function () {
 
     resultsView.renderSpinner();
 
-    console.log(pokemonResults);
-    if (!pokemonResults) return;
+    if (pokemonResults.length < 1) {
+      resultsView._clear();
+      return;
+    }
 
     if (hasMoreResults) {
       resultsView.observeSentinel(controlInfiniteScroll);
@@ -155,7 +158,6 @@ export const controlSearchRenderSort = function (sort) {
 
 const controlSearchSortBtn = function (sort) {
   const currentURL = new URL(window.location.href);
-  console.log(currentURL);
 
   if (sort === 'name') {
     currentURL.searchParams.set('sort', sort);
@@ -188,6 +190,13 @@ const controlSearchClickPreview = function (pokemon) {
   );
 
   controlSearchPokemonPanel();
+};
+
+const controlSearchLoadActivePreview = function () {
+  const query = getQuery();
+
+  if (query) resultsView.render(getQueryResults());
+  else resultsView.render(getPokemonResults());
 };
 
 // To render Pokémon details (desc, stats, moves) for the Pokémon panel
@@ -225,6 +234,7 @@ const controlSearchPokemonPanel = async function () {
       pokemonResults,
       loadMoreResults
     );
+
     if (!prev) paginationView.disablePaginationBtn('prev');
     if (!next) paginationView.disablePaginationBtn('next');
   } catch (err) {
@@ -249,11 +259,6 @@ const controlSearchPagination = async function (direction) {
   let nextPokemon = loadNextPokemon(direction, pokemonResults);
 
   // Loading more Pokémon preview results (if the user navigates to a Pokémon that hasn't been rendered yet)
-
-  // if (!loadMoreResults) {
-  //   paginationView.disablePaginationBtn(direction);
-  //   resultsView.unobserveSentinel();
-  // } else
 
   if (!nextPokemon && loadMoreResults) {
     paginationView.enablePaginationBtn('next');
@@ -284,7 +289,8 @@ const controlSearchPagination = async function (direction) {
   }
 
   // Updating the Pokémon panel (for the Pokémon that has been navigated to via pagination button, now reflected in the url)
-  // await controlSearchPokemonPanel();
+  controlSearchLoadActivePreview();
+  await controlSearchPokemonPanel();
 };
 
 // To add Pokémon from our active Pokémon panel to our Caught Pokémon
@@ -296,6 +302,7 @@ const controlSearchCaughtBtn = function () {
   if (!pokemon.caught) addCaughtPokemon(pokemon);
   else removeCaughtPokemon(pokemon);
 
+  console.log(caughtState.caughtPokemon);
   panelView.toggleCaughtBtn();
 };
 
@@ -312,6 +319,13 @@ const controlSearchFavoriteBtn = function () {
   panelView.toggleFavoriteBtn();
 };
 
+export const controlSearchRedirect = async function () {
+  navView.resetNav();
+  navView.toggleNavSearch();
+  controlSearchLoadActivePreview();
+  await controlSearchPokemonPanel();
+};
+
 // To initialize all Pokémon references to store in our state (pokemonState)
 const initPokemonData = async function () {
   await storeAllPokemonReferences();
@@ -323,7 +337,6 @@ export const controlSearchInit = function () {
   sortView.addHandlerSortBtn(controlSearchSortBtn);
   sortView.addHandlerSortLoad(controlSearchSortLoad);
   previewView.addHandlerClickActivePreview(controlSearchClickPreview);
-  // previewView.addHandlerHashChange(controlPageActivePreview);
 
   panelView.addHandlerRenderPanel(controlSearchPokemonPanel);
 

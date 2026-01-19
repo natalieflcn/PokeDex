@@ -24,6 +24,7 @@ export const AJAX = async function (url) {
 
 // To capitalize a word
 export const capitalize = function (word) {
+  if (!word) return;
   return word[0].toUpperCase().concat(word.slice(1));
 };
 

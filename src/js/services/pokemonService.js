@@ -70,7 +70,6 @@ export const getPokemonPagination = function (
   pokemonResults,
   loadMoreResults
 ) {
-  console.log(pokemonName, pokemonResults, loadMoreResults);
   let prev = true,
     next = true;
 
@@ -78,10 +77,8 @@ export const getPokemonPagination = function (
     currPokemon => currPokemon.name === pokemonName
   );
 
-  console.log(currIndex);
   if (currIndex === 0) prev = false;
   if (currIndex === pokemonResults.length - 1 && !loadMoreResults) next = false;
 
-  console.log(prev, next);
   return { prev, next };
 };

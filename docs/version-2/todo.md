@@ -143,3 +143,23 @@
 - [x] BUG: When removing Caught Pokemon, the first index of the Caught array is being removed instead of the specific Pokemon selected
 
 ### Notes
+
+- Need to automate some searchController functions to run upon 'popstate' event instead of calling them directly
+- Need functionality from clickActivePreview function to run when url changes to update active Pokemon in the search results
+
+## Week: January 19 - January 24
+
+### Goals
+
+- [~] Refactor MVC system architecture implementation
+
+  - [x] Offload controller functionality into the services or models -- follow fat models, skinny controllers guideline
+  - [x] Improve controller orchestration within searchController
+  - ~~[-] Need to automate some searchController functions to run upon 'popstate' event instead of calling them directly~~
+  - [x] Need functionality from clickActivePreview function to run when url changes to update active Pokemon in the search results
+  - [ ] Need to add documentation across MVC architecture
+  - [ ] Need to centralize error handling and create appropriate, descriptive error messages for all Views
+
+- [x] BUG: Redirecting from /profile to /search no longer works
+- [x] BUG: Platform crashes when querying for Pokémon that does not exist
+- [x] BUG: /profile/favorites and /profile/caught is not immediately rendering newly added Favorties/Caught Pokémon on profile -- page needs to be reloaded for new Pokémon

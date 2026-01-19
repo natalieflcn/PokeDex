@@ -58,7 +58,6 @@ const controlNavBtn = function (page) {
 
   if (!route) return;
 
-  console.log(route);
   const currentURL = navResolveSortParams(route);
 
   window.history.pushState({ page: route }, '', currentURL);
