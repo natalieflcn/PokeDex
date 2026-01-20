@@ -122,7 +122,7 @@ export const loadPokemon = async function (pokemon) {
       AJAX(`${DETAILS_API_URL}${pokemon}`),
     ]);
 
-    panelState.pokemon = createPokemonObject(data);
+    panelState.pokemon = await createPokemonObject(data);
   } catch (err) {
     console.error(err);
   }
