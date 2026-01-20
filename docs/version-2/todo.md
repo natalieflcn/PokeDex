@@ -127,7 +127,7 @@
 - Need to centralize and improve error handling
 - Render message to inform user to begin adding Caught/Favorite Pokémon to the Profile if there are no results
 
-## Week: January 12 - January 17
+## Week: January 12 - January 15
 
 ### Goals
 
@@ -136,10 +136,8 @@
   - [~] Offload controller functionality into the services or models -- follow fat models, skinny controllers guideline
   - [~] Improve controller orchestration within searchController
 
-- [ ] BUG: Platform crashes when querying for Pokémon that does not exist
 - [x] BUG: Search module renders all Pokémon after query results
 - [x] BUG: Platform crashes when using pagination buttons to navigate to Pokémon that exist, but are not rendered in the results yet (error most likely in controlSearchPagination method)
-- [ ] BUG: /profile/favorites and /profile/caught is not immediately rendering newly added Favorties/Caught Pokémon on profile -- page needs to be reloaded for new Pokémon
 - [x] BUG: When removing Caught Pokemon, the first index of the Caught array is being removed instead of the specific Pokemon selected
 
 ### Notes
@@ -156,10 +154,13 @@
   - [x] Offload controller functionality into the services or models -- follow fat models, skinny controllers guideline
   - [x] Improve controller orchestration within searchController
   - ~~[-] Need to automate some searchController functions to run upon 'popstate' event instead of calling them directly~~
-  - [x] Need functionality from clickActivePreview function to run when url changes to update active Pokemon in the search results
-  - [ ] Need to add documentation across MVC architecture
+  - [x] Need active preview to update and reflect the Pokemon displayed in the Pokemon panel (upon page navigation, url change)
+  - [~] Need to add documentation across MVC architecture
   - [ ] Need to centralize error handling and create appropriate, descriptive error messages for all Views
+  - [ ] Merge version-2 branch to main branch for GitHub repo
 
 - [x] BUG: Redirecting from /profile to /search no longer works
 - [x] BUG: Platform crashes when querying for Pokémon that does not exist
 - [x] BUG: /profile/favorites and /profile/caught is not immediately rendering newly added Favorties/Caught Pokémon on profile -- page needs to be reloaded for new Pokémon
+- [x] BUG: When switching between Name and Id sort modes on Search module, the sorting is not applied until page reloads or scrolling into further batches of Pokémon
+- [ ] BUG: When entering invalid url, the Search module is loaded but url does not reflect this

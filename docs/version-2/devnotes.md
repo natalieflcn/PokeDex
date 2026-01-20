@@ -4,7 +4,7 @@
 
 ## Bugs to Fix (BROKEN FUNCTIONALITY)
 
-- [ ] Fix improper rendering of Pokémon searches (when the user types too quickly)
+- [x] Fix improper rendering of Pokémon searches (when the user types too quickly)
 - [ ] Fix the number of Pokémon panels rendered during general Name/ID queries; when a Pokémon has invalid data from the PokéAPI, that panel is omitted instead of being used for the subsequent Pokémon (resulting in one or two less panels, making the visual design skewed and inconsistent)
 - [ ] Fix the broken pagination buttons (left, right) when navigating between Pokémon
 

@@ -1,11 +1,24 @@
+/**
+ * Profile Views – Profile View
+ * ---------------------
+ * Responsible for rendering Pokémon profile details and managing profile-related DOM interactions.
+ *
+ * Emits events to the profileController but does not own state, perform data fetching, or implement business logic.
+ */
+
 import View from '../View.js';
 import { PROFILE_IMG, PROFILE_NAME, PROFILE_BIO } from '../../config.js';
 
 class ProfileView extends View {
   _parentEl = document.querySelector('.screen__1--profile');
 
+  /**
+   * Adds handler to trigger rendering of profile details during browser navigation events
+   *
+   * @param {Function} handler - Profile controller callback (controlProfileLoad)
+   */
   addHandlerLoadProfile(handler) {
-    ['hashchange', 'load'].forEach(e => window.addEventListener(e, handler));
+    ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
   _generateMarkup() {

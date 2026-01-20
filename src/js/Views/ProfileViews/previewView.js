@@ -1,8 +1,21 @@
+/**
+ * Profile Views – Preview View
+ * ---------------------
+ * Responsible for rendering Pokémon profile previews (for the Saved Pokemon View results) and managing preview-related DOM interactions.
+ *
+ * Emits events to the profileController but does not own state, perform data fetching, or implement business logic.
+ */
+
 import View from '../View.js';
 
 class PreviewView extends View {
   _parentEl = document.querySelector('.profile__preview--container');
 
+  /**
+   * Adds handler to redirect user to the Search module and view more details on the selected Pokémon
+   *
+   * @param {Function} handler - Profile controller callback (controlProfileClickPreview)
+   */
   addHandlerRedirect(handler) {
     this._parentEl.addEventListener('click', function (e) {
       const preview = e.target.closest('.profile__preview');
@@ -13,10 +26,6 @@ class PreviewView extends View {
       ).textContent;
       handler(pokemonName);
     });
-  }
-
-  addHandlerHashChange(handler) {
-    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 
   _generateMarkup() {

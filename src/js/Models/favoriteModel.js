@@ -10,13 +10,10 @@ export const getFavoriteRender = () => favoriteState.profile.render;
 
 export const getFavoriteSortBy = () => favoriteState.profile.sortBy;
 
-export const setFavoriteRender = function (value) {
-  favoriteState.profile.render = value;
-};
+export const setFavoriteRender = value =>
+  (favoriteState.profile.render = value);
 
-export const setFavoriteSortBy = function (sort) {
-  favoriteState.profile.sortBy = sort;
-};
+export const setFavoriteSortBy = sort => (favoriteState.profile.sortBy = sort);
 
 // To load sorted Favorite Pokémon (favoriteState)
 export const loadFavoritePokemon = async function () {

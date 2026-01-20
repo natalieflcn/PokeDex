@@ -105,7 +105,7 @@ const controlProfileClickPreview = async function (pokemon) {
 // RENDERING AND ROUTING PROFILE CATEGORY (Caught/Favorite)
 
 // Renders the appropriate category view (Caught/Favorites)
-export const controlProfileRenderCategory = function (view) {
+export const controlProfileRenderCategory = async function (view) {
   switch (view) {
     case 'caught':
       categoryView.toggleCaughtCategory();
@@ -122,11 +122,11 @@ export const controlProfileRenderCategory = function (view) {
       break;
   }
 
-  controlProfilePokemonResults();
+  await controlProfilePokemonResults();
 };
 
 // Updates the URL and renders appropriate view when user clicks a category button
-const controlProfileCategoryBtn = function (view) {
+const controlProfileCategoryBtn = async function (view) {
   queryView.clearInput();
   savedPokemonView._clear();
   resetQueryState();
@@ -136,7 +136,7 @@ const controlProfileCategoryBtn = function (view) {
   window.history.replaceState({ page: `profile/${view}` }, '', currentURL);
 
   controlProfileRenderCategory(view);
-  controlProfilePokemonResults();
+  await controlProfilePokemonResults();
 };
 
 // Reads the URL and navigates to appropriate view when user navigates around browser history stack
@@ -178,7 +178,7 @@ const controlProfileRenderSort = function (sort) {
 };
 
 // Updates the URL search params and renders appropriate view when user clicks a sort button
-const controlProfileSortBtn = function (sort) {
+const controlProfileSortBtn = async function (sort) {
   const currentURL = new URL(window.location.href);
 
   if (sort === 'name') {
@@ -192,7 +192,7 @@ const controlProfileSortBtn = function (sort) {
   setCaughtSortBy(sort);
 
   controlProfileRenderSort(sort);
-  controlProfilePokemonResults();
+  await controlProfilePokemonResults();
 };
 
 // Sets the sorting mode to 'id' upon load/reload of the platform

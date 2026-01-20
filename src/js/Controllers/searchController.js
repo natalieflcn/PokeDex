@@ -30,6 +30,7 @@ import {
   getPokemonResults,
   loadNextPokemon,
   loadPokemonBatch,
+  resetPokemonState,
   setPokemonSortBy,
   startPokemonRequest,
   storeAllPokemonReferences,
@@ -59,12 +60,15 @@ const controlSearchResults = async function () {
   try {
     // Retrieve query from user input
     resetQueryState();
+    resetPokemonState();
 
     if (resultsView._observer) resultsView.unobserveSentinel();
 
     const query = queryView.getQuery();
 
     let requestId, pokemonResults, hasMoreResults;
+
+    resultsView.renderSpinner();
 
     if (query) {
       requestId = startPokemonQuery();
@@ -80,10 +84,9 @@ const controlSearchResults = async function () {
       await loadPokemonBatch(requestId);
 
       pokemonResults = getPokemonResults();
+      console.log(pokemonResults);
       hasMoreResults = getHasMoreQueryResults();
     }
-
-    resultsView.renderSpinner();
 
     if (pokemonResults.length < 1) {
       resultsView._clear();
@@ -156,7 +159,7 @@ export const controlSearchRenderSort = function (sort) {
   }
 };
 
-const controlSearchSortBtn = function (sort) {
+const controlSearchSortBtn = async function (sort) {
   const currentURL = new URL(window.location.href);
 
   if (sort === 'name') {
@@ -166,9 +169,11 @@ const controlSearchSortBtn = function (sort) {
     navSanitizeSort();
   }
 
+  console.log(sort);
   setPokemonSortBy(sort);
+  console.log(pokemonState.sortBy);
   controlSearchRenderSort(sort);
-  controlSearchResults();
+  await controlSearchResults();
 };
 
 const controlSearchSortLoad = function () {

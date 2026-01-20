@@ -1,48 +1,54 @@
-import { getCaughtRender } from '../models/caughtModel';
-import { getPokemon } from '../models/panelModel';
+/**
+ * Navigation Controller
+ * ---------------------
+ * Orchestrates Pokémon sorting, DOM updates, and URL state.
+ * Implements basic routing and enforces navigation flow.
+ * Renders the appropriate views with fresh data.
+ *
+ * This controller does not own state or perform data fetching.
+ */
+
 import { getPokemonSortBy } from '../models/pokemonModel';
-import {
-  navCheckRoute,
-  navResolveSortParams,
-  navSanitizeSort,
-} from '../services/navService';
+import { getCaughtRender } from '../models/caughtModel';
+import { navCheckRoute, navResolveSortParams } from '../services/navService';
+import { controlSearchRenderSort } from './searchController';
+import { controlProfileRenderCategory } from './profileController';
 import navView from '../views/navView';
 import categoryView from '../views/ProfileViews/categoryView';
-import sortView from '../views/SearchViews/sortView';
-import { controlProfileRenderCategory } from './profileController';
-import { controlSearchRenderSort } from './searchController';
 
-// Renders the appropriate module by calling their respective navService (based on the URL path)
-const controlNavRenderView = function (page) {
+/**
+ * Renders module with appropriate data (based on the URL path)
+ *
+ * @param {string} route - Route identifier derived from navigation button or URL
+ */
+const controlNavRenderView = function (route) {
   navView.resetNav();
 
-  switch (page) {
-    case 'search':
+  switch (route) {
+    case '/search':
       navView.toggleNavSearch();
-
       controlSearchRenderSort(getPokemonSortBy());
       break;
 
-    case 'map':
+    case '/map':
       navView.toggleNavMap();
       break;
 
-    case 'profile':
+    case '/profile':
       navView.toggleNavProfile();
 
+      // Determines if the profile is currently in 'Caught' or 'Favorites' mode for rendering
       const category = getCaughtRender() ? 'caught' : 'favorites';
       controlProfileRenderCategory(category);
       break;
 
-    case 'profile/caught':
+    case '/profile/caught':
       navView.toggleNavProfile();
-
       categoryView.toggleCaughtCategory();
       break;
 
-    case 'profile/favorites':
+    case '/profile/favorites':
       navView.toggleNavProfile();
-
       categoryView.toggleFavoritesCategory();
       break;
 
@@ -52,7 +58,12 @@ const controlNavRenderView = function (page) {
   }
 };
 
-// Updates the URL and navigates to appropriate module when user clicks a navigation button
+/**
+ * Handles navigation button clicks.
+ * Updates the URL and triggers rendering of appropriate module.
+ *
+ * @param {string} page - Route identifier derived from navigation button
+ */
 const controlNavBtn = function (page) {
   const route = navCheckRoute(page);
 
@@ -61,14 +72,14 @@ const controlNavBtn = function (page) {
   const currentURL = navResolveSortParams(route);
 
   window.history.pushState({ page: route }, '', currentURL);
-  controlNavRenderView(page);
+  controlNavRenderView(route);
 };
 
-// Reads the URL and navigates to appropriate module when user navigates around browser history stack
+// Reads the URL and navigates to appropriate module when user interacts with browser history stack
 const controlNavBrowser = function () {
-  const page = window.location.pathname.replace('/', '');
+  const route = window.location.pathname;
 
-  controlNavRenderView(page);
+  controlNavRenderView(route);
 };
 
 // Rewrites the root URL '/' to '/search' to maintain URL consistency across page loads
@@ -78,6 +89,9 @@ const controlNavInitialLoad = function () {
   }
 };
 
+/**
+ * Initializes navigation event handlers
+ */
 export const controlNavInit = function () {
   navView.addHandlerNavigateBtn(controlNavBtn);
   navView.addHandlerBrowser(controlNavBrowser);

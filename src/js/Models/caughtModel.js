@@ -15,13 +15,9 @@ export const getCaughtRender = () => caughtState.profile.render;
 
 export const getCaughtSortBy = () => caughtState.profile.sortBy;
 
-export const setCaughtRender = function (value) {
-  caughtState.profile.render = value;
-};
+export const setCaughtRender = value => (caughtState.profile.render = value);
 
-export const setCaughtSortBy = function (sort) {
-  caughtState.profile.sortBy = sort;
-};
+export const setCaughtSortBy = sort => (caughtState.profile.sortBy = sort);
 
 // To load sorted Caught Pokémon (caughtState)
 export const loadCaughtPokemon = async function () {

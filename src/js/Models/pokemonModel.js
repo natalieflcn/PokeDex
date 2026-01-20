@@ -9,6 +9,20 @@ import { AJAX, extractPokemonId } from '../helpers';
 import { LIMIT, POKEMON_NAMES_API_URL } from '../config';
 import { getPokemon } from './panelModel';
 
+// To retrieve the general Pokémon (pokemonState) results
+export const getPokemonResults = () => pokemonState.results;
+
+export const getPokemonCurrentBatch = () => pokemonState.currentBatch;
+
+export const getPokemonLoading = () => pokemonState.loading;
+
+// To determine whether or not there are more general Pokémon (pokemonState) results that can be rendered
+export const getHasMoreResults = () => pokemonState.hasMoreResults;
+
+export const getPokemonSortBy = () => pokemonState.sortBy;
+
+export const setPokemonSortBy = sortBy => (pokemonState.sortBy = sortBy);
+
 // To initiate a new request for general Pokémon
 export const startPokemonRequest = function () {
   const requestId = ++pokemonState.currentRequestId;
@@ -16,35 +30,8 @@ export const startPokemonRequest = function () {
 };
 
 // To determine whether the current request for general Pokémon is the latest request, preventing race conditions
-export const isStalePokemonRequest = function (requestId) {
-  return pokemonState.currentRequestId !== requestId;
-};
-
-// To retrieve the general Pokémon (pokemonState) results
-export const getPokemonResults = function () {
-  return pokemonState.results;
-};
-
-export const getPokemonCurrentBatch = function () {
-  return pokemonState.currentBatch;
-};
-
-export const getPokemonLoading = function () {
-  return pokemonState.loading;
-};
-
-// To determine whether or not there are more general Pokémon (pokemonState) results that can be rendered
-export const getHasMoreResults = function () {
-  return pokemonState.hasMoreResults;
-};
-
-export const getPokemonSortBy = function () {
-  return pokemonState.sortBy;
-};
-
-export const setPokemonSortBy = function (sortBy) {
-  pokemonState.sortBy = sortBy;
-};
+export const isStalePokemonRequest = requestId =>
+  pokemonState.currentRequestId !== requestId;
 
 // To add general Pokémon to our state (pokemonState)
 const addPokemonToState = function (pokemon) {
@@ -133,4 +120,10 @@ export const loadNextPokemon = function (direction, pokemonResults) {
     // loadMoreResults = true;
     return pokemonResults[currIndex];
   }
+};
+
+export const resetPokemonState = function () {
+  pokemonState.offset = 0;
+  pokemonState.results = [];
+  pokemonState.hasMoreResults = true;
 };

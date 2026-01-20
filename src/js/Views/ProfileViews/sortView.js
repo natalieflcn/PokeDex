@@ -1,8 +1,21 @@
+/**
+ * Profile Views – Sort View
+ * ---------------------
+ * Responsible for rendering Pokémon profile sort controls and managing sort-related DOM interactions.
+ *
+ * Emits events to the profileController but does not own state, perform data fetching, or implement business logic.
+ */
+
 import View from '../View';
 
 class SortView extends View {
   _parentEl = document.querySelector('.profile__form');
 
+  /**
+   * Adds handler to profile sort buttons
+   *
+   * @param {Function} handler - Profile controller callback (controlProfileSortBtn)
+   */
   addHandlerSortBtn(handler) {
     this._parentEl.addEventListener('click', function (e) {
       e.preventDefault();
@@ -16,11 +29,16 @@ class SortView extends View {
     });
   }
 
+  /**
+   * Adds handler to load active sort button during browser navigation events
+   *
+   * @param {Function} handler - Profile controller callback (controlProfileSortLoad)
+   */
   addHandlerSortLoad(handler) {
     ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
-  // Adds active classes to visually toggle the Sort Name button on the Profile module
+  // Visually toggles the "Name" sort button as active
   toggleProfileSortName() {
     this._parentEl
       .querySelector('.profile__btn--name')
@@ -30,7 +48,7 @@ class SortView extends View {
       .classList.remove('btn--active');
   }
 
-  // Adds active classes to visually toggle the Sort ID button on the Profile module
+  // Visually toggles the "Id" sort button as active
   toggleProfileSortId() {
     this._parentEl
       .querySelector('.profile__btn--id')
