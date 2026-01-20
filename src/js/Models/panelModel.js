@@ -1,13 +1,56 @@
+/**
+ * Panel Model
+ * ---------------------
+ * Manages data to be rendered on Pokémon panel.
+ *
+ * Directly reads and modifies panelState.
+ * Fetches data from external APIs.
+ * Does not manipulate the DOM.
+ */
+
 import panelState from './state/panelState';
 import caughtState from './state/caughtState';
 import favoriteState from './state/favoriteState';
 import { AJAX, capitalize } from '../helpers';
 import { DETAILS_API_URL, MAIN_API_URL, MOVE_TYPE_URL } from '../config';
 
-// To retrieve the Pokémon to be rendered in the panel
+/**
+ * ======================
+ * Type Definitions
+ * ======================
+ */
+
+/**
+ * @typedef {Object} PokemonPanel
+ * @property {string} name
+ * @property {number} id
+ * @property {string} [img] img
+ * @property {string[]} types
+ * @property {string} desc
+ * @property {number} height
+ * @property {number} weight
+ * @property {Array<[string, number]>} stats
+ * @property {Array<[string, string]>} moves - [moveName, moveType]
+ * @property {boolean} caught
+ * @property {boolean} favorite
+ */
+
+/**
+ * ======================
+ * Panel Model Functions
+ * ======================
+ */
+
 export const getPokemon = () => panelState.pokemon;
 
-// To create a detailed Pokémon object after parsing PokéAPI data
+/**
+ * To create a detailed Pokémon Panel object after parsing multiple pieces of PokéAPI data
+ *
+ * @param {Array<Object>} data - Array of responses from PokéAPI:
+ *   data[0] = Pokémon general info, types, stats
+ *   data[1] = Pokémon description
+ * @returns {PokemonPanel} - Structured Pokémon Panel object
+ */
 export const createPokemonObject = async function (data) {
   // Data loaded from MAIN_API_URL (data[0])
   const {
@@ -67,7 +110,11 @@ export const createPokemonObject = async function (data) {
   };
 };
 
-// To load Pokémon details for the Search panel
+/**
+ * Loads detailed Pokémon data and stores into panelState
+ *
+ * @param {string} pokemon - Pokémon name (unique identifier) used to fetch more data from PokéAPI
+ */
 export const loadPokemon = async function (pokemon) {
   try {
     const data = await Promise.all([
@@ -75,7 +122,7 @@ export const loadPokemon = async function (pokemon) {
       AJAX(`${DETAILS_API_URL}${pokemon}`),
     ]);
 
-    panelState.pokemon = await createPokemonObject(data);
+    panelState.pokemon = createPokemonObject(data);
   } catch (err) {
     console.error(err);
   }

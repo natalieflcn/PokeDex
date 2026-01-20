@@ -1,22 +1,51 @@
+/**
+ * Caught Pokémon Model
+ * ---------------------
+ * Manages Caught Pokémon data and state (caught Pokémon list, types caught, sort/render flags).
+ * Handles state updates and persistence with local storage.
+ *
+ * Directly reads and modifies caughtState.
+ * Does not fetch external data or manipulate the DOM.
+ */
+
 import caughtState from './state/caughtState';
-import { persistData } from '../helpers';
-import { sortPokemon } from '../services/pokemonService';
-
-import favoriteState from './state/favoriteState';
 import { resetQueryState } from './queryModel';
+import { sortPokemon } from '../services/pokemonService';
+import { persistData } from '../helpers';
 
-// To retrieve Caught Pokémon (caughtState)
+/**
+ * ======================
+ * Type Definitions
+ * ======================
+ */
+
+/**
+ * A Pokémon Preview object stored in state.
+ *
+ * @typedef {Object} Pokemon
+ * @property {string} name - Pokémon name
+ * @property {number} id - Pokémon ID
+ * @property {string} [img] - Pokémon image
+ */
+
+/**
+ * ======================
+ * Caught Model Functions
+ * ======================
+ */
+
 export const getCaughtPokemon = () => caughtState.caughtPokemon;
 
-// To retrieve the types of Pokémon caught for the Profile module
 export const getTypesPokemonCaught = () => caughtState.typesCaught;
 
 export const getCaughtRender = () => caughtState.profile.render;
 
 export const getCaughtSortBy = () => caughtState.profile.sortBy;
 
+// Sets render to 'true' or 'false' depending on active category
 export const setCaughtRender = value => (caughtState.profile.render = value);
 
+// Sets sort value to 'name' or 'id' depending on value maintained in caughtState
 export const setCaughtSortBy = sort => (caughtState.profile.sortBy = sort);
 
 // To load sorted Caught Pokémon (caughtState)
@@ -41,7 +70,11 @@ export const loadCaughtPokemon = async function () {
   }
 };
 
-// To store Pokémon details in Caught Pokémon (caughtState)
+/**
+ * To store Pokémon details in Caught State and updates local storage
+ *
+ * @param {PokemonPreview} newPokemon - Pokémon being added to Caught state
+ */
 export const addCaughtPokemon = function (newPokemon) {
   newPokemon.caught = true;
 
@@ -56,7 +89,11 @@ export const addCaughtPokemon = function (newPokemon) {
   updateTypesPokemonCaught();
 };
 
-// To remove Pokémon details from Caught Pokémon (caughtState)
+/**
+ * To remove Pokémon details from Caught State and updates local storage
+ *
+ * @param {PokemonPreview} pokemon - Pokémon being removed from Caught state
+ */
 export const removeCaughtPokemon = function (pokemon) {
   pokemon.caught = false;
 
@@ -70,6 +107,10 @@ export const removeCaughtPokemon = function (pokemon) {
   updateTypesPokemonCaught();
 };
 
+/**
+ * Resets the typesCaught counters to 0 for all Pokémon types.
+ * Called internally by updateTypesPokemonCaught.
+ */
 const resetTypesPokemonCaught = function () {
   caughtState.typesCaught = {
     Normal: 0,

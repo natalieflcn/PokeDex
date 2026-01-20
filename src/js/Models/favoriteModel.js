@@ -1,18 +1,50 @@
-import favoriteState from './state/favoriteState';
-import { persistData } from '../helpers';
-import { sortPokemon } from '../services/pokemonService';
-import { resetQueryState } from './queryModel';
+/**
+ * Favorite Pokémon Model
+ * ---------------------
+ * Manages Favorite Pokémon data and state (favorite Pokémon list, types caught, sort/render flags).
+ * Handles state updates and persistence with local storage.
+ *
+ * Directly reads and modifies favoriteState.
+ * Does not fetch external data or manipulate the DOM.
+ */
 
-// To retrieve Favorite Pokémon (favoriteState)
+import favoriteState from './state/favoriteState';
+import { resetQueryState } from './queryModel';
+import { sortPokemon } from '../services/pokemonService';
+import { persistData } from '../helpers';
+
+/**
+ * ======================
+ * Type Definitions
+ * ======================
+ */
+
+/**
+ * A Pokémon Preview object stored in state.
+ *
+ * @typedef {Object} Pokemon
+ * @property {string} name - Pokémon name
+ * @property {number} id - Pokémon ID
+ * @property {string} [img] - Pokémon image
+ */
+
+/**
+ * ======================
+ * Favorite Model Functions
+ * ======================
+ */
+
 export const getFavoritePokemon = () => favoriteState.favoritePokemon;
 
 export const getFavoriteRender = () => favoriteState.profile.render;
 
 export const getFavoriteSortBy = () => favoriteState.profile.sortBy;
 
+// Sets render to 'true' or 'false' depending on active category
 export const setFavoriteRender = value =>
   (favoriteState.profile.render = value);
 
+// Sets sort value to 'name' or 'id' depending on value maintained in favoriteState
 export const setFavoriteSortBy = sort => (favoriteState.profile.sortBy = sort);
 
 // To load sorted Favorite Pokémon (favoriteState)
@@ -38,7 +70,11 @@ export const loadFavoritePokemon = async function () {
   }
 };
 
-// To store Pokémon details in Favorite Pokémon (favoriteState)
+/**
+ * To store Pokémon details in Favorite State and updates local storage
+ *
+ * @param {PokemonPreview} newPokemon - Pokémon being added to Favorite state
+ */
 export const addFavoritePokemon = function (newPokemon) {
   newPokemon.favorite = true;
 
@@ -54,7 +90,11 @@ export const addFavoritePokemon = function (newPokemon) {
   persistData('favoritePokemon', favoriteState.favoritePokemon);
 };
 
-// To remove Pokémon details from Favorite Pokémon (favoriteState)
+/**
+ * To remove Pokémon details from Favorite State and updates local storage
+ *
+ * @param {PokemonPreview} pokemon - Pokémon being removed from Favorite state
+ */
 export const removeFavoritePokemon = function (pokemon) {
   pokemon.favorite = false;
 

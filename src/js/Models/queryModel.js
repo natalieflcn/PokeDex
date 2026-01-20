@@ -1,6 +1,14 @@
-import queryState from './state/queryState';
+/**
+ * Query Model
+ * ---------------------
+ * Manages business logic and data related to queryState.
+ * Responsible for handling requests for data, updating state, initializing query references, and loading queried Pokémon data.
+ *
+ * Directly reads and modifies queryState.
+ * Does not fetch from external APIs or manipulate the DOM.
+ */
 
-import { LIMIT } from '../config';
+import queryState from './state/queryState';
 import {
   filterPokemonPreviews,
   loadBatch,
@@ -8,6 +16,25 @@ import {
   possiblePokemon,
   sortPokemon,
 } from '../services/pokemonService';
+import { LIMIT } from '../config';
+
+/**
+ * ======================
+ * Type Definitions
+ * ======================
+ */
+
+/**
+ * @typedef {Object} Pokemon
+ * @property {string} name
+ * @property {number} id
+ */
+
+/**
+ * ======================
+ * Query Model Functions
+ * ======================
+ */
 
 // To initiate a new request for a Pokémon query
 export const startPokemonQuery = function () {
@@ -15,17 +42,15 @@ export const startPokemonQuery = function () {
   return requestId;
 };
 
-// To determine whether the current request for a queried Pokémon is the latest request, preventing race conditions
+// To determine whether the current request for a queried Pokémon is stale, preventing race conditions
 export const isStalePokemonQuery = function (requestId) {
   return queryState.currentQueryId !== requestId;
 };
 
-// To retrieve the current query (queryState)
 export const getQuery = function () {
   return queryState.query;
 };
 
-// To retrieve the queried Pokémon (queryState) results
 export const getQueryResults = function () {
   return queryState.queryResults;
 };
@@ -53,7 +78,12 @@ export const updateHasMoreQueryResults = function () {
     queryState.hasMoreResults = false;
 };
 
-// To store all possible Pokémon references in the query results (queryState)
+/**
+ * To store all possible Pokémon references in the queryResults (queryState)
+ *
+ * @param {string} query - Query retrieved from user input
+ * @param {Array<Pokemon>} - Pokémon dataset that is being queried (all Pokémon, caught Pokemon, or Favorite Pokémon)
+ */
 export const storeQueryResults = function (query, querySet) {
   queryState.loading = true;
 
@@ -65,7 +95,11 @@ export const storeQueryResults = function (query, querySet) {
   queryState.loading = false;
 };
 
-// To load queried Pokémon (preview) details for the current batch to be rendered in the results
+/**
+ * To load general Pokémon (preview) details for the current batch to be rendered in results
+ *
+ * @param {number} requestId - Id of current request being made
+ */
 export const loadQueryBatch = async function (requestId) {
   queryState.loading = true;
   queryState.currentBatch = [];
@@ -104,21 +138,3 @@ export const resetQueryState = function () {
   queryState.query = '';
   queryState.hasMoreResults = true;
 };
-// const pokemonRequests = pokemonBatch.map(pokemon => {
-//     const pokemonName = pokemon.name || pokemon;
-
-//     return fetchPokemon(pokemonName)
-//       .then(pokemonDetails =>
-//         createPokemonPreviewObject(pokemonName, pokemonDetails)
-//       )
-//       .catch(err => {
-//         console.error(`Failed to load Pokémon: ${pokemonName}`, err);
-//         return null;
-//       });
-//   });
-
-//   const pokemonPreviews = await Promise.all(pokemonRequests);
-
-//   if (isStalePokemonQuery(requestId)) return;
-
-//   const validPokemonPreviews = pokemonPreviews.filter(Boolean);
