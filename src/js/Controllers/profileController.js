@@ -1,7 +1,11 @@
-import {
-  navResolveSortParams,
-  navSanitizeSort,
-} from '../services/navService.js';
+/**
+ * Profile Controller
+ * ---------------------
+ * Orchestrates Profile module logic: loading data, managing category and sorting state, handling queries, updating URL and browser history, and redirecting to Search module.
+ *
+ * Emits actions to Profile views but does not own state, perform data fetching, or manipulate the DOM.
+ */
+
 import {
   getQueryResults,
   loadQueryBatch,
@@ -24,13 +28,17 @@ import {
   setFavoriteRender,
   setFavoriteSortBy,
 } from '../models/favoriteModel.js';
+import {
+  navResolveSortParams,
+  navSanitizeSort,
+} from '../services/navService.js';
+import { controlSearchRedirect } from './searchController.js';
 import profileView from '../views/ProfileViews/profileView.js';
 import previewView from '../views/ProfileViews/previewView.js';
 import savedPokemonView from '../views/ProfileViews/savedPokemonView.js';
 import categoryView from '../views/ProfileViews/categoryView.js';
 import sortView from '../views/ProfileViews/sortView.js';
 import queryView from '../views/ProfileViews/queryView.js';
-import { controlSearchRedirect } from './searchController.js';
 
 // GENERAL PROFILE CONTROLLER FUNCTIONS
 
@@ -86,7 +94,11 @@ const controlProfilePokemonResults = async function () {
   }
 };
 
-// To redirect user to the Search Module with the selected Pokémon's details rendered in the panel
+/**
+ * To redirect user to the Search Module with the selected Pokémon's details rendered in the panel
+ *
+ * @param {string} pokemon - Pokémon name
+ */
 const controlProfileClickPreview = async function (pokemon) {
   const pokemonName = pokemon.toLowerCase();
 
@@ -103,7 +115,11 @@ const controlProfileClickPreview = async function (pokemon) {
 
 // RENDERING AND ROUTING PROFILE CATEGORY (Caught/Favorite)
 
-// Renders the appropriate category view (Caught/Favorites)
+/**
+ * Renders the appropriate category view
+ *
+ * @param {string} view - Category View ('caught' or 'favorite')
+ */
 export const controlProfileRenderCategory = async function (view) {
   switch (view) {
     case 'caught':
@@ -159,7 +175,11 @@ const controlProfileCategoryLoad = function () {
 
 // RENDERING AND ROUTING PROFILE SORTING VIEW (Name/Id)
 
-// Renders the appropriate sorting view (Caught/Favorites)
+/**
+ * Renders the appropriate sorting mode
+ *
+ * @param {string} sort - Sort mode ('name' or 'id')
+ */
 const controlProfileRenderSort = function (sort) {
   switch (sort) {
     case 'name':
@@ -176,7 +196,11 @@ const controlProfileRenderSort = function (sort) {
   }
 };
 
-// Updates the URL search params and renders appropriate view when user clicks a sort button
+/**
+ * Updates the URL search params and renders appropriate view when user clicks a sort button
+ *
+ * @param {string} sort - Sort mode ('name' or 'id')
+ */
 const controlProfileSortBtn = async function (sort) {
   const currentURL = new URL(window.location.href);
 
@@ -201,7 +225,9 @@ const controlProfileSortLoad = function () {
   controlProfileRenderSort(sort);
 };
 
-// To initialize Profile Controller event handlers and attach them to Profile Views
+/**
+ * Initializes Profile Controller event handlers and attach them to Profile Views
+ */
 export const controlProfileInit = function () {
   profileView.addHandlerLoadProfile(controlProfileLoad);
   queryView.addHandlerQuery(controlProfilePokemonResults);

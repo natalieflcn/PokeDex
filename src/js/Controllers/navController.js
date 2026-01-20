@@ -90,7 +90,7 @@ const controlNavInitialLoad = function () {
 };
 
 /**
- * Initializes navigation event handlers
+ * Initializes Navigation Controller event handlers
  */
 export const controlNavInit = function () {
   navView.addHandlerNavigateBtn(controlNavBtn);
