@@ -94,7 +94,7 @@ const controlSearchResults = async function () {
     }
 
     if (hasMoreResults) {
-      resultsView.observeSentinel(controlInfiniteScroll);
+      resultsView.observeSentinel(controlSearchInfiniteScroll);
     }
 
     resultsView.render(pokemonResults);
@@ -106,7 +106,7 @@ const controlSearchResults = async function () {
 const debouncedControlSearchResults = debounce(controlSearchResults, 300); // Debounce search results to reduce redundant queries
 
 // To determine the scroll position of the client and to load more data, if necessary
-const controlInfiniteScroll = async function () {
+const controlSearchInfiniteScroll = async function () {
   const query = getQuery();
 
   let requestId,

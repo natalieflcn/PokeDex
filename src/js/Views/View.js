@@ -3,10 +3,12 @@ import pokeball from '../../../public/imgs/logo.svg';
 export default class View {
   _data;
 
+  // Clears the current view
   _clear() {
     this._parentEl.innerHTML = '';
   }
 
+  // Renders a Pokéball spinner to provide visual feedback while data is loading
   renderSpinner = function () {
     const markup = `
     <div class="spinner__div">
@@ -18,6 +20,13 @@ export default class View {
     this._parentEl.insertAdjacentHTML('afterbegin', markup);
   };
 
+  /**
+   * Renders incoming data for the current view.
+   *
+   * @param {string} data - Markup text to be rendered
+   * @param {boolean} render - Determines whether the data should be rendered immediately or returned as markup text
+   * @param {boolean} append - Determines whether the view should be cleared before rendering data or if data should be appended
+   */
   render(data, render = true, append = false) {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
@@ -36,6 +45,11 @@ export default class View {
     );
   }
 
+  /**
+   * Renders error for the current view.
+   *
+   * @param {string} message - Error message to be rendered
+   */
   renderError(message = this._errorMessage) {
     const markup = `
       <div class="error">

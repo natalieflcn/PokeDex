@@ -1,8 +1,22 @@
+/**
+ * Navigation View
+ * ---------------------
+ * Responsible for rendering Pokédex navigation buttons managing navigation-related DOM interactions.
+ *
+ * Emits events to navController and interacts with searchController when redirecting from Profile to Search module.
+ * Does not own state, perform data fetching, or implement business logic.
+ */
+
 import View from './View.js';
 
 class NavView extends View {
   _parentEl = document.querySelector('.container');
 
+  /**
+   * Adds handler to navigation menu buttons.
+   *
+   * @param {Function} handler - Navigation controller callback (controlNavBtn)
+   */
   addHandlerNavigateBtn(handler) {
     this._parentEl.addEventListener('click', function (e) {
       const btn = e.target.closest('.header__btn');
@@ -15,10 +29,20 @@ class NavView extends View {
     });
   }
 
+  /**
+   * Adds handler that renders the appropriate module when user is navigating around browser history stack
+   *
+   * @param {Function} handler - Navigation controller callback (controlNavBrowser)
+   */
   addHandlerBrowser(handler) {
     ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
+  /**
+   * Adds handler that rewrites root URL '/' to '/search' to maintain URL consistency
+   *
+   * @param {Function} handler - Navigation controller callback (controlNavInitialLoad)
+   */
   addHandlerInitialLoad(handler) {
     document.addEventListener('DOMContentLoaded', handler);
   }
@@ -44,7 +68,7 @@ class NavView extends View {
       .forEach(btn => btn.classList.remove('btn--active'));
   }
 
-  // Adds active classes to Search module indicators and reveals Search module screens
+  // Adds active classes to Search module and displays Search module screens
   toggleNavSearch() {
     this._parentEl
       .querySelectorAll('.screen__1--search, .screen__2--search')
@@ -59,7 +83,7 @@ class NavView extends View {
       .classList.add('btn--active');
   }
 
-  // Adds active classes to Map module indicators and reveals Map module screens
+  // Adds active classes to Map module and displays Map module screens
   toggleNavMap() {
     this._parentEl
       .querySelectorAll('.screen__1--map, .screen__2--map')
@@ -74,7 +98,7 @@ class NavView extends View {
       .classList.add('btn--active');
   }
 
-  // Adds active classes to Profile module indicators and reveals Profile module screens
+  // Adds active classes to Profile module and displays Profile module screens
   toggleNavProfile() {
     this._parentEl
       .querySelectorAll('.screen__1--profile, .screen__2--profile')

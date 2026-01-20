@@ -25,7 +25,6 @@ import {
   setFavoriteSortBy,
 } from '../models/favoriteModel.js';
 import profileView from '../views/ProfileViews/profileView.js';
-import navView from '../views/navView.js';
 import previewView from '../views/ProfileViews/previewView.js';
 import savedPokemonView from '../views/ProfileViews/savedPokemonView.js';
 import categoryView from '../views/ProfileViews/categoryView.js';

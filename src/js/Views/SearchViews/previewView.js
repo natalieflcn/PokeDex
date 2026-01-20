@@ -1,9 +1,22 @@
-import { capitalize } from '../../helpers.js';
+/**
+ * Search Views – Preview View
+ * ---------------------
+ * Responsible for rendering Pokémon preview panels for search results and managing preview-related DOM interactions.
+ *
+ * Emits events to the searchController but does not own state, perform data fetching, or implement business logic.
+ */
+
 import View from '../View.js';
+import { capitalize } from '../../helpers.js';
 
 class PreviewView extends View {
   _parentEl = document.querySelector('.search__preview--container');
 
+  /**
+   * Adds handler to Pokémon preview panels
+   *
+   * @param {Function} handler - Search controller callback (controlSearchClickPreview)
+   */
   addHandlerClickActivePreview(handler) {
     this._parentEl.addEventListener('click', e => {
       const preview = e.target.closest('.search__preview');

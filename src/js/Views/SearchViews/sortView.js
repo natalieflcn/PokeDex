@@ -1,8 +1,21 @@
+/**
+ * Search Views – Sort View
+ * ---------------------
+ * Responsible for rendering Pokémon search sort controls and managing sort-related DOM interactions.
+ *
+ * Emits events to the searchController but does not own state, perform data fetching, or implement business logic.
+ */
+
 import View from '../View.js';
 
 class SortView extends View {
   _parentEl = document.querySelector('.search__form--sort');
 
+  /**
+   * Adds handler to search sort buttons
+   *
+   * @param {Function} handler - Search controller callback (controlSearchSortBtn)
+   */
   addHandlerSortBtn(handler) {
     this._parentEl.addEventListener('click', function (e) {
       e.preventDefault();
@@ -16,11 +29,16 @@ class SortView extends View {
     });
   }
 
+  /**
+   * Adds handler to load active sort button during browser navigation events
+   *
+   * @param {Function} handler - Search controller callback (controlSearchSortLoad)
+   */
   addHandlerSortLoad(handler) {
     ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
-  // Adds active classes to visually toggle the Sort Name button on the Search module
+  // Visually toggles the "Name" sort button as active
   toggleSearchSortName() {
     this._parentEl
       .querySelector('.search__btn--name')
@@ -30,7 +48,7 @@ class SortView extends View {
       .classList.remove('btn--active');
   }
 
-  // Adds active classes to visually toggle the Sort ID button on the Search module
+  // Visually toggles the "Id" sort button as active
   toggleSearchSortId() {
     this._parentEl
       .querySelector('.search__btn--id')

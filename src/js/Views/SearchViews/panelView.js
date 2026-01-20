@@ -1,13 +1,31 @@
+/**
+ * Search Views – Panel View
+ * ---------------------
+ * Responsible for rendering Pokémon panel panel-related DOM interactions.
+ *
+ * Emits events to the searchController but does not own state, perform data fetching, or implement business logic.
+ */
+
 import View from '../View.js';
 
 class PanelView extends View {
   _parentEl = document.querySelector('.screen__2--search');
   _errorMessage = 'There was an error loading this Pokémon!';
 
+  /**
+   * Adds handler to render Pokémon panel
+   *
+   * @param {Function} handler - Search controller callback (controlSearchPokemonPanel)
+   */
   addHandlerRenderPanel(handler) {
     window.addEventListener('load', handler);
   }
 
+  /**
+   * Adds handler to Pokemon panel 'Caught' button
+   *
+   * @param {Function} handler - Search controller callback (controlSearchCaughtBtn)
+   */
   addHandlerCaughtBtn(handler) {
     this._parentEl.addEventListener('click', function (e) {
       const btn = e.target.closest('.search__btn--caught');
@@ -17,6 +35,11 @@ class PanelView extends View {
     });
   }
 
+  /**
+   * Adds handler to Pokemon panel 'Favorite' button
+   *
+   * @param {Function} handler - Search controller callback (controlSearchFavoriteBtn)
+   */
   addHandlerFavoriteBtn(handler) {
     this._parentEl.addEventListener('click', function (e) {
       const btn = e.target.closest('.search__btn--favorite');
@@ -26,12 +49,14 @@ class PanelView extends View {
     });
   }
 
+  // Visually toggles 'Favorite' button on Pokémon panel
   toggleFavoriteBtn() {
     this._parentEl
       .querySelector('.search__btn--favorite')
       .classList.toggle('btn--active');
   }
 
+  // Visually toggles 'Caught' button on Pokémon panel
   toggleCaughtBtn() {
     this._parentEl
       .querySelector('.search__btn--caught')
