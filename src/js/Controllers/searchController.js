@@ -42,7 +42,10 @@ import { getPokemon, loadPokemon } from '../models/panelModel.js';
 import pokemonState from '../models/state/pokemonState.js';
 import caughtState from '../models/state/caughtState.js';
 import favoriteState from '../models/state/favoriteState.js';
-import { navSanitizeSort } from '../services/navService.js';
+import {
+  navResolveSortParams,
+  navSanitizeSort,
+} from '../services/navService.js';
 import { getPokemonPagination } from '../services/pokemonService.js';
 import navView from '../views/navView.js';
 import queryView from '../views/SearchViews/queryView.js';
@@ -92,6 +95,7 @@ const controlSearchResults = async function () {
 
     if (pokemonResults.length < 1) {
       resultsView._clear();
+      // resultsView.renderError('pokemon not found!');
       return;
     }
 
@@ -101,7 +105,7 @@ const controlSearchResults = async function () {
 
     resultsView.render(pokemonResults);
   } catch (err) {
-    queryView.renderError();
+    resultsView.renderError('pokemon not found!');
   }
 };
 
@@ -185,9 +189,17 @@ const controlSearchSortBtn = async function (sort) {
 };
 
 const controlSearchSortLoad = function () {
-  const sort = new URL(window.location.href).searchParams.get('sort');
+  // const sort = new URL(window.location.href).searchParams.get('sort');
 
-  if (!sort || sort !== 'name') navSanitizeSort();
+  // if (!sort || sort !== 'name') navSanitizeSort();
+
+  const route = window.location.href;
+
+  const currentURL = navResolveSortParams(new URL(route));
+
+  window.history.replaceState({ page: route }, '', currentURL);
+
+  const sort = currentURL.searchParams.get('sort');
 
   controlSearchRenderSort(sort);
 };

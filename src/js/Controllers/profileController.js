@@ -181,6 +181,7 @@ const controlProfileCategoryLoad = function () {
  * @param {string} sort - Sort mode ('name' or 'id')
  */
 const controlProfileRenderSort = function (sort) {
+  console.log(sort);
   switch (sort) {
     case 'name':
       sortView.toggleProfileSortName();
@@ -211,6 +212,7 @@ const controlProfileSortBtn = async function (sort) {
     navSanitizeSort();
   }
 
+  console.log(sort);
   setFavoriteSortBy(sort);
   setCaughtSortBy(sort);
 
@@ -219,9 +221,14 @@ const controlProfileSortBtn = async function (sort) {
 };
 
 // Sets the sorting mode to 'id' upon load/reload of the platform
-const controlProfileSortLoad = function () {
-  const sort = new URL(window.location.href).searchParams.get('sort');
+export const controlProfileSortLoad = function () {
+  const route = window.location.href;
 
+  const currentURL = navResolveSortParams(new URL(route));
+
+  window.history.replaceState({ page: route }, '', currentURL);
+
+  const sort = currentURL.searchParams.get('sort');
   controlProfileRenderSort(sort);
 };
 

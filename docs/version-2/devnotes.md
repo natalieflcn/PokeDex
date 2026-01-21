@@ -6,13 +6,13 @@
 
 - [x] Fix improper rendering of Pokémon searches (when the user types too quickly)
 - [ ] Fix the number of Pokémon panels rendered during general Name/ID queries; when a Pokémon has invalid data from the PokéAPI, that panel is omitted instead of being used for the subsequent Pokémon (resulting in one or two less panels, making the visual design skewed and inconsistent)
-- [ ] Fix the broken pagination buttons (left, right) when navigating between Pokémon
+- [x] Fix the broken pagination buttons (left, right) when navigating between Pokémon
 
 ---
 
 ## Areas of Improvement (ENHANCE USER EXPERIENCE)
 
-- [~] Ensure the current file system properly reflects the MVC model before building off this system architecture
+- [x] Ensure the current file system properly reflects the MVC model before building off this system architecture
 - [ ] Make the platform responsive for tablet and mobile users
 - [ ] Make it clear that the user is intially loaded onto the Search module
 - [ ] Disable buttons that are already active

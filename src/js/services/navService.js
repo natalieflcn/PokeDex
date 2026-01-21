@@ -68,5 +68,6 @@ export const navResolveSortParams = function (route) {
   if (sortBy === 'name') currentURL.searchParams.set('sort', sortBy);
   if (sortBy === 'id') navSanitizeSort();
 
+  console.log(route, sortBy);
   return currentURL;
 };
