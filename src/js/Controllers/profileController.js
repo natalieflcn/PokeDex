@@ -181,7 +181,7 @@ const controlProfileCategoryLoad = function () {
  * @param {string} sort - Sort mode ('name' or 'id')
  */
 const controlProfileRenderSort = function (sort) {
-  console.log(sort);
+  // console.log(sort);
   switch (sort) {
     case 'name':
       sortView.toggleProfileSortName();
@@ -203,7 +203,8 @@ const controlProfileRenderSort = function (sort) {
  * @param {string} sort - Sort mode ('name' or 'id')
  */
 const controlProfileSortBtn = async function (sort) {
-  const currentURL = new URL(window.location.href);
+  // console.log(window.location.pathname);
+  const currentURL = navResolveSortParams(window.location.pathname);
 
   if (sort === 'name') {
     currentURL.searchParams.set('sort', sort);
@@ -212,7 +213,6 @@ const controlProfileSortBtn = async function (sort) {
     navSanitizeSort();
   }
 
-  console.log(sort);
   setFavoriteSortBy(sort);
   setCaughtSortBy(sort);
 
@@ -222,9 +222,10 @@ const controlProfileSortBtn = async function (sort) {
 
 // Sets the sorting mode to 'id' upon load/reload of the platform
 export const controlProfileSortLoad = function () {
-  const route = window.location.href;
+  const route = window.location.pathname;
 
-  const currentURL = navResolveSortParams(new URL(route));
+  // console.log(route);
+  const currentURL = navResolveSortParams(route);
 
   window.history.replaceState({ page: route }, '', currentURL);
 

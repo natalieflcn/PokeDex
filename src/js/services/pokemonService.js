@@ -9,6 +9,7 @@
 
 import { AJAX, capitalize } from '../helpers';
 import { MAIN_API_URL } from '../config';
+import { getPokemonSortBy } from '../models/pokemonModel';
 
 /**
  * ======================
@@ -121,10 +122,11 @@ export const filterPokemonPreviews = pokemonPreviews =>
  *
  * @param {Pokemon[]} pokemon - An array of Pokémon to be sorted
  */
-export const sortPokemon = function (pokemon) {
+export const sortPokemon = function (pokemon, sortParam) {
   let sortedPokemon;
 
-  const sortParam = new URL(window.location.href).searchParams.get('sort');
+  if (!sortParam)
+    sortParam = new URL(window.location.href).searchParams.get('sort');
 
   if (sortParam === 'name') {
     sortedPokemon = pokemon.toSorted((a, b) => a.name.localeCompare(b.name));

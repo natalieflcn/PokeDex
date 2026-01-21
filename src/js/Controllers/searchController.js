@@ -11,6 +11,7 @@ import {
   getPokemonCurrentBatch,
   getPokemonLoading,
   getPokemonResults,
+  getPokemonSortBy,
   loadNextPokemon,
   loadPokemonBatch,
   resetPokemonState,
@@ -85,6 +86,7 @@ const controlSearchResults = async function () {
       pokemonResults = getQueryResults();
       hasMoreResults = getHasMoreQueryResults();
     } else {
+      console.log(getPokemonSortBy());
       requestId = startPokemonRequest();
 
       await loadPokemonBatch(requestId);
@@ -174,6 +176,7 @@ export const controlSearchRenderSort = function (sort) {
 const controlSearchSortBtn = async function (sort) {
   const currentURL = new URL(window.location.href);
 
+  console.log(sort);
   if (sort === 'name') {
     currentURL.searchParams.set('sort', sort);
     window.history.replaceState({}, '', currentURL);
@@ -181,25 +184,27 @@ const controlSearchSortBtn = async function (sort) {
     navSanitizeSort();
   }
 
-  console.log(sort);
   setPokemonSortBy(sort);
-  console.log(pokemonState.sortBy);
+  console.log(getPokemonSortBy());
+
   controlSearchRenderSort(sort);
   await controlSearchResults();
 };
 
 const controlSearchSortLoad = function () {
-  // const sort = new URL(window.location.href).searchParams.get('sort');
-
-  // if (!sort || sort !== 'name') navSanitizeSort();
-
-  const route = window.location.href;
-
-  const currentURL = navResolveSortParams(new URL(route));
-
-  window.history.replaceState({ page: route }, '', currentURL);
-
+  const currentURL = new URL(window.location.href);
   const sort = currentURL.searchParams.get('sort');
+
+  // console.log();
+  if (!sort || sort !== 'name') navSanitizeSort();
+
+  // const route = window.location.href;
+
+  // const currentURL = navResolveSortParams(new URL(route));
+
+  window.history.replaceState({ page: '/search ' }, '', currentURL);
+
+  // const sort = currentURL.searchParams.get('sort');
 
   controlSearchRenderSort(sort);
 };
@@ -370,6 +375,7 @@ const initPokemonData = async function () {
  */
 export const controlSearchInit = function () {
   initPokemonData();
+
   queryView.addHandlerQuery(debouncedControlSearchResults);
   sortView.addHandlerSortBtn(controlSearchSortBtn);
   sortView.addHandlerSortLoad(controlSearchSortLoad);

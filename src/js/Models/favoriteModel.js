@@ -56,7 +56,10 @@ export const loadFavoritePokemon = async function () {
   const favoritePokemonPreviews = [];
 
   try {
-    const favoritePokemon = sortPokemon(favoriteState.favoritePokemon);
+    const favoritePokemon = sortPokemon(
+      favoriteState.favoritePokemon,
+      getFavoriteSortBy()
+    );
 
     for (const pokemon of favoritePokemon) {
       const { name, id, img } = pokemon;

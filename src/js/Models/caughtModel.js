@@ -57,7 +57,10 @@ export const loadCaughtPokemon = async function () {
   const caughtPokemonPreviews = [];
 
   try {
-    const caughtPokemon = sortPokemon(caughtState.caughtPokemon);
+    const caughtPokemon = sortPokemon(
+      caughtState.caughtPokemon,
+      getCaughtSortBy()
+    );
 
     for (const pokemon of caughtPokemon) {
       const { name, id, img } = pokemon;

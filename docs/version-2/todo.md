@@ -156,7 +156,6 @@
   - ~~[-] Need to automate some searchController functions to run upon 'popstate' event instead of calling them directly~~
   - [x] Need active preview to update and reflect the Pokemon displayed in the Pokemon panel (upon page navigation, url change)
   - [x] Need to add documentation across MVC architecture
-  - [ ] Need to centralize error handling and create appropriate, descriptive error messages for all Views
   - [x] Merge version-2 branch to main branch for GitHub repo
 
 - [x] BUG: Redirecting from /profile to /search no longer works
@@ -165,8 +164,8 @@
 - [x] BUG: When switching between Name and Id sort modes on Search module, the sorting is not applied until page reloads or scrolling into further batches of Pokémon
 - [x] BUG: When entering invalid url, the Search module is loaded but url does not reflect this TODO
 - [ ] BUG: Pokémon seems to be loading slower now
-- [ ] BUG: Pokémon profile category/sort state out of sync TODO 1
+- [x] BUG: Pokémon profile category/sort state out of sync TODO 1
   - [x] Displays favorite Pokémon upon page reload, but visually toggled Caught category
   - [x] When switching between categories, the current sorting mode isn't applied
   - [x] After exiting Profile module and returning, the visually toggled sorting mode (name) is not applied to savedPokemonView
-  - [] When reloading page, the Search module and Profile module lose sorting state
+  - [x] When reloading page, the Search module is loaded with Profile module sorting state

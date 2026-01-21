@@ -7,9 +7,13 @@
  * It only interacts with URL and History Browser APIs.
  */
 
-import { getPokemonSortBy } from '../models/pokemonModel';
-import { getCaughtRender, getCaughtSortBy } from '../models/caughtModel';
-import { getFavoriteSortBy } from '../models/favoriteModel';
+import { getPokemonSortBy, setPokemonSortBy } from '../models/pokemonModel';
+import {
+  getCaughtRender,
+  getCaughtSortBy,
+  setCaughtSortBy,
+} from '../models/caughtModel';
+import { getFavoriteSortBy, setFavoriteSortBy } from '../models/favoriteModel';
 import { BASE_POKEDEX_URL } from '../config';
 
 /**
@@ -52,22 +56,50 @@ export const navSanitizeSort = function () {
 };
 
 /**
- * Creates a new URL object with the specified route and appends any sort search parameters (if applicable)
+ * Creates a new URL object with the specified route and appends any sort search parameters (if applicable) from STATE
 
 @param {string} route - Route identifier derived from navigation button or URL
 */
 export const navResolveSortParams = function (route) {
   const currentURL = new URL(route.toString(), BASE_POKEDEX_URL);
 
+  // console.log(route);
   let sortBy;
 
+  // console.log(route);
   if (route === '/search') sortBy = getPokemonSortBy();
   else if (route === '/profile/caught') sortBy = getCaughtSortBy();
   else if (route === '/profile/favorites') sortBy = getFavoriteSortBy();
 
+  // console.log(sortBy);
   if (sortBy === 'name') currentURL.searchParams.set('sort', sortBy);
   if (sortBy === 'id') navSanitizeSort();
 
-  console.log(route, sortBy);
   return currentURL;
+};
+
+// Hydrates sort parameters from URL into state
+export const navHydrateSortParams = function () {
+  const sortParams = new URLSearchParams(window.location.search);
+  const sort = sortParams.get('sort') ?? 'id';
+  const currentRoute = window.location.pathname;
+
+  if (sort !== 'name' && sort !== 'id') {
+    navSanitizeSort();
+    return;
+  }
+
+  // console.log(sort);
+  switch (currentRoute) {
+    case '/profile/caught':
+    case '/profile/favorites':
+      setCaughtSortBy(sort);
+      setFavoriteSortBy(sort);
+      break;
+
+    case '/search':
+      setPokemonSortBy(sort);
+      break;
+  }
+  // console.log(getPokemonSortBy(), getCaughtSortBy(), getFavoriteSortBy());
 };

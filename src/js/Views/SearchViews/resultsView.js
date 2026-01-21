@@ -17,6 +17,9 @@ class ResultsView extends View {
   _sentinel = document.querySelector('.search__sentinel');
   _observer = null;
 
+  addHandlerLoadResults(handler) {
+    this._parentEl.addEventListener('popstate', handler);
+  }
   /**
    * Observes the sentinel element for infinite scroll.
    * Triggers loading more results when sentinel enters viewport.

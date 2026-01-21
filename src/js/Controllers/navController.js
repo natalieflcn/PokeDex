@@ -10,7 +10,12 @@
 
 import { getPokemonSortBy } from '../models/pokemonModel';
 import { getCaughtRender } from '../models/caughtModel';
-import { navCheckRoute, navResolveSortParams } from '../services/navService';
+import {
+  navCheckRoute,
+  navHydrateSortParams,
+  navResolveSortParams,
+  navSanitizeSort,
+} from '../services/navService';
 import { controlSearchRenderSort } from './searchController';
 import {
   controlProfileRenderCategory,
@@ -32,8 +37,7 @@ const controlNavRenderView = function (route) {
     case '/search':
       navView.toggleNavSearch();
       controlSearchRenderSort(getPokemonSortBy());
-      console.log(getPokemonSortBy());
-      console.log('running');
+
       break;
 
     case '/map':
@@ -54,16 +58,16 @@ const controlNavRenderView = function (route) {
       categoryView.toggleCaughtCategory();
 
       if (getCaughtRender()) controlProfileRenderCategory('caught');
-
+      controlProfileSortLoad();
       break;
 
     case '/profile/favorites':
       navView.toggleNavProfile();
       categoryView.toggleFavoritesCategory();
-      controlProfileSortLoad();
 
       if (getFavoriteRender()) controlProfileRenderCategory('favorites');
       controlProfileSortLoad();
+
       break;
 
     default:
@@ -79,9 +83,10 @@ const controlNavRenderView = function (route) {
  * @param {string} page - Route identifier derived from navigation button
  */
 const controlNavBtn = function (page) {
+  navSanitizeSort();
+
   const route = navCheckRoute(page);
 
-  console.log(route);
   if (!route) return;
 
   const currentURL = navResolveSortParams(route);
@@ -92,24 +97,17 @@ const controlNavBtn = function (page) {
 
 // Reads the URL and navigates to appropriate module when user interacts with browser history stack
 const controlNavBrowser = function () {
-  const route = window.location.href;
+  navHydrateSortParams();
+  const route = window.location.pathname;
 
-  console.log(route);
+  // console.log(route);
   controlNavRenderView(route);
 };
 
 // Rewrites the root URL '/' to '/search' to maintain URL consistency across page loads
 const controlNavInitialLoad = function () {
-  switch (window.location.pathname) {
-    case '/map':
-    case '/profile/caught':
-    case '/profile/favorites':
-      return;
-
-    case '/':
-    default:
-      const currentURL = navResolveSortParams('/search');
-      window.history.replaceState({ page: 'search' }, '', currentURL);
+  if (window.location.pathname === '/') {
+    window.history.replaceState({ page: 'search' }, '', '/search');
   }
 };
 

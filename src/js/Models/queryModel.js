@@ -105,7 +105,7 @@ export const loadQueryBatch = async function (requestId) {
   queryState.currentBatch = [];
 
   // Sort Pokémon by Name or ID according to (global) sort search param
-  const sortedPokemon = sortPokemon(queryState.queryReferences);
+  const sortedPokemon = sortPokemon(queryState.queryReferences, null);
 
   const pokemonBatch = sortedPokemon.slice(
     queryState.offset,
