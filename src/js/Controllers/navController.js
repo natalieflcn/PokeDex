@@ -21,9 +21,10 @@ import {
   controlProfileRenderCategory,
   controlProfileSortLoad,
 } from './profileController';
-import navView from '../views/navView';
+import navView from '../views/NavViews/navView';
 import categoryView from '../views/ProfileViews/categoryView';
 import { getFavoriteRender } from '../models/favoriteModel';
+import lightsView from '../views/NavViews/lightsView';
 
 /**
  * Renders module with appropriate data (based on the URL path)
@@ -118,4 +119,5 @@ export const controlNavInit = function () {
   navView.addHandlerNavigateBtn(controlNavBtn);
   navView.addHandlerBrowser(controlNavBrowser);
   navView.addHandlerInitialLoad(controlNavInitialLoad);
+  lightsView.addHandlerLightBtn(controlNavBtn);
 };

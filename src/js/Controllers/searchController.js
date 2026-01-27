@@ -48,7 +48,7 @@ import {
   navSanitizeSort,
 } from '../services/navService.js';
 import { getPokemonPagination } from '../services/pokemonService.js';
-import navView from '../views/navView.js';
+import navView from '../views/NavViews/navView.js';
 import queryView from '../views/SearchViews/queryView.js';
 import resultsView from '../views/SearchViews/resultsView.js';
 import previewView from '../views/SearchViews/previewView.js';
@@ -90,14 +90,15 @@ const controlSearchResults = async function () {
       requestId = startPokemonRequest();
 
       await loadPokemonBatch(requestId);
-
+      console.log('controlsearchresults working');
       pokemonResults = getPokemonResults();
       hasMoreResults = getHasMoreQueryResults();
+      console.log(pokemonResults);
     }
 
     if (pokemonResults.length < 1) {
       resultsView._clear();
-      // resultsView.renderError('pokemon not found!');
+      resultsView.renderError();
       return;
     }
 
@@ -107,7 +108,8 @@ const controlSearchResults = async function () {
 
     resultsView.render(pokemonResults);
   } catch (err) {
-    resultsView.renderError('pokemon not found!');
+    resultsView.renderError();
+    console.error(err);
   }
 };
 
@@ -221,7 +223,7 @@ const controlSearchClickPreview = function (pokemon) {
   window.history.replaceState(
     { page: `search/${pokemonName}` },
     '',
-    `/search/${pokemonName}`
+    `/search/${pokemonName}`,
   );
 
   controlSearchPokemonPanel();
@@ -266,13 +268,14 @@ const controlSearchPokemonPanel = async function () {
     const { prev, next } = getPokemonPagination(
       pokemon.name,
       pokemonResults,
-      loadMoreResults
+      loadMoreResults,
     );
 
     if (!prev) paginationView.disablePaginationBtn('prev');
     if (!next) paginationView.disablePaginationBtn('next');
   } catch (err) {
-    panelView.renderError(err);
+    panelView.renderError();
+    console.error(err);
   }
 };
 
@@ -324,7 +327,7 @@ const controlSearchPagination = async function (direction) {
     window.history.replaceState(
       { page: `search/${pokemonName}` },
       '',
-      `/search/${pokemonName}`
+      `/search/${pokemonName}`,
     );
   }
 

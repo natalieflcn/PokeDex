@@ -10,7 +10,7 @@ import View from '../View.js';
 
 class PaginationView extends View {
   _parentEl = document.querySelector('.screen__2--search');
-  _errorMessage = 'oops';
+  _errorMessage = 'There was a problem paginating through Pokémon.';
 
   /**
    * Adds handler to Pokémon panel pagination buttons ('prev'/'next')

@@ -10,6 +10,7 @@ import View from '../View';
 
 class SortView extends View {
   _parentEl = document.querySelector('.profile__form');
+  _errorMessage = 'There was an error sorting Pokémon on the profile.';
 
   /**
    * Adds handler to profile sort buttons

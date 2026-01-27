@@ -10,6 +10,7 @@ import View from '../View.js';
 
 class SortView extends View {
   _parentEl = document.querySelector('.search__form--sort');
+  _errorMessage = 'There was an error sorting Pokémon on the profile.';
 
   /**
    * Adds handler to search sort buttons

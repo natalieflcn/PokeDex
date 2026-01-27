@@ -10,7 +10,7 @@ import View from '../View.js';
 
 class CategoryView extends View {
   _parentEl = document.querySelector('.profile__categories');
-  _errorMessage = 'Invalid category?.';
+  _errorMessage = 'There was an error loading this category.';
 
   /**
    * Adds handler to profile category buttons

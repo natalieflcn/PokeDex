@@ -60,7 +60,6 @@
 ### Goals
 
 - [~] Refactor MVC system architecture implementation
-
   - [~] Offload controller functionality into the services -- follow fat models, skinny controllers guideline
   - [x] Review the relationship between controllers and views and ensure that the publisher-subscriber pattern is being enforced
     - [x] Clean up Views and ensure there is no application logic within them (views should only be responsible for ADDING event handlers)
@@ -88,7 +87,6 @@
 ### Goals
 
 - [~] Refactor MVC system architecture implementation
-
   - [x] Modify code for the overlapping responsiblities currently shared between Model and Controller layers
   - [x] Refactor the current Model structure into domain-driven Models: pokemonModel, favoritesModel, caughtModel
   - [~] Offload controller functionality into the services or models -- follow fat models, skinny controllers guideline
@@ -105,7 +103,6 @@
 ### Goals
 
 - [~] Refactor MVC system architecture implementation
-
   - [~] Offload controller functionality into the services or models -- follow fat models, skinny controllers guideline
   - [x] Improve controller orchestration within profileController
 
@@ -114,7 +111,6 @@
 - [x] Extract duplicate logic from loadPokemonResults and loadQueryResults into a shared service (pokemonService)
 - [x] Review all methods in helpers.js and distribute methods to models or services, where applicable
 - [x] Maintain sorting mode in pokemonState (string), caughtState (boolean, string), and favoriteState (boolean, string) to reinforce url-driven UI state
-
   - [x] Sorting method should be persisted across page reloads, navigating around browser history stack, and accessing modules via UI buttons
   - [x] Default sorting method should be by ID. This should not be reflected in the url (i.e. /search, /profile/category). Only /name (and potential future sorting params) should be reflected in the url.
 
@@ -132,7 +128,6 @@
 ### Goals
 
 - [~] Refactor MVC system architecture implementation
-
   - [~] Offload controller functionality into the services or models -- follow fat models, skinny controllers guideline
   - [~] Improve controller orchestration within searchController
 
@@ -145,27 +140,42 @@
 - Need to automate some searchController functions to run upon 'popstate' event instead of calling them directly
 - Need functionality from clickActivePreview function to run when url changes to update active Pokemon in the search results
 
-## Week: January 19 - January 24
+## Week: January 19 - January 21
 
 ### Goals
 
 - [~] Refactor MVC system architecture implementation
-
   - [x] Offload controller functionality into the services or models -- follow fat models, skinny controllers guideline
   - [x] Improve controller orchestration within searchController
   - ~~[-] Need to automate some searchController functions to run upon 'popstate' event instead of calling them directly~~
   - [x] Need active preview to update and reflect the Pokemon displayed in the Pokemon panel (upon page navigation, url change)
   - [x] Need to add documentation across MVC architecture
   - [x] Merge version-2 branch to main branch for GitHub repo
+  - [x] Centralize and polish error handling
 
 - [x] BUG: Redirecting from /profile to /search no longer works
 - [x] BUG: Platform crashes when querying for Pokémon that does not exist
 - [x] BUG: /profile/favorites and /profile/caught is not immediately rendering newly added Favorties/Caught Pokémon on profile -- page needs to be reloaded for new Pokémon
 - [x] BUG: When switching between Name and Id sort modes on Search module, the sorting is not applied until page reloads or scrolling into further batches of Pokémon
-- [x] BUG: When entering invalid url, the Search module is loaded but url does not reflect this TODO
-- [ ] BUG: Pokémon seems to be loading slower now
-- [x] BUG: Pokémon profile category/sort state out of sync TODO 1
+- [x] BUG: When entering invalid url, the Search module is loaded but url does not reflect this
+- [x] BUG: Pokémon profile category/sort state out of sync
   - [x] Displays favorite Pokémon upon page reload, but visually toggled Caught category
   - [x] When switching between categories, the current sorting mode isn't applied
   - [x] After exiting Profile module and returning, the visually toggled sorting mode (name) is not applied to savedPokemonView
   - [x] When reloading page, the Search module is loaded with Profile module sorting state
+
+## Week: January 22 - January 27
+
+### Goals
+
+- [x] Make it clear that the user is intially loaded onto the Search module
+- [x] Disable buttons that are already active
+- [x] Hyperlink the Pokédex menu buttons to the Pokédex circular lights
+- [ ] Render visual feedback while additional Pokémon is loading
+- [ ] Align the last Pokémon panels to the left, instead of the center
+- [ ] Implement CSS animations across Pokémon panels and menu buttons to create a smoother user experience
+- [ ] Make input field, sort buttons, category buttons sticky at the top of the form
+- [ ] If a Pokémon panel is loaded from the url, the Pokémon should automatically have its name rendered in the input search field (Search Module)
+- [ ] In loadBatch() method, render the subsequent Pokémon in the catch block to create consistent flow of Pokémon
+
+- [x] BUG: Pokédex is rendering error when attempting to render Pokémon sorted by name on Search module

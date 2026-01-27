@@ -21,7 +21,7 @@ class QueryView extends View {
    * @param {Function} handler - Profile controller callback (controlProfilePokemonResults)
    */
   addHandlerQuery(handler) {
-    window.addEventListener('load', handler);
+    ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
 
     this._parentEl.addEventListener('input', handler);
 

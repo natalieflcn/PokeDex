@@ -7,10 +7,11 @@
  * Does not own state, perform data fetching, or implement business logic.
  */
 
-import View from './View.js';
+import View from '../View.js';
 
 class NavView extends View {
   _parentEl = document.querySelector('.container');
+  _errorMessage = 'There was an error loading the navigation bar.';
 
   /**
    * Adds handler to navigation menu buttons.

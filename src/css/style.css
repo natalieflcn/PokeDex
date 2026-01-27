@@ -244,7 +244,21 @@ body {
   padding: 0.5rem 0.5rem 0.3rem;
   background: var(--btn-bg);
   color: var(--text--light);
+  transition:
+    background-color 0.1s ease-in-out,
+    box-shadow 0.3s ease-in-out;
 }
+
+.header__btn {
+  margin-left: 0.6rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  box-shadow: 2px 3px 5px 3px var(--secondary-color--red-gradient--3);
+  transition:
+    background-color 0.1s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+}
+
 /*  caught btn -- 0 0.5rem; */
 .btn--red {
   --btn-bg: linear-gradient(
@@ -306,11 +320,11 @@ body {
   background: var(--btn-highlight);
   color: var(--btn-shadow);
   box-shadow: 0px 0px 4px 2px inset var(--btn-shadow);
-  cursor: pointer;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 /* Button States */
-.btn--active,
 .btn:hover {
   background: var(--btn-highlight);
   box-shadow: 0px 0px 4px 2px inset var(--btn-shadow);
@@ -319,13 +333,13 @@ body {
   cursor: pointer;
 }
 
-.btn--disabled {
+/* .btn--disabled {
   background: var(--text--light);
   box-shadow: 0px 0px 4px 2px inset var(--secondary-color--grey-gradient);
   color: var(--secondary-color--grey);
   font-weight: bold;
   cursor: default;
-}
+} */
 
 /* Header */
 .header {
@@ -341,14 +355,6 @@ body {
   font-size: 2rem;
   letter-spacing: 0.15rem;
   text-shadow: 3px 4px 2px var(--secondary-color--red-gradient--3);
-}
-
-.header__btn {
-  margin-left: 0.6rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  box-shadow: 2px 3px 5px 3px var(--secondary-color--red-gradient--3);
-  transition: background-color 0.1s, box-shadow 0.5s;
 }
 
 .header__btn:first-child {
@@ -385,6 +391,9 @@ body {
   margin-right: 0.5rem;
   border: 0.05rem solid var(--screen-color--dark);
   border-radius: 50%;
+  transition:
+    background-color 0.1s ease-in-out,
+    border 0.1s ease-in-out;
 }
 
 .lights__inner--blue {
@@ -434,8 +443,18 @@ body {
   --lights-highlight: var(--secondary-color--green-gradient--2);
 }
 
-.lights__inner--active {
+.lights__inner:hover {
+  cursor: pointer;
+}
+
+.lights__inner--active,
+.lights__inner:hover {
   border: 1px solid var(--lights-highlight);
+}
+
+.lights__inner--active:hover {
+  cursor: none;
+  pointer-events: none;
 }
 
 /* Divider */
@@ -528,11 +547,11 @@ body {
   padding: 0.25rem 0.4rem;
 }
 
-.search__preview--container,
+/* .search__preview--container,
 .profile__preview--container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   padding: 1rem 0rem;
 }
 
@@ -545,8 +564,9 @@ body {
   height: 9.5rem;
   width: 7.75rem;
   padding: 1rem;
-  margin: 0.75rem 0.4rem;
+  margin: 0.75rem auto;
   border-radius: 5px;
+  justify-self: flex-start;
 
   background-position: 20% 25%;
   background-repeat: no-repeat;
@@ -554,6 +574,38 @@ body {
   background-color: var(--secondary-color--grey);
   background-image: url(../../public/imgs/pokeball.svg);
   background-blend-mode: soft-light;
+  transition: all 0.3s ease-in;
+} */
+
+.search__preview--container,
+.profile__preview--container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  justify-content: start;
+  padding: 1rem 1.3rem;
+}
+
+.search__preview,
+.profile__preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 9.5rem;
+  width: 7.75rem;
+  padding: 1rem;
+  margin: 0.75rem auto;
+  border-radius: 5px;
+  justify-self: flex-start;
+
+  background-position: 20% 25%;
+  background-repeat: no-repeat;
+  background-size: 40%;
+  background-color: var(--secondary-color--grey);
+  background-image: url(../../public/imgs/pokeball.svg);
+  background-blend-mode: soft-light;
+  transition: all 0.3s ease-in;
 }
 
 .search__preview--id,
@@ -1108,18 +1160,25 @@ footer p {
 
 .error {
   display: flex;
-  max-width: 40rem;
-  margin: 0 auto;
-  padding: 5rem 4rem;
+  background-color: var(--secondary-color--grey-gradient);
+  border: 3px solid var(--text--light);
+  border-radius: 3px;
+  justify-content: flex-start;
+  margin: 1rem 1.9rem;
+  padding: 0.85rem 1.25rem;
 }
 
 .error svg {
-  height: 3rem;
-  width: 3rem;
+  align-self: center;
+  height: 5rem;
+  width: 5rem;
+  margin: 1rem 2rem 1rem 1rem;
 }
 
 .error p {
-  font-size: 1.8rem;
+  align-self: center;
+  justify-self: center;
+  font-size: 15px;
   line-height: 1.5;
 }
 

@@ -124,6 +124,6 @@ export const loadPokemon = async function (pokemon) {
 
     panelState.pokemon = await createPokemonObject(data);
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };

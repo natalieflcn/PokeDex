@@ -10,6 +10,7 @@ import View from '../View.js';
 
 class PreviewView extends View {
   _parentEl = document.querySelector('.profile__preview--container');
+  _errorMessage = 'There was an error Pokémon previews for the profile.';
 
   /**
    * Adds handler to redirect user to the Search module and view more details on the selected Pokémon

@@ -18,7 +18,7 @@ class PanelView extends View {
    * @param {Function} handler - Search controller callback (controlSearchPokemonPanel)
    */
   addHandlerRenderPanel(handler) {
-    window.addEventListener('load', handler);
+    ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
   /**

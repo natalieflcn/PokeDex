@@ -69,7 +69,7 @@ export const loadCaughtPokemon = async function () {
 
     return caughtPokemonPreviews;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 

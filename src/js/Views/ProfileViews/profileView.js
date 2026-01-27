@@ -11,6 +11,7 @@ import { PROFILE_IMG, PROFILE_NAME, PROFILE_BIO } from '../../config.js';
 
 class ProfileView extends View {
   _parentEl = document.querySelector('.screen__1--profile');
+  _errorMessage = 'There was an error loading the profile.';
 
   /**
    * Adds handler to trigger rendering of profile details during browser navigation events

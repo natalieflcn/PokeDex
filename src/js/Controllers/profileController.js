@@ -77,7 +77,8 @@ const controlProfilePokemonResults = async function () {
     // Rendering all of the Caught/Favorite Pokémon results if there is no query
     if (!query && pokemonBatch.length > 0)
       savedPokemonView.render(pokemonBatch);
-    else if (!query && pokemonBatch.length < 1) savedPokemonView._clear();
+    else if (!query && pokemonBatch.length < 1) savedPokemonView.renderError();
+    // savedPokemonView._clear();
 
     // Rendering Pokémon query results
     if (query) {
@@ -86,10 +87,17 @@ const controlProfilePokemonResults = async function () {
       const queryBatch = getQueryResults();
 
       if (queryBatch.length > 0) savedPokemonView.render(queryBatch);
-      else savedPokemonView._clear();
+      else
+        savedPokemonView.renderError(
+          `We couldn't find that Pokémon! Add more ${
+            getCaughtRender() ? 'caught' : 'favorite'
+          } Pokémon from the Search module. `
+        );
+      // savedPokemonView._clear();
       //TODO Render message that informs user to begin adding Pokemon to Profile
     }
   } catch (err) {
+    savedPokemonView.renderError();
     console.error(err);
   }
 };

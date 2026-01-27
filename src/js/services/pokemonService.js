@@ -54,7 +54,7 @@ import { getPokemonSortBy } from '../models/pokemonModel';
  */
 export const possiblePokemon = function (substring, pokemonSet) {
   return pokemonSet.filter(pokemon =>
-    capitalize(pokemon.name).startsWith(capitalize(substring))
+    capitalize(pokemon.name).startsWith(capitalize(substring)),
   );
 };
 
@@ -89,11 +89,11 @@ export const loadBatch = function (pokemonBatch) {
 
     return fetchPokemon(pokemonName)
       .then(pokemonDetails =>
-        createPokemonPreviewObject(pokemonName, pokemonDetails)
+        createPokemonPreviewObject(pokemonName, pokemonDetails),
       )
       .catch(err => {
         console.error(`Failed to load Pokémon: ${pokemonName}`, err);
-        return null;
+        // throw err;
       });
   });
 
@@ -147,13 +147,13 @@ export const sortPokemon = function (pokemon, sortParam) {
 export const getPokemonPagination = function (
   pokemonName,
   pokemonResults,
-  loadMoreResults
+  loadMoreResults,
 ) {
   let prev = true,
     next = true;
 
   const currIndex = pokemonResults.findIndex(
-    currPokemon => currPokemon.name === pokemonName
+    currPokemon => currPokemon.name === pokemonName,
   );
 
   if (currIndex === 0) prev = false;

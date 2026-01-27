@@ -11,6 +11,7 @@ import { capitalize } from '../../helpers.js';
 
 class PreviewView extends View {
   _parentEl = document.querySelector('.search__preview--container');
+  _errorMessage = 'There was an error Pokémon previews for the search results.';
 
   /**
    * Adds handler to Pokémon preview panels

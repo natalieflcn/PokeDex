@@ -69,7 +69,7 @@ export const loadFavoritePokemon = async function () {
 
     return favoritePokemonPreviews;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 

@@ -11,8 +11,7 @@ import previewView from './previewView.js';
 
 class savedPokemonView extends View {
   _parentEl = document.querySelector('.profile__preview--container');
-
-  _errorMessage = 'We could not find any caught Pokémon! Please try again.';
+  _errorMessage = 'We could not find any Pokémon! Please try again.';
 
   // Maps an array of previewViews to be rendered and appended to the savedPokemonView
   _generateMarkup() {

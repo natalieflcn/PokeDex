@@ -108,17 +108,17 @@ export const loadPokemonBatch = async function (requestId) {
     // Sort Pokémon by Name or ID according to (global) sort search param
     const sortedPokemon = sortPokemon(
       pokemonState.allPokemonReferences,
-      getPokemonSortBy()
+      getPokemonSortBy(),
     );
 
     const pokemonBatch = sortedPokemon.slice(
       pokemonState.offset,
-      pokemonState.offset + LIMIT
+      pokemonState.offset + LIMIT,
     );
 
     // Fetch Pokémon name, ID, and img to later create Pokémon previews (this stores an array of promises)
     const pokemonBatchDetails = loadBatch(pokemonBatch);
-
+    console.log(pokemonBatchDetails);
     if (isStalePokemonRequest(requestId)) return;
 
     // Resolves the aforementioned array of promises and creates Pokémon preview objects
@@ -149,7 +149,7 @@ export const loadNextPokemon = function (direction, pokemonResults) {
   const activePokemon = getPokemon();
 
   let currIndex = pokemonResults.findIndex(
-    pokemon => pokemon.name === activePokemon.name
+    pokemon => pokemon.name === activePokemon.name,
   );
 
   // To increment/decrement the index based on next/prev direction (passed from button dataset property)
