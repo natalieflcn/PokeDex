@@ -70,7 +70,7 @@ const addPokemonToState = function (pokemon) {
   pokemonState.results.push(...pokemon);
 };
 
-export const updateHasMoreResults = function () {
+export const updateHasMorePokemonResults = function () {
   if (pokemonState.results.length === pokemonState.allPokemonReferences.length)
     pokemonState.hasMoreResults = false;
 };
@@ -130,7 +130,7 @@ export const loadPokemonBatch = async function (requestId) {
     const validPokemonPreviews = filterPokemonPreviews(pokemonPreviews);
 
     addPokemonToState(validPokemonPreviews);
-    updateHasMoreResults();
+    updateHasMorePokemonResults();
 
     pokemonState.offset += LIMIT;
     pokemonState.loading = false;

@@ -9,15 +9,15 @@ export default class View {
   }
 
   // Renders a Pokéball spinner to provide visual feedback while data is loading
-  renderSpinner = function () {
+  renderSpinner = function (append = false) {
     const markup = `
     <div class="spinner__div">
         <img class="spinner__img" src="${pokeball}"/>
     </div>
   `;
 
-    this._clear();
-    this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    if (!append) this._clear();
+    this._parentEl.insertAdjacentHTML('beforeend', markup);
   };
 
   /**
@@ -41,7 +41,7 @@ export default class View {
 
     this._parentEl.insertAdjacentHTML(
       `${append ? 'beforeend' : 'afterbegin'}`,
-      markup
+      markup,
     );
   }
 
@@ -62,5 +62,10 @@ export default class View {
 
     this._clear();
     this._parentEl.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  removeSpinner() {
+    const spinner = this._parentEl.querySelector('.spinner__div');
+    spinner?.remove();
   }
 }

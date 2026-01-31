@@ -171,11 +171,17 @@
 - [x] Make it clear that the user is intially loaded onto the Search module
 - [x] Disable buttons that are already active
 - [x] Hyperlink the Pokédex menu buttons to the Pokédex circular lights
-- [ ] Render visual feedback while additional Pokémon is loading
-- [ ] Align the last Pokémon panels to the left, instead of the center
-- [ ] Implement CSS animations across Pokémon panels and menu buttons to create a smoother user experience
+- [x] Align the last Pokémon panels to the left, instead of the center
+- [x] Implement CSS animations across Pokémon panels and menu buttons to create a smoother user experience
+
+- [x] BUG: Pokédex is rendering error when attempting to render Pokémon sorted by name on Search module
+- [ ] BUG: Loading spinner now renders on the left of preview containers, instead of the center
+
+## Week: January 31 - February 6
+
+### Goals
+
+- [~] Render visual feedback while additional Pokémon is loading
 - [ ] Make input field, sort buttons, category buttons sticky at the top of the form
 - [ ] If a Pokémon panel is loaded from the url, the Pokémon should automatically have its name rendered in the input search field (Search Module)
 - [ ] In loadBatch() method, render the subsequent Pokémon in the catch block to create consistent flow of Pokémon
-
-- [x] BUG: Pokédex is rendering error when attempting to render Pokémon sorted by name on Search module

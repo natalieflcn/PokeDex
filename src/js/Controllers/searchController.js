@@ -18,6 +18,7 @@ import {
   setPokemonSortBy,
   startPokemonRequest,
   storeAllPokemonReferences,
+  updateHasMorePokemonResults,
 } from '../models/pokemonModel.js';
 import {
   getHasMoreQueryResults,
@@ -57,8 +58,7 @@ import panelView from '../views/SearchViews/panelView.js';
 import paginationView from '../views/SearchViews/paginationView.js';
 import { debounce } from '../helpers.js';
 
-// import 'core-js/stable';
-// import 'regenerator-runtime/runtime';
+let infiniteScrollLocked = false;
 
 // SEARCH CONTROLLER FUNCTIONS
 
@@ -118,43 +118,59 @@ const debouncedControlSearchResults = debounce(controlSearchResults, 300);
 
 // To determine the scroll position of the client and to load more data, if necessary
 const controlSearchInfiniteScroll = async function () {
+  if (infiniteScrollLocked) return;
+  infiniteScrollLocked = true;
+
   const query = getQuery();
 
   let requestId,
     loading,
     hasMoreResults,
-    currentBatch,
     loadBatch,
-    updateHasMoreResults;
+    updateHasMoreResults,
+    getCurrentBatch;
 
   if (query) {
     requestId = startPokemonQuery();
-    loading = getQueryLoading();
+    // loading = getQueryLoading();
     hasMoreResults = getHasMoreQueryResults();
     loadBatch = loadQueryBatch;
     updateHasMoreResults = updateHasMoreQueryResults;
+    getCurrentBatch = getQueryCurrentBatch;
   } else {
     requestId = startPokemonRequest();
-    loading = getPokemonLoading();
+    // loading = getPokemonLoading();
     hasMoreResults = getHasMoreResults();
     loadBatch = loadPokemonBatch;
-    updateHasMoreResults = updateHasMoreResults;
+    updateHasMoreResults = updateHasMorePokemonResults;
+    getCurrentBatch = getPokemonCurrentBatch;
   }
 
-  if (loading || !hasMoreResults) return;
+  if (!hasMoreResults) {
+    infiniteScrollLocked = false;
+    return;
+  }
+
+  resultsView.renderSpinner(true);
 
   await loadBatch(requestId);
 
-  currentBatch = query ? getQueryCurrentBatch() : getPokemonCurrentBatch();
+  const currentBatch = getCurrentBatch();
 
-  if (currentBatch.length === 0) {
+  console.log(currentBatch, hasMoreResults);
+
+  resultsView.removeSpinner();
+  // There are no more results to be rendered
+  if (!currentBatch || currentBatch.length === 0) {
     updateHasMoreResults();
-    resultsView.unobserveSentinel();
+    infiniteScrollLocked = false;
     return;
   }
 
   // Return Pokémon data to controlSearchResults
   resultsView.render(currentBatch, true, true);
+
+  infiniteScrollLocked = false;
 };
 
 export const controlSearchRenderSort = function (sort) {
