@@ -7,7 +7,7 @@
  */
 
 import {
-  getHasMoreResults,
+  getHasMorePokemonResults,
   getPokemonCurrentBatch,
   getPokemonLoading,
   getPokemonResults,
@@ -48,7 +48,10 @@ import {
   navResolveSortParams,
   navSanitizeSort,
 } from '../services/navService.js';
-import { getPokemonPagination } from '../services/pokemonService.js';
+import {
+  getPokemonPagination,
+  loadGuaranteedBatch,
+} from '../services/pokemonService.js';
 import navView from '../views/NavViews/navView.js';
 import queryView from '../views/SearchViews/queryView.js';
 import resultsView from '../views/SearchViews/resultsView.js';
@@ -81,19 +84,21 @@ const controlSearchResults = async function () {
       requestId = startPokemonQuery();
 
       storeQueryResults(query, pokemonState.allPokemonReferences);
-      await loadQueryBatch(requestId);
+      await loadGuaranteedBatch(requestId, loadQueryBatch);
+      // await loadQueryBatch(requestId);
 
       pokemonResults = getQueryResults();
       hasMoreResults = getHasMoreQueryResults();
     } else {
-      console.log(getPokemonSortBy());
       requestId = startPokemonRequest();
 
-      await loadPokemonBatch(requestId);
-      console.log('controlsearchresults working');
+      await loadGuaranteedBatch(requestId, loadPokemonBatch);
+      // await loadPokemonBatch(requestId);
+
+      // console.log(pokemonState.results);
       pokemonResults = getPokemonResults();
-      hasMoreResults = getHasMoreQueryResults();
-      console.log(pokemonResults);
+      hasMoreResults = getHasMorePokemonResults();
+      // console.log(pokemonResults);
     }
 
     if (pokemonResults.length < 1) {
@@ -140,7 +145,7 @@ const controlSearchInfiniteScroll = async function () {
   } else {
     requestId = startPokemonRequest();
     // loading = getPokemonLoading();
-    hasMoreResults = getHasMoreResults();
+    hasMoreResults = getHasMorePokemonResults();
     loadBatch = loadPokemonBatch;
     updateHasMoreResults = updateHasMorePokemonResults;
     getCurrentBatch = getPokemonCurrentBatch;
@@ -153,11 +158,11 @@ const controlSearchInfiniteScroll = async function () {
 
   resultsView.renderSpinner(true);
 
-  await loadBatch(requestId);
+  await loadGuaranteedBatch(requestId, loadBatch);
 
   const currentBatch = getCurrentBatch();
 
-  console.log(currentBatch, hasMoreResults);
+  // console.log(currentBatch, hasMoreResults);
 
   resultsView.removeSpinner();
   // There are no more results to be rendered
@@ -194,7 +199,7 @@ export const controlSearchRenderSort = function (sort) {
 const controlSearchSortBtn = async function (sort) {
   const currentURL = new URL(window.location.href);
 
-  console.log(sort);
+  // console.log(sort);
   if (sort === 'name') {
     currentURL.searchParams.set('sort', sort);
     window.history.replaceState({}, '', currentURL);
@@ -203,7 +208,7 @@ const controlSearchSortBtn = async function (sort) {
   }
 
   setPokemonSortBy(sort);
-  console.log(getPokemonSortBy());
+  // console.log(getPokemonSortBy());
 
   controlSearchRenderSort(sort);
   await controlSearchResults();
@@ -278,7 +283,7 @@ const controlSearchPokemonPanel = async function () {
       loadMoreResults = getHasMoreQueryResults();
     } else {
       pokemonResults = getPokemonResults();
-      loadMoreResults = getHasMoreResults();
+      loadMoreResults = getHasMorePokemonResults();
     }
 
     const { prev, next } = getPokemonPagination(
@@ -303,15 +308,17 @@ const controlSearchPokemonPanel = async function () {
  */
 const controlSearchPagination = async function (direction) {
   const query = getQuery();
-  let pokemonResults, loadMoreResults;
+  let pokemonResults, loadMoreResults, requestId;
 
   // Determining if the pokemonResults should reflect the entire Pokémon database or the query results
   if (query) {
+    requestId = startPokemonQuery();
     pokemonResults = getQueryResults();
     loadMoreResults = getHasMoreQueryResults();
   } else {
+    requestId = startPokemonRequest();
     pokemonResults = getPokemonResults();
-    loadMoreResults = getHasMoreResults();
+    loadMoreResults = getHasMorePokemonResults();
   }
 
   // Loading the prev/next Pokémon based on the user-selected direction
@@ -326,8 +333,10 @@ const controlSearchPagination = async function (direction) {
     const numResults = getPokemonResults().length;
 
     // Loading the next appropriate Pokémon batch
-    if (query) await loadQueryBatch();
-    else await loadPokemonBatch();
+    // if (query) await loadQueryBatch();
+    if (query) await loadGuaranteedBatch(requestId, loadQueryBatch);
+    // else await loadPokemonBatch();
+    else await loadGuaranteedBatch(requestId, loadPokemonBatch);
 
     // Updating the Pokémon preview search results
     await controlSearchResults();

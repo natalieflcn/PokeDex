@@ -11,7 +11,7 @@
 import queryState from './state/queryState';
 import {
   filterPokemonPreviews,
-  loadBatch,
+  loadBatchDetails,
   loadPokemonPreviews,
   possiblePokemon,
   sortPokemon,
@@ -74,7 +74,7 @@ const addQueryPokemonToState = function (pokemon) {
 };
 
 export const updateHasMoreQueryResults = function () {
-  if (queryState.queryResults.length === queryState.queryReferences.length)
+  if (queryState.offset === queryState.queryReferences.length)
     queryState.hasMoreResults = false;
 };
 
@@ -100,7 +100,7 @@ export const storeQueryResults = function (query, querySet) {
  *
  * @param {number} requestId - Id of current request being made
  */
-export const loadQueryBatch = async function (requestId) {
+export const loadQueryBatch = async function (requestId, batchSize = LIMIT) {
   queryState.loading = true;
   queryState.currentBatch = [];
 
@@ -109,11 +109,11 @@ export const loadQueryBatch = async function (requestId) {
 
   const pokemonBatch = sortedPokemon.slice(
     queryState.offset,
-    queryState.offset + LIMIT
+    queryState.offset + batchSize,
   );
 
   // Fetch Pokémon name, ID, and img to later create Pokémon previews (this stores an array of promises)
-  const pokemonBatchDetails = loadBatch(pokemonBatch);
+  const pokemonBatchDetails = loadBatchDetails(pokemonBatch);
 
   if (isStalePokemonQuery(requestId)) return;
 
@@ -128,8 +128,10 @@ export const loadQueryBatch = async function (requestId) {
   addQueryPokemonToState(validPokemonPreviews);
   updateHasMoreQueryResults();
 
-  queryState.offset += LIMIT;
+  queryState.offset += batchSize;
   queryState.loading = false;
+
+  return validPokemonPreviews;
 };
 
 export const resetQueryState = function () {

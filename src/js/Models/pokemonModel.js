@@ -13,7 +13,7 @@ import pokemonState from './state/pokemonState';
 import { getPokemon } from './panelModel';
 import {
   filterPokemonPreviews,
-  loadBatch,
+  loadBatchDetails,
   loadPokemonPreviews,
   sortPokemon,
 } from '../services/pokemonService';
@@ -45,7 +45,7 @@ export const getPokemonCurrentBatch = () => pokemonState.currentBatch;
 export const getPokemonLoading = () => pokemonState.loading;
 
 // To determine whether or not there are additional Pokémon (pokemonState) results that can be rendered
-export const getHasMoreResults = () => pokemonState.hasMoreResults;
+export const getHasMorePokemonResults = () => pokemonState.hasMoreResults;
 
 export const getPokemonSortBy = () => pokemonState.sortBy;
 
@@ -71,7 +71,7 @@ const addPokemonToState = function (pokemon) {
 };
 
 export const updateHasMorePokemonResults = function () {
-  if (pokemonState.results.length === pokemonState.allPokemonReferences.length)
+  if (pokemonState.offset === pokemonState.allPokemonReferences.length)
     pokemonState.hasMoreResults = false;
 };
 
@@ -98,12 +98,13 @@ export const storeAllPokemonReferences = async function () {
  *
  * @param {number} requestId - Id of current request being made
  */
-export const loadPokemonBatch = async function (requestId) {
+export const loadPokemonBatch = async function (requestId, batchSize = LIMIT) {
   try {
     pokemonState.loading = true;
-    pokemonState.currentBatch = [];
 
-    console.log(getPokemonSortBy());
+    if (batchSize === LIMIT) pokemonState.currentBatch = [];
+
+    // console.log('running');
 
     // Sort Pokémon by Name or ID according to (global) sort search param
     const sortedPokemon = sortPokemon(
@@ -113,12 +114,12 @@ export const loadPokemonBatch = async function (requestId) {
 
     const pokemonBatch = sortedPokemon.slice(
       pokemonState.offset,
-      pokemonState.offset + LIMIT,
+      pokemonState.offset + batchSize,
     );
 
     // Fetch Pokémon name, ID, and img to later create Pokémon previews (this stores an array of promises)
-    const pokemonBatchDetails = loadBatch(pokemonBatch);
-    console.log(pokemonBatchDetails);
+    const pokemonBatchDetails = loadBatchDetails(pokemonBatch);
+    // console.log(pokemonBatchDetails);
     if (isStalePokemonRequest(requestId)) return;
 
     // Resolves the aforementioned array of promises and creates Pokémon preview objects
@@ -128,12 +129,17 @@ export const loadPokemonBatch = async function (requestId) {
 
     // Removes the invalid (null, non-existent) entries from the array of Pokémon preview obejcts
     const validPokemonPreviews = filterPokemonPreviews(pokemonPreviews);
-
+    // console.log(validPokemonPreviews);
     addPokemonToState(validPokemonPreviews);
+    // console.log(validPokemonPreviews.length);
     updateHasMorePokemonResults();
 
-    pokemonState.offset += LIMIT;
+    pokemonState.offset += batchSize;
+    console.log('pokemon offset ', pokemonState.offset);
     pokemonState.loading = false;
+    console.log('pokemon state ', pokemonState.results);
+
+    return validPokemonPreviews;
   } catch (err) {
     throw err;
   }

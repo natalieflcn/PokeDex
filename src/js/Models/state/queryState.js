@@ -4,7 +4,6 @@ const queryState = {
   loading: false,
   currentQueryId: 0,
   query: '',
-  queryReferences: [],
   queryResults: [],
   currentBatch: [],
   hasMoreResults: true,

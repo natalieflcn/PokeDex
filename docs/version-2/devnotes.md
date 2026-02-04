@@ -14,15 +14,15 @@
 
 - [x] Ensure the current file system properly reflects the MVC model before building off this system architecture
 - [ ] Make the platform responsive for tablet and mobile users
-- [ ] Make it clear that the user is intially loaded onto the Search module
-- [ ] Disable buttons that are already active
-- [ ] Hyperlink the Pokédex menu buttons to the Pokédex circular lights
+- [x] Make it clear that the user is intially loaded onto the Search module
+- [x] Disable buttons that are already active
+- [x] Hyperlink the Pokédex menu buttons to the Pokédex circular lights
 - [x] Improve the loading speed of the Pokémon from the PokéAPI
-- [ ] Render visual feedback while additional Pokémon is loading
+- [x] Render visual feedback while additional Pokémon is loading
 - [x] Define the routing for pages while the user is navigating between modules
-- [ ] Align the last Pokémon panels to the left, instead of the center
+- [x] Align the last Pokémon panels to the left, instead of the center
 - [ ] If the Pokémon data is already loaded into cache, do not render loading spinner
-- [ ] Implement CSS animations across Pokémon panels and menu buttons to create a smoother user experience
+- [x] Implement CSS animations across Pokémon panels and menu buttons to create a smoother user experience
 - [ ] Use LocalStorageAPI to cache Pokémon previews and Pokémon details into local storage
 - [ ] Make input field, sort buttons, category buttons sticky at the top of the form
 - [ ] If a Pokémon panel is loaded from the url, the Pokémon should automatically have its name rendered in the input search field (Search Module)

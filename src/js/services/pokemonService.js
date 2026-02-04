@@ -8,8 +8,13 @@
  */
 
 import { AJAX, capitalize } from '../helpers';
-import { MAIN_API_URL } from '../config';
-import { getPokemonSortBy } from '../models/pokemonModel';
+import { LIMIT, MAIN_API_URL } from '../config';
+import {
+  getHasMorePokemonResults,
+  getPokemonSortBy,
+  loadPokemonBatch,
+} from '../models/pokemonModel';
+import { getHasMoreQueryResults } from '../models/queryModel';
 
 /**
  * ======================
@@ -77,13 +82,35 @@ const createPokemonPreviewObject = function (name, details) {
   };
 };
 
+//TODO Write documentation
+export const loadGuaranteedBatch = async function (requestId, loadBatch) {
+  console.log('running LOADGUARANTEEDBATCH');
+  const pokemonPreviews = [];
+  const hasMoreResults =
+    loadBatch === loadPokemonBatch
+      ? getHasMorePokemonResults()
+      : getHasMoreQueryResults();
+
+  while (pokemonPreviews.length < LIMIT && hasMoreResults) {
+    const batchSize = LIMIT - pokemonPreviews.length;
+    console.log('current pokemon batchsize ', batchSize);
+
+    const loadedPokemon = await loadBatch(requestId, batchSize);
+
+    pokemonPreviews.push(...loadedPokemon);
+  }
+
+  console.log(pokemonPreviews);
+  return pokemonPreviews;
+};
+
 /**
  * Loads Pokémon details for the next batch of Pokémon in the specified set. Maps each Pokémon into an array of PokemonPreview objects to be created.
  *
  * @param {Pokemon[]} pokemonSet - Pokémon dataset (All Pokémon, Caught Pokémon, or Favorite Pokémon)
  * @returns {PokemonPreviewRequest[]}
  */
-export const loadBatch = function (pokemonBatch) {
+export const loadBatchDetails = function (pokemonBatch) {
   const pokemonBatchDetails = pokemonBatch.map(pokemon => {
     const pokemonName = pokemon.name || pokemon;
 
@@ -92,7 +119,10 @@ export const loadBatch = function (pokemonBatch) {
         createPokemonPreviewObject(pokemonName, pokemonDetails),
       )
       .catch(err => {
-        console.error(`Failed to load Pokémon: ${pokemonName}`, err);
+        console.error(
+          `Failed to load Pokémon: ${pokemonName}. Will attempt to load next Pokémon instead.`,
+          err,
+        );
         // throw err;
       });
   });
@@ -116,7 +146,6 @@ export const loadPokemonPreviews = async pokemonRequests => {
  */
 export const filterPokemonPreviews = pokemonPreviews =>
   pokemonPreviews.filter(Boolean);
-
 /**
  * Sorts the specified Pokémon set according to the sort search parameters defined in the URL.
  *

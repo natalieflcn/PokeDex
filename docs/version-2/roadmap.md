@@ -16,14 +16,14 @@
 
 ### Phase 1: Patching Version One of Pokédex
 
-- [~] Review codebase from Version 1 and polish the implementation of the MVC architecture
+- [x] Review codebase from Version 1 and polish the implementation of the MVC architecture
 - [ ] Make the platform responsive for smaller devices
-- [ ] Patch lingering bugs from Version 1
+- [~] Patch lingering bugs from Version 1
 
 ### Phase 2: Improving the Existing Functionality
 
-- [ ] Load the Pokémon more smoothly and quickly from PokéAPI into search results
-- [ ] Implement feedback for users while search results are loading in the background
+- [x] Load the Pokémon more smoothly and quickly from PokéAPI into search results
+- [x] Implement feedback for users while search results are loading in the background
 - [x] Define the routing for pages when user is switching between different views
 
 ### Phase 3: Introducing New Features to Existing Modules

@@ -175,13 +175,24 @@
 - [x] Implement CSS animations across Pokémon panels and menu buttons to create a smoother user experience
 
 - [x] BUG: Pokédex is rendering error when attempting to render Pokémon sorted by name on Search module
-- [ ] BUG: Loading spinner now renders on the left of preview containers, instead of the center
+- [x] BUG: Loading spinner now renders on the left of preview containers, instead of the center
 
 ## Week: January 31 - February 6
 
 ### Goals
 
-- [~] Render visual feedback while additional Pokémon is loading
+- [x] Render visual feedback while additional Pokémon is loading
 - [ ] Make input field, sort buttons, category buttons sticky at the top of the form
+
+- [x] Render the subsequent Pokémon (if current Pokémon request fails) to create consistent flow of Pokémon
+  - [x] Fix the number of Pokémon panels rendered during general Name/ID queries; when a Pokémon has invalid data from the PokéAPI, that panel is omitted instead of being used for the subsequent Pokémon (resulting in one or two less panels, making the visual design skewed and inconsistent)
+  - [x] Use the offset to determine if more results are available, not the length of Pokemon results (doesn't include failed references)
 - [ ] If a Pokémon panel is loaded from the url, the Pokémon should automatically have its name rendered in the input search field (Search Module)
-- [ ] In loadBatch() method, render the subsequent Pokémon in the catch block to create consistent flow of Pokémon
+- [ ] Create "Types of Pokémon Favorited" on Profile module, that renders when accessing Favorite Pokémon
+- [ ] Create a personal Pokémon Trainer GIF to use on the Profile page
+- [ ] Create "Page Not Found" page, softly redirect them to the Search module
+- [ ] Create error pages for the user, softly redirect them to Search module
+  - [ ] Operational error page (i.e. no internet, request timeout)
+  - [ ] Programmatic error page (i.e. Internal Server Error)
+
+- BUG: Querying for Pokémon results in infinite loop

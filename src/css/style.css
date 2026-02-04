@@ -524,6 +524,7 @@ body {
   width: 47%;
   background-color: var(--screen-color--dark);
   overflow-y: auto;
+
   scrollbar-color: var(--secondary-color--grey);
 }
 
@@ -536,9 +537,15 @@ body {
   /* display: flex;
   flex-direction: column;
   justify-content: space-evenly; */
-  position: sticky;
+
+  position: relative;
+
   padding: 1.5rem;
   color: var(--text--light);
+}
+
+.screen__1--search {
+  display: block;
 }
 
 /* Shared Styles */
@@ -1213,8 +1220,9 @@ footer p {
   .search__form {
     display: flex;
     position: sticky;
+
     top: 0;
-    z-index: 3;
+    z-index: 10;
   }
 
   .search__form--sort {
