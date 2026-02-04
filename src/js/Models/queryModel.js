@@ -74,7 +74,10 @@ const addQueryPokemonToState = function (pokemon) {
 };
 
 export const updateHasMoreQueryResults = function () {
-  if (queryState.offset === queryState.queryReferences.length)
+  console.log('queryState offset ', queryState.offset);
+  console.log('queryState references ', queryState.queryReferences);
+
+  if (queryState.offset >= queryState.queryReferences.length)
     queryState.hasMoreResults = false;
 };
 

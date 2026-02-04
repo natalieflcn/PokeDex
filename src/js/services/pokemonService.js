@@ -15,6 +15,7 @@ import {
   loadPokemonBatch,
 } from '../models/pokemonModel';
 import { getHasMoreQueryResults } from '../models/queryModel';
+import queryState from '../models/state/queryState';
 
 /**
  * ======================
@@ -85,19 +86,24 @@ const createPokemonPreviewObject = function (name, details) {
 //TODO Write documentation
 export const loadGuaranteedBatch = async function (requestId, loadBatch) {
   console.log('running LOADGUARANTEEDBATCH');
+
   const pokemonPreviews = [];
   const hasMoreResults =
     loadBatch === loadPokemonBatch
-      ? getHasMorePokemonResults()
-      : getHasMoreQueryResults();
+      ? getHasMorePokemonResults
+      : getHasMoreQueryResults;
 
-  while (pokemonPreviews.length < LIMIT && hasMoreResults) {
+  while (pokemonPreviews.length < LIMIT && hasMoreResults()) {
     const batchSize = LIMIT - pokemonPreviews.length;
     console.log('current pokemon batchsize ', batchSize);
 
     const loadedPokemon = await loadBatch(requestId, batchSize);
 
     pokemonPreviews.push(...loadedPokemon);
+
+    console.log('queryState offset ', queryState.offset);
+    console.log('queryState references ', queryState.queryReferences);
+    console.log(hasMoreResults);
   }
 
   console.log(pokemonPreviews);
