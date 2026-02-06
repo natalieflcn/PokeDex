@@ -38,6 +38,8 @@ import { LIMIT, POKEMON_NAMES_API_URL } from '../config';
  * ======================
  */
 
+export const getLoadedReferences = () => pokemonState.loadedReferences;
+
 export const getPokemonResults = () => pokemonState.results;
 
 export const getPokemonCurrentBatch = () => pokemonState.currentBatch;
@@ -77,6 +79,8 @@ export const updateHasMorePokemonResults = function () {
 
 // To store all Pokémon names and IDs in our state (This shallow dataset will later be referenced to fetch more Pokémon details as needed)
 export const storeAllPokemonReferences = async function () {
+  if (getLoadedReferences()) return;
+
   const pokeAPIData = await AJAX(`${POKEMON_NAMES_API_URL}`);
   const { results } = pokeAPIData;
 

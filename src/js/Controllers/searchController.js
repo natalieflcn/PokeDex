@@ -8,6 +8,7 @@
 
 import {
   getHasMorePokemonResults,
+  getLoadedReferences,
   getPokemonCurrentBatch,
   getPokemonLoading,
   getPokemonResults,
@@ -264,6 +265,7 @@ const controlSearchPokemonPanel = async function () {
     // Retrieve Pokémon name from URL
     const pokemonName = window.location.pathname.split('/search/')[1];
 
+    console.log(Boolean(getPokemon()));
     if (!pokemonName) return;
 
     // Load Pokémon (data) panel details
@@ -296,7 +298,7 @@ const controlSearchPokemonPanel = async function () {
     if (!prev) paginationView.disablePaginationBtn('prev');
     if (!next) paginationView.disablePaginationBtn('next');
   } catch (err) {
-    panelView.renderError();
+    panelView._clear();
     console.error(err);
   }
 };
@@ -397,11 +399,17 @@ const controlSearchFavoriteBtn = function () {
 };
 
 // To reset the navView and load the Search module when user is redirected from Profile module
-export const controlSearchRedirect = async function () {
+export const controlSearchRedirect = async function (pokemon) {
+  controlSearchLoadQuery();
+  queryView.setQuery(pokemon);
+  setQuery(pokemon);
+
   navView.resetNav();
   navView.toggleNavSearch();
-  controlSearchLoadActivePreview();
+
+  resultsView.renderSpinner();
   await controlSearchPokemonPanel();
+  await controlSearchResults();
 };
 
 // To initialize all Pokémon references to store in our state (pokemonState)
@@ -412,11 +420,12 @@ const initPokemonData = async function () {
 /**
  * Initializes Search Controller event handlers and attach them to Search Views
  */
-export const controlSearchInit = function () {
-  initPokemonData();
+export const controlSearchInit = async function () {
+  if (getLoadedReferences()) return;
+
+  await initPokemonData();
 
   queryView.addHandlerQuery(debouncedControlSearchResults);
-  queryView.addHandlerLoadQuery(controlSearchLoadQuery);
 
   sortView.addHandlerSortBtn(controlSearchSortBtn);
   sortView.addHandlerSortLoad(controlSearchSortLoad);

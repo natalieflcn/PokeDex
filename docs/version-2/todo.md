@@ -187,12 +187,24 @@
 - [x] Render the subsequent Pokémon (if current Pokémon request fails) to create consistent flow of Pokémon
   - [x] Fix the number of Pokémon panels rendered during general Name/ID queries; when a Pokémon has invalid data from the PokéAPI, that panel is omitted instead of being used for the subsequent Pokémon (resulting in one or two less panels, making the visual design skewed and inconsistent)
   - [x] Use the offset to determine if more results are available, not the length of Pokemon results (doesn't include failed references)
-- [ ] If a Pokémon panel is loaded from the url, the Pokémon should automatically have its name rendered in the input search field (Search Module)
+- [x] If a Pokémon panel is loaded from the url, the Pokémon should automatically have its name rendered in the input search field (Search Module)
+  - [x] The Pokémon should only be automatically loaded into the URL if it was redirected from the Profile
+  - [x] If there was a query, the query should just be automatically loaded when page is refreshed or navigated back to
+  - [x] If there was no query, but a Pokemon was selected, the main search results should still appear while the Pokemon panel details are displayed
+
 - [ ] Create "Types of Pokémon Favorited" on Profile module, that renders when accessing Favorite Pokémon
-- [ ] Create a personal Pokémon Trainer GIF to use on the Profile page
 - [ ] Create "Page Not Found" page, softly redirect them to the Search module
 - [ ] Create error pages for the user, softly redirect them to Search module
   - [ ] Operational error page (i.e. no internet, request timeout)
   - [ ] Programmatic error page (i.e. Internal Server Error)
+- [ ] Create a personal Pokémon Trainer GIF to use on the Profile page
 
 - [x] BUG: Querying for Pokémon results in infinite loop
+- [x] BUG: Sometimes refreshing the page will immediately result in "Pokémon Not Found!" error and won't proceed to fetch results. Not sure why.
+
+### Notes
+
+- Could hyperlink 'Pokémon Caught' to all caught Pokémon, 'Pokémon Favorited' to all favorited Pokémon'
+- Could click on a Pokémon type to view all caught/favorited Pokémon of that type
+- When viewing a subset of a type of Pokémon, a 'View All' button should appear to allow user to return to viewing all caught/favorited Pokémon
+- Routing should reflect the types of Pokémon being accessed (i.e. profile/caught/fire)

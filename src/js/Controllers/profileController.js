@@ -91,7 +91,7 @@ const controlProfilePokemonResults = async function () {
         savedPokemonView.renderError(
           `We couldn't find that Pokémon! Add more ${
             getCaughtRender() ? 'caught' : 'favorite'
-          } Pokémon from the Search module. `
+          } Pokémon from the Search module. `,
         );
       // savedPokemonView._clear();
       //TODO Render message that informs user to begin adding Pokemon to Profile
@@ -113,12 +113,12 @@ const controlProfileClickPreview = async function (pokemon) {
   window.history.pushState(
     { page: `search/${pokemonName}` },
     '',
-    `/search/${pokemonName}`
+    `/search/${pokemonName}`,
   );
 
   savedPokemonView._clear();
 
-  await controlSearchRedirect();
+  await controlSearchRedirect(pokemon);
 };
 
 // RENDERING AND ROUTING PROFILE CATEGORY (Caught/Favorite)
@@ -176,7 +176,7 @@ const controlProfileCategoryLoad = function () {
     window.history.replaceState(
       { page: `profile/${category}` },
       '',
-      `/profile/${category}`
+      `/profile/${category}`,
     );
   }
 };

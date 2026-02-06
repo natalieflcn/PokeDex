@@ -96,7 +96,7 @@ export const loadGuaranteedBatch = async function (requestId, loadBatch) {
 
     const loadedPokemon = await loadBatch(requestId, batchSize);
 
-    pokemonPreviews.push(...loadedPokemon);
+    pokemonPreviews.push(...(loadedPokemon ?? []));
   }
 
   return pokemonPreviews;
