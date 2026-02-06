@@ -20,6 +20,7 @@ class ResultsView extends View {
   addHandlerLoadResults(handler) {
     this._parentEl.addEventListener('popstate', handler);
   }
+
   /**
    * Observes the sentinel element for infinite scroll.
    * Triggers loading more results when sentinel enters viewport.
@@ -32,8 +33,8 @@ class ResultsView extends View {
         entry => {
           if (entry.isIntersecting) handler();
         },
-        { root: null, threshold: 0.01, rootMargin: '100%' }
-      )
+        { root: null, threshold: 0.01, rootMargin: '100%' },
+      ),
     );
 
     this._observer.observe(this._sentinel);

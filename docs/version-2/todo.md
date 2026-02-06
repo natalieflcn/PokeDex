@@ -195,4 +195,4 @@
   - [ ] Operational error page (i.e. no internet, request timeout)
   - [ ] Programmatic error page (i.e. Internal Server Error)
 
-- BUG: Querying for Pokémon results in infinite loop
+- [x] BUG: Querying for Pokémon results in infinite loop

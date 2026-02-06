@@ -32,9 +32,17 @@ class QueryView extends View {
     });
   }
 
+  addHandlerLoadQuery(handler) {
+    ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
+  }
+
   // Returns the current value of the search input field
   getQuery() {
     return this._parentEl.value;
+  }
+
+  setQuery(query) {
+    this._parentEl.value = query;
   }
 }
 

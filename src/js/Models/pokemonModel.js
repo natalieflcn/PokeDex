@@ -135,9 +135,8 @@ export const loadPokemonBatch = async function (requestId, batchSize = LIMIT) {
     updateHasMorePokemonResults();
 
     pokemonState.offset += batchSize;
-    console.log('pokemon offset ', pokemonState.offset);
+
     pokemonState.loading = false;
-    console.log('pokemon state ', pokemonState.results);
 
     return validPokemonPreviews;
   } catch (err) {

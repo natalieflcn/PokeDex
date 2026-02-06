@@ -3,6 +3,8 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 module.exports = {
   mode: 'development',
   entry: './src/js/controllers/appController.js',
@@ -22,7 +24,10 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        use: [
+          isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+        ],
       },
       {
         test: /\.js$/,
@@ -42,7 +47,7 @@ module.exports = {
   },
   plugins: [
     new FaviconsWebpackPlugin({ logo: 'public/imgs/logo.svg' }),
-    new HtmlWebpackPlugin({ template: './dist/index.html' }),
-    new MiniCssExtractPlugin(),
+    new HtmlWebpackPlugin({ template: './public/index.html' }),
+    ...(isDev ? [] : [new MiniCssExtractPlugin()]),
   ],
 };

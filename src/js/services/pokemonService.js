@@ -85,8 +85,6 @@ const createPokemonPreviewObject = function (name, details) {
 
 //TODO Write documentation
 export const loadGuaranteedBatch = async function (requestId, loadBatch) {
-  console.log('running LOADGUARANTEEDBATCH');
-
   const pokemonPreviews = [];
   const hasMoreResults =
     loadBatch === loadPokemonBatch
@@ -95,18 +93,12 @@ export const loadGuaranteedBatch = async function (requestId, loadBatch) {
 
   while (pokemonPreviews.length < LIMIT && hasMoreResults()) {
     const batchSize = LIMIT - pokemonPreviews.length;
-    console.log('current pokemon batchsize ', batchSize);
 
     const loadedPokemon = await loadBatch(requestId, batchSize);
 
     pokemonPreviews.push(...loadedPokemon);
-
-    console.log('queryState offset ', queryState.offset);
-    console.log('queryState references ', queryState.queryReferences);
-    console.log(hasMoreResults);
   }
 
-  console.log(pokemonPreviews);
   return pokemonPreviews;
 };
 

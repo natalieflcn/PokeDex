@@ -68,15 +68,16 @@ export const getHasMoreQueryResults = function () {
   return queryState.hasMoreResults;
 };
 
+export const setQuery = function (query) {
+  queryState.query = query;
+};
+
 const addQueryPokemonToState = function (pokemon) {
   queryState.currentBatch.push(...pokemon);
   queryState.queryResults.push(...pokemon);
 };
 
 export const updateHasMoreQueryResults = function () {
-  console.log('queryState offset ', queryState.offset);
-  console.log('queryState references ', queryState.queryReferences);
-
   if (queryState.offset >= queryState.queryReferences.length)
     queryState.hasMoreResults = false;
 };

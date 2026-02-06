@@ -28,6 +28,7 @@ import {
   getQueryResults,
   loadQueryBatch,
   resetQueryState,
+  setQuery,
   startPokemonQuery,
   storeQueryResults,
   updateHasMoreQueryResults,
@@ -300,6 +301,16 @@ const controlSearchPokemonPanel = async function () {
   }
 };
 
+const controlSearchLoadQuery = function () {
+  const query = window.location.pathname.split('/search/')[1];
+
+  console.log(query);
+  if (!query) return;
+
+  setQuery(query);
+  queryView.setQuery(query);
+};
+
 /**
  * Manages pagination buttons on Pokémon panel.
  * Determines if pagination buttons should be enabled/disabled based on length of Pokémon results.
@@ -405,6 +416,8 @@ export const controlSearchInit = function () {
   initPokemonData();
 
   queryView.addHandlerQuery(debouncedControlSearchResults);
+  queryView.addHandlerLoadQuery(controlSearchLoadQuery);
+
   sortView.addHandlerSortBtn(controlSearchSortBtn);
   sortView.addHandlerSortLoad(controlSearchSortLoad);
   previewView.addHandlerClickActivePreview(controlSearchClickPreview);
