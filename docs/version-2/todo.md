@@ -189,10 +189,10 @@
   - [x] Use the offset to determine if more results are available, not the length of Pokemon results (doesn't include failed references)
 - [x] If a Pokémon panel is loaded from the url, the Pokémon should automatically have its name rendered in the input search field (Search Module)
   - [x] The Pokémon should only be automatically loaded into the URL if it was redirected from the Profile
-  - [x] If there was a query, the query should just be automatically loaded when page is refreshed or navigated back to
-  - [x] If there was no query, but a Pokemon was selected, the main search results should still appear while the Pokemon panel details are displayed
+  - [x] If there was a query, the query should just be automatically loaded when page is navigated back to
 
 - [ ] Create "Types of Pokémon Favorited" on Profile module, that renders when accessing Favorite Pokémon
+- [ ] When querying for a new Pokémon, the Pokémon panel should be wiped clean
 - [ ] Create "Page Not Found" page, softly redirect them to the Search module
 - [ ] Create error pages for the user, softly redirect them to Search module
   - [ ] Operational error page (i.e. no internet, request timeout)
@@ -201,6 +201,7 @@
 
 - [x] BUG: Querying for Pokémon results in infinite loop
 - [x] BUG: Sometimes refreshing the page will immediately result in "Pokémon Not Found!" error and won't proceed to fetch results. Not sure why.
+- [ ] BUG: Pokémon pagination buttons are no longer disabled
 
 ### Notes
 

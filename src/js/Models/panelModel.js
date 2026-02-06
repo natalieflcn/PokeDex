@@ -43,6 +43,8 @@ import { DETAILS_API_URL, MAIN_API_URL, MOVE_TYPE_URL } from '../config';
 
 export const getPokemon = () => panelState.pokemon;
 
+export const clearPokemon = () => (panelState.pokemon = {});
+
 /**
  * To create a detailed Pokémon Panel object after parsing multiple pieces of PokéAPI data
  *
@@ -79,7 +81,7 @@ export const createPokemonObject = async function (data) {
 
   // Data loaded from DETAILS_API_URL (data[1])
   const language = data[1].flavor_text_entries.find(
-    entry => entry.language.name === 'en'
+    entry => entry.language.name === 'en',
   );
   const flavor_text = language?.flavor_text || data[1].flavor_text;
 
@@ -90,7 +92,7 @@ export const createPokemonObject = async function (data) {
 
   // Data fetched from favoriteState
   const favorite = favoriteState.favoritePokemon.some(
-    pokemon => pokemon.id === id
+    pokemon => pokemon.id === id,
   )
     ? true
     : false;

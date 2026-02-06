@@ -39,6 +39,7 @@ export default class View {
 
     if (!append) this._clear();
 
+    console.log(this._parentEl);
     this._parentEl.insertAdjacentHTML(
       `${append ? 'beforeend' : 'afterbegin'}`,
       markup,

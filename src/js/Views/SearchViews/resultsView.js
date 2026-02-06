@@ -18,7 +18,7 @@ class ResultsView extends View {
   _observer = null;
 
   addHandlerLoadResults(handler) {
-    this._parentEl.addEventListener('popstate', handler);
+    this._parentEl.addEventListener('load', handler);
   }
 
   /**

@@ -36,6 +36,8 @@ import { persistData } from '../helpers';
 
 export const getFavoritePokemon = () => favoriteState.favoritePokemon;
 
+export const getTypesPokemonFavorited = () => favoriteState.typesFavorited;
+
 export const getFavoriteRender = () => favoriteState.profile.render;
 
 export const getFavoriteSortBy = () => favoriteState.profile.sortBy;
@@ -58,7 +60,7 @@ export const loadFavoritePokemon = async function () {
   try {
     const favoritePokemon = sortPokemon(
       favoriteState.favoritePokemon,
-      getFavoriteSortBy()
+      getFavoriteSortBy(),
     );
 
     for (const pokemon of favoritePokemon) {
@@ -84,13 +86,14 @@ export const addFavoritePokemon = function (newPokemon) {
   // Prevents user from adding duplicate Pokémon, if already rendered from local storage
   if (
     favoriteState.favoritePokemon.find(
-      pokemon => pokemon.name === newPokemon.name
+      pokemon => pokemon.name === newPokemon.name,
     )
   )
     return;
 
   favoriteState.favoritePokemon.push(newPokemon);
   persistData('favoritePokemon', favoriteState.favoritePokemon);
+  updateTypesPokemonFavorited();
 };
 
 /**
@@ -102,12 +105,44 @@ export const removeFavoritePokemon = function (pokemon) {
   pokemon.favorite = false;
 
   const index = favoriteState.favoritePokemon.findIndex(
-    currPokemon => currPokemon.name === pokemon.name
+    currPokemon => currPokemon.name === pokemon.name,
   );
 
   favoriteState.favoritePokemon.splice(index, 1);
 
   persistData('favoritePokemon', favoriteState.favoritePokemon);
+  updateTypesPokemonFavorited();
+};
+
+const resetTypesPokemonFavorited = function () {
+  favoriteState.typesFavorited = {
+    Normal: 0,
+    Fire: 0,
+    Water: 0,
+    Electric: 0,
+    Grass: 0,
+    Ice: 0,
+    Fighting: 0,
+    Poison: 0,
+    Ground: 0,
+    Flying: 0,
+    Psychic: 0,
+    Bug: 0,
+    Rock: 0,
+    Ghost: 0,
+    Dragon: 0,
+    Dark: 0,
+    Steel: 0,
+    Fairy: 0,
+  };
+};
+
+export const updateTypesPokemonFavorited = function () {
+  resetTypesPokemonFavorited();
+
+  favoriteState.favoritePokemon
+    .flatMap(pokemon => pokemon.types)
+    .forEach(type => favoriteState.typesFavorited[type]++);
 };
 
 // To check local storage and update Favorite Pokémon (favoriteState) with persisted data

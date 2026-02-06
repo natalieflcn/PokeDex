@@ -85,6 +85,10 @@ const controlSearchResults = async function () {
     if (query) {
       requestId = startPokemonQuery();
 
+      panelView._clear();
+
+      window.history.replaceState({ page: `search` }, '', `/search`);
+
       storeQueryResults(query, pokemonState.allPokemonReferences);
       await loadGuaranteedBatch(requestId, loadQueryBatch);
       // await loadQueryBatch(requestId);
@@ -94,6 +98,9 @@ const controlSearchResults = async function () {
     } else {
       requestId = startPokemonRequest();
 
+      // window.history.replaceState({ page: `search` }, '', `/search`);
+
+      // await controlSearchPokemonPanel();
       await loadGuaranteedBatch(requestId, loadPokemonBatch);
       // await loadPokemonBatch(requestId);
 
@@ -263,15 +270,20 @@ const controlSearchLoadActivePreview = function () {
 const controlSearchPokemonPanel = async function () {
   try {
     // Retrieve Pokémon name from URL
+
     const pokemonName = window.location.pathname.split('/search/')[1];
 
-    console.log(Boolean(getPokemon()));
     if (!pokemonName) return;
 
     // Load Pokémon (data) panel details
     panelView.renderSpinner();
 
     await loadPokemon(pokemonName);
+
+    // if (window.location.pathname.split('/search/')[1] !== pokemonName) {
+    //   panelView._clear();
+    //   return;
+    // }
 
     // Render Pokémon panel
     const pokemon = getPokemon();
@@ -401,6 +413,7 @@ const controlSearchFavoriteBtn = function () {
 // To reset the navView and load the Search module when user is redirected from Profile module
 export const controlSearchRedirect = async function (pokemon) {
   controlSearchLoadQuery();
+  console.log(pokemon);
   queryView.setQuery(pokemon);
   setQuery(pokemon);
 
@@ -414,6 +427,8 @@ export const controlSearchRedirect = async function (pokemon) {
 
 // To initialize all Pokémon references to store in our state (pokemonState)
 const initPokemonData = async function () {
+  if (getLoadedReferences()) return;
+
   await storeAllPokemonReferences();
 };
 
@@ -421,14 +436,14 @@ const initPokemonData = async function () {
  * Initializes Search Controller event handlers and attach them to Search Views
  */
 export const controlSearchInit = async function () {
-  if (getLoadedReferences()) return;
-
   await initPokemonData();
 
   queryView.addHandlerQuery(debouncedControlSearchResults);
+  // queryView.addHandlerLoadQuery(controlSearchLoadQuery);
 
   sortView.addHandlerSortBtn(controlSearchSortBtn);
   sortView.addHandlerSortLoad(controlSearchSortLoad);
+
   previewView.addHandlerClickActivePreview(controlSearchClickPreview);
 
   panelView.addHandlerRenderPanel(controlSearchPokemonPanel);
@@ -437,4 +452,6 @@ export const controlSearchInit = async function () {
   panelView.addHandlerFavoriteBtn(controlSearchFavoriteBtn);
 
   paginationView.addHandlerPaginationClick(controlSearchPagination);
+
+  resultsView.addHandlerLoadResults(debouncedControlSearchResults);
 };

@@ -15,6 +15,7 @@ import {
 } from '../models/caughtModel';
 import { getFavoriteSortBy, setFavoriteSortBy } from '../models/favoriteModel';
 import { BASE_POKEDEX_URL } from '../config';
+import { getPokemon } from '../models/panelModel';
 
 /**
  * Resolves pages identifiers to application routes.
@@ -30,6 +31,11 @@ const navResolveRoute = function (page) {
     return `/profile/${category}`;
   }
 
+  if (page === 'search' && Boolean(getPokemon())) {
+    console.log(getPokemon());
+    return `/search/${getPokemon().name.toLowerCase()}`;
+  }
+  console.log(page);
   return `/${page}`;
 };
 

@@ -24,9 +24,11 @@ import {
 } from '../models/caughtModel.js';
 import {
   getFavoritePokemon,
+  getTypesPokemonFavorited,
   loadFavoritePokemon,
   setFavoriteRender,
   setFavoriteSortBy,
+  updateTypesPokemonFavorited,
 } from '../models/favoriteModel.js';
 import {
   navResolveSortParams,
@@ -39,20 +41,41 @@ import savedPokemonView from '../views/ProfileViews/savedPokemonView.js';
 import categoryView from '../views/ProfileViews/categoryView.js';
 import sortView from '../views/ProfileViews/sortView.js';
 import queryView from '../views/ProfileViews/queryView.js';
+import typesView from '../views/ProfileViews/typesView.js';
 
 // GENERAL PROFILE CONTROLLER FUNCTIONS
 
 // To populate the Profile with the appropriate data upon load
 const controlProfileLoad = function () {
-  updateTypesPokemonCaught();
-
   const profileData = {
-    typesCaught: getTypesPokemonCaught(),
     caught: getCaughtPokemon(),
-    favorites: getFavoritePokemon().length,
+    favorites: getFavoritePokemon(),
   };
 
   profileView.render(profileData);
+  controlProfileLoadTypes();
+};
+
+const controlProfileLoadTypes = function () {
+  updateTypesPokemonCaught();
+  updateTypesPokemonFavorited();
+
+  const mode =
+    window.location.pathname.split('/profile/')[1] === 'caught'
+      ? 'Caught'
+      : 'Favorited';
+
+  const typesData = {
+    mode: mode,
+    types:
+      mode === 'Caught' ? getTypesPokemonCaught() : getTypesPokemonFavorited(),
+    caught: getCaughtPokemon(),
+    favorites: getFavoritePokemon(),
+  };
+
+  console.log('types:', typesData.types);
+
+  typesView.render(typesData, true, true);
 };
 
 // To populate the savedPokemonView with either all Caught/Favorite Pokémon or queried Caught/Favorite Pokémon
@@ -140,12 +163,14 @@ export const controlProfileRenderCategory = async function (view) {
     case 'favorites':
       categoryView.toggleFavoritesCategory();
 
-      setFavoriteRender(true);
       setCaughtRender(false);
+      setFavoriteRender(true);
+
       break;
   }
 
   await controlProfilePokemonResults();
+  controlProfileLoad();
 };
 
 // Updates the URL and renders appropriate view when user clicks a category button
@@ -246,6 +271,7 @@ export const controlProfileSortLoad = function () {
  */
 export const controlProfileInit = function () {
   profileView.addHandlerLoadProfile(controlProfileLoad);
+
   queryView.addHandlerQuery(controlProfilePokemonResults);
   previewView.addHandlerRedirect(controlProfileClickPreview);
 
@@ -255,4 +281,6 @@ export const controlProfileInit = function () {
 
   sortView.addHandlerSortBtn(controlProfileSortBtn);
   sortView.addHandlerSortLoad(controlProfileSortLoad);
+
+  // typesView.addHandlerLoadTypes(controlProfileLoadTypes);
 };

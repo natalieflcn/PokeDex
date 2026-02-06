@@ -39,6 +39,10 @@
 - [ ] Create "Page Not Found" page
 - [ ] Create an error page for the user, redirect them to Search module
 - [ ] Create "Types of Pokémon Favorited" on Profile module, that renders when accessing Favorite Pokémon
+- [ ] Hyperlink 'Pokémon Caught' to all caught Pokémon, 'Pokémon Favorited' to all favorited Pokémon'
+- [ ] Hyperlink Pokémon type on Profile module to view all caught/favorited Pokémon of that type
+- [ ] When viewing a subset of a type of Pokémon, a 'View All' button should appear to allow user to return to viewing all caught/favorited Pokémon
+- [ ] Routing should reflect the types of Pokémon being accessed (i.e. profile/caught/fire)
 
 ### Map Module
 
