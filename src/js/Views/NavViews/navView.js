@@ -52,21 +52,21 @@ class NavView extends View {
   resetNav() {
     this._parentEl
       .querySelectorAll(
-        '.screen__1--search, .screen__2--search, .screen__1--map, .screen__2--map, .screen__1--profile, .screen__2--profile'
+        '.screen__1--search, .screen__2--search, .screen__1--map, .screen__2--map, .screen__1--profile, .screen__2--profile',
       )
       .forEach(page => page.classList.add('hidden'));
 
     this._parentEl
       .querySelectorAll(
-        '.lights__inner--blue, .lights__inner--yellow, .lights__inner--green'
+        '.lights__inner--blue, .lights__inner--yellow, .lights__inner--green',
       )
       .forEach(light => light.classList.remove('lights__inner--active'));
 
     this._parentEl
       .querySelectorAll(
-        '.header__btn--search, .header__btn--map, .header__btn--profile'
+        '.header__btn--search, .header__btn--map, .header__btn--profile',
       )
-      .forEach(btn => btn.classList.remove('btn--active'));
+      .forEach(btn => btn.classList.remove('btn--active', 'btn--disabled'));
   }
 
   // Adds active classes to Search module and displays Search module screens
@@ -81,7 +81,7 @@ class NavView extends View {
 
     this._parentEl
       .querySelector('.header__btn--search')
-      .classList.add('btn--active');
+      .classList.add('btn--active', 'btn--disabled');
   }
 
   // Adds active classes to Map module and displays Map module screens
@@ -96,7 +96,7 @@ class NavView extends View {
 
     this._parentEl
       .querySelector('.header__btn--map')
-      .classList.add('btn--active');
+      .classList.add('btn--active', 'btn--disabled');
   }
 
   // Adds active classes to Profile module and displays Profile module screens
@@ -111,7 +111,7 @@ class NavView extends View {
 
     this._parentEl
       .querySelector('.header__btn--profile')
-      .classList.add('btn--active');
+      .classList.add('btn--active', 'btn--disabled');
   }
 }
 

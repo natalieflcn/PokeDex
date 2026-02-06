@@ -74,8 +74,8 @@ class PanelView extends View {
               <header class="search__panel--header">
                 <h2 class="heading">
                   ${this._data.name}<span class="pokemon__id">#${
-      this._data.id
-    }</span>
+                    this._data.id
+                  }</span>
                 </h2>
 
                 <div class="search__panel--types">
@@ -117,8 +117,8 @@ class PanelView extends View {
                   ><div class="progress__inner" style="background-color: var(--type--${
                     this._data.types[0]
                   }); width: ${
-      (this._data.stats[0][1] / 255) * 100
-    }%"></div></div>
+                    (this._data.stats[0][1] / 255) * 100
+                  }%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>ATK</p>
@@ -128,8 +128,8 @@ class PanelView extends View {
                   ><div class="progress__inner" style="background-color: var(--type--${
                     this._data.types[0]
                   }); width: ${
-      (this._data.stats[1][1] / 255) * 100
-    }%"></div></div>
+                    (this._data.stats[1][1] / 255) * 100
+                  }%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>DEF</p>
@@ -139,8 +139,8 @@ class PanelView extends View {
                   ><div class="progress__inner" style="background-color: var(--type--${
                     this._data.types[0]
                   }); width: ${
-      (this._data.stats[2][1] / 255) * 100
-    }%"></div></div>
+                    (this._data.stats[2][1] / 255) * 100
+                  }%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>SATK</p>
@@ -150,8 +150,8 @@ class PanelView extends View {
                   ><div class="progress__inner" style="background-color: var(--type--${
                     this._data.types[0]
                   }); width: ${
-      (this._data.stats[3][1] / 255) * 100
-    }%"></div></div>
+                    (this._data.stats[3][1] / 255) * 100
+                  }%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>SDEF</p>
@@ -161,8 +161,8 @@ class PanelView extends View {
                   ><div class="progress__inner" style="background-color: var(--type--${
                     this._data.types[0]
                   }); width: ${
-      (this._data.stats[4][1] / 255) * 100
-    }%"></div></div>
+                    (this._data.stats[4][1] / 255) * 100
+                  }%"></div></div>
                 </div>
                 <div class="search__stats--row">
                   <p>SPD</p>
@@ -172,8 +172,8 @@ class PanelView extends View {
                   ><div class="progress__inner" style="background-color: var(--type--${
                     this._data.types[0]
                   }); width: ${
-      (this._data.stats[5][1] / 255) * 100
-    }%"></div></div>
+                    (this._data.stats[5][1] / 255) * 100
+                  }%"></div></div>
                 </div>
               </div>
 
@@ -182,38 +182,44 @@ class PanelView extends View {
                 <p>1<span class="search__moves--known" style="background-color: var(${
                   this._data.moves?.[0]?.[1] ? '--type--' : ''
                 }${
-      this._data.moves?.[0]?.[1] || '--secondary-color--grey-gradient'
-    });">${this._data.moves?.[0]?.[0] || '???'}</span></p>
+                  this._data.moves?.[0]?.[1] ||
+                  '--secondary-color--grey-gradient'
+                });">${this._data.moves?.[0]?.[0] || '???'}</span></p>
 
                 <p>2<span class="search__moves--known" style="background-color: var(${
                   this._data.moves?.[0]?.[1] ? '--type--' : ''
                 }${
-      this._data.moves?.[1]?.[1] || '--secondary-color--grey-gradient'
-    });">${this._data.moves?.[1]?.[0] || '???'}</span></p>
+                  this._data.moves?.[1]?.[1] ||
+                  '--secondary-color--grey-gradient'
+                });">${this._data.moves?.[1]?.[0] || '???'}</span></p>
 
                 <p>3<span class="search__moves--known" style="background-color: var(${
                   this._data.moves?.[0]?.[1] ? '--type--' : ''
                 }${
-      this._data.moves?.[2]?.[1] || '--secondary-color--grey-gradient'
-    });">${this._data.moves?.[2]?.[0] || '???'}</span></p>
+                  this._data.moves?.[2]?.[1] ||
+                  '--secondary-color--grey-gradient'
+                });">${this._data.moves?.[2]?.[0] || '???'}</span></p>
 
                 <p>4<span class="search__moves--known" style="background-color: var(${
                   this._data.moves?.[0]?.[1] ? '--type--' : ''
                 }${
-      this._data.moves?.[3]?.[1] || '--secondary-color--grey-gradient'
-    });">${this._data.moves?.[3]?.[0] || '???'}</span></p>
+                  this._data.moves?.[3]?.[1] ||
+                  '--secondary-color--grey-gradient'
+                });">${this._data.moves?.[3]?.[0] || '???'}</span></p>
 
                 <p>5<span class="search__moves--known" style="background-color: var(${
                   this._data.moves?.[0]?.[1] ? '--type--' : ''
                 }${
-      this._data.moves?.[4]?.[1] || '--secondary-color--grey-gradient'
-    });">${this._data.moves?.[4]?.[0] || '???'}</span></p>
+                  this._data.moves?.[4]?.[1] ||
+                  '--secondary-color--grey-gradient'
+                });">${this._data.moves?.[4]?.[0] || '???'}</span></p>
 
                 <p>6<span class="search__moves--known" style="background-color: var(${
                   this._data.moves?.[0]?.[1] ? '--type--' : ''
                 }${
-      this._data.moves?.[5]?.[1] || '--secondary-color--grey-gradient'
-    });">${this._data.moves?.[5]?.[0] || '???'}</span></p>
+                  this._data.moves?.[5]?.[1] ||
+                  '--secondary-color--grey-gradient'
+                });">${this._data.moves?.[5]?.[0] || '???'}</span></p>
               </div>
             </div>
 

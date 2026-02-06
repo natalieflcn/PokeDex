@@ -191,9 +191,10 @@
   - [x] The Pokémon should only be automatically loaded into the URL if it was redirected from the Profile
   - [x] If there was a query, the query should just be automatically loaded when page is navigated back to
 
-- [ ] Create "Types of Pokémon Favorited" on Profile module, that renders when accessing Favorite Pokémon
-- [ ] When querying for a new Pokémon, the Pokémon panel should be wiped clean
-- [ ] Create "Page Not Found" page, softly redirect them to the Search module
+- [x] Create "Types of Pokémon Favorited" on Profile module, that renders when accessing Favorite Pokémon
+- [ ] Hyperlink 'Pokémon Caught' to all caught Pokémon, 'Pokémon Favorited' to all favorited Pokémon' TODO 1
+- [x] When querying for a new Pokémon, the Pokémon panel should be wiped clean
+- [ ] Create "Page Not Found" page, softly redirect them to the Search module TODO 2
 - [ ] Create error pages for the user, softly redirect them to Search module
   - [ ] Operational error page (i.e. no internet, request timeout)
   - [ ] Programmatic error page (i.e. Internal Server Error)
@@ -202,6 +203,7 @@
 - [x] BUG: Querying for Pokémon results in infinite loop
 - [x] BUG: Sometimes refreshing the page will immediately result in "Pokémon Not Found!" error and won't proceed to fetch results. Not sure why.
 - [ ] BUG: Pokémon pagination buttons are no longer disabled
+- [x] BUG: Pokémon panel Caught/Favorite buttons are no longer being toggled
 
 ### Notes
 

@@ -321,6 +321,9 @@ body {
   background: var(--btn-highlight);
   color: var(--btn-shadow);
   box-shadow: 0px 0px 4px 2px inset var(--btn-shadow);
+}
+
+.btn--disabled {
   pointer-events: none;
   cursor: not-allowed;
 }

@@ -31,8 +31,7 @@ const navResolveRoute = function (page) {
     return `/profile/${category}`;
   }
 
-  if (page === 'search' && Boolean(getPokemon())) {
-    console.log(getPokemon());
+  if (page === 'search' && Object.keys(getPokemon()).length !== 0) {
     return `/search/${getPokemon().name.toLowerCase()}`;
   }
   console.log(page);

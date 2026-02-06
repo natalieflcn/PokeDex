@@ -14,7 +14,6 @@ class TypesView extends View {
   }
 
   _generateMarkup() {
-    console.log(this._data);
     return `
             <h2>Types of Pokémon ${this._data.mode}</h2>
             <div class="profile__stats">

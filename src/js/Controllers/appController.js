@@ -11,12 +11,12 @@ import { controlSearchInit } from './searchController';
 import { controlProfileInit } from './profileController';
 import '../../css/style.css';
 
-const init = async function () {
+const init = function () {
   // Prevents app from duplication initialization during development (HMR)
   if (window.appInitialized) return;
 
   controlNavInit();
-  await controlSearchInit();
+  controlSearchInit();
   controlProfileInit();
 
   window.appInitialized = true;

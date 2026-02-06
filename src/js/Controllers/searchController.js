@@ -36,10 +36,12 @@ import {
 } from '../models/queryModel.js';
 import {
   addCaughtPokemon,
+  getCaughtPokemon,
   removeCaughtPokemon,
 } from '../models/caughtModel.js';
 import {
   addFavoritePokemon,
+  getFavoritePokemon,
   removeFavoritePokemon,
 } from '../models/favoriteModel.js';
 import { getPokemon, loadPokemon } from '../models/panelModel.js';
@@ -389,12 +391,16 @@ const controlSearchPagination = async function (direction) {
 // To add/remove Pokémon from our active Pokémon panel to our Caught Pokémon
 const controlSearchCaughtBtn = function () {
   // Retrieve Pokémon that is highlighted on the Pokémon Panel
+
   const pokemon = getPokemon();
 
+  console.log(pokemon);
   // To add/remove Caught status
   if (!pokemon.caught) addCaughtPokemon(pokemon);
   else removeCaughtPokemon(pokemon);
 
+  console.log(getCaughtPokemon());
+  console.log(getFavoritePokemon());
   panelView.toggleCaughtBtn();
 };
 
@@ -448,10 +454,10 @@ export const controlSearchInit = async function () {
 
   panelView.addHandlerRenderPanel(controlSearchPokemonPanel);
 
-  panelView.addHandlerCaughtBtn(controlSearchCaughtBtn);
-  panelView.addHandlerFavoriteBtn(controlSearchFavoriteBtn);
-
   paginationView.addHandlerPaginationClick(controlSearchPagination);
 
   resultsView.addHandlerLoadResults(debouncedControlSearchResults);
+
+  panelView.addHandlerCaughtBtn(controlSearchCaughtBtn);
+  panelView.addHandlerFavoriteBtn(controlSearchFavoriteBtn);
 };
