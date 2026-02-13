@@ -326,6 +326,8 @@ body {
 .btn--disabled {
   pointer-events: none;
   cursor: not-allowed;
+  background: var(--secondary-color--grey);
+  box-shadow: 0px 0px 4px 2px inset var(--secondary-color--grey-gradient);
 }
 
 /* Button States */

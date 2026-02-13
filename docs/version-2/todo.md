@@ -192,17 +192,10 @@
   - [x] If there was a query, the query should just be automatically loaded when page is navigated back to
 
 - [x] Create "Types of Pokémon Favorited" on Profile module, that renders when accessing Favorite Pokémon
-- [ ] Hyperlink 'Pokémon Caught' to all caught Pokémon, 'Pokémon Favorited' to all favorited Pokémon' TODO 1
 - [x] When querying for a new Pokémon, the Pokémon panel should be wiped clean
-- [ ] Create "Page Not Found" page, softly redirect them to the Search module TODO 2
-- [ ] Create error pages for the user, softly redirect them to Search module
-  - [ ] Operational error page (i.e. no internet, request timeout)
-  - [ ] Programmatic error page (i.e. Internal Server Error)
-- [ ] Create a personal Pokémon Trainer GIF to use on the Profile page
 
 - [x] BUG: Querying for Pokémon results in infinite loop
 - [x] BUG: Sometimes refreshing the page will immediately result in "Pokémon Not Found!" error and won't proceed to fetch results. Not sure why.
-- [ ] BUG: Pokémon pagination buttons are no longer disabled
 - [x] BUG: Pokémon panel Caught/Favorite buttons are no longer being toggled
 
 ### Notes
@@ -211,3 +204,18 @@
 - Could click on a Pokémon type to view all caught/favorited Pokémon of that type
 - When viewing a subset of a type of Pokémon, a 'View All' button should appear to allow user to return to viewing all caught/favorited Pokémon
 - Routing should reflect the types of Pokémon being accessed (i.e. profile/caught/fire)
+
+## Week: February 16 - February 20
+
+### Goals
+
+- [x] Hyperlink 'Pokémon Caught' to all caught Pokémon, 'Pokémon Favorited' to all favorited Pokémon'
+- [ ] Create "Page Not Found" page, softly redirect them to the Search module
+- [ ] Create error pages for the user, softly redirect them to Search module
+  - [ ] Operational error page (i.e. no internet, request timeout)
+  - [ ] Programmatic error page (i.e. Internal Server Error)
+- [ ] Create a personal Pokémon Trainer GIF to use on the Profile page
+
+- [x] BUG: Pokémon pagination buttons are no longer disabled
+
+### Notes

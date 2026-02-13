@@ -22,7 +22,7 @@ class CategoryView extends View {
       e.preventDefault();
 
       const btn = e.target.closest(
-        '.profile__btn--caught, .profile__btn--favorites'
+        '.profile__btn--caught, .profile__btn--favorites',
       );
       if (!btn || btn.classList.contains('btn--active')) return;
 

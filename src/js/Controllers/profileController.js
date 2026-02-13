@@ -153,6 +153,7 @@ export const controlProfileRenderCategory = async function (view) {
   switch (view) {
     case 'caught':
       categoryView.toggleCaughtCategory();
+      // profileView.toggleCaughtLabel();
 
       setCaughtRender(true);
       setFavoriteRender(false);
@@ -160,10 +161,10 @@ export const controlProfileRenderCategory = async function (view) {
 
     case 'favorites':
       categoryView.toggleFavoritesCategory();
+      // profileView.toggleFavoritesLabel();
 
       setCaughtRender(false);
       setFavoriteRender(true);
-
       break;
   }
 
@@ -204,6 +205,19 @@ const controlProfileCategoryLoad = function () {
   }
 };
 
+const controlProfileCategoryLabel = async function (view) {
+  const currentView = getCaughtRender() ? 'caught' : 'favorites';
+
+  if (view === currentView) return;
+  else
+    window.history.replaceState(
+      { page: `profile/${view}` },
+      '',
+      `/profile/${view}`,
+    );
+
+  await controlProfileRenderCategory(view);
+};
 // RENDERING AND ROUTING PROFILE SORTING VIEW (Name/Id)
 
 /**
@@ -269,6 +283,7 @@ export const controlProfileSortLoad = function () {
  */
 export const controlProfileInit = function () {
   profileView.addHandlerLoadProfile(controlProfileLoad);
+  profileView.addHandlerLabels(controlProfileCategoryLabel);
 
   queryView.addHandlerQuery(controlProfilePokemonResults);
   previewView.addHandlerRedirect(controlProfileClickPreview);
