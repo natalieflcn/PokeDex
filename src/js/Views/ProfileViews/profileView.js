@@ -22,20 +22,6 @@ class ProfileView extends View {
     ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
   }
 
-  addHandlerLabels(handler) {
-    this._parentEl.addEventListener('click', function (e) {
-      e.preventDefault();
-
-      const label = e.target.closest('.profile__header--label');
-      if (!label || label.classList.contains('label--active')) return;
-
-      const view = label.dataset.view;
-      if (!view) return;
-
-      handler(view);
-    });
-  }
-
   _generateMarkup() {
     return `
     <div class="profile__header--container">

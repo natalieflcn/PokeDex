@@ -26,10 +26,12 @@ import {
   getQuery,
   getQueryCurrentBatch,
   getQueryLoading,
+  getQueryRedirect,
   getQueryResults,
   loadQueryBatch,
   resetQueryState,
   setQuery,
+  setQueryRedirect,
   startPokemonQuery,
   storeQueryResults,
   updateHasMoreQueryResults,
@@ -72,6 +74,9 @@ let infiniteScrollLocked = false;
 // To coordinate rendering of the Pokémon search results
 const controlSearchResults = async function () {
   try {
+    const redirectedFromProfile = getQueryRedirect();
+
+    console.log('running');
     // Retrieve query from user input
     resetQueryState();
     resetPokemonState();
@@ -82,14 +87,19 @@ const controlSearchResults = async function () {
 
     let requestId, pokemonResults, hasMoreResults;
 
+    panelView._clear();
+
     resultsView.renderSpinner();
 
     if (query) {
       requestId = startPokemonQuery();
 
-      panelView._clear();
-
-      window.history.replaceState({ page: `search` }, '', `/search`);
+      if (redirectedFromProfile) {
+        setQueryRedirect(false);
+        await controlSearchPokemonPanel();
+      } else {
+        window.history.replaceState({ page: `search` }, '', `/search`);
+      }
 
       storeQueryResults(query, pokemonState.allPokemonReferences);
       await loadGuaranteedBatch(requestId, loadQueryBatch);
@@ -317,14 +327,19 @@ const controlSearchPokemonPanel = async function () {
   }
 };
 
-const controlSearchLoadQuery = function () {
+const controlSearchLoadQuery = async function () {
   const query = window.location.pathname.split('/search/')[1];
+
+  console.log(window.location.pathname);
 
   console.log(query);
   if (!query) return;
 
+  setQueryRedirect(true);
   setQuery(query);
   queryView.setQuery(query);
+
+  console.log(window.location.pathname);
 };
 
 /**

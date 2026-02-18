@@ -63,6 +63,10 @@ export const getQueryLoading = function () {
   return queryState.loading;
 };
 
+export const getQueryRedirect = function () {
+  return queryState.redirect;
+};
+
 // To determine whether or not there are more queried Pokémon (queryState) results that can be rendered
 export const getHasMoreQueryResults = function () {
   return queryState.hasMoreResults;
@@ -70,6 +74,11 @@ export const getHasMoreQueryResults = function () {
 
 export const setQuery = function (query) {
   queryState.query = query;
+  console.log(queryState.query);
+};
+
+export const setQueryRedirect = function (value) {
+  queryState.redirect = value;
 };
 
 const addQueryPokemonToState = function (pokemon) {

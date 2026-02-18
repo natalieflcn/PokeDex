@@ -326,8 +326,8 @@ body {
 .btn--disabled {
   pointer-events: none;
   cursor: not-allowed;
-  background: var(--secondary-color--grey);
-  box-shadow: 0px 0px 4px 2px inset var(--secondary-color--grey-gradient);
+  background: var(--btn-highlight);
+  box-shadow: 0px 0px 4px 2px inset var(--btn-shadow);
 }
 
 /* Button States */
@@ -821,6 +821,12 @@ body {
 
 .search__pagination button {
   padding: 0 0.5rem;
+}
+
+.search__btn--prev,
+.search__btn--next {
+  --btn-highlight: var(--secondary-color--grey);
+  --btn-shadow: var(--secondary-color--grey-gradient);
 }
 
 /* PERSPECTIVE -- Map (Screen 1) */
