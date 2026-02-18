@@ -1029,11 +1029,16 @@ body {
 /* PERSPECTIVE -- Map (Screen 2) */
 
 /* PERSPECTIVE -- Profile (Screen 1) */
+.profile__header--container {
+  display: flex;
+}
+
 .profile__header {
   display: flex;
 }
 
 .profile__img {
+  display: inline;
   width: 6rem;
   height: 6rem;
 }
@@ -1051,6 +1056,7 @@ body {
 
 .profile__header--label {
   margin-right: 1.5rem;
+  cursor: pointer;
 }
 
 .profile__header--label span {

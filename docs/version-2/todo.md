@@ -205,11 +205,13 @@
 - When viewing a subset of a type of Pokémon, a 'View All' button should appear to allow user to return to viewing all caught/favorited Pokémon
 - Routing should reflect the types of Pokémon being accessed (i.e. profile/caught/fire)
 
-## Week: February 16 - February 20
+## Week: February 18 - February 20
 
 ### Goals
 
 - [x] Hyperlink 'Pokémon Caught' to all caught Pokémon, 'Pokémon Favorited' to all favorited Pokémon'
+- [ ] Automatically display Pokémon panel when redirected from the Profile module
+- [ ] When input is cleared, url should be updated and Pokémon panel should be cleared
 - [ ] Create "Page Not Found" page, softly redirect them to the Search module
 - [ ] Create error pages for the user, softly redirect them to Search module
   - [ ] Operational error page (i.e. no internet, request timeout)
@@ -219,3 +221,5 @@
 - [x] BUG: Pokémon pagination buttons are no longer disabled
 
 ### Notes
+
+- [ ] DevNote: Need to fix HMR in development. Not working consistently for some reason.

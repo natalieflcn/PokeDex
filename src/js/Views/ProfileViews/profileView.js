@@ -38,11 +38,13 @@ class ProfileView extends View {
 
   _generateMarkup() {
     return `
-            <header class="profile__header">
-              <img
+    <div class="profile__header--container">
+    <img
                 class="profile__img img__display"
                 src= "${PROFILE_IMG}"
               />
+            <header class="profile__header">
+              
               <div class="profile__header--details">
                 <h2 class="heading">${PROFILE_NAME}'s Pokédex</h2>
 
@@ -69,6 +71,7 @@ class ProfileView extends View {
 
             
             
+            </div>
             </div>
             `;
   }
