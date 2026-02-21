@@ -823,10 +823,17 @@ body {
   padding: 0 0.5rem;
 }
 
-.search__btn--prev,
-.search__btn--next {
+.search__btn--prev.btn--disabled,
+.search__btn--next.btn--disabled {
   --btn-highlight: var(--secondary-color--grey);
   --btn-shadow: var(--secondary-color--grey-gradient);
+}
+
+.search__btn--hidden {
+  opacity: 0%;
+  width: 1rem;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 /* PERSPECTIVE -- Map (Screen 1) */

@@ -240,4 +240,4 @@
 ### Notes
 
 - [ ] BUG: Upon initial load or quick reload, controlSearchResults produces no Pokémon results
-- [ ] BUG: Pokémon panel rendering is inconsistent -- sometimes loading spinner disappears and panel stays blank before rendering details, sometimes details are rendered and removed
+- [x] BUG: Pokémon panel rendering is inconsistent -- sometimes loading spinner disappears and panel stays blank before rendering details, sometimes details are rendered and removed

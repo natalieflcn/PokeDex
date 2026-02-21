@@ -176,6 +176,18 @@ export const getPokemonPagination = function (
   pokemonResults,
   loadMoreResults,
 ) {
+  console.log(pokemonName, pokemonResults, loadMoreResults);
+
+  if (!pokemonResults.some(pokemon => pokemon.name === pokemonName)) {
+    console.log('trying to disable pagination buttons');
+    return { prev: false, next: false };
+  }
+
+  // If the current Pokémon panel is a result from manual-url navigation or Profile module redirect
+  // if (!pokemonResults.some(pokemon => pokemon.name === pokemonName)) {
+  //   return { prev: false, next: false };
+  // }
+
   let prev = true,
     next = true;
 

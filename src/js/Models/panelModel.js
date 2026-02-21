@@ -55,7 +55,7 @@ export const clearPokemon = () => (panelState.pokemon = {});
  */
 export const createPokemonObject = async function (data) {
   // Data loaded from MAIN_API_URL (data[0])
-  console.log('running createpokemonobject');
+
   const {
     name,
     id,
@@ -81,16 +81,12 @@ export const createPokemonObject = async function (data) {
   // }
 
   const selectedMoves = data[0].moves.slice(13, 19);
-  console.log(data[0]);
-  console.log('running createpokemonobject');
 
   const moveData = await Promise.all(
     selectedMoves.map(move => AJAX(`${MOVE_TYPE_URL}${move.move.name}`)),
   );
 
-  console.log(moveData);
   for (const move of moveData) {
-    console.log(move);
     moves.push([
       move.name
         .split('-')
@@ -139,7 +135,6 @@ export const createPokemonObject = async function (data) {
  * @param {string} pokemon - Pokémon name (unique identifier) used to fetch more data from PokéAPI
  */
 export const loadPokemon = async function (pokemon) {
-  console.log('running loadpokemon');
   try {
     const data = await Promise.all([
       AJAX(`${MAIN_API_URL}${pokemon}`),
@@ -147,7 +142,6 @@ export const loadPokemon = async function (pokemon) {
     ]);
 
     panelState.pokemon = await createPokemonObject(data);
-    console.log(panelState.pokemon);
   } catch (err) {
     throw err;
   }

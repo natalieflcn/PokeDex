@@ -133,6 +133,7 @@ export const loadPokemonBatch = async function (requestId, batchSize = LIMIT) {
 
     // Removes the invalid (null, non-existent) entries from the array of Pokémon preview obejcts
     const validPokemonPreviews = filterPokemonPreviews(pokemonPreviews);
+
     // console.log(validPokemonPreviews);
     addPokemonToState(validPokemonPreviews);
     // console.log(validPokemonPreviews.length);
@@ -157,6 +158,7 @@ export const loadPokemonBatch = async function (requestId, batchSize = LIMIT) {
 export const loadNextPokemon = function (direction, pokemonResults) {
   const activePokemon = getPokemon();
 
+  console.log(activePokemon);
   let currIndex = pokemonResults.findIndex(
     pokemon => pokemon.name === activePokemon.name,
   );

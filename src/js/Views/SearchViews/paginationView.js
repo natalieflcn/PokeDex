@@ -49,6 +49,12 @@ class PaginationView extends View {
       .querySelector(`.search__btn--${btn}`)
       .classList.remove('btn--disabled');
   }
+
+  removePaginationBtns() {
+    this._parentEl
+      .querySelectorAll('.search__btn--prev, .search__btn--next')
+      .forEach(btn => btn.classList.add('search__btn--hidden'));
+  }
 }
 
 export default new PaginationView();

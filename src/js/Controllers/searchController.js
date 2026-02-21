@@ -132,6 +132,8 @@ const controlSearchResults = async function () {
 
       // console.log(pokemonState.results);
       pokemonResults = getPokemonResults();
+      console.log(pokemonResults);
+
       hasMoreResults = getHasMorePokemonResults();
       // console.log(pokemonResults);
     }
@@ -146,7 +148,6 @@ const controlSearchResults = async function () {
       resultsView.observeSentinel(controlSearchInfiniteScroll);
     }
 
-    initializedSearchResults = true;
     resultsView.render(pokemonResults);
   } catch (err) {
     resultsView.renderError();
@@ -307,7 +308,6 @@ const controlSearchPokemonPanel = async function () {
 
     await loadPokemon(pokemonName);
 
-    console.log(panelState.pokemon);
     // if (window.location.pathname.split('/search/')[1] !== pokemonName) {
     //   panelView._clear();
     //   return;
@@ -315,12 +315,13 @@ const controlSearchPokemonPanel = async function () {
 
     // Render Pokémon panel
     const pokemon = getPokemon();
-    console.log(pokemon);
 
     // Configuring pagination buttons of Pokémon panel
     let pokemonResults, loadMoreResults;
 
-    if (getQuery()) {
+    const query = getQuery();
+
+    if (query) {
       pokemonResults = getQueryResults();
       loadMoreResults = getHasMoreQueryResults();
     } else {
@@ -328,18 +329,19 @@ const controlSearchPokemonPanel = async function () {
       loadMoreResults = getHasMorePokemonResults();
     }
 
+    console.log(pokemonResults, loadMoreResults);
     const { prev, next } = getPokemonPagination(
       pokemon.name,
       pokemonResults,
       loadMoreResults,
     );
 
-    if (!prev) paginationView.disablePaginationBtn('prev');
-    if (!next) paginationView.disablePaginationBtn('next');
-
-    console.log('running controlpanel');
-    console.log(panelState.pokemon, pokemon);
     panelView.render(pokemon);
+    if (!prev && next) paginationView.disablePaginationBtn('prev');
+    if (!next && prev) paginationView.disablePaginationBtn('next');
+    if (!prev && !next) paginationView.removePaginationBtns();
+
+    console.log(prev, next);
   } catch (err) {
     panelView._clear();
     console.error(err);
@@ -368,6 +370,7 @@ const controlSearchLoadQuery = async function () {
  * @param {string} direction - 'prev' or 'next pagination button
  */
 const controlSearchPagination = async function (direction) {
+  console.log(direction);
   const query = getQuery();
   let pokemonResults, loadMoreResults, requestId;
 
@@ -382,17 +385,20 @@ const controlSearchPagination = async function (direction) {
     loadMoreResults = getHasMorePokemonResults();
   }
 
+  console.log(pokemonResults, loadMoreResults);
   // Loading the prev/next Pokémon based on the user-selected direction
   let nextPokemon = loadNextPokemon(direction, pokemonResults);
+  console.log('next pokemon is');
+  console.log(nextPokemon);
 
   // Loading more Pokémon preview results (if the user navigates to a Pokémon that hasn't been rendered yet)
 
   if (!nextPokemon && loadMoreResults) {
     paginationView.enablePaginationBtn('next');
     panelView.renderSpinner();
-    console.log('running controlsearchpagination');
+    console.log('null received, but there are more results');
 
-    const numResults = getPokemonResults().length;
+    const numResults = pokemonResults.length;
 
     // Loading the next appropriate Pokémon batch
     // if (query) await loadQueryBatch();
@@ -401,10 +407,11 @@ const controlSearchPagination = async function (direction) {
     else await loadGuaranteedBatch(requestId, loadPokemonBatch);
 
     // Updating the Pokémon preview search results
-    await controlSearchResults();
+    // await controlSearchResults();
+    // resultsView.render(currentBatch, true, true);
 
     // Manually setting the next Pokémon to the first element of the updated Pokémon preview search results
-    nextPokemon = getPokemonResults()[numResults];
+    nextPokemon = pokemonResults[numResults];
   }
 
   // Updating the url to reflect the Pokémon that will be navigated to via pagination button
@@ -420,7 +427,7 @@ const controlSearchPagination = async function (direction) {
 
   // Updating the Pokémon panel (for the Pokémon that has been navigated to via pagination button, now reflected in the url)
   controlSearchLoadActivePreview();
-  // await controlSearchPokemonPanel();
+  await controlSearchPokemonPanel();
 };
 
 // To add/remove Pokémon from our active Pokémon panel to our Caught Pokémon
@@ -479,8 +486,10 @@ const initPokemonData = async function () {
 export const controlSearchInit = async function () {
   await initPokemonData();
 
-  queryView.addHandlerQuery(debouncedControlSearchResults);
+  queryView.addHandlerQuery(controlSearchResults);
   // queryView.addHandlerLoadQuery(controlSearchLoadQuery);
+
+  resultsView.addHandlerLoadResults(controlSearchResults);
 
   sortView.addHandlerSortBtn(controlSearchSortBtn);
   sortView.addHandlerSortLoad(controlSearchSortLoad);
@@ -489,10 +498,8 @@ export const controlSearchInit = async function () {
 
   panelView.addHandlerRenderPanel(controlSearchPokemonPanel);
 
-  paginationView.addHandlerPaginationClick(controlSearchPagination);
-
-  resultsView.addHandlerLoadResults(debouncedControlSearchResults);
-
   panelView.addHandlerCaughtBtn(controlSearchCaughtBtn);
   panelView.addHandlerFavoriteBtn(controlSearchFavoriteBtn);
+
+  paginationView.addHandlerPaginationClick(controlSearchPagination);
 };
