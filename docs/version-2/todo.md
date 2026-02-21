@@ -210,16 +210,34 @@
 ### Goals
 
 - [x] Hyperlink 'Pokémon Caught' to all caught Pokémon, 'Pokémon Favorited' to all favorited Pokémon'
-- [ ] Automatically display Pokémon panel when redirected from the Profile module
-- [ ] When input is cleared, url should be updated and Pokémon panel should be cleared
-- [ ] Create "Page Not Found" page, softly redirect them to the Search module
-- [ ] Create error pages for the user, softly redirect them to Search module
-  - [ ] Operational error page (i.e. no internet, request timeout)
-  - [ ] Programmatic error page (i.e. Internal Server Error)
-- [ ] Create a personal Pokémon Trainer GIF to use on the Profile page
+- [x] Automatically display Pokémon panel when redirected from the Profile module
+- [x] When input is cleared, url should be updated and Pokémon panel should be cleared
 
 - [x] BUG: Pokémon pagination buttons are no longer disabled
 
 ### Notes
 
-- [ ] DevNote: Need to fix HMR in development. Not working consistently for some reason.
+- [x] DevNote: Need to fix HMR in development. Not working consistently for some reason.
+
+## Week: February 21 - February 26
+
+### Goals
+
+- [ ] Don't render Pokémon pagination buttons
+  - [ ] When a Pokémon is rendered directly from the url
+  - [ ] When being redirected from the Profile module (replace current functionality)
+- [ ] When navigating between modules or browser history, search results should automatically scroll to active panel
+
+- [ ] Create "Page Not Found" page, softly redirect them to the Search module
+- [ ] Create error pages for the user, softly redirect them to Search module
+  - [ ] XXX: Generic error template
+  - [ ] 400: Bad Request error
+  - [ ] 404: Page Not Found error
+  - [ ] 429: Too Many Requests error
+  - [ ] 500: Internal Server error
+- [ ] Create a personal Pokémon Trainer GIF to use on the Profile page
+
+### Notes
+
+- [ ] BUG: Upon initial load or quick reload, controlSearchResults produces no Pokémon results
+- [ ] BUG: Pokémon panel rendering is inconsistent -- sometimes loading spinner disappears and panel stays blank before rendering details, sometimes details are rendered and removed

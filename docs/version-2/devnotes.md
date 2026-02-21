@@ -5,7 +5,7 @@
 ## Bugs to Fix (BROKEN FUNCTIONALITY)
 
 - [x] Fix improper rendering of Pokémon searches (when the user types too quickly)
-- [ ] Fix the number of Pokémon panels rendered during general Name/ID queries; when a Pokémon has invalid data from the PokéAPI, that panel is omitted instead of being used for the subsequent Pokémon (resulting in one or two less panels, making the visual design skewed and inconsistent)
+- [x] Fix the number of Pokémon panels rendered during general Name/ID queries; when a Pokémon has invalid data from the PokéAPI, that panel is omitted instead of being used for the subsequent Pokémon (resulting in one or two less panels, making the visual design skewed and inconsistent)
 - [x] Fix the broken pagination buttons (left, right) when navigating between Pokémon
 
 ---
@@ -38,8 +38,8 @@
 - [ ] Create a personal Pokémon Trainer GIF to use on the Profile page
 - [ ] Create "Page Not Found" page
 - [ ] Create an error page for the user, redirect them to Search module
-- [ ] Create "Types of Pokémon Favorited" on Profile module, that renders when accessing Favorite Pokémon
-- [ ] Hyperlink 'Pokémon Caught' to all caught Pokémon, 'Pokémon Favorited' to all favorited Pokémon'
+- [x] Create "Types of Pokémon Favorited" on Profile module, that renders when accessing Favorite Pokémon
+- [x] Hyperlink 'Pokémon Caught' to all caught Pokémon, 'Pokémon Favorited' to all favorited Pokémon'
 - [ ] Hyperlink Pokémon type on Profile module to view all caught/favorited Pokémon of that type
 - [ ] When viewing a subset of a type of Pokémon, a 'View All' button should appear to allow user to return to viewing all caught/favorited Pokémon
 - [ ] Routing should reflect the types of Pokémon being accessed (i.e. profile/caught/fire)

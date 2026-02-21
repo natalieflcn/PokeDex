@@ -1,4 +1,6 @@
 const path = require('path');
+const webpack = require('webpack');
+
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -13,7 +15,7 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: '/',
   },
-  devtool: 'eval-source-map',
+  devtool: 'inline-source-map',
   devServer: {
     historyApiFallback: true,
     static: { directory: path.join(__dirname, 'dist') },

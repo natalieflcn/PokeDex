@@ -55,6 +55,7 @@ export const clearPokemon = () => (panelState.pokemon = {});
  */
 export const createPokemonObject = async function (data) {
   // Data loaded from MAIN_API_URL (data[0])
+  console.log('running createpokemonobject');
   const {
     name,
     id,
@@ -67,15 +68,35 @@ export const createPokemonObject = async function (data) {
   const stats = data[0].stats.map(stat => [stat.stat.name, stat.base_stat]);
   const moves = [];
 
-  for (const move of data[0].moves.slice(13, 19)) {
-    const moveType = await AJAX(`${MOVE_TYPE_URL}${move.move.name}`);
+  // for (const move of data[0].moves.slice(13, 19)) {
+  //   const moveType = await AJAX(`${MOVE_TYPE_URL}${move.move.name}`);
 
+  //   moves.push([
+  //     move.move.name
+  //       .split('-')
+  //       .map(word => capitalize(word))
+  //       .join(' '),
+  //     capitalize(moveType.type.name),
+  //   ]);
+  // }
+
+  const selectedMoves = data[0].moves.slice(13, 19);
+  console.log(data[0]);
+  console.log('running createpokemonobject');
+
+  const moveData = await Promise.all(
+    selectedMoves.map(move => AJAX(`${MOVE_TYPE_URL}${move.move.name}`)),
+  );
+
+  console.log(moveData);
+  for (const move of moveData) {
+    console.log(move);
     moves.push([
-      move.move.name
+      move.name
         .split('-')
         .map(word => capitalize(word))
         .join(' '),
-      capitalize(moveType.type.name),
+      capitalize(move.type.name),
     ]);
   }
 
@@ -118,6 +139,7 @@ export const createPokemonObject = async function (data) {
  * @param {string} pokemon - Pokémon name (unique identifier) used to fetch more data from PokéAPI
  */
 export const loadPokemon = async function (pokemon) {
+  console.log('running loadpokemon');
   try {
     const data = await Promise.all([
       AJAX(`${MAIN_API_URL}${pokemon}`),
@@ -125,6 +147,7 @@ export const loadPokemon = async function (pokemon) {
     ]);
 
     panelState.pokemon = await createPokemonObject(data);
+    console.log(panelState.pokemon);
   } catch (err) {
     throw err;
   }

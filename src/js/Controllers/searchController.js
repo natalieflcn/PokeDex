@@ -66,8 +66,10 @@ import sortView from '../views/SearchViews/sortView.js';
 import panelView from '../views/SearchViews/panelView.js';
 import paginationView from '../views/SearchViews/paginationView.js';
 import { debounce } from '../helpers.js';
+import panelState from '../models/state/panelState.js';
 
 let infiniteScrollLocked = false;
+let initializedSearchResults = false;
 
 // SEARCH CONTROLLER FUNCTIONS
 
@@ -76,7 +78,9 @@ const controlSearchResults = async function () {
   try {
     const redirectedFromProfile = getQueryRedirect();
 
-    console.log('running');
+    if (initializedSearchResults) panelView._clear();
+    else initializedSearchResults = true;
+
     // Retrieve query from user input
     resetQueryState();
     resetPokemonState();
@@ -84,10 +88,9 @@ const controlSearchResults = async function () {
     if (resultsView._observer) resultsView.unobserveSentinel();
 
     const query = queryView.getQuery();
+    const pokemonName = window.location.pathname.split('/search/')[1];
 
     let requestId, pokemonResults, hasMoreResults;
-
-    panelView._clear();
 
     resultsView.renderSpinner();
 
@@ -96,7 +99,7 @@ const controlSearchResults = async function () {
 
       if (redirectedFromProfile) {
         setQueryRedirect(false);
-        await controlSearchPokemonPanel();
+        // await controlSearchPokemonPanel();
       } else {
         window.history.replaceState({ page: `search` }, '', `/search`);
       }
@@ -107,7 +110,18 @@ const controlSearchResults = async function () {
 
       pokemonResults = getQueryResults();
       hasMoreResults = getHasMoreQueryResults();
-    } else {
+    }
+    // } else if (!initializedSearchResults && pokemonName) {
+    //   // Need to render search results until Pokémon is found
+    //   let i = 0;
+    //   while (i !== 10) {
+    //     console.log(pokemonName, getPokemonResults());
+    //     await loadGuaranteedBatch(requestId, loadPokemonBatch);
+    //     i++;
+    //   }
+    //   console.log('done running');
+    // }
+    else {
       requestId = startPokemonRequest();
 
       // window.history.replaceState({ page: `search` }, '', `/search`);
@@ -132,6 +146,7 @@ const controlSearchResults = async function () {
       resultsView.observeSentinel(controlSearchInfiniteScroll);
     }
 
+    initializedSearchResults = true;
     resultsView.render(pokemonResults);
   } catch (err) {
     resultsView.renderError();
@@ -292,6 +307,7 @@ const controlSearchPokemonPanel = async function () {
 
     await loadPokemon(pokemonName);
 
+    console.log(panelState.pokemon);
     // if (window.location.pathname.split('/search/')[1] !== pokemonName) {
     //   panelView._clear();
     //   return;
@@ -299,8 +315,7 @@ const controlSearchPokemonPanel = async function () {
 
     // Render Pokémon panel
     const pokemon = getPokemon();
-
-    panelView.render(pokemon);
+    console.log(pokemon);
 
     // Configuring pagination buttons of Pokémon panel
     let pokemonResults, loadMoreResults;
@@ -321,6 +336,10 @@ const controlSearchPokemonPanel = async function () {
 
     if (!prev) paginationView.disablePaginationBtn('prev');
     if (!next) paginationView.disablePaginationBtn('next');
+
+    console.log('running controlpanel');
+    console.log(panelState.pokemon, pokemon);
+    panelView.render(pokemon);
   } catch (err) {
     panelView._clear();
     console.error(err);
@@ -371,6 +390,7 @@ const controlSearchPagination = async function (direction) {
   if (!nextPokemon && loadMoreResults) {
     paginationView.enablePaginationBtn('next');
     panelView.renderSpinner();
+    console.log('running controlsearchpagination');
 
     const numResults = getPokemonResults().length;
 
@@ -400,7 +420,7 @@ const controlSearchPagination = async function (direction) {
 
   // Updating the Pokémon panel (for the Pokémon that has been navigated to via pagination button, now reflected in the url)
   controlSearchLoadActivePreview();
-  await controlSearchPokemonPanel();
+  // await controlSearchPokemonPanel();
 };
 
 // To add/remove Pokémon from our active Pokémon panel to our Caught Pokémon
