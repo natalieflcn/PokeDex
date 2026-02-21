@@ -224,7 +224,7 @@
 ### Goals
 
 - [ ] Don't render Pokémon pagination buttons
-  - [ ] When a Pokémon is rendered directly from the url
+  - [x] When a Pokémon is rendered directly from the url
   - [ ] When being redirected from the Profile module (replace current functionality)
 - [ ] When navigating between modules or browser history, search results should automatically scroll to active panel
 
@@ -239,5 +239,5 @@
 
 ### Notes
 
-- [ ] BUG: Upon initial load or quick reload, controlSearchResults produces no Pokémon results
+- [ ] BUG: Upon initial load or quick reload, controlSearchResults produces no Pokémon results or Pokémon panel
 - [x] BUG: Pokémon panel rendering is inconsistent -- sometimes loading spinner disappears and panel stays blank before rendering details, sometimes details are rendered and removed

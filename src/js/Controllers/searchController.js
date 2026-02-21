@@ -460,17 +460,19 @@ const controlSearchFavoriteBtn = function () {
 
 // To reset the navView and load the Search module when user is redirected from Profile module
 export const controlSearchRedirect = async function (pokemon) {
-  controlSearchLoadQuery();
-  console.log(pokemon);
-  queryView.setQuery(pokemon);
-  setQuery(pokemon);
+  // controlSearchLoadQuery();
+  // console.log(pokemon);
+  // queryView.setQuery(pokemon);
+  // setQuery(pokemon);
 
   navView.resetNav();
   navView.toggleNavSearch();
 
-  resultsView.renderSpinner();
+  // resultsView.renderSpinner();
+  // panelView.renderSpinner();
+
   await controlSearchPokemonPanel();
-  await controlSearchResults();
+  // await controlSearchResults();
 };
 
 // To initialize all Pokémon references to store in our state (pokemonState)
