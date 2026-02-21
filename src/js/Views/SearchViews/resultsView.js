@@ -47,6 +47,26 @@ class ResultsView extends View {
     this._observer.unobserve(this._sentinel);
   }
 
+  scrollIntoView(pokemonName) {
+    console.log('running scrollintoview');
+    const pokemon = this._parentEl.querySelector(`.search__preview--active`);
+
+    console.log(pokemon);
+    if (!pokemon) return;
+
+    if (
+      pokemon.querySelector('.search__preview--name').textContent !==
+      pokemonName
+    )
+      return;
+
+    console.log(pokemon.querySelector('.search__preview--name').textContent);
+
+    pokemon.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
+  }
   _generateMarkup() {
     // Map an array of previewViews to be rendered and appended to resultsView
     return this._data.map(result => previewView.render(result, false)).join('');

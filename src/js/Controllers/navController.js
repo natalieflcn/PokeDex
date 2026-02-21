@@ -25,6 +25,8 @@ import navView from '../views/NavViews/navView';
 import categoryView from '../views/ProfileViews/categoryView';
 import { getFavoriteRender } from '../models/favoriteModel';
 import lightsView from '../views/NavViews/lightsView';
+import resultsView from '../views/SearchViews/resultsView';
+import { capitalize } from '../helpers';
 
 /**
  * Renders module with appropriate data (based on the URL path)
@@ -34,10 +36,26 @@ import lightsView from '../views/NavViews/lightsView';
 const controlNavRenderView = function (route) {
   navView.resetNav();
 
+  // let pokemon = null;
+
+  if (route.startsWith('/search')) {
+    // pokemon = route.split('/search/')[1];
+    route = '/search';
+  }
+
   switch (route) {
     case '/search':
       navView.toggleNavSearch();
       controlSearchRenderSort(getPokemonSortBy());
+
+      // testing
+      const pokemonName = capitalize(
+        window.location.pathname.split('/search/')[1],
+      );
+
+      console.log(pokemonName);
+
+      if (pokemonName) resultsView.scrollIntoView(pokemonName);
 
       break;
 
@@ -72,7 +90,7 @@ const controlNavRenderView = function (route) {
       break;
 
     default:
-      navView.toggleNavSearch();
+      // navView.toggleNavSearch();
       break;
   }
 };

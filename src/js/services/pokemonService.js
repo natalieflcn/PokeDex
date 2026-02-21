@@ -176,7 +176,7 @@ export const getPokemonPagination = function (
   pokemonResults,
   loadMoreResults,
 ) {
-  console.log(pokemonName, pokemonResults, loadMoreResults);
+  // console.log(pokemonName, pokemonResults, loadMoreResults);
 
   if (!pokemonResults.some(pokemon => pokemon.name === pokemonName)) {
     console.log('trying to disable pagination buttons');
