@@ -67,6 +67,7 @@ import panelView from '../views/SearchViews/panelView.js';
 import paginationView from '../views/SearchViews/paginationView.js';
 import { capitalize, debounce } from '../helpers.js';
 import panelState from '../models/state/panelState.js';
+import queryState from '../models/state/queryState.js';
 
 let infiniteScrollLocked = false;
 let initializedSearchResults = false;
@@ -101,19 +102,21 @@ const controlSearchResults = async function () {
     if (query) {
       requestId = startPokemonQuery();
 
-      if (redirectedFromProfile) {
-        setQueryRedirect(false);
-        // await controlSearchPokemonPanel();
-      } else {
-        window.history.replaceState({ page: `search` }, '', `/search`);
-      }
+      // if (redirectedFromProfile) {
+      //   setQueryRedirect(false);
+      //   // await controlSearchPokemonPanel();
+      // } else {
+      window.history.replaceState({ page: `search` }, '', `/search`);
+      // }
 
       storeQueryResults(query, pokemonState.allPokemonReferences);
+      console.log(queryState.queryReferences);
       await loadGuaranteedBatch(requestId, loadQueryBatch);
       // await loadQueryBatch(requestId);
 
       pokemonResults = getQueryResults();
       hasMoreResults = getHasMoreQueryResults();
+      // console.log(pokemonResults, hasMoreResults);
     }
     // } else if (!initializedSearchResults && pokemonName) {
     //   // Need to render search results until Pokémon is found
@@ -155,7 +158,7 @@ const controlSearchResults = async function () {
     resultsView.render(pokemonResults);
 
     //testing
-    console.log(pokemonName);
+
     if (pokemonName) resultsView.scrollIntoView(pokemonName);
 
     resultsView.scrollIntoView;
@@ -170,13 +173,16 @@ const debouncedControlSearchResults = debounce(controlSearchResults, 300);
 
 // To determine the scroll position of the client and to load more data, if necessary
 const controlSearchInfiniteScroll = async function () {
+  console.log('running infinite scroll');
+
+  console.log('GET QUERY, GETQUERYRESULTS');
+  console.log(getQuery(), getQueryResults());
   if (infiniteScrollLocked) return;
   infiniteScrollLocked = true;
 
   const query = getQuery();
 
   let requestId,
-    loading,
     hasMoreResults,
     loadBatch,
     updateHasMoreResults,
@@ -203,12 +209,16 @@ const controlSearchInfiniteScroll = async function () {
     return;
   }
 
+  console.log('SERCHCTRONOLLER QUERYREFERENCES, HASMORERESULTS');
+  console.log(queryState.queryReferences, hasMoreResults);
   resultsView.renderSpinner(true);
 
   await loadGuaranteedBatch(requestId, loadBatch);
 
   const currentBatch = getCurrentBatch();
 
+  console.log('SERCHCONTROLLER CURRENTBATCH');
+  console.log(currentBatch);
   // console.log(currentBatch, hasMoreResults);
 
   resultsView.removeSpinner();

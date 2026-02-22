@@ -53,8 +53,6 @@ const controlNavRenderView = function (route) {
         window.location.pathname.split('/search/')[1],
       );
 
-      console.log(pokemonName);
-
       if (pokemonName) resultsView.scrollIntoView(pokemonName);
 
       break;

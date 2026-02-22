@@ -114,37 +114,48 @@ export const storeQueryResults = function (query, querySet) {
  * @param {number} requestId - Id of current request being made
  */
 export const loadQueryBatch = async function (requestId, batchSize = LIMIT) {
-  queryState.loading = true;
-  queryState.currentBatch = [];
+  try {
+    queryState.loading = true;
 
-  // Sort Pokémon by Name or ID according to (global) sort search param
-  const sortedPokemon = sortPokemon(queryState.queryReferences, null);
+    console.log('QUERYMODEL BATCHSIZE');
+    console.log(batchSize);
+    if (batchSize === LIMIT) queryState.currentBatch = [];
 
-  const pokemonBatch = sortedPokemon.slice(
-    queryState.offset,
-    queryState.offset + batchSize,
-  );
+    // Sort Pokémon by Name or ID according to (global) sort search param
+    const sortedPokemon = sortPokemon(queryState.queryReferences, null);
 
-  // Fetch Pokémon name, ID, and img to later create Pokémon previews (this stores an array of promises)
-  const pokemonBatchDetails = loadBatchDetails(pokemonBatch);
+    const pokemonBatch = sortedPokemon.slice(
+      queryState.offset,
+      queryState.offset + batchSize,
+    );
+    console.log('QUERY MODEL POKEMONBATCH');
+    console.log(pokemonBatch);
+    // Fetch Pokémon name, ID, and img to later create Pokémon previews (this stores an array of promises)
+    const pokemonBatchDetails = loadBatchDetails(pokemonBatch);
 
-  if (isStalePokemonQuery(requestId)) return;
+    if (isStalePokemonQuery(requestId)) return;
 
-  // Resolves the aforementioned array of promises and creates Pokémon preview objects
-  const pokemonPreviews = await loadPokemonPreviews(pokemonBatchDetails);
+    // Resolves the aforementioned array of promises and creates Pokémon preview objects
+    const pokemonPreviews = await loadPokemonPreviews(pokemonBatchDetails);
 
-  if (isStalePokemonQuery(requestId)) return;
+    if (isStalePokemonQuery(requestId)) return;
 
-  // Removes the invalid (null, non-existent) entries from the array of Pokémon preview obejcts
-  const validPokemonPreviews = filterPokemonPreviews(pokemonPreviews);
+    // Removes the invalid (null, non-existent) entries from the array of Pokémon preview obejcts
+    const validPokemonPreviews = filterPokemonPreviews(pokemonPreviews);
 
-  addQueryPokemonToState(validPokemonPreviews);
-  updateHasMoreQueryResults();
+    console.log('VALID POKEMON PREVIEWS, QUERY MODEL');
+    console.log(validPokemonPreviews);
+    addQueryPokemonToState(validPokemonPreviews);
+    updateHasMoreQueryResults();
 
-  queryState.offset += batchSize;
-  queryState.loading = false;
+    queryState.offset += batchSize;
+    queryState.loading = false;
 
-  return validPokemonPreviews;
+    return validPokemonPreviews;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 };
 
 export const resetQueryState = function () {

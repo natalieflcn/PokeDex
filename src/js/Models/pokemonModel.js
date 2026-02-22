@@ -73,7 +73,7 @@ const addPokemonToState = function (pokemon) {
 };
 
 export const updateHasMorePokemonResults = function () {
-  if (pokemonState.offset === pokemonState.allPokemonReferences.length)
+  if (pokemonState.offset >= pokemonState.allPokemonReferences.length)
     pokemonState.hasMoreResults = false;
 };
 
@@ -108,7 +108,7 @@ export const loadPokemonBatch = async function (requestId, batchSize = LIMIT) {
 
     if (batchSize === LIMIT) pokemonState.currentBatch = [];
 
-    // console.log('running');
+    console.log('runningLOADPOKEMONBATCH');
 
     // Sort Pokémon by Name or ID according to (global) sort search param
     const sortedPokemon = sortPokemon(
