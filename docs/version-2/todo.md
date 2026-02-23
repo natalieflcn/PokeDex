@@ -223,11 +223,12 @@
 
 ### Goals
 
-- [ ] Don't render Pokémon pagination buttons
+- [x] Don't render Pokémon pagination buttons
   - [x] When a Pokémon is rendered directly from the url
-  - [ ] When being redirected from the Profile module (replace current functionality)
-- [ ] When navigating between modules or browser history, search results should automatically scroll to active panel
+  - [x] When being redirected from the Profile module (replace current functionality)
+- [x] When navigating between modules or browser history, search results should automatically scroll to active panel
 
+- [ ] Create "About" page module
 - [ ] Create "Page Not Found" page, softly redirect them to the Search module
 - [ ] Create error pages for the user, softly redirect them to Search module
   - [ ] XXX: Generic error template
@@ -236,8 +237,10 @@
   - [ ] 429: Too Many Requests error
   - [ ] 500: Internal Server error
 - [ ] Create a personal Pokémon Trainer GIF to use on the Profile page
+- [ ] Create personalized Pokémon images for the error pages
+
+- [ ] BUG: Upon initial load or quick reload, controlSearchResults produces no Pokémon results or Pokémon panel TODO 1
+- [x] BUG: Pokémon panel rendering is inconsistent -- sometimes loading spinner disappears and panel stays blank before rendering details, sometimes details are rendered and removed
+- [x] BUG: When entering a query with lots of results, subsequent batches upon scrolling are not rendered properly and stops rendering
 
 ### Notes
-
-- [ ] BUG: Upon initial load or quick reload, controlSearchResults produces no Pokémon results or Pokémon panel
-- [x] BUG: Pokémon panel rendering is inconsistent -- sometimes loading spinner disappears and panel stays blank before rendering details, sometimes details are rendered and removed
