@@ -14,6 +14,9 @@ class TypesView extends View {
   }
 
   _generateMarkup() {
+    const mode = this._data.mode === 'Caught' ? 'caught' : 'favorites';
+    console.log(mode);
+
     return `
             <h2>Types of Pokémon ${this._data.mode}</h2>
             <div class="profile__stats">
@@ -33,7 +36,7 @@ class TypesView extends View {
                     class="profile__progress progress__outer"
                   >
                     <span class="profile__progress progress__inner" style="background-color: var(--type--Normal); width:${
-                      (this._data.types.Normal / this._data.caught.length) * 100
+                      (this._data.types.Normal / this._data[mode].length) * 100
                     }%"></span>
                   </div>
                 </div>
@@ -51,7 +54,7 @@ class TypesView extends View {
                     class="profile__progress progress__outer"
                   >
                   <span class="profile__progress progress__inner" style="background-color: var(--type--Fire); width:${
-                    (this._data.types.Fire / this._data.caught.length) * 100
+                    (this._data.types.Fire / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -68,7 +71,7 @@ class TypesView extends View {
                   <div
                     class="profile__progress progress__outer"
                   ><span class="profile__progress progress__inner" style="background-color: var(--type--Water); width:${
-                    (this._data.types.Water / this._data.caught.length) * 100
+                    (this._data.types.Water / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -85,7 +88,7 @@ class TypesView extends View {
                   <div
                     class="profile__progress progress__outer"
                   ><span class="profile__progress progress__inner" style="background-color: var(--type--Electric); width:${
-                    (this._data.types.Electric / this._data.caught.length) * 100
+                    (this._data.types.Electric / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -102,7 +105,7 @@ class TypesView extends View {
                   <div
                     class="profile__progress progress__outer"
                   ><span class="profile__progress progress__inner" style="background-color: var(--type--Grass); width:${
-                    (this._data.types.Grass / this._data.caught.length) * 100
+                    (this._data.types.Grass / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -116,7 +119,7 @@ class TypesView extends View {
                   <div
                     class="profile__progress progress__outer"
                   ><span class="profile__progress progress__inner" style="background-color: var(--type--Ice); width:${
-                    (this._data.types.Ice / this._data.caught.length) * 100
+                    (this._data.types.Ice / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -133,7 +136,7 @@ class TypesView extends View {
                   <div
                     class="profile__progress progress__outer"
                   ><span class="profile__progress progress__inner" style="background-color: var(--type--Fighting); width:${
-                    (this._data.types.Fighting / this._data.caught.length) * 100
+                    (this._data.types.Fighting / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -150,7 +153,7 @@ class TypesView extends View {
                   <div
                     class="profile__progress progress__outer"
                   ><span class="profile__progress progress__inner" style="background-color: var(--type--Poison); width:${
-                    (this._data.types.Poison / this._data.caught.length) * 100
+                    (this._data.types.Poison / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -167,7 +170,7 @@ class TypesView extends View {
                   <div
                     class="profile__progress progress__outer"
                   ><span class="profile__progress progress__inner" style="background-color: var(--type--Ground); width:${
-                    (this._data.types.Ground / this._data.caught.length) * 100
+                    (this._data.types.Ground / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -187,7 +190,7 @@ class TypesView extends View {
                   <div
                     class="profile__progress progress__outer"
                   ><span class="profile__progress progress__inner" style="background-color: var(--type--Flying); width:${
-                    (this._data.types.Flying / this._data.caught.length) * 100
+                    (this._data.types.Flying / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -205,7 +208,7 @@ class TypesView extends View {
                     class="profile__progress progress__outer"
                   >
                   <span class="profile__progress progress__inner" style="background-color: var(--type--Psychic); width:${
-                    (this._data.types.Psychic / this._data.caught.length) * 100
+                    (this._data.types.Psychic / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -219,7 +222,7 @@ class TypesView extends View {
                   <div
                     class="profile__progress progress__outer"
                   ><span class="profile__progress progress__inner" style="background-color: var(--type--Bug); width:${
-                    (this._data.types.Bug / this._data.caught.length) * 100
+                    (this._data.types.Bug / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -237,7 +240,7 @@ class TypesView extends View {
                     class="profile__progress progress__outer"
                   >
                   <span class="profile__progress progress__inner" style="background-color: var(--type--Rock); width:${
-                    (this._data.types.Rock / this._data.caught.length) * 100
+                    (this._data.types.Rock / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -255,7 +258,7 @@ class TypesView extends View {
                     class="profile__progress progress__outer"
                   >
                   <span class="profile__progress progress__inner" style="background-color: var(--type--Ghost); width:${
-                    (this._data.types.Ghost / this._data.caught.length) * 100
+                    (this._data.types.Ghost / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -273,7 +276,7 @@ class TypesView extends View {
                     class="profile__progress progress__outer"
                   >
                   <span class="profile__progress progress__inner" style="background-color: var(--type--Dragon); width:${
-                    (this._data.types.Dragon / this._data.caught.length) * 100
+                    (this._data.types.Dragon / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -291,7 +294,7 @@ class TypesView extends View {
                     class="profile__progress progress__outer"
                   >
                   <span class="profile__progress progress__inner" style="background-color: var(--type--Dark); width:${
-                    this._data.types.Dark / this._data.caught.length
+                    (this._data.types.Dark / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -309,7 +312,7 @@ class TypesView extends View {
                     class="profile__progress progress__outer"
                   >
                   <span class="profile__progress progress__inner" style="background-color: var(--type--Steel); width:${
-                    (this._data.types.Steel / this._data.caught.length) * 100
+                    (this._data.types.Steel / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>
@@ -327,7 +330,7 @@ class TypesView extends View {
                     class="profile__progress progress__outer"
                   >
                   <span class="profile__progress progress__inner" style="background-color: var(--type--Fairy); width:${
-                    (this._data.types.Fairy / this._data.caught.length) * 100
+                    (this._data.types.Fairy / this._data[mode].length) * 100
                   }%"></span>
                   </div>
                 </div>

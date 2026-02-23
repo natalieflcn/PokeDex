@@ -351,7 +351,7 @@ body {
 .header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   border-image: 1px solid black;
   color: var(--text--light);
 }
@@ -359,8 +359,12 @@ body {
 .header__logo {
   font-family: 'Pokemon Solid', sans-serif;
   font-size: 2rem;
-  letter-spacing: 0.15rem;
+  letter-spacing: 0.2rem;
   text-shadow: 3px 4px 2px var(--secondary-color--red-gradient--3);
+}
+
+.header__logo--name {
+  letter-spacing: 0.5rem;
 }
 
 .header__btn:first-child {

@@ -228,7 +228,7 @@
   - [x] When being redirected from the Profile module (replace current functionality)
 - [x] When navigating between modules or browser history, search results should automatically scroll to active panel
 
-- [ ] Create "About" page module
+- [ ] Create "About" page module TODO
 - [ ] Create "Page Not Found" page, softly redirect them to the Search module
 - [ ] Create error pages for the user, softly redirect them to Search module
   - [ ] XXX: Generic error template
@@ -239,7 +239,7 @@
 - [ ] Create a personal Pokémon Trainer GIF to use on the Profile page
 - [ ] Create personalized Pokémon images for the error pages
 
-- [ ] BUG: Upon initial load or quick reload, controlSearchResults produces no Pokémon results or Pokémon panel TODO 1
+- [x] BUG: Upon initial load or quick reload, controlSearchResults produces no Pokémon results or Pokémon panel TODO 1
 - [x] BUG: Pokémon panel rendering is inconsistent -- sometimes loading spinner disappears and panel stays blank before rendering details, sometimes details are rendered and removed
 - [x] BUG: When entering a query with lots of results, subsequent batches upon scrolling are not rendered properly and stops rendering
 
