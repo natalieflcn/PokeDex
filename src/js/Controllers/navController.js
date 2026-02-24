@@ -37,7 +37,7 @@ const controlNavRenderView = function (route) {
   navView.resetNav();
 
   // let pokemon = null;
-
+  // TODO move this into navService later
   if (route.startsWith('/search')) {
     // pokemon = route.split('/search/')[1];
     route = '/search';
@@ -85,6 +85,10 @@ const controlNavRenderView = function (route) {
       if (getFavoriteRender()) controlProfileRenderCategory('favorites');
       controlProfileSortLoad();
 
+      break;
+
+    case '/about':
+      navView.toggleNavAbout();
       break;
 
     default:

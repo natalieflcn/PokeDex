@@ -242,5 +242,6 @@
 - [x] BUG: Upon initial load or quick reload, controlSearchResults produces no Pokémon results or Pokémon panel TODO 1
 - [x] BUG: Pokémon panel rendering is inconsistent -- sometimes loading spinner disappears and panel stays blank before rendering details, sometimes details are rendered and removed
 - [x] BUG: When entering a query with lots of results, subsequent batches upon scrolling are not rendered properly and stops rendering
+- [ ] BUG: Some queries result in endless loop
 
 ### Notes

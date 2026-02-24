@@ -542,7 +542,9 @@ body {
 .screen__1--map,
 .screen__2--map,
 .screen__1--profile,
-.screen__2--profile {
+.screen__2--profile,
+.screen__1--about,
+.screen__2--about {
   /* display: flex;
   flex-direction: column;
   justify-content: space-evenly; */
@@ -1166,6 +1168,62 @@ body {
   width: 48%;
   height: 1.75em;
 }
+
+/* ABOUT MODULE (Screen 1) */
+.heading--about {
+  font-size: 1.4rem;
+  /* text-align: center; */
+  text-shadow: 3px 2px 4px var(--secondary-color--grey-gradient);
+  margin-bottom: 1rem;
+}
+
+.about--text {
+  line-height: 1rem;
+  font-size: 0.75rem;
+}
+
+.about__intro {
+  margin-bottom: 1.5rem;
+}
+
+.about__manual--modDesc {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.about__btn {
+  margin-right: 1rem;
+  min-width: 8rem;
+  height: 2rem;
+  align-self: center;
+}
+
+.about__creator {
+  /* display: flex; */
+  margin-top: 1.5rem;
+}
+
+.about__creator--intro {
+  display: flex;
+}
+
+.about__creator--text {
+  margin-bottom: 1rem;
+  /* letter-spacing: 0.001rem; */
+}
+.about__creator--text .heading {
+  margin-bottom: 0.5rem;
+}
+.about__creator--img {
+  width: 6rem;
+  height: 8rem;
+  margin-right: 1rem;
+}
+
+.about__creator--section:not(:first-child) {
+  margin: 1.5rem 0 0.5rem 0;
+}
+/*  */
 
 /* Footer */
 footer p {

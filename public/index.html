@@ -39,6 +39,12 @@
           >
             Profile
           </button>
+          <button
+            class="btn header__btn header__btn--about btn--red"
+            data-page="about"
+          >
+            ?
+          </button>
 
           <!-- Tablet Icon Buttons -->
 
@@ -87,8 +93,8 @@
       <!-- Screen -->
       <main class="screen__border">
         <section class="screen__1">
-          <!-- Perspective: Search -->
-          <section class="screen__1--search">
+          <!-- SEARCH MODULE -->
+          <section class="screen__1--search hidden">
             <form class="form search__form">
               <input
                 class="input search__input"
@@ -130,7 +136,7 @@
             <span class="search__sentinel"></span>
           </section>
 
-          <!-- Perspective: Map -->
+          <!-- MAP MODULE -->
           <section class="screen__1--map hidden">
             <header class="map__header">
               <h2 class="heading">Caught Pokémon</h2>
@@ -304,22 +310,104 @@
             </div>
           </section>
 
-          <!-- Perspective: Favorites -->
+          <!-- PROFILE MODULE -->
           <section class="screen__1--profile hidden"></section>
+
+          <!-- ABOUT MODULE -->
+          <section class="screen__1--about hidden">
+            <h2 class="heading--about">Welcome to Naty's Pokédex!</h2>
+
+            <div class="about__intro">
+              <p class="about--text bio">
+                It looks like you stumbled upon my Pokédex...<br />
+                I’m glad you’re here, make sure you take good care of it while
+                exploring!
+                <br />
+                <br />
+                Whether you’re here to browse through Pokémon or review my work
+                as a developer, I hope you enjoy.
+              </p>
+            </div>
+
+            <div class="about__manual">
+              <h2 class="heading--2">How to Use Naty's Pokédex</h2>
+
+              <div class="about__manual--modDesc">
+                <button class="btn about__btn header__btn--search btn--blue">
+                  Search
+                </button>
+                <p class="about--text">
+                  Browse Pokémon, view detailed stats, track which ones you’ve
+                  caught, and mark your favorites.
+                </p>
+              </div>
+
+              <div class="about__manual--modDesc">
+                <button class="btn about__btn header__btn--map btn--yellow">
+                  Map
+                </button>
+                <p class="about--text">
+                  Track where Pokémon were caught using an interactive map.
+                  Note: Location data is never stored externally.<br />
+                </p>
+              </div>
+
+              <div class="about__manual--modDesc">
+                <button class="btn about__btn header__btn--profile btn--green">
+                  Profile
+                </button>
+                <p class="about--text">
+                  View your caught and favorite Pokémon within my profile
+                  dashboard — your activity lives inside my Pokédex.
+                </p>
+              </div>
+            </div>
+
+            <div class="about__creator">
+              <div>
+              <div class="about__creator--intro">
+                <img
+                  class="about__creator--img"
+                  src="https://i.redd.it/3mmmx0dz9nmb1.gif"
+                />
+                <div class="about__creator--text">
+                  <h2 class="heading">Meet Naty</h2>
+                  <p class="bio about--text">
+                    My name is Natalie (Naty) and I’m a full-stack developer
+                    who’s honing her skills by building clean, interactive, and
+                    meaningful web applications.
+                  </p>
+                </div>
+              </div>
+
+              <p class="about__creator--section">Why I Built Naty's Pokédex</p>
+              <p class="bio about--text">
+                This is the first major project in my coding
+                portfolio. I wanted to challenge myself by building a fully functional application using vanilla JavaScript (no frameworks) to strengthen my understanding of core fundamentals. <br/><br/>Growing up playing Pokémon games, this felt like the perfect way to
+                merge a nostalgic passion with technical growth.
+              </p>
+
+              <p class="about__creator--section">What I Learned from this Project</p>
+              <p class="bio about--text">
+                This project reflects not just technical ability, but it is the
+                product of discipline, persistence, and growth.
+              </p>
+            </div>
+          </section>
         </section>
 
         <div class="divider__hinge"></div>
 
         <section class="screen__2">
-          <!-- Perspective: Search -->
-          <section class="screen__2--search"></section>
+          <!-- SEARCH MODULE -->
+          <section class="screen__2--search hidden"></section>
 
-          <!-- Perspective: Map -->
+          <!-- MAP MODULE -->
           <section class="screen__2--map hidden">
             <h1>Map Feature Coming Soon</h1>
           </section>
 
-          <!-- Perspective: Profile -->
+          <!-- PROFILE MODULE -->
           <section class="screen__2--profile hidden">
             <div class="profile__categories">
               <button
@@ -369,11 +457,14 @@
               <span class="profile__sentinel"></span>
             </div>
           </section>
+
+          <!-- ABOUT MODULE -->
+          <section class="screen__2--about hidden">screen 2 about</section>
         </section>
       </main>
       <footer>
         <div class="divider__footer"></div>
-        <p>Pokédex Created By <bold>Natalie Falcon</bold> &copy;</p>
+        <p>Naty's Pokédex Created By <bold>Natalie Falcon</bold> &copy;</p>
       </footer>
     </div>
     <script src="/bundle.js"></script>

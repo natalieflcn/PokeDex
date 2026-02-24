@@ -52,19 +52,19 @@ class NavView extends View {
   resetNav() {
     this._parentEl
       .querySelectorAll(
-        '.screen__1--search, .screen__2--search, .screen__1--map, .screen__2--map, .screen__1--profile, .screen__2--profile',
+        '.screen__1--search, .screen__2--search, .screen__1--map, .screen__2--map, .screen__1--profile, .screen__2--profile, .screen__1--about, .screen__2--about',
       )
       .forEach(page => page.classList.add('hidden'));
 
     this._parentEl
       .querySelectorAll(
-        '.lights__inner--blue, .lights__inner--yellow, .lights__inner--green',
+        '.lights__inner--blue, .lights__inner--yellow, .lights__inner--green, .lights__inner--red',
       )
       .forEach(light => light.classList.remove('lights__inner--active'));
 
     this._parentEl
       .querySelectorAll(
-        '.header__btn--search, .header__btn--map, .header__btn--profile',
+        '.header__btn--search, .header__btn--map, .header__btn--profile, .header__btn--about',
       )
       .forEach(btn => btn.classList.remove('btn--active', 'btn--disabled'));
   }
@@ -111,6 +111,21 @@ class NavView extends View {
 
     this._parentEl
       .querySelector('.header__btn--profile')
+      .classList.add('btn--active', 'btn--disabled');
+  }
+
+  // Adds active classes to About module and displays About module screens
+  toggleNavAbout() {
+    this._parentEl
+      .querySelectorAll('.screen__1--about, .screen__2--about')
+      .forEach(screen => screen.classList.remove('hidden'));
+
+    this._parentEl
+      .querySelector('.lights__inner--red')
+      .classList.add('lights__inner--active');
+
+    this._parentEl
+      .querySelector('.header__btn--about')
       .classList.add('btn--active', 'btn--disabled');
   }
 }
