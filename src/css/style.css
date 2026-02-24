@@ -134,14 +134,14 @@ body {
   font-weight: bolder;
   align-content: center;
   padding: 0.5rem 1rem 0.25rem 0rem;
-  text-shadow: 3px 2px 4px var(--secondary-color--grey-gradient);
+  text-shadow: 3px 2px 2px var(--secondary-color--grey-gradient);
   font-size: 1.55rem;
 }
 
 .heading--2 {
   margin-bottom: 1rem;
   font-size: 1.25rem;
-  text-shadow: 1px 1px 2px var(--secondary-color--grey);
+  text-shadow: 2px 2px 1px var(--secondary-color--grey-gradient);
 }
 
 .form {
@@ -1187,6 +1187,7 @@ body {
 
 .about--divider {
   border-bottom: var(--text--light) solid 2px;
+  margin: 1.5rem 0;
 }
 
 .about__intro {
@@ -1250,8 +1251,46 @@ body {
   margin: 0 1rem 0 0.75rem;
   align-self: center;
 }
-/*  */
+/* ABOUT MODULE (Screen 2) */
+.about__tech-stack {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0 1.5rem;
+}
 
+.about__tech-stack--item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about__tech-stack--img {
+  width: 3rem;
+  height: 3rem;
+  margin: 0.25rem 0.25rem 0.5rem;
+}
+
+.about__tech-stack--item p {
+  font-size: 0.65rem;
+}
+
+.about__third-party {
+  margin: 0.5rem 0 1.5rem;
+}
+
+.about__focus {
+  margin: 0.5rem 0 1rem;
+}
+
+.about__btn-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.about__btn-group--btn {
+  width: 100%;
+  margin-bottom: 1rem;
+}
 /* Footer */
 footer p {
   margin: 1rem 0 1rem;
