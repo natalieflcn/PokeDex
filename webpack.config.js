@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -51,5 +52,6 @@ module.exports = {
     new FaviconsWebpackPlugin({ logo: 'public/imgs/logo.svg' }),
     new HtmlWebpackPlugin({ template: './public/index.html' }),
     ...(isDev ? [] : [new MiniCssExtractPlugin()]),
+    new CopyWebpackPlugin({ patterns: [{ from: 'public/imgs', to: 'imgs' }] }),
   ],
 };

@@ -1171,9 +1171,12 @@ body {
 
 /* ABOUT MODULE (Screen 1) */
 .heading--about {
-  font-size: 1.4rem;
+  font-family: 'Pokemon Solid';
+  font-size: 2.3rem;
+  letter-spacing: 0.2rem;
+  color: var(--secondary-color--yellow);
   /* text-align: center; */
-  text-shadow: 3px 2px 4px var(--secondary-color--grey-gradient);
+  text-shadow: 4px 4px 0px var(--secondary-color--blue-gradient--1);
   margin-bottom: 1rem;
 }
 
@@ -1182,13 +1185,17 @@ body {
   font-size: 0.75rem;
 }
 
+.about--divider {
+  border-bottom: var(--text--light) solid 2px;
+}
+
 .about__intro {
   margin-bottom: 1.5rem;
 }
 
 .about__manual--modDesc {
   display: flex;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .about__btn {
@@ -1220,8 +1227,28 @@ body {
   margin-right: 1rem;
 }
 
-.about__creator--section:not(:first-child) {
-  margin: 1.5rem 0 0.5rem 0;
+.about__creator--section:first-of-type {
+  margin: 1rem 0 0.5rem 0;
+}
+
+.about__creator--section:not(:first-of-type) {
+  margin: 2rem 0 0.5rem 0;
+}
+
+.about--li {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.about--li:first-of-type {
+  margin-top: 1rem;
+}
+
+.about--list-icon {
+  width: 1rem;
+  height: 1rem;
+  margin: 0 1rem 0 0.75rem;
+  align-self: center;
 }
 /*  */
 
