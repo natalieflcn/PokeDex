@@ -40,7 +40,7 @@ const controlNavRenderView = function (route) {
 
   // let pokemon = null;
   // TODO move this into navService later
-  if (route.startsWith('/search')) {
+  if (route.startsWith('/search/')) {
     // pokemon = route.split('/search/')[1];
     route = '/search';
   }

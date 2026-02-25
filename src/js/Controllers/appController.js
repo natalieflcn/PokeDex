@@ -16,51 +16,14 @@ const controlAboutBtns = function (action) {
   switch (action) {
     // In-app redirects
     case 'search':
-      // console.log(isEmpty(getPokemon()));
-
-      // const pokemon = isEmpty(getPokemon())
-      //   ? null
-      //   : getPokemon().name.toLowerCase();
-
-      // console.log(pokemon);
-      // if (pokemon)
-      //   internalURL = new URL(`/search/${pokemon}`, BASE_POKEDEX_URL);
-
-      // window.history.pushState(
-      //   { page: `search/${pokemon ?? ''}` },
-      //   '',
-      //   internalURL,
-      // );
-
-      // navView.resetNav();
-      // navView.toggleNavSearch();
-
-      // if (pokemon) resultsView.scrollIntoView(capitalize(pokemon));
-
       controlNavBtn('search');
       break;
 
     case 'map':
-      // window.history.pushState({ page: 'map' }, '', internalURL);
-
-      // navView.resetNav();
-      // navView.toggleNavMap();
-
       controlNavBtn('map');
       break;
 
     case 'profile':
-      // window.history.pushState(
-      //   { page: `profile/${getCaughtRender() ? 'caught' : 'favorites'}` },
-      //   '',
-      //   internalURL,
-      // );
-
-      // console.log(navResolveRoute(action));
-      // internalURL = new URL(`${navResolveRoute(action)}`, BASE_POKEDEX_URL);
-      // navView.resetNav();
-      // navView.toggleNavProfile();
-
       controlNavBtn('profile');
       break;
 
@@ -79,6 +42,17 @@ const controlAboutBtns = function (action) {
 
     case 'portfolio':
       alert('Portfolio coming soon... Stay tuned!');
+      break;
+  }
+};
+
+export const controlAppError = function (err, view, message) {
+  console.log('running ControlAppERROR');
+  switch (err.message) {
+    case 'Pokemon Not Found':
+      console.log(err.message);
+
+      view.renderError(message || view._errorMessage);
       break;
   }
 };

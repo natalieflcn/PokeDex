@@ -68,6 +68,7 @@ import paginationView from '../views/SearchViews/paginationView.js';
 import { capitalize, debounce } from '../helpers.js';
 import panelState from '../models/state/panelState.js';
 import queryState from '../models/state/queryState.js';
+import { controlAppError } from './appController.js';
 
 let infiniteScrollLocked = false;
 let initializedSearchResults = false;
@@ -89,8 +90,6 @@ const controlSearchResults = async function () {
     if (resultsView._observer) resultsView.unobserveSentinel();
 
     const query = queryView.getQuery();
-
-    console.log(query);
 
     const pokemonName = capitalize(
       window.location.pathname.split('/search/')[1],
@@ -137,7 +136,8 @@ const controlSearchResults = async function () {
 
     if (pokemonResults.length < 1) {
       resultsView._clear();
-      resultsView.renderError();
+      controlAppError(new Error('Pokemon Not Found'), resultsView);
+      // resultsView.renderError();
       return;
     }
 
@@ -153,7 +153,8 @@ const controlSearchResults = async function () {
 
     resultsView.scrollIntoView;
   } catch (err) {
-    resultsView.renderError();
+    // resultsView.renderError();
+    controlAppError(new Error('Pokemon Not Found'), resultsView);
     console.error(err);
   }
 };
@@ -294,9 +295,8 @@ const controlSearchLoadActivePreview = function () {
 // To render Pokémon details (desc, stats, moves) for the Pokémon panel
 const controlSearchPokemonPanel = async function () {
   try {
-    // Retrieve Pokémon name from URL
-
     const pokemonName = window.location.pathname.split('/search/')[1];
+    // Retrieve Pokémon name from URL
 
     if (!pokemonName) return;
 
@@ -341,20 +341,14 @@ const controlSearchPokemonPanel = async function () {
     // console.log(prev, next);
   } catch (err) {
     panelView._clear();
+    controlAppError(
+      new Error('Pokemon Not Found'),
+      panelView,
+      `We couldn't load the Pokémon, ${capitalize(window.location.pathname.split('/search/')[1])}. Please try again.`,
+    );
+    // panelView.renderError();
     console.error(err);
   }
-};
-
-const controlSearchLoadQuery = async function () {
-  const query = window.location.pathname.split('/search/')[1];
-
-  // console.log(window.location.pathname);
-
-  if (!query) return;
-
-  setQueryRedirect(true);
-  setQuery(query);
-  queryView.setQuery(query);
 };
 
 /**
@@ -423,7 +417,6 @@ const controlSearchPagination = async function (direction) {
 const controlSearchCaughtBtn = function () {
   // Retrieve Pokémon that is highlighted on the Pokémon Panel
 
-  console.log('caught button control function running');
   const pokemon = getPokemon();
 
   // To add/remove Caught status
@@ -435,8 +428,6 @@ const controlSearchCaughtBtn = function () {
 
 // To add/remove Pokémon from our active Pokémon panel to our Favorite Pokémon
 const controlSearchFavoriteBtn = function () {
-  console.log('fav button control function running');
-
   // Retrieve Pokémon that is highlighted on the Pokémon Panel
   const pokemon = getPokemon();
 

@@ -10,7 +10,7 @@ import View from '../View.js';
 
 class PanelView extends View {
   _parentEl = document.querySelector('.screen__2--search');
-  _errorMessage = 'There was an error loading this Pokémon!';
+  _errorMessage = 'There was an error loading this Pokémon! Please try again.';
 
   /**
    * Adds handler to render Pokémon panel
@@ -27,7 +27,6 @@ class PanelView extends View {
    * @param {Function} handler - Search controller callback (controlSearchCaughtBtn)
    */
   addHandlerCaughtBtn(handler) {
-    console.log('adding caught button handler');
     this._parentEl.addEventListener('click', function (e) {
       const btn = e.target.closest('.search__btn--caught');
 
@@ -42,7 +41,6 @@ class PanelView extends View {
    * @param {Function} handler - Search controller callback (controlSearchFavoriteBtn)
    */
   addHandlerFavoriteBtn(handler) {
-    console.log('adding favorite button handler');
     this._parentEl.addEventListener('click', function (e) {
       const btn = e.target.closest('.search__btn--favorite');
 

@@ -55,7 +55,6 @@ class NavView extends View {
 
   // Removes all active classes and hides the current screens, prepping to instantiate a module
   resetNav() {
-    console.log('running');
     this._parentEl
       .querySelectorAll(
         '.screen__1--search, .screen__2--search, .screen__1--map, .screen__2--map, .screen__1--profile, .screen__2--profile, .screen__1--about, .screen__2--about, .screen__1--page-not-found, .screen__2--page-not-found',

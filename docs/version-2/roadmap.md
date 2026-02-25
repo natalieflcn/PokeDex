@@ -29,7 +29,7 @@
 ### Phase 3: Introducing New Features to Existing Modules
 
 - [ ] Add sorting by "Type" for the Search and Profile views
-- [ ] Create an "About the Project" section for visitors to learn more
+- [x] Create an "About the Project" section for visitors to learn more
 - [ ] Create a custom Pokémon Trainer GIF for Profile view
 
 ### Phase 4: Implementing the Map Module

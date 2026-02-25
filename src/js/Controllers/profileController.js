@@ -42,6 +42,7 @@ import categoryView from '../views/ProfileViews/categoryView.js';
 import sortView from '../views/ProfileViews/sortView.js';
 import queryView from '../views/ProfileViews/queryView.js';
 import typesView from '../views/ProfileViews/typesView.js';
+import { controlAppError } from './appController.js';
 
 // GENERAL PROFILE CONTROLLER FUNCTIONS
 
@@ -98,7 +99,16 @@ const controlProfilePokemonResults = async function () {
     // Rendering all of the Caught/Favorite Pokémon results if there is no query
     if (!query && pokemonBatch.length > 0)
       savedPokemonView.render(pokemonBatch);
-    else if (!query && pokemonBatch.length < 1) savedPokemonView.renderError();
+    else if (!query && pokemonBatch.length < 1)
+      controlAppError(
+        new Error('Pokemon Not Found'),
+        savedPokemonView,
+        `You haven't saved any Pokémon here yet! Start tracking your ${
+          getCaughtRender() ? 'caught' : 'favorite'
+        } Pokémon from the Search module.`,
+      );
+
+    // savedPokemonView.renderError();
     // savedPokemonView._clear();
 
     // Rendering Pokémon query results
@@ -109,16 +119,25 @@ const controlProfilePokemonResults = async function () {
 
       if (queryBatch.length > 0) savedPokemonView.render(queryBatch);
       else
-        savedPokemonView.renderError(
+        controlAppError(
+          new Error('Pokemon Not Found'),
+          savedPokemonView,
           `We couldn't find that Pokémon! Add more ${
             getCaughtRender() ? 'caught' : 'favorite'
           } Pokémon from the Search module. `,
         );
+
+      // savedPokemonView.renderError(
+      //   `We couldn't find that Pokémon! Add more ${
+      //     getCaughtRender() ? 'caught' : 'favorite'
+      //   } Pokémon from the Search module. `,
+      // );
       // savedPokemonView._clear();
       //TODO Render message that informs user to begin adding Pokemon to Profile
     }
   } catch (err) {
-    savedPokemonView.renderError();
+    // savedPokemonView.renderError();
+    controlAppError(new Error('Pokemon Not Found'), savedPokemonView);
     console.error(err);
   }
 };

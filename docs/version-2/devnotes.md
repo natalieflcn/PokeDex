@@ -25,7 +25,6 @@
 - [x] Implement CSS animations across Pokémon panels and menu buttons to create a smoother user experience
 - [ ] Use LocalStorageAPI to cache Pokémon previews and Pokémon details into local storage
 - [ ] Make input field, sort buttons, category buttons sticky at the top of the form
-- [ ] If a Pokémon panel is loaded from the url, the Pokémon should automatically have its name rendered in the input search field (Search Module)
 
 ---
 
@@ -33,16 +32,14 @@
 
 ### Minor Modifications
 
-- [ ] Create an About module to discuss the project's purpose, objectives, functionality, technical details, challenges and solutions, and lessons learned.
-- [ ] Add a "Type" sorting algorithm to the Search and Profile modules
-- [ ] Create a personal Pokémon Trainer GIF to use on the Profile page
-- [ ] Create "Page Not Found" page
-- [ ] Create an error page for the user, redirect them to Search module
+- [x] Create an About module to discuss the project's purpose, objectives, functionality, technical details, challenges and solutions, and lessons learned.
+- [x] Create "Page Not Found" page, redirect them to the Search module
 - [x] Create "Types of Pokémon Favorited" on Profile module, that renders when accessing Favorite Pokémon
-- [x] Hyperlink 'Pokémon Caught' to all caught Pokémon, 'Pokémon Favorited' to all favorited Pokémon'
 - [ ] Hyperlink Pokémon type on Profile module to view all caught/favorited Pokémon of that type
-- [ ] When viewing a subset of a type of Pokémon, a 'View All' button should appear to allow user to return to viewing all caught/favorited Pokémon
-- [ ] Routing should reflect the types of Pokémon being accessed (i.e. profile/caught/fire)
+- [ ] Add a "Type" sorting algorithm to the Profile module
+  - [ ] When viewing a subset of a type of Pokémon, a 'View All' button should appear to allow user to return to viewing all caught/favorited Pokémon
+  - [ ] Routing should reflect the types of Pokémon being accessed (i.e. profile/caught/fire)
+- [ ] Create personal Pokémon GIFS to use through application (Procreate)
 
 ### Map Module
 
@@ -64,7 +61,7 @@
 ## Technical Notes
 
 - Try loading Pokémon into browser cache to reduce loading speed of future searches.
-  - Currently, Pokémon data is initially loaded from the PokéAPI into memory... determine if it's more efficient to continue loading Pokémon like this or pivot towards leveraging browser cache to retain Pokémon data.
+  - Currently, Pokémon references are initially loaded from the PokéAPI into memory... determine if it's more efficient to continue loading Pokémon like this or pivot towards leveraging browser cache to retain Pokémon data.
 
 ---
 

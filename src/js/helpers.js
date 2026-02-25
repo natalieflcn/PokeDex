@@ -14,10 +14,14 @@ export const AJAX = async function (url) {
     const res = await Promise.race([fetch(url), timeout(TIMEOUT_SEC)]);
     const data = await res.json();
 
-    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+    if (!res.ok) throw new Error(`HTTP_${res.status}`);
+
+    // ${data.message} (${res.status})
 
     return data;
   } catch (err) {
+    if (err instanceof TypeError) throw new Error('NETWORK_ERROR');
+
     throw err;
   }
 };

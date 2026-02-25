@@ -230,14 +230,14 @@
 - [x] Create "About" page module
   - [x] Fix scrolling problem for the About module
 - [x] Include personal links in the footer
+- [x] Create "Page Not Found" page, softly redirect them to the Search module
 
-- [ ] Create "Page Not Found" page, softly redirect them to the Search module
-- [ ] Create error pages for the user, softly redirect them to Search module
-  - [ ] XXX: Generic error template
+- [ ] Render in-app errors for the user
   - [ ] 400: Bad Request error
-  - [ ] 404: Page Not Found error
   - [ ] 429: Too Many Requests error
   - [ ] 500: Internal Server error
+  - [ ] ERR_INTERNET_DISCONNECTED
+  - [x] Can't find Pokémon (manual URL entry)
 
 - [x] BUG: Upon initial load or quick reload, controlSearchResults produces no Pokémon results or Pokémon panel
 - [x] BUG: Pokémon panel rendering is inconsistent -- sometimes loading spinner disappears and panel stays blank before rendering details, sometimes details are rendered and removed
@@ -246,5 +246,3 @@
 - [x] BUG: Pokémon panel buttons not working anymore
 
 ### Notes
-
-- Download SVGs of Bootstrap icons referenced in HTML and replace images
