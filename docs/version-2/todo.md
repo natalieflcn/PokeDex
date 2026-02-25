@@ -248,3 +248,5 @@
 - [ ] BUG: Pokémon panel buttons not working anymore
 
 ### Notes
+
+- Download SVGs of Bootstrap icons referenced in HTML and replace images

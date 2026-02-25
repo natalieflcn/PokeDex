@@ -1302,12 +1302,41 @@ body {
   margin-bottom: 1rem;
 }
 /* Footer */
-footer p {
-  margin: 1rem 0 1rem;
-  padding-bottom: 0.75rem;
+.footer {
+  position: relative;
+  padding: 1.25rem 0 1rem;
+  color: var(--screen-color--dark);
+}
+
+.footer__byline {
   text-align: center;
 }
 
+.footer__links {
+  position: absolute;
+  right: 0.2rem;
+  bottom: 1rem;
+}
+
+.footer__links--link {
+  transition: all ease-in-out 0.25s;
+}
+
+.footer__links--link:hover {
+  color: var(--text--light);
+}
+
+.footer__links--link:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
+.footer__links--link:hover {
+  color: var(--text--light);
+}
+/* .footer__links--btn {
+  all: unset;
+} */
 /* Utility Classes */
 .hidden {
   display: none;
