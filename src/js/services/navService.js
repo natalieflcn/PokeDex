@@ -23,7 +23,7 @@ import { getPokemon } from '../models/panelModel';
  *
  * @param {string} page - Page identifier derived from navigation button or URL
  */
-const navResolveRoute = function (page) {
+export const navResolveRoute = function (page) {
   if (page === 'profile') {
     // Determines if the profile is currently in 'Caught' or 'Favorites' mode to define appropriate path
     const category = getCaughtRender() ? 'caught' : 'favorites';

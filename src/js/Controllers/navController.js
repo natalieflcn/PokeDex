@@ -27,6 +27,7 @@ import { getFavoriteRender } from '../models/favoriteModel';
 import lightsView from '../views/NavViews/lightsView';
 import resultsView from '../views/SearchViews/resultsView';
 import { capitalize } from '../helpers';
+import aboutView from '../views/AboutView';
 
 /**
  * Renders module with appropriate data (based on the URL path)
@@ -59,6 +60,7 @@ const controlNavRenderView = function (route) {
 
     case '/map':
       navView.toggleNavMap();
+
       break;
 
     // case '/profile':
@@ -89,7 +91,8 @@ const controlNavRenderView = function (route) {
 
     case '/about':
       navView.toggleNavAbout();
-      break;
+      // window.scrollTo({ top: 0, behavior: 'auto' });
+      aboutView.scrollToTop();
 
     default:
       // navView.toggleNavSearch();
@@ -103,7 +106,7 @@ const controlNavRenderView = function (route) {
  *
  * @param {string} page - Route identifier derived from navigation button
  */
-const controlNavBtn = function (page) {
+export const controlNavBtn = function (page) {
   navSanitizeSort();
 
   const route = navCheckRoute(page);
@@ -132,6 +135,11 @@ const controlNavInitialLoad = function () {
   }
 };
 
+const controlNavLogo = function () {
+  if (window.location.pathname === '/about') return;
+
+  controlNavBtn('about');
+};
 /**
  * Initializes Navigation Controller event handlers
  */
@@ -139,5 +147,6 @@ export const controlNavInit = function () {
   navView.addHandlerNavigateBtn(controlNavBtn);
   navView.addHandlerBrowser(controlNavBrowser);
   navView.addHandlerInitialLoad(controlNavInitialLoad);
+  navView.addHandlerLogo(controlNavLogo);
   lightsView.addHandlerLightBtn(controlNavBtn);
 };

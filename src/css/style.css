@@ -363,6 +363,16 @@ body {
   text-shadow: 3px 4px 2px var(--secondary-color--red-gradient--3);
 }
 
+.header__logo:hover {
+  cursor: pointer;
+}
+
+.header:hover h1 {
+  text-decoration: none;
+  text-shadow: 2px 2px 3px var(--secondary-color--red-gradient--3);
+  transition: all ease-in-out 0.25s;
+}
+
 .header__logo--name {
   letter-spacing: 0.5rem;
 }

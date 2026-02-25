@@ -30,6 +30,12 @@ class NavView extends View {
     });
   }
 
+  addHandlerLogo(handler) {
+    console.log('running logo');
+    this._parentEl
+      .querySelector('.header__logo')
+      .addEventListener('click', handler);
+  }
   /**
    * Adds handler that renders the appropriate module when user is navigating around browser history stack
    *

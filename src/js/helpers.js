@@ -22,6 +22,14 @@ export const AJAX = async function (url) {
   }
 };
 
+export const isEmpty = function (obj) {
+  if (obj === null || typeof obj === 'undefined') {
+    return true;
+  }
+
+  return Object.keys(obj).length === 0;
+};
+
 // To capitalize a word
 export const capitalize = function (word) {
   if (!word) return;
