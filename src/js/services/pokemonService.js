@@ -85,32 +85,27 @@ const createPokemonPreviewObject = function (name, details) {
 
 //TODO Write documentation
 export const loadGuaranteedBatch = async function (requestId, loadBatch) {
-  console.log('running LOADGUARANTEEDBATCH');
-  console.log(loadBatch);
   const pokemonPreviews = [];
   const hasMoreResults =
     loadBatch === loadPokemonBatch
       ? getHasMorePokemonResults
       : getHasMoreQueryResults;
 
-  console.log(hasMoreResults());
+ 
   while (pokemonPreviews.length < LIMIT && hasMoreResults()) {
-    console.log('running WHILELOOP');
+   
     // let currentBatchSize =
     const batchSize = LIMIT - pokemonPreviews.length;
 
-    console.log('BATCH SIZE');
-    console.log(batchSize);
+   
 
     const loadedPokemon = await loadBatch(requestId, batchSize);
 
-    console.log('LOADED POKEMON');
-    console.log(loadedPokemon);
+    
     pokemonPreviews.push(...(loadedPokemon ?? []));
   }
 
-  console.log('pokemon previews');
-  console.log(pokemonPreviews);
+  
   return pokemonPreviews;
 };
 
@@ -191,7 +186,7 @@ export const getPokemonPagination = function (
   // console.log(pokemonName, pokemonResults, loadMoreResults);
 
   if (!pokemonResults.some(pokemon => pokemon.name === pokemonName)) {
-    console.log('trying to disable pagination buttons');
+    
     return { prev: false, next: false };
   }
 

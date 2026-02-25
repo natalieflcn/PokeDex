@@ -34,7 +34,7 @@ export const navResolveRoute = function (page) {
   if (page === 'search' && Object.keys(getPokemon()).length !== 0) {
     return `/search/${getPokemon().name.toLowerCase()}`;
   }
-  console.log(page);
+
   return `/${page}`;
 };
 

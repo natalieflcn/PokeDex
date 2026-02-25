@@ -28,6 +28,7 @@ import lightsView from '../views/NavViews/lightsView';
 import resultsView from '../views/SearchViews/resultsView';
 import { capitalize } from '../helpers';
 import aboutView from '../views/AboutView';
+import pageNotFoundView from '../views/ErrorViews/pageNotFoundView';
 
 /**
  * Renders module with appropriate data (based on the URL path)
@@ -95,7 +96,7 @@ const controlNavRenderView = function (route) {
       aboutView.scrollToTop();
 
     default:
-      // navView.toggleNavSearch();
+      navView.toggleNavPageNotFound();
       break;
   }
 };
@@ -140,6 +141,10 @@ const controlNavLogo = function () {
 
   controlNavBtn('about');
 };
+
+const controlNavBackToSearch = function () {
+  controlNavBtn('search');
+};
 /**
  * Initializes Navigation Controller event handlers
  */
@@ -149,4 +154,5 @@ export const controlNavInit = function () {
   navView.addHandlerInitialLoad(controlNavInitialLoad);
   navView.addHandlerLogo(controlNavLogo);
   lightsView.addHandlerLightBtn(controlNavBtn);
+  pageNotFoundView.addHandlerBackToSearchBtn(controlNavBackToSearch);
 };

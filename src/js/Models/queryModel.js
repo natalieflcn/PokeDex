@@ -74,7 +74,6 @@ export const getHasMoreQueryResults = function () {
 
 export const setQuery = function (query) {
   queryState.query = query;
-  console.log(queryState.query);
 };
 
 export const setQueryRedirect = function (value) {
@@ -117,8 +116,6 @@ export const loadQueryBatch = async function (requestId, batchSize = LIMIT) {
   try {
     queryState.loading = true;
 
-    console.log('QUERYMODEL BATCHSIZE');
-    console.log(batchSize);
     if (batchSize === LIMIT) queryState.currentBatch = [];
 
     // Sort Pokémon by Name or ID according to (global) sort search param
@@ -128,8 +125,7 @@ export const loadQueryBatch = async function (requestId, batchSize = LIMIT) {
       queryState.offset,
       queryState.offset + batchSize,
     );
-    console.log('QUERY MODEL POKEMONBATCH');
-    console.log(pokemonBatch);
+
     // Fetch Pokémon name, ID, and img to later create Pokémon previews (this stores an array of promises)
     const pokemonBatchDetails = loadBatchDetails(pokemonBatch);
 
@@ -143,8 +139,6 @@ export const loadQueryBatch = async function (requestId, batchSize = LIMIT) {
     // Removes the invalid (null, non-existent) entries from the array of Pokémon preview obejcts
     const validPokemonPreviews = filterPokemonPreviews(pokemonPreviews);
 
-    console.log('VALID POKEMON PREVIEWS, QUERY MODEL');
-    console.log(validPokemonPreviews);
     addQueryPokemonToState(validPokemonPreviews);
     updateHasMoreQueryResults();
 

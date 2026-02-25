@@ -15,7 +15,6 @@ class TypesView extends View {
 
   _generateMarkup() {
     const mode = this._data.mode === 'Caught' ? 'caught' : 'favorites';
-    console.log(mode);
 
     return `
             <h2>Types of Pokémon ${this._data.mode}</h2>

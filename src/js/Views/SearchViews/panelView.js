@@ -27,6 +27,7 @@ class PanelView extends View {
    * @param {Function} handler - Search controller callback (controlSearchCaughtBtn)
    */
   addHandlerCaughtBtn(handler) {
+    console.log('adding caught button handler');
     this._parentEl.addEventListener('click', function (e) {
       const btn = e.target.closest('.search__btn--caught');
 
@@ -41,6 +42,7 @@ class PanelView extends View {
    * @param {Function} handler - Search controller callback (controlSearchFavoriteBtn)
    */
   addHandlerFavoriteBtn(handler) {
+    console.log('adding favorite button handler');
     this._parentEl.addEventListener('click', function (e) {
       const btn = e.target.closest('.search__btn--favorite');
 

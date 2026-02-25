@@ -86,13 +86,12 @@ const controlAboutBtns = function (action) {
 const init = async function () {
   // Prevents app from duplication initialization during development (HMR)
   if (window.appInitialized) return;
+  window.appInitialized = true;
 
   controlNavInit();
   await controlSearchInit();
   controlProfileInit();
   AboutView.addHandlerAboutBtn(controlAboutBtns);
-
-  window.appInitialized = true;
 };
 
 init();

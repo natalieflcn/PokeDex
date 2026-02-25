@@ -108,8 +108,6 @@ export const loadPokemonBatch = async function (requestId, batchSize = LIMIT) {
 
     if (batchSize === LIMIT) pokemonState.currentBatch = [];
 
-    console.log('runningLOADPOKEMONBATCH');
-
     // Sort Pokémon by Name or ID according to (global) sort search param
     const sortedPokemon = sortPokemon(
       pokemonState.allPokemonReferences,
@@ -158,7 +156,6 @@ export const loadPokemonBatch = async function (requestId, batchSize = LIMIT) {
 export const loadNextPokemon = function (direction, pokemonResults) {
   const activePokemon = getPokemon();
 
-  console.log(activePokemon);
   let currIndex = pokemonResults.findIndex(
     pokemon => pokemon.name === activePokemon.name,
   );

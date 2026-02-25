@@ -31,7 +31,6 @@ class NavView extends View {
   }
 
   addHandlerLogo(handler) {
-    console.log('running logo');
     this._parentEl
       .querySelector('.header__logo')
       .addEventListener('click', handler);
@@ -56,9 +55,10 @@ class NavView extends View {
 
   // Removes all active classes and hides the current screens, prepping to instantiate a module
   resetNav() {
+    console.log('running');
     this._parentEl
       .querySelectorAll(
-        '.screen__1--search, .screen__2--search, .screen__1--map, .screen__2--map, .screen__1--profile, .screen__2--profile, .screen__1--about, .screen__2--about',
+        '.screen__1--search, .screen__2--search, .screen__1--map, .screen__2--map, .screen__1--profile, .screen__2--profile, .screen__1--about, .screen__2--about, .screen__1--page-not-found, .screen__2--page-not-found',
       )
       .forEach(page => page.classList.add('hidden'));
 
@@ -133,6 +133,14 @@ class NavView extends View {
     this._parentEl
       .querySelector('.header__btn--about')
       .classList.add('btn--active', 'btn--disabled');
+  }
+
+  toggleNavPageNotFound() {
+    this._parentEl
+      .querySelectorAll(
+        '.screen__1--page-not-found, .screen__2--page-not-found',
+      )
+      .forEach(screen => screen.classList.remove('hidden'));
   }
 }
 

@@ -554,7 +554,9 @@ body {
 .screen__1--profile,
 .screen__2--profile,
 .screen__1--about,
-.screen__2--about {
+.screen__2--about,
+.screen__1--page-not-found,
+.screen__2--page-not-found {
   /* display: flex;
   flex-direction: column;
   justify-content: space-evenly; */
@@ -1085,7 +1087,6 @@ body {
 
 .profile__header--label {
   margin-right: 1.5rem;
-  cursor: pointer;
 }
 
 .profile__header--label span {
@@ -1334,9 +1335,43 @@ body {
 .footer__links--link:hover {
   color: var(--text--light);
 }
-/* .footer__links--btn {
-  all: unset;
-} */
+
+/* Error Views */
+.page-not-found {
+  margin-top: 1rem;
+  line-height: 1.25rem;
+}
+
+.page-not-found__error {
+  display: flex;
+  margin-top: 1rem;
+}
+.page-not-found__img {
+  width: 15rem;
+  height: 15rem;
+}
+
+.page-not-found__code {
+  margin-right: 1rem;
+  align-content: center;
+  text-align: center;
+  width: 50%;
+  height: 17rem;
+  font-size: 3.5rem;
+}
+
+.error__template--img {
+  width: 100%;
+}
+
+.error__details {
+  margin: 1rem 0;
+  line-height: 1.25rem;
+}
+
+.error__btn {
+  width: 100%;
+}
 /* Utility Classes */
 .hidden {
   display: none;

@@ -73,7 +73,6 @@ const controlProfileLoadTypes = function () {
     favorites: getFavoritePokemon(),
   };
 
-  console.log(typesData);
   typesView.render(typesData, true, true);
 };
 

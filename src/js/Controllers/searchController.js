@@ -76,9 +76,8 @@ let initializedSearchResults = false;
 
 // To coordinate rendering of the Pokémon search results
 const controlSearchResults = async function () {
-  console.log('running controlsearchrseults');
   try {
-    const redirectedFromProfile = getQueryRedirect();
+    if (!window.appInitialized) return;
 
     if (initializedSearchResults) panelView._clear();
     else initializedSearchResults = true;
@@ -90,6 +89,8 @@ const controlSearchResults = async function () {
     if (resultsView._observer) resultsView.unobserveSentinel();
 
     const query = queryView.getQuery();
+
+    console.log(query);
 
     const pokemonName = capitalize(
       window.location.pathname.split('/search/')[1],
@@ -110,25 +111,14 @@ const controlSearchResults = async function () {
       // }
 
       storeQueryResults(query, pokemonState.allPokemonReferences);
-      console.log(queryState.queryReferences);
+
       await loadGuaranteedBatch(requestId, loadQueryBatch);
       // await loadQueryBatch(requestId);
 
       pokemonResults = getQueryResults();
       hasMoreResults = getHasMoreQueryResults();
       // console.log(pokemonResults, hasMoreResults);
-    }
-    // } else if (!initializedSearchResults && pokemonName) {
-    //   // Need to render search results until Pokémon is found
-    //   let i = 0;
-    //   while (i !== 10) {
-    //     console.log(pokemonName, getPokemonResults());
-    //     await loadGuaranteedBatch(requestId, loadPokemonBatch);
-    //     i++;
-    //   }
-    //   console.log('done running');
-    // }
-    else {
+    } else {
       requestId = startPokemonRequest();
 
       // window.history.replaceState({ page: `search` }, '', `/search`);
@@ -168,15 +158,8 @@ const controlSearchResults = async function () {
   }
 };
 
-// Debounce search results to reduce redundant queries
-const debouncedControlSearchResults = debounce(controlSearchResults, 300);
-
 // To determine the scroll position of the client and to load more data, if necessary
 const controlSearchInfiniteScroll = async function () {
-  console.log('running infinite scroll');
-
-  console.log('GET QUERY, GETQUERYRESULTS');
-  console.log(getQuery(), getQueryResults());
   if (infiniteScrollLocked) return;
   infiniteScrollLocked = true;
 
@@ -209,17 +192,11 @@ const controlSearchInfiniteScroll = async function () {
     return;
   }
 
-  console.log('SERCHCTRONOLLER QUERYREFERENCES, HASMORERESULTS');
-  console.log(queryState.queryReferences, hasMoreResults);
   resultsView.renderSpinner(true);
 
   await loadGuaranteedBatch(requestId, loadBatch);
 
   const currentBatch = getCurrentBatch();
-
-  console.log('SERCHCONTROLLER CURRENTBATCH');
-  console.log(currentBatch);
-  // console.log(currentBatch, hasMoreResults);
 
   resultsView.removeSpinner();
   // There are no more results to be rendered
@@ -373,14 +350,11 @@ const controlSearchLoadQuery = async function () {
 
   // console.log(window.location.pathname);
 
-  console.log(query);
   if (!query) return;
 
   setQueryRedirect(true);
   setQuery(query);
   queryView.setQuery(query);
-
-  console.log(window.location.pathname);
 };
 
 /**
@@ -390,7 +364,6 @@ const controlSearchLoadQuery = async function () {
  * @param {string} direction - 'prev' or 'next pagination button
  */
 const controlSearchPagination = async function (direction) {
-  console.log(direction);
   const query = getQuery();
   let pokemonResults, loadMoreResults, requestId;
 
@@ -405,18 +378,14 @@ const controlSearchPagination = async function (direction) {
     loadMoreResults = getHasMorePokemonResults();
   }
 
-  console.log(pokemonResults, loadMoreResults);
   // Loading the prev/next Pokémon based on the user-selected direction
   let nextPokemon = loadNextPokemon(direction, pokemonResults);
-  console.log('next pokemon is');
-  console.log(nextPokemon);
 
   // Loading more Pokémon preview results (if the user navigates to a Pokémon that hasn't been rendered yet)
 
   if (!nextPokemon && loadMoreResults) {
     paginationView.enablePaginationBtn('next');
     panelView.renderSpinner();
-    console.log('null received, but there are more results');
 
     const numResults = pokemonResults.length;
 
@@ -454,20 +423,20 @@ const controlSearchPagination = async function (direction) {
 const controlSearchCaughtBtn = function () {
   // Retrieve Pokémon that is highlighted on the Pokémon Panel
 
+  console.log('caught button control function running');
   const pokemon = getPokemon();
 
-  console.log(pokemon);
   // To add/remove Caught status
   if (!pokemon.caught) addCaughtPokemon(pokemon);
   else removeCaughtPokemon(pokemon);
 
-  console.log(getCaughtPokemon());
-  console.log(getFavoritePokemon());
   panelView.toggleCaughtBtn();
 };
 
 // To add/remove Pokémon from our active Pokémon panel to our Favorite Pokémon
 const controlSearchFavoriteBtn = function () {
+  console.log('fav button control function running');
+
   // Retrieve Pokémon that is highlighted on the Pokémon Panel
   const pokemon = getPokemon();
 

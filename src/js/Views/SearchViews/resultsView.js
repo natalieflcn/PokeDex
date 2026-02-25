@@ -48,10 +48,8 @@ class ResultsView extends View {
   }
 
   scrollIntoView(pokemonName) {
-    console.log('running scrollintoview');
     const pokemon = this._parentEl.querySelector(`.search__preview--active`);
 
-    console.log(pokemon);
     if (!pokemon) return;
 
     if (
@@ -59,8 +57,6 @@ class ResultsView extends View {
       pokemonName
     )
       return;
-
-    console.log(pokemon.querySelector('.search__preview--name').textContent);
 
     pokemon.scrollIntoView({
       behavior: 'smooth',

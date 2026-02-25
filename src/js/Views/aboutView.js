@@ -15,7 +15,7 @@ class AboutView extends View {
       .forEach(screen =>
         screen.addEventListener('click', function (e) {
           const btn = e.target.closest('.about__btn');
-          console.log(btn);
+
           if (!btn) return;
 
           const page = btn.dataset.action;
@@ -33,8 +33,6 @@ class AboutView extends View {
     ];
 
     if (screenTops.length === 0) return;
-
-    console.log(screenTops);
 
     screenTops.forEach(screen =>
       screen.scrollIntoView({ behavior: 'auto', block: 'start' }),
