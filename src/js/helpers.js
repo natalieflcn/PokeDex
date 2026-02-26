@@ -11,6 +11,9 @@ const timeout = function (s) {
 // To consolidate fetching data and parsing the JSON response
 export const AJAX = async function (url) {
   try {
+    // if (url.includes('pokemon')) {
+    //   throw new Error('HTTP_503');
+    // }
     const res = await Promise.race([fetch(url), timeout(TIMEOUT_SEC)]);
     const data = await res.json();
 

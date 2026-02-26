@@ -1408,14 +1408,15 @@ body {
 
 .error svg {
   align-self: center;
-  height: 5rem;
-  width: 5rem;
+  height: 3rem;
+  width: 25%;
   margin: 1rem 2rem 1rem 1rem;
 }
 
 .error p {
   align-self: center;
   justify-self: center;
+  width: 90%;
   font-size: 15px;
   line-height: 1.5;
 }

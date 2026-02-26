@@ -136,9 +136,8 @@ const controlSearchResults = async function () {
 
     if (pokemonResults.length < 1) {
       resultsView._clear();
-      controlAppError(new Error('Pokemon Not Found'), resultsView);
+      throw new Error('Pokemon Not Found');
       // resultsView.renderError();
-      return;
     }
 
     if (hasMoreResults) {
@@ -153,8 +152,10 @@ const controlSearchResults = async function () {
 
     resultsView.scrollIntoView;
   } catch (err) {
-    // resultsView.renderError();
-    controlAppError(new Error('Pokemon Not Found'), resultsView);
+    resultsView.unobserveSentinel();
+    console.log('controlsearchresults line 156 calling error');
+    console.log(err);
+    controlAppError(err, resultsView);
     console.error(err);
   }
 };
@@ -341,6 +342,7 @@ const controlSearchPokemonPanel = async function () {
     // console.log(prev, next);
   } catch (err) {
     panelView._clear();
+    console.log('controlpokemonpanel line 344 calling error');
     controlAppError(
       new Error('Pokemon Not Found'),
       panelView,
@@ -458,8 +460,13 @@ export const controlSearchRedirect = async function (pokemon) {
 // To initialize all Pokémon references to store in our state (pokemonState)
 const initPokemonData = async function () {
   if (getLoadedReferences()) return;
-
-  await storeAllPokemonReferences();
+  try {
+    await storeAllPokemonReferences();
+  } catch (err) {
+    console.log(err);
+    console.log('searchcontroller line 466 calling error');
+    controlAppError(err, panelView);
+  }
 };
 
 /**

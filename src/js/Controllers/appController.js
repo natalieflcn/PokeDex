@@ -11,6 +11,8 @@ import { controlSearchInit } from './searchController';
 import { controlProfileInit } from './profileController';
 import '../../css/style.css';
 import AboutView from '../views/AboutView';
+import resultsView from '../views/SearchViews/resultsView';
+import generalErrorView from '../views/ErrorViews/generalErrorView';
 
 const controlAboutBtns = function (action) {
   switch (action) {
@@ -47,12 +49,43 @@ const controlAboutBtns = function (action) {
 };
 
 export const controlAppError = function (err, view, message) {
+  console.log(err);
+  console.log(err.message);
   console.log('running ControlAppERROR');
   switch (err.message) {
     case 'Pokemon Not Found':
-      console.log(err.message);
-
       view.renderError(message || view._errorMessage);
+      break;
+
+    case 'NETWORK_ERROR':
+      view.renderError(
+        'You appear to be offline. Please connect to the internet and try again.',
+      );
+      break;
+
+    case 'HTTP_400':
+      view.renderError('We were unable to fulfill your request.');
+      break;
+
+    case 'HTTP_429':
+      view.renderError(
+        "Oops, sorry! You've sent us too many requests, please try again later.",
+      );
+      break;
+
+    case 'HTTP_500':
+    case 'HTTP_503':
+      view.renderError(
+        "We're experiencing some technical difficulties, but we're working to fix it. Please refresh the page or return to the Search module.",
+      );
+      break;
+
+    case 'HTTP_400':
+      view.renderError('Invalid request.');
+      break;
+
+    default:
+      view.renderError('Something went wrong!');
       break;
   }
 };

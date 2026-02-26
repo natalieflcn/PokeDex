@@ -233,6 +233,8 @@
 - [x] Create "Page Not Found" page, softly redirect them to the Search module
 
 - [ ] Render in-app errors for the user
+  - [x] Centralize error handling in appController
+  - [x] Refactor current renderError calls into centralized error handler
   - [ ] 400: Bad Request error
   - [ ] 429: Too Many Requests error
   - [ ] 500: Internal Server error
@@ -246,3 +248,5 @@
 - [x] BUG: Pokémon panel buttons not working anymore
 
 ### Notes
+
+- Some error methods trump others, will need to polish erro r handling system

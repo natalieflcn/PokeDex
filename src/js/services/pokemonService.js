@@ -91,21 +91,19 @@ export const loadGuaranteedBatch = async function (requestId, loadBatch) {
       ? getHasMorePokemonResults
       : getHasMoreQueryResults;
 
- 
   while (pokemonPreviews.length < LIMIT && hasMoreResults()) {
-   
-    // let currentBatchSize =
-    const batchSize = LIMIT - pokemonPreviews.length;
+    try {
+      // let currentBatchSize =
+      const batchSize = LIMIT - pokemonPreviews.length;
 
-   
+      const loadedPokemon = await loadBatch(requestId, batchSize);
 
-    const loadedPokemon = await loadBatch(requestId, batchSize);
-
-    
-    pokemonPreviews.push(...(loadedPokemon ?? []));
+      pokemonPreviews.push(...(loadedPokemon ?? []));
+    } catch (err) {
+      throw err;
+    }
   }
 
-  
   return pokemonPreviews;
 };
 
@@ -128,7 +126,7 @@ export const loadBatchDetails = function (pokemonBatch) {
           `Failed to load Pokémon: ${pokemonName}. Will attempt to load next Pokémon instead.`,
           err,
         );
-        // throw err;
+        throw err;
       });
   });
 
@@ -186,7 +184,6 @@ export const getPokemonPagination = function (
   // console.log(pokemonName, pokemonResults, loadMoreResults);
 
   if (!pokemonResults.some(pokemon => pokemon.name === pokemonName)) {
-    
     return { prev: false, next: false };
   }
 

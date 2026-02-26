@@ -55,7 +55,6 @@ export const clearPokemon = () => (panelState.pokemon = {});
  */
 export const createPokemonObject = async function (data) {
   // Data loaded from MAIN_API_URL (data[0])
-
   const {
     name,
     id,
