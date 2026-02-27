@@ -239,6 +239,25 @@ class PanelView extends View {
                   />
                 </svg>
               </button>
+              
+              <button class="btn search__btn--caught btn--yellow ${
+                this._data.caught ? 'btn--active' : ''
+              }">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="13"
+                  height="13"
+                  fill="currentColor"
+                  class="bi bi-geo-alt-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"
+                  />
+                </svg>
+                <span class="full-text">Caught This Pokémon</span><span class="short-text">Caught</span>
+              </button>
+
               <button class="btn search__btn--favorite btn--red ${
                 this._data.favorite ? 'btn--active' : ''
               }">
@@ -255,23 +274,6 @@ class PanelView extends View {
                   />
                 </svg>
                 Favorite
-              </button>
-              <button class="btn search__btn--caught btn--yellow ${
-                this._data.caught ? 'btn--active' : ''
-              }">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="13"
-                  height="13"
-                  fill="currentColor"
-                  class="bi bi-geo-alt-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"
-                  />
-                </svg>
-                Caught This Pokémon
               </button>
               <button class="btn search__btn--next btn--blue" data-page="next">
                 <svg

@@ -94,6 +94,7 @@ const controlNavRenderView = function (route) {
       navView.toggleNavAbout();
       // window.scrollTo({ top: 0, behavior: 'auto' });
       aboutView.scrollToTop();
+      break;
 
     default:
       navView.toggleNavPageNotFound();

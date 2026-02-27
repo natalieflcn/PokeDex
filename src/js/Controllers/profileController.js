@@ -78,7 +78,7 @@ const controlProfileLoadTypes = function () {
 };
 
 // To populate the savedPokemonView with either all Caught/Favorite Pokémon or queried Caught/Favorite Pokémon
-const controlProfilePokemonResults = async function () {
+export const controlProfilePokemonResults = async function () {
   try {
     resetQueryState();
 
@@ -98,18 +98,20 @@ const controlProfilePokemonResults = async function () {
         ? await loadCaughtPokemon()
         : await loadFavoritePokemon();
 
+    console.log(pokemonBatch);
     // Rendering all of the Caught/Favorite Pokémon results if there is no query
     if (!query && pokemonBatch.length > 0)
       savedPokemonView.render(pokemonBatch);
-    else if (!query && pokemonBatch.length < 1)
+    else if (!query && pokemonBatch.length < 1) {
       console.log('controlprofilepokemon line 105 calling error');
-    controlAppError(
-      new Error('Pokemon Not Found'),
-      savedPokemonView,
-      `You haven't saved any Pokémon here yet! Start tracking your ${
-        getCaughtRender() ? 'caught' : 'favorite'
-      } Pokémon from the Search module.`,
-    );
+      controlAppError(
+        new Error('Pokemon Not Found'),
+        savedPokemonView,
+        `You haven't saved any Pokémon here yet! Start tracking your ${
+          getCaughtRender() ? 'caught' : 'favorite'
+        } Pokémon from the Search module.`,
+      );
+    }
 
     // savedPokemonView.renderError();
     // savedPokemonView._clear();
@@ -123,6 +125,7 @@ const controlProfilePokemonResults = async function () {
       if (queryBatch.length > 0) savedPokemonView.render(queryBatch);
       else {
         console.log('controlprofilepokemon line 125 calling error');
+
         controlAppError(
           new Error('Pokemon Not Found'),
           savedPokemonView,
@@ -131,6 +134,7 @@ const controlProfilePokemonResults = async function () {
           } Pokémon from the Search module. `,
         );
       }
+
       // savedPokemonView.renderError(
       //   `We couldn't find that Pokémon! Add more ${
       //     getCaughtRender() ? 'caught' : 'favorite'

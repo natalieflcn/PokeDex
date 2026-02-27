@@ -69,6 +69,7 @@ import { capitalize, debounce } from '../helpers.js';
 import panelState from '../models/state/panelState.js';
 import queryState from '../models/state/queryState.js';
 import { controlAppError } from './appController.js';
+import { controlProfilePokemonResults } from './profileController.js';
 
 let infiniteScrollLocked = false;
 let initializedSearchResults = false;
@@ -426,6 +427,7 @@ const controlSearchCaughtBtn = function () {
   else removeCaughtPokemon(pokemon);
 
   panelView.toggleCaughtBtn();
+  // controlProfilePokemonResults();
 };
 
 // To add/remove Pokémon from our active Pokémon panel to our Favorite Pokémon
@@ -438,6 +440,7 @@ const controlSearchFavoriteBtn = function () {
   else removeFavoritePokemon(pokemon);
 
   panelView.toggleFavoriteBtn();
+  // controlProfilePokemonResults();
 };
 
 // To reset the navView and load the Search module when user is redirected from Profile module

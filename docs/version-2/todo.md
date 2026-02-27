@@ -231,16 +231,17 @@
   - [x] Fix scrolling problem for the About module
 - [x] Include personal links in the footer
 - [x] Create "Page Not Found" page, softly redirect them to the Search module
-
-- [ ] Render in-app errors for the user
+- [x] Render in-app errors for the user
   - [x] Centralize error handling in appController
   - [x] Refactor current renderError calls into centralized error handler
-  - [ ] 400: Bad Request error
-  - [ ] 429: Too Many Requests error
-  - [ ] 500: Internal Server error
-  - [ ] ERR_INTERNET_DISCONNECTED
+  - [x] 400: Bad Request error
+  - [x] 429: Too Many Requests error
+  - [x] 500: Internal Server error
+  - [x] ERR_INTERNET_DISCONNECTED
   - [x] Can't find Pokémon (manual URL entry)
-
+- [ ] Make platform responsive for smaller devices TODO
+  - [ ] Tablets
+  - [ ] Phones
 - [x] BUG: Upon initial load or quick reload, controlSearchResults produces no Pokémon results or Pokémon panel
 - [x] BUG: Pokémon panel rendering is inconsistent -- sometimes loading spinner disappears and panel stays blank before rendering details, sometimes details are rendered and removed
 - [x] BUG: When entering a query with lots of results, subsequent batches upon scrolling are not rendered properly and stops rendering
@@ -250,3 +251,23 @@
 ### Notes
 
 - Some error methods trump others, will need to polish erro r handling system
+
+## Week: February 26 - March 4
+
+### Goals
+
+- [ ] BUG: When typing queries quickly, program loops and crashes
+- [ ] Begin planning implementation for Map functionality TODO2
+
+- [ ] Implement Google Maps library and render Caught Pokémon on a map
+- [ ] Add location details to the entry panel
+- [ ] When a user marks a Pokémon as "Caught" in the Search module, redirect them to the Map module to create a new entry
+  - [ ] Pre-fill the entry data with Pokémon name, Pokémon ID, date, and time
+  - [ ] When a user is clicking around the map, match the location details of the entry to the newly clicked location
+- [ ] Keep entry panel hidden if a user is not currently logging an entry
+- [ ] Sort Caught Pokémon entries
+  - [ ] Sort by Name
+  - [ ] Sort by ID
+  - [ ] Sort by Date
+- [ ] Render the number of Pokémon Caught in the Map module -- this number should match the number of Pokémon Caught indicated in the Profile module
+- [ ] TBD: Should a user be allowed to manually add Caught Pokémon entries from the Map module?
