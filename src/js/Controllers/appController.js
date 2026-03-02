@@ -80,10 +80,6 @@ export const controlAppError = function (err, view, message) {
       );
       break;
 
-    case 'HTTP_400':
-      view.renderError('Invalid request.');
-      break;
-
     default:
       view.renderError('Something went wrong!');
       break;

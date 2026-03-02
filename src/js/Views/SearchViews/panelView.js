@@ -179,6 +179,7 @@ class PanelView extends View {
 
               <div class="search__moves">
                 <h2 class="heading--2">Moves</h2>
+                <div class=search__moves--collection>
                 <p>1<span class="search__moves--known" style="background-color: var(${
                   this._data.moves?.[0]?.[1] ? '--type--' : ''
                 }${
@@ -220,6 +221,7 @@ class PanelView extends View {
                   this._data.moves?.[5]?.[1] ||
                   '--secondary-color--grey-gradient'
                 });">${this._data.moves?.[5]?.[0] || '???'}</span></p>
+                </div>
               </div>
             </div>
 

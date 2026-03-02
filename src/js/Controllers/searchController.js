@@ -479,6 +479,7 @@ export const controlSearchInit = async function () {
   await initPokemonData();
 
   queryView.addHandlerQuery(controlSearchResults);
+  queryView.addHandlerChangePlaceholder();
   // queryView.addHandlerLoadQuery(controlSearchLoadQuery);
 
   resultsView.addHandlerLoadResults(controlSearchResults);

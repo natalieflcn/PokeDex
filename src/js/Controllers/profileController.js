@@ -74,7 +74,7 @@ const controlProfileLoadTypes = function () {
     favorites: getFavoritePokemon(),
   };
 
-  typesView.render(typesData, true, true);
+  typesView.render(typesData);
 };
 
 // To populate the savedPokemonView with either all Caught/Favorite Pokémon or queried Caught/Favorite Pokémon
@@ -300,6 +300,8 @@ export const controlProfileInit = function () {
   profileView.addHandlerLoadProfile(controlProfileLoad);
 
   queryView.addHandlerQuery(controlProfilePokemonResults);
+  queryView.addHandlerChangePlaceholder();
+
   previewView.addHandlerRedirect(controlProfileClickPreview);
 
   categoryView.addHandlerCategoryBtn(controlProfileCategoryBtn);

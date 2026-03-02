@@ -44,6 +44,21 @@ class QueryView extends View {
   setQuery(query) {
     this._parentEl.value = query;
   }
+
+  changePlaceholderText() {
+    const windowWidth = window.innerWidth;
+
+    if (windowWidth < 1200) {
+      this._parentEl.setAttribute('placeholder', 'Search...');
+    } else {
+      this._parentEl.setAttribute('placeholder', 'Search for a Pokémon...');
+    }
+  }
+
+  addHandlerChangePlaceholder() {
+    this.changePlaceholderText();
+    window.addEventListener('resize', this.changePlaceholderText.bind(this));
+  }
 }
 
 export default new QueryView();

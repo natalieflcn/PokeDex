@@ -311,7 +311,24 @@
           </section>
 
           <!-- PROFILE MODULE -->
-          <section class="screen__1--profile hidden"></section>
+          <section class="screen__1--profile hidden">
+              <div class="profile__header--container">
+                  <img
+                class="profile__img img__display"
+                src='https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ce59ab1e-3349-49ea-a021-e0fc8c0dc054/dau5pmk-ff876a20-b483-4ed0-8968-29b4648e5fe1.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2NlNTlhYjFlLTMzNDktNDllYS1hMDIxLWUwZmM4YzBkYzA1NFwvZGF1NXBtay1mZjg3NmEyMC1iNDgzLTRlZDAtODk2OC0yOWI0NjQ4ZTVmZTEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.vnqf14GGZS1KBdD7b8MbxK4RX957bZwVMIH6PmxCo9I'
+                  />
+
+              <header class="profile__header"></header>
+              
+
+                
+
+              </div>
+              
+              <p class="profile__header--bio bio profile__header--short-text">Grew up catching Pokémon in the Bronx, now training my Pokémon and ready for battle in Dyckman.</p>
+
+              <div class="profile__types"></div>
+          </section>
 
           <!-- ABOUT MODULE -->
           <section class="screen__1--about hidden">
@@ -477,14 +494,16 @@
                 autocomplete="off"
               />
 
-              <label>Sort</label>
+              <div class="profile__form--sort">
+                <label>Sort</label>
 
-              <button class="btn profile__btn--name btn--blue" data-sort="name">
-                Name
-              </button>
-              <button class="btn profile__btn--id btn--yellow" data-sort="id">
-                ID
-              </button>
+                <button class="btn profile__btn--name btn--blue" data-sort="name">
+                  Name
+                </button>
+                <button class="btn profile__btn--id btn--yellow" data-sort="id">
+                  ID
+                </button>
+              </div>
             </form>
 
             <div class="profile__preview--container">
@@ -521,9 +540,20 @@
            
             <div class="bio about__third-party">
               <ul>
-                <li>PokéAPI</li>
-                <li>Font from somewhere</li>
-                <li>Google Maps API</li>
+                <div class="about--li">
+                   <img class="about--list-icon" src="/imgs/pokeball-list-icon.png">
+                   <li>PokéAPI</li>
+                </div>
+
+                <div class="about--li">
+                   <img class="about--list-icon" src="/imgs/pokeball-list-icon.png">
+                   <li>Font from somewhere</li>
+                </div>
+
+                <div class="about--li">
+                   <img class="about--list-icon" src="/imgs/pokeball-list-icon.png">
+                   <li>Google Maps API</li>
+                </div>
               
               </ul>
             </div>
@@ -561,7 +591,7 @@
 
             <h2 class="heading--2">Want to See More?</h2>
             <div class="about__btn-group">
-            <button class="btn about__btn btn--blue about__btn-group--btn" data-action="source-code">View the Source Code on GitHub</button>
+            <button class="btn about__btn btn--blue about__btn-group--btn" data-action="source-code">View Source Code on GitHub</button>
             <button class="btn about__btn btn--yellow about__btn-group--btn" data-action="github">Visit My GitHub Profile</button>
             <button class="btn about__btn btn--green about__btn-group--btn" data-action="linkedin">Connect with Me on Linkedin</button>
             <button class="btn about__btn btn--red about__btn-group--btn" data-action="portfolio">Explore My Full Portfolio</button>

@@ -10,7 +10,7 @@ import View from '../View.js';
 import { PROFILE_IMG, PROFILE_NAME, PROFILE_BIO } from '../../config.js';
 
 class ProfileView extends View {
-  _parentEl = document.querySelector('.screen__1--profile');
+  _parentEl = document.querySelector('.profile__header');
   _errorMessage = 'There was an error loading the profile.';
 
   /**
@@ -24,14 +24,11 @@ class ProfileView extends View {
 
   _generateMarkup() {
     return `
-    <div class="profile__header--container">
-    <img
-                class="profile__img img__display"
-                src= "${PROFILE_IMG}"
-              />
-            <header class="profile__header">
+    
+          
               
               <div class="profile__header--details">
+                
                 <h2 class="heading">${PROFILE_NAME}'s Pokédex</h2>
 
                 <div class="profile__header--labels">
@@ -41,6 +38,7 @@ class ProfileView extends View {
                       >${this._data.caught.length}</span
                     >
                   </p>
+
                   <p class="profile__header--label" data-view="favorites">
                     Pokémon Favorited<span
                       class="profile__header--label label--inset" data-view="favorites"
@@ -49,16 +47,17 @@ class ProfileView extends View {
                   </p>
                 </div>
 
-                <p class="profile__header--bio bio">
-                  ${PROFILE_BIO}
-                </p>
+               <div class="profile__header--bio bio profile__header--full-text">Grew up catching Pokémon in the Bronx, now training my Pokémon and ready for battle in Dyckman.</div>
+                
               </div>
-            </header>
-
+          
+             
             
             
-            </div>
-            </div>
+            
+    
+                
+            
             `;
   }
 }

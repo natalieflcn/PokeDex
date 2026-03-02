@@ -12,7 +12,7 @@ const timeout = function (s) {
 export const AJAX = async function (url) {
   try {
     // if (url.includes('pokemon')) {
-    //   throw new Error('HTTP_503');
+    //   throw new Error('HTTP_42');
     // }
     const res = await Promise.race([fetch(url), timeout(TIMEOUT_SEC)]);
     const data = await res.json();

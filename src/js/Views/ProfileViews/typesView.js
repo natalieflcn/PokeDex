@@ -1,7 +1,7 @@
 import View from '../View.js';
 
 class TypesView extends View {
-  _parentEl = document.querySelector('.screen__1--profile');
+  _parentEl = document.querySelector('.profile__types');
   _errorMessage = 'There was an error loading the profile.';
 
   /**
