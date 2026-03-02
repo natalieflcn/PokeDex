@@ -239,9 +239,6 @@
   - [x] 500: Internal Server error
   - [x] ERR_INTERNET_DISCONNECTED
   - [x] Can't find Pokémon (manual URL entry)
-- [ ] Make platform responsive for smaller devices TODO
-  - [ ] Tablets
-  - [ ] Phones
 - [x] BUG: Upon initial load or quick reload, controlSearchResults produces no Pokémon results or Pokémon panel
 - [x] BUG: Pokémon panel rendering is inconsistent -- sometimes loading spinner disappears and panel stays blank before rendering details, sometimes details are rendered and removed
 - [x] BUG: When entering a query with lots of results, subsequent batches upon scrolling are not rendered properly and stops rendering
@@ -255,6 +252,13 @@
 ## Week: February 26 - March 4
 
 ### Goals
+
+- [ ] Make platform responsive for smaller devices TODO
+  - [x] Extra extra large devices (1200+)
+  - [x] Extra large devices (1200px)
+  - [x] Large devices (992px)
+  - [x] Medium devices (768px)
+  - [ ] Small devices (576px)
 
 - [ ] BUG: When typing queries quickly, program loops and crashes
 - [ ] Begin planning implementation for Map functionality TODO2
