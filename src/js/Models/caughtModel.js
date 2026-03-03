@@ -59,7 +59,7 @@ export const loadCaughtPokemon = async function () {
   try {
     const caughtPokemon = sortPokemon(
       caughtState.caughtPokemon,
-      getCaughtSortBy()
+      getCaughtSortBy(),
     );
 
     for (const pokemon of caughtPokemon) {
@@ -88,6 +88,8 @@ export const addCaughtPokemon = function (newPokemon) {
     return;
 
   caughtState.caughtPokemon.push(newPokemon);
+
+  console.log(caughtState.caughtPokemon);
   persistData('caughtPokemon', caughtState.caughtPokemon);
   updateTypesPokemonCaught();
 };
@@ -101,7 +103,7 @@ export const removeCaughtPokemon = function (pokemon) {
   pokemon.caught = false;
 
   const index = caughtState.caughtPokemon.findIndex(
-    currPokemon => currPokemon.name === pokemon.name
+    currPokemon => currPokemon.name === pokemon.name,
   );
 
   caughtState.caughtPokemon.splice(index, 1);

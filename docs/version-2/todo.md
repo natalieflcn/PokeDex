@@ -262,7 +262,8 @@
 
 - [x] BUG: When typing queries quickly, program loops and crashes
 
-- [ ] Begin planning implementation for Map functionality TODO
+- [ ] Plan implementation for Map functionality
+  - [x] Edit styling for Map module
 
 - [ ] Implement Google Maps library and render Caught Pokémon on a map
 - [ ] Add location details to the entry panel
