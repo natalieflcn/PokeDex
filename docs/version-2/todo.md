@@ -253,16 +253,16 @@
 
 ### Goals
 
-- [ ] Make platform responsive for smaller devices TODO
+- [x] Make platform responsive for smaller devices
   - [x] Extra extra large devices (1200+)
   - [x] Extra large devices (1200px)
   - [x] Large devices (992px)
   - [x] Medium devices (768px)
-  - [ ] Small devices (576px)
+  - [x] Small devices (576px)
 
-- [ ] BUG: When typing queries quickly, program loops and crashes
+- [x] BUG: When typing queries quickly, program loops and crashes
 
-- [ ] Begin planning implementation for Map functionality TODO2
+- [ ] Begin planning implementation for Map functionality TODO
 
 - [ ] Implement Google Maps library and render Caught Pokémon on a map
 - [ ] Add location details to the entry panel

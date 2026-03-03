@@ -112,7 +112,11 @@ export const storeQueryResults = function (query, querySet) {
  *
  * @param {number} requestId - Id of current request being made
  */
-export const loadQueryBatch = async function (requestId, batchSize = LIMIT) {
+export const loadQueryBatch = async function (
+  requestId,
+  batchSize = LIMIT,
+  signal,
+) {
   try {
     queryState.loading = true;
 
@@ -127,7 +131,7 @@ export const loadQueryBatch = async function (requestId, batchSize = LIMIT) {
     );
 
     // Fetch Pokémon name, ID, and img to later create Pokémon previews (this stores an array of promises)
-    const pokemonBatchDetails = loadBatchDetails(pokemonBatch);
+    const pokemonBatchDetails = loadBatchDetails(pokemonBatch, signal);
 
     if (isStalePokemonQuery(requestId)) return;
 

@@ -73,6 +73,7 @@ import { controlProfilePokemonResults } from './profileController.js';
 
 let infiniteScrollLocked = false;
 let initializedSearchResults = false;
+let currentSearchResultsController;
 
 // SEARCH CONTROLLER FUNCTIONS
 
@@ -83,6 +84,13 @@ const controlSearchResults = async function () {
 
     if (initializedSearchResults) panelView._clear();
     else initializedSearchResults = true;
+
+    if (currentSearchResultsController) {
+      currentSearchResultsController.abort();
+    }
+
+    currentSearchResultsController = new AbortController();
+    const { signal } = currentSearchResultsController;
 
     // Retrieve query from user input
     resetQueryState();
@@ -112,7 +120,7 @@ const controlSearchResults = async function () {
 
       storeQueryResults(query, pokemonState.allPokemonReferences);
 
-      await loadGuaranteedBatch(requestId, loadQueryBatch);
+      await loadGuaranteedBatch(requestId, loadQueryBatch, signal);
       // await loadQueryBatch(requestId);
 
       pokemonResults = getQueryResults();
@@ -124,7 +132,7 @@ const controlSearchResults = async function () {
       // window.history.replaceState({ page: `search` }, '', `/search`);
 
       // await controlSearchPokemonPanel();
-      await loadGuaranteedBatch(requestId, loadPokemonBatch);
+      await loadGuaranteedBatch(requestId, loadPokemonBatch, signal);
       // await loadPokemonBatch(requestId);
 
       // console.log(pokemonState.results);
@@ -156,11 +164,17 @@ const controlSearchResults = async function () {
     resultsView.unobserveSentinel();
     console.log('controlsearchresults line 156 calling error');
     console.log(err);
+    console.log('request aborted');
+    if (err.name === 'AbortError') return;
+
     controlAppError(err, resultsView);
     console.error(err);
   }
 };
 
+const debouncedControlSearchResults = function () {
+  debounce(controlSearchResults);
+};
 // To determine the scroll position of the client and to load more data, if necessary
 const controlSearchInfiniteScroll = async function () {
   if (infiniteScrollLocked) return;
@@ -478,7 +492,7 @@ const initPokemonData = async function () {
 export const controlSearchInit = async function () {
   await initPokemonData();
 
-  queryView.addHandlerQuery(controlSearchResults);
+  queryView.addHandlerQuery(debounce(controlSearchResults, 300));
   queryView.addHandlerChangePlaceholder();
   // queryView.addHandlerLoadQuery(controlSearchLoadQuery);
 

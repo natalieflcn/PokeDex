@@ -9,12 +9,15 @@ const timeout = function (s) {
 };
 
 // To consolidate fetching data and parsing the JSON response
-export const AJAX = async function (url) {
+export const AJAX = async function (url, signal) {
   try {
     // if (url.includes('pokemon')) {
     //   throw new Error('HTTP_42');
     // }
-    const res = await Promise.race([fetch(url), timeout(TIMEOUT_SEC)]);
+
+    const fetchPromise = fetch(url, signal ? { signal } : {});
+
+    const res = await Promise.race([fetchPromise, timeout(TIMEOUT_SEC)]);
     const data = await res.json();
 
     if (!res.ok) throw new Error(`HTTP_${res.status}`);
@@ -23,6 +26,8 @@ export const AJAX = async function (url) {
 
     return data;
   } catch (err) {
+    if (err.name === 'AbortError') throw err;
+
     if (err instanceof TypeError) throw new Error('NETWORK_ERROR');
 
     throw err;

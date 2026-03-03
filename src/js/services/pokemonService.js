@@ -65,8 +65,8 @@ export const possiblePokemon = function (substring, pokemonSet) {
 };
 
 // Fetching Pokémon data from https://pokeapi.co/api/v2/pokemon/
-const fetchPokemon = async function (pokemonName) {
-  return await AJAX(`${MAIN_API_URL}${pokemonName}`);
+const fetchPokemon = async function (pokemonName, signal) {
+  return await AJAX(`${MAIN_API_URL}${pokemonName}`, signal);
 };
 
 // Creating a PokemonPreview object after parsing PokéAPI data
@@ -84,7 +84,11 @@ const createPokemonPreviewObject = function (name, details) {
 };
 
 //TODO Write documentation
-export const loadGuaranteedBatch = async function (requestId, loadBatch) {
+export const loadGuaranteedBatch = async function (
+  requestId,
+  loadBatch,
+  signal,
+) {
   const pokemonPreviews = [];
   const hasMoreResults =
     loadBatch === loadPokemonBatch
@@ -96,7 +100,9 @@ export const loadGuaranteedBatch = async function (requestId, loadBatch) {
       // let currentBatchSize =
       const batchSize = LIMIT - pokemonPreviews.length;
 
-      const loadedPokemon = await loadBatch(requestId, batchSize);
+      const loadedPokemon = await loadBatch(requestId, batchSize, signal);
+
+      if (!loadedPokemon) break;
 
       pokemonPreviews.push(...(loadedPokemon ?? []));
     } catch (err) {
@@ -113,11 +119,11 @@ export const loadGuaranteedBatch = async function (requestId, loadBatch) {
  * @param {Pokemon[]} pokemonSet - Pokémon dataset (All Pokémon, Caught Pokémon, or Favorite Pokémon)
  * @returns {PokemonPreviewRequest[]}
  */
-export const loadBatchDetails = function (pokemonBatch) {
+export const loadBatchDetails = function (pokemonBatch, signal) {
   const pokemonBatchDetails = pokemonBatch.map(pokemon => {
     const pokemonName = pokemon.name || pokemon;
 
-    return fetchPokemon(pokemonName)
+    return fetchPokemon(pokemonName, signal)
       .then(pokemonDetails =>
         createPokemonPreviewObject(pokemonName, pokemonDetails),
       )

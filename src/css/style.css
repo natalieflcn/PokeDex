@@ -367,6 +367,10 @@ body {
   text-shadow: 3px 4px 2px var(--secondary-color--red-gradient--3);
   padding-top: 0.25rem;
 }
+.header__nav {
+  display: flex;
+  gap: 0.5rem;
+}
 
 .header__logo:hover {
   cursor: pointer;
@@ -1681,6 +1685,18 @@ body {
 } */
 /* Large Devices (i.e. Desktops) --- 992px */
 @media (max-width: 998px) {
+  .header__btn .short-text,
+  .header__btn .full-text {
+    display: none;
+  }
+
+  .header__btn--icon {
+    display: inline-block;
+  }
+
+  .header__logo {
+    font-size: 1.75rem;
+  }
   /* About Module */
   .heading--about {
     line-height: 2.8rem;
@@ -1763,12 +1779,6 @@ body {
 
   .heading--2 {
     font-size: 1rem;
-  }
-
-  .about__manual--modDesc {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
   }
 
   .about--full-text {
@@ -2040,14 +2050,7 @@ body {
   .profile__header--bio {
     text-align: start;
   }
-  .header__btn .short-text,
-  .header__btn .full-text {
-    display: none;
-  }
 
-  .header__btn--icon {
-    display: inline-block;
-  }
   /* nav */
 
   .header {
@@ -2066,6 +2069,24 @@ body {
   }
 
   .header__logo {
+    text-align: center;
+  }
+
+  .about__manual--modDesc {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .about__tech-stack {
+    justify-content: center;
+  }
+  .screen__1--about .heading,
+  .screen__2--about .heading,
+  .screen__2--about .heading--2,
+  .screen__1--about .heading--2,
+  .heading--about,
+  .about__heading {
     text-align: center;
   }
   /* .header__btn--about {
