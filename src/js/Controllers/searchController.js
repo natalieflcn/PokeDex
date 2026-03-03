@@ -70,6 +70,7 @@ import panelState from '../models/state/panelState.js';
 import queryState from '../models/state/queryState.js';
 import { controlAppError } from './appController.js';
 import { controlProfilePokemonResults } from './profileController.js';
+import { controlMapRedirect } from './mapController.js';
 
 let infiniteScrollLocked = false;
 let initializedSearchResults = false;
@@ -437,10 +438,15 @@ const controlSearchCaughtBtn = function () {
   const pokemon = getPokemon();
 
   // To add/remove Caught status
-  if (!pokemon.caught) addCaughtPokemon(pokemon);
-  else removeCaughtPokemon(pokemon);
+  if (!pokemon.caught) {
+    addCaughtPokemon(pokemon);
+    console.log(caughtState.caughtPokemon);
+    window.history.pushState({ page: `map` }, '', `/map`);
+    controlMapRedirect();
+  } else removeCaughtPokemon(pokemon);
 
   panelView.toggleCaughtBtn();
+
   // controlProfilePokemonResults();
 };
 
@@ -458,7 +464,7 @@ const controlSearchFavoriteBtn = function () {
 };
 
 // To reset the navView and load the Search module when user is redirected from Profile module
-export const controlSearchRedirect = async function (pokemon) {
+export const controlSearchRedirect = async function () {
   // controlSearchLoadQuery();
   // console.log(pokemon);
   // queryView.setQuery(pokemon);

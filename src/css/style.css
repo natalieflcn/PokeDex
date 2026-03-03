@@ -934,11 +934,14 @@ body {
   /* position: relative; */
   /* bottom: 9%; */
   font-size: 0.5rem;
+
   /* margin-right: 0.6rem; */
 }
 
-.map__header--summary span {
+.map__header--caught {
   margin-right: 0.65rem;
+  justify-content: center;
+  padding: 0.4rem 0.25rem 0.25rem;
 }
 
 .map__btns {

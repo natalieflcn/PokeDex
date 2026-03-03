@@ -262,18 +262,23 @@
 
 - [x] BUG: When typing queries quickly, program loops and crashes
 
-- [ ] Plan implementation for Map functionality
+- [~] Plan implementation for Map functionality
   - [x] Edit styling for Map module
+  - [x] Determine data flow within Map module (and Search module)
+  - [x] Render the number of Pokémon Caught in the Map module -- this number should match the number of Pokémon Caught indicated in the Profile module
 
-- [ ] Implement Google Maps library and render Caught Pokémon on a map
-- [ ] Add location details to the entry panel
-- [ ] When a user marks a Pokémon as "Caught" in the Search module, redirect them to the Map module to create a new entry
-  - [ ] Pre-fill the entry data with Pokémon name, Pokémon ID, date, and time
-  - [ ] When a user is clicking around the map, match the location details of the entry to the newly clicked location
-- [ ] Keep entry panel hidden if a user is not currently logging an entry
-- [ ] Sort Caught Pokémon entries
-  - [ ] Sort by Name
-  - [ ] Sort by ID
-  - [ ] Sort by Date
-- [ ] Render the number of Pokémon Caught in the Map module -- this number should match the number of Pokémon Caught indicated in the Profile module
-- [ ] TBD: Should a user be allowed to manually add Caught Pokémon entries from the Map module?
+### Notes
+
+- Catching Pokémon: Data Flow
+  - [x] User clicks 'Caught this Pokémon' on Search module
+    - [x] User is redirected to Map module
+    - [ ] Name, Pokémon ID, is automatically pre-filled on Map entry form
+    - [ ] 'Location' field is determined by map marker (When a user is clicking around the map, match the location details of the entry to the newly clicked location)
+    - [ ] User clicks 'Log Entry', form disappears (Keep entry panel hidden if a user is not currently logging an entry)
+  - [ ] User deletes Caught Pokémon entry from Map module
+    - [ ] Entry is deleted from Map module
+    - [ ]Pokémon no longer exists in Caught Pokémon state (also reflected in Search module, Profile module)
+  - [ ] User deselects 'Caught this Pokémon' from Search module
+    - [ ] Pokémon no longer exists in Caught Pokémon
+    - [ ] Entry no longer exists in Map module
+  - [ ] User should not be allowed to add Pokémon manually from the map module (One-Way Data Flow)

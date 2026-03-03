@@ -167,7 +167,7 @@ const controlProfileClickPreview = async function (pokemon) {
 
   savedPokemonView._clear();
 
-  controlSearchRedirect(pokemon);
+  controlSearchRedirect();
 };
 
 // RENDERING AND ROUTING PROFILE CATEGORY (Caught/Favorite)

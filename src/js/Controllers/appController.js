@@ -13,6 +13,7 @@ import '../../css/style.css';
 import AboutView from '../views/AboutView';
 import resultsView from '../views/SearchViews/resultsView';
 import generalErrorView from '../views/ErrorViews/generalErrorView';
+import { controlMapInit } from './mapController';
 
 const controlAboutBtns = function (action) {
   switch (action) {
@@ -94,6 +95,7 @@ const init = async function () {
   controlNavInit();
   await controlSearchInit();
   controlProfileInit();
+  controlMapInit();
   AboutView.addHandlerAboutBtn(controlAboutBtns);
 };
 

@@ -13,7 +13,7 @@
 ## Areas of Improvement (ENHANCE USER EXPERIENCE)
 
 - [x] Ensure the current file system properly reflects the MVC model before building off this system architecture
-- [ ] Make the platform responsive for tablet and mobile users
+- [x] Make the platform responsive for tablet and mobile users
 - [x] Make it clear that the user is intially loaded onto the Search module
 - [x] Disable buttons that are already active
 - [x] Hyperlink the Pokédex menu buttons to the Pokédex circular lights
