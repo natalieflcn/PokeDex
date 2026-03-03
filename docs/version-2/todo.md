@@ -261,6 +261,7 @@
   - [ ] Small devices (576px)
 
 - [ ] BUG: When typing queries quickly, program loops and crashes
+
 - [ ] Begin planning implementation for Map functionality TODO2
 
 - [ ] Implement Google Maps library and render Caught Pokémon on a map

@@ -390,6 +390,9 @@ body {
   padding: 0.2rem 0.3rem 0 0.3rem;
 }
 
+.header__btn--icon {
+  display: none;
+}
 /* Lights */
 .lights {
   display: flex;
@@ -1407,6 +1410,7 @@ body {
 
 .footer__byline {
   text-align: center;
+  line-height: 1.25rem;
 }
 
 .footer__links {
@@ -1894,6 +1898,183 @@ body {
   }
 }
 
+@media (max-width: 576px) {
+  .about__tech-stack--img {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .about__tech-stack--item p {
+    font-size: 0.5rem;
+  }
+
+  .about--text,
+  .about--li,
+  .about__btn-group--btn {
+    font-size: 0.6rem;
+  }
+
+  .page-not-found__code {
+    font-size: 2.5rem;
+    height: 7rem;
+  }
+
+  .page-not-found__img {
+    width: 7rem;
+    height: 7rem;
+  }
+
+  .error {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+    padding: 2rem;
+  }
+
+  .error svg,
+  .error p {
+    margin: 0;
+  }
+
+  .error p {
+    font-size: 0.75rem;
+  }
+
+  .search__form,
+  .profile__form {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .search__form--sort {
+    justify-content: space-evenly;
+  }
+
+  .profile__categories {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .profile__btn--caught,
+  .profile__btn--favorites {
+    width: 100%;
+  }
+
+  .search__panel {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .search__panel img,
+  .profile__img {
+    margin: 0;
+  }
+
+  .search__panel--bio {
+    font-size: 0.65rem;
+  }
+
+  .search__abilities {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .search__stats--row .progress__outer {
+    margin-right: 0;
+  }
+
+  .search__moves--known {
+    font-size: 0.65rem;
+  }
+  .search__stats {
+    flex-grow: 1;
+  }
+
+  .search__btn--caught .full-text,
+  .search__btn--favorite .full-text,
+  .search__btn--caught .short-text,
+  .search__btn--favorite .short-text {
+    display: none;
+  }
+
+  .search__pagination button {
+    padding: 0 0.5rem;
+  }
+  .heading {
+    font-size: 1rem;
+  }
+
+  .profile__stats {
+    flex-direction: column;
+  }
+
+  .profile__types h2 {
+    font-size: 0.8rem;
+    text-align: center;
+    line-height: 1rem;
+  }
+
+  .profile__header--container {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .profile__header--details {
+    display: flex;
+    align-items: center; /* centers horizontally */
+    text-align: center;
+  }
+
+  .profile__header--labels {
+    flex-direction: column;
+
+    align-items: center;
+  }
+
+  .profile__header--label:first-child {
+    margin-right: 0;
+  }
+
+  .profile__header--bio {
+    text-align: start;
+  }
+  .header__btn .short-text,
+  .header__btn .full-text {
+    display: none;
+  }
+
+  .header__btn--icon {
+    display: inline-block;
+  }
+  /* nav */
+
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .header__nav {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+  }
+
+  .header__btn {
+    margin: 0;
+  }
+
+  .header__logo {
+    text-align: center;
+  }
+  /* .header__btn--about {
+    width: auto;
+    position: relative;
+    height: 2.2rem;
+    bottom: 3px;
+  } */
+}
 /* @media (max-width: 768px) {
   .heading--about {
     font-size: 1.75rem;
