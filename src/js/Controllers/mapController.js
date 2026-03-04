@@ -7,6 +7,7 @@ import {
 } from '../models/caughtModel';
 import formView from '../views/MapViews/formView.js';
 import { capitalize } from '../helpers.js';
+import mapEntriesView from '../views/MapViews/mapEntriesView.js';
 
 const controlMapLoadSummary = function () {
   const caughtSummary = getCaughtPokemon().length || 0;
@@ -24,14 +25,21 @@ export const controlMapRedirect = function () {
   //   navView.toggleNavMap();
 };
 
+export const controlMapLoadEntries = function () {
+  console.log('controlmapentries running');
+  mapEntriesView.render(getCaughtPokemon().toReversed());
+};
+
 const controlMapLogEntry = function () {
   //   const pokemon = getLastCaughtPokemon();
   //   pokemon.location = 'Unknown Location';
-
-  setLastCaughtPokemonLocation('Unknown Location');
+  const location = formView.getFormData()['pokemon-location'];
+  setLastCaughtPokemonLocation(location || 'Unknown Location');
 
   console.log(getLastCaughtPokemon());
   formView.hideMapForm();
+  console.log(formView.getFormData());
+  controlMapLoadEntries();
 };
 
 export const controlMapRevealForm = function () {
@@ -48,6 +56,8 @@ const controlMapCalculateFormData = function () {
 };
 
 export const controlMapInit = function () {
+  controlMapLoadEntries();
+  // mapEntriesView.addHandlerLoadEntries(controlMapLoadEntries);
   headerView.addHandlerLoadSummary(controlMapLoadSummary);
   formView.addHandlerLogEntry(controlMapLogEntry);
 };

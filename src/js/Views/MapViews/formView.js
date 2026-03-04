@@ -23,12 +23,25 @@ class FormView extends View {
     this._parentEl.classList.add('hidden');
   }
 
+  getFormData() {
+    const pokemonData = [
+      ...new FormData(this._parentEl.querySelector('.map__form')),
+    ];
+    return Object.fromEntries(pokemonData);
+  }
+
   addHandlerLogEntry(handler) {
     this._parentEl
       .querySelector('.map__btn--submit')
       .addEventListener('click', handler);
   }
 
+  clearForm() {
+    this._parentEl.querySelector('.map__input--name').value = '';
+    this._parentEl.querySelector('.map__input--id').value = '';
+    this._parentEl.querySelector('.map__input--name').value = '';
+    this._parentEl.querySelector('.map__input--location').value = '';
+  }
   _generateMarkup() {
     return `
     <div class="map__entry map__entry--new">

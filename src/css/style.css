@@ -1001,7 +1001,7 @@ body {
     var(--secondary-color--grey) 10%,
     var(--secondary-color--grey-gradient) 100%
   );
-  /* margin-bottom: 1rem; */
+  margin-bottom: 1rem;
 }
 
 .map__entry--img {

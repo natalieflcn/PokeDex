@@ -272,12 +272,13 @@
 - Catching Pokémon: Data Flow
   - [x] User clicks 'Caught this Pokémon' on Search module
     - [x] User is redirected to Map module
-    - [~] Name, Pokémon ID, is automatically pre-filled on Map entry form
+    - [x] Name, Pokémon ID, is automatically pre-filled on Map entry form
     - [ ] 'Location' field is determined by map marker (When a user is clicking around the map, match the location details of the entry to the newly clicked location)
-    - [ ] User clicks 'Log Entry',
+    - [~] User clicks 'Log Entry',
       - [x] Form disappears (Keep entry panel hidden if a user is not currently logging an entry)
-      - [ ] Form info is submitted and creates an entry
-    - [~] If a Pokémon entry is created without a location, generate 'Last Caught in UNKNOWN LOCATION' text to prevent code from breaking
+      - [x] Form info is submitted and creates an entry
+    - [x] If a Pokémon entry is created without a location, generate 'Last Caught in UNKNOWN LOCATION' text to prevent code from breaking
+    - [x] Need to add entry to the top of the map entries list
   - [ ] User deletes Caught Pokémon entry from Map module
     - [ ] Entry is deleted from Map module
     - [ ] Pokémon no longer exists in Caught Pokémon state (also reflected in Search module, Profile module)
@@ -286,3 +287,4 @@
     - [ ] Entry no longer exists in Map module
   - [ ] User should not be allowed to add Pokémon manually from the map module (One-Way Data Flow)
   - [ ] Add feature to edit location data with a separate button, pre-populate form with map entry details
+  - [ ] Add sorting by 'Date' button back to Map module

@@ -70,7 +70,7 @@ import panelState from '../models/state/panelState.js';
 import queryState from '../models/state/queryState.js';
 import { controlAppError } from './appController.js';
 import { controlProfilePokemonResults } from './profileController.js';
-import { controlMapRedirect } from './mapController.js';
+import { controlMapLoadEntries, controlMapRedirect } from './mapController.js';
 
 let infiniteScrollLocked = false;
 let initializedSearchResults = false;
@@ -443,7 +443,10 @@ const controlSearchCaughtBtn = function () {
     console.log(caughtState.caughtPokemon);
     window.history.pushState({ page: `map` }, '', `/map`);
     controlMapRedirect();
-  } else removeCaughtPokemon(pokemon);
+  } else {
+    removeCaughtPokemon(pokemon);
+    controlMapLoadEntries();
+  }
 
   panelView.toggleCaughtBtn();
 
