@@ -1,10 +1,15 @@
 import headerView from '../views/MapViews/headerView';
 import navView from '../views/NavViews/navView.js';
-import { getCaughtPokemon } from '../models/caughtModel';
+import {
+  getCaughtPokemon,
+  getLastCaughtPokemon,
+  setLastCaughtPokemonLocation,
+} from '../models/caughtModel';
 import formView from '../views/MapViews/formView.js';
+import { capitalize } from '../helpers.js';
 
 const controlMapLoadSummary = function () {
-  const caughtSummary = getCaughtPokemon().length;
+  const caughtSummary = getCaughtPokemon().length || 0;
   headerView.render(caughtSummary);
 };
 
@@ -19,10 +24,30 @@ export const controlMapRedirect = function () {
   //   navView.toggleNavMap();
 };
 
+const controlMapLogEntry = function () {
+  //   const pokemon = getLastCaughtPokemon();
+  //   pokemon.location = 'Unknown Location';
+
+  setLastCaughtPokemonLocation('Unknown Location');
+
+  console.log(getLastCaughtPokemon());
+  formView.hideMapForm();
+};
+
 export const controlMapRevealForm = function () {
-  formView.render('hi', true, true);
+  const { name, id } = controlMapCalculateFormData();
+  console.log('controlmap' + name);
+  formView.showMapForm();
+  formView.updateFormNameAndId(name, id);
+};
+
+const controlMapCalculateFormData = function () {
+  const { name, id } = getLastCaughtPokemon();
+
+  return { name: capitalize(name), id };
 };
 
 export const controlMapInit = function () {
   headerView.addHandlerLoadSummary(controlMapLoadSummary);
+  formView.addHandlerLogEntry(controlMapLogEntry);
 };

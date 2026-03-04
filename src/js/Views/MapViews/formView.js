@@ -9,8 +9,24 @@ class FormView extends View {
    *
    * @param {Function} handler - Profile controller callback (controlProfileLoad)
    */
-  addHandlerLoadProfile(handler) {
-    ['popstate', 'load'].forEach(e => window.addEventListener(e, handler));
+
+  showMapForm() {
+    this._parentEl.classList.remove('hidden');
+  }
+
+  updateFormNameAndId(name, id) {
+    this._parentEl.querySelector('.map__input--name').value = name;
+    this._parentEl.querySelector('.map__input--id').value = id;
+  }
+
+  hideMapForm() {
+    this._parentEl.classList.add('hidden');
+  }
+
+  addHandlerLogEntry(handler) {
+    this._parentEl
+      .querySelector('.map__btn--submit')
+      .addEventListener('click', handler);
   }
 
   _generateMarkup() {

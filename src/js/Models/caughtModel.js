@@ -36,6 +36,9 @@ import { persistData } from '../helpers';
 
 export const getCaughtPokemon = () => caughtState.caughtPokemon;
 
+export const getLastCaughtPokemon = () =>
+  caughtState.caughtPokemon[caughtState.caughtPokemon.length - 1];
+
 export const getTypesPokemonCaught = () => caughtState.typesCaught;
 
 export const getCaughtRender = () => caughtState.profile.render;
@@ -47,6 +50,10 @@ export const setCaughtRender = value => (caughtState.profile.render = value);
 
 // Sets sort value to 'name' or 'id' depending on value maintained in caughtState
 export const setCaughtSortBy = sort => (caughtState.profile.sortBy = sort);
+
+export const setLastCaughtPokemonLocation = location =>
+  (caughtState.caughtPokemon[caughtState.caughtPokemon.length - 1].location =
+    location);
 
 // To load sorted Caught Pokémon (caughtState)
 export const loadCaughtPokemon = async function () {

@@ -178,8 +178,10 @@ body {
 .input {
   height: 1.75em;
   border-radius: 5px;
+  padding: 0.4rem 0.5rem 0.3rem;
   font-family: Gameboy, sans-serif;
-  text-transform: lowercase;
+  /* text-transform: lowercase; */
+  line-height: 2rem;
 }
 
 .input::placeholder {
@@ -597,7 +599,8 @@ body {
   flex: 1 1 auto; /* grow and shrink */
   min-width: 0;
   /* margin-right: 1.5rem; */
-  padding: 0.25rem 0.4rem;
+  /* padding: 0.25rem 0.4rem; */
+  padding: 0.4rem 0.5rem 0.3rem;
 }
 
 /* .search__preview--container,
@@ -973,7 +976,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
 }
 .map__entry {
   display: flex;
@@ -986,6 +989,19 @@ body {
   );
   color: var(--screen-color--dark);
   border-radius: 5px;
+}
+
+.map__entry--form {
+  display: flex;
+  border-radius: 5px;
+  padding: 0.75rem;
+  flex-direction: column;
+  background: linear-gradient(
+    10deg,
+    var(--secondary-color--grey) 10%,
+    var(--secondary-color--grey-gradient) 100%
+  );
+  /* margin-bottom: 1rem; */
 }
 
 .map__entry--img {
@@ -1078,7 +1094,7 @@ body {
   color: var(--primary-color);
 }
 
-.map__entry--new {
+/* .map__entry--new {
   display: flex;
   flex-direction: column;
   background: linear-gradient(
@@ -1086,7 +1102,7 @@ body {
     var(--secondary-color--grey) 10%,
     var(--secondary-color--grey-gradient) 100%
   );
-}
+} */
 
 .map__entry--active {
   background: linear-gradient(
@@ -1124,25 +1140,35 @@ body {
   color: var(--screen-color--dark);
 }
 
+.map__entry--delete:hover {
+  background-color: var(--secondary-color--grey);
+  color: var(--secondary-color--grey-gradient);
+}
 /* .map__form--row label[for='ID'] {
   margin-right: 1.95rem;
 } */
 
 .map__input {
-  padding: 0.4rem 0.25rem 0.1rem;
+  padding: 0.4rem 0.5rem 0.3rem;
   margin-bottom: 0.4rem;
   /* width: 30%; */
   font-size: 0.75rem;
   flex: 1 1 0;
   min-width: 0;
+  line-height: 2rem;
 }
 
 .map__input--name {
   /* position: relative;
   right: 0.65rem; */
   margin-right: 0.5rem;
+  text-transform: none;
+  background-color: var(--secondary-color--grey);
 }
 
+.map__input--id {
+  background-color: var(--secondary-color--grey);
+}
 .map__input:focus {
   box-shadow: 1px 1px 2px 1px inset var(--screen-color--dark);
   outline: none;
