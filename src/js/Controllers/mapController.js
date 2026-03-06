@@ -4,12 +4,14 @@ import {
   getCaughtPokemon,
   getLastCaughtPokemon,
   removeCaughtPokemon,
+  setCaughtPokemonLocation,
   setLastCaughtPokemonLocation,
 } from '../models/caughtModel';
 import formView from '../views/MapViews/formView.js';
 import { capitalize } from '../helpers.js';
 import mapEntriesView from '../views/MapViews/mapEntriesView.js';
 import deleteEntryView from '../views/MapViews/deleteEntryView.js';
+import editEntryView from '../views/MapViews/editEntryView.js';
 
 const controlMapLoadSummary = function () {
   const caughtSummary = getCaughtPokemon().length || 0;
@@ -20,9 +22,10 @@ export const controlMapRedirect = function () {
   setTimeout(() => {
     navView.resetNav();
     navView.toggleNavMap();
+    controlMapNewEntry();
+    formView.scrollIntoView();
   }, 200); // 3000 milliseconds = 3 seconds
 
-  controlMapRevealForm();
   //   navView.resetNav();
   //   navView.toggleNavMap();
 };
@@ -35,16 +38,22 @@ export const controlMapLoadEntries = function () {
 const controlMapLogEntry = function () {
   //   const pokemon = getLastCaughtPokemon();
   //   pokemon.location = 'Unknown Location';
-  const location = formView.getFormData()['pokemon-location'];
-  setLastCaughtPokemonLocation(location || 'Unknown Location');
 
-  console.log(getLastCaughtPokemon());
+  const formData = formView.getFormData();
+  const name = formData['pokemon-name'];
+  const location = formData['pokemon-location'];
+  console.log(name);
+  console.log(location);
+  // setLastCaughtPokemonLocation(location || 'Unknown Location');
+
+  setCaughtPokemonLocation(name, location);
+
+  formView.clearForm();
   formView.hideMapForm();
-  console.log(formView.getFormData());
   controlMapLoadEntries();
 };
 
-export const controlMapRevealForm = function () {
+export const controlMapNewEntry = function () {
   const { name, id } = controlMapCalculateFormData();
   console.log('controlmap' + name);
   formView.showMapForm();
@@ -57,14 +66,24 @@ const controlMapCalculateFormData = function () {
   return { name: capitalize(name), id };
 };
 
-const controlMapDeleteEntry = function (pokemon) {
+const controlMapDeleteEntry = function (pokemonName) {
   const removePokemon = getCaughtPokemon().find(
-    currPokemon => currPokemon.name === pokemon,
+    pokemon => pokemon.name === pokemonName,
   );
 
   removeCaughtPokemon(removePokemon);
 
   controlMapLoadEntries();
+};
+
+const controlMapEditEntry = function (pokemonName) {
+  const id = getCaughtPokemon().find(
+    pokemon => pokemon.name === pokemonName,
+  ).id;
+
+  formView.showMapForm();
+  formView.updateFormNameAndId(pokemonName, id);
+  formView.scrollIntoView();
 };
 
 export const controlMapInit = function () {
@@ -73,4 +92,5 @@ export const controlMapInit = function () {
   headerView.addHandlerLoadSummary(controlMapLoadSummary);
   formView.addHandlerLogEntry(controlMapLogEntry);
   deleteEntryView.addHandlerDeleteBtn(controlMapDeleteEntry);
+  editEntryView.addHandlerEditBtn(controlMapEditEntry);
 };

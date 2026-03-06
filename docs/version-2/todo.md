@@ -293,7 +293,15 @@
 - [x] User deletes Caught Pokémon entry from Map module
   - [x] Add functionality to delete entry button, entry is deleted from Map module
   - [x] Pokémon no longer exists in Caught Pokémon state (also reflected in Search module, Profile module)
-- [ ] Add feature to edit location data with a separate button, pre-populate form with map entry details
-  - [ ] Add button to edit location data with a separate button
-  - [ ] Add functionality to button, pre-populate form with map entry details and allow user to edit location data
+- [x] Add feature to edit location data with a separate button, pre-populate form with map entry details
+  - [x] Add button to edit location data with a separate button
+  - [x] Add functionality to button, pre-populate form with map entry details and allow user to edit location data
+- [x] Add tool-tip texts to buttons on map entries
 - [ ] 'Location' field is determined by map marker (When a user is clicking around the map, match the location details of the entry to the newly clicked location)
+- [ ] Add sorting functionality to Map Module
+  - [ ] Sort by Name
+  - [ ] Sort by ID
+  - [ ] Sort by Date
+- [ ] Add functionality to input field on Map module
+
+- [ ] BUG: Queries are aborting early

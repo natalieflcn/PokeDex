@@ -36,6 +36,10 @@ class FormView extends View {
       .addEventListener('click', handler);
   }
 
+  scrollIntoView() {
+    this._parentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
   clearForm() {
     this._parentEl.querySelector('.map__input--name').value = '';
     this._parentEl.querySelector('.map__input--id').value = '';

@@ -51,6 +51,16 @@ export const setCaughtRender = value => (caughtState.profile.render = value);
 // Sets sort value to 'name' or 'id' depending on value maintained in caughtState
 export const setCaughtSortBy = sort => (caughtState.profile.sortBy = sort);
 
+export const setCaughtPokemonLocation = function (pokemonName, newLocation) {
+  caughtState.caughtPokemon.find(
+    currPokemon => currPokemon.name === pokemonName,
+  ).location = newLocation;
+
+  console.log(caughtState.caughtPokemon);
+
+  persistData('caughtPokemon', caughtState.caughtPokemon);
+};
+
 export const setLastCaughtPokemonLocation = location =>
   (caughtState.caughtPokemon[caughtState.caughtPokemon.length - 1].location =
     location);
