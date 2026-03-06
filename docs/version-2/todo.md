@@ -302,6 +302,7 @@
   - [ ] Sort by Name
   - [ ] Sort by ID
   - [ ] Sort by Date
-- [ ] Add functionality to input field on Map module
+- [x] Add functionality to input field on Map module
 
 - [ ] BUG: Queries are aborting early
+- [ ] BUG: Caught Pokémon summary not updating

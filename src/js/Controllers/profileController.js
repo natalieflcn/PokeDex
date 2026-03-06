@@ -146,7 +146,8 @@ export const controlProfilePokemonResults = async function () {
   } catch (err) {
     // savedPokemonView.renderError();
     console.log('controlprofilepokemon line 144 calling error');
-    controlAppError(new Error('Pokemon Not Found'), savedPokemonView);
+    // controlAppError(new Error('Pokemon Not Found'), savedPokemonView);
+    controlAppError(err, savedPokemonView);
     console.error(err);
   }
 };

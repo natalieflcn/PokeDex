@@ -3,6 +3,7 @@ import navView from '../views/NavViews/navView.js';
 import {
   getCaughtPokemon,
   getLastCaughtPokemon,
+  loadCaughtPokemon,
   removeCaughtPokemon,
   setCaughtPokemonLocation,
   setLastCaughtPokemonLocation,
@@ -12,6 +13,15 @@ import { capitalize } from '../helpers.js';
 import mapEntriesView from '../views/MapViews/mapEntriesView.js';
 import deleteEntryView from '../views/MapViews/deleteEntryView.js';
 import editEntryView from '../views/MapViews/editEntryView.js';
+import {
+  getQueryResults,
+  loadQueryBatch,
+  resetQueryState,
+  startPokemonQuery,
+  storeQueryResults,
+} from '../models/queryModel.js';
+import { controlAppError } from './appController.js';
+import queryView from '../views/MapViews/queryView.js';
 
 const controlMapLoadSummary = function () {
   const caughtSummary = getCaughtPokemon().length || 0;
@@ -30,9 +40,43 @@ export const controlMapRedirect = function () {
   //   navView.toggleNavMap();
 };
 
-export const controlMapLoadEntries = function () {
-  console.log('controlmapentries running');
-  mapEntriesView.render(getCaughtPokemon().toReversed());
+export const controlMapLoadEntries = async function () {
+  try {
+    resetQueryState();
+    const requestId = startPokemonQuery();
+    const query = queryView.getQuery();
+    mapEntriesView.renderSpinner();
+
+    const pokemonBatch = await loadCaughtPokemon();
+
+    if (!query && pokemonBatch.length > 0)
+      mapEntriesView.render(getCaughtPokemon().toReversed());
+    else if (!query && pokemonBatch.length < 1)
+      controlAppError(
+        new Error('Pokemon Not Found'),
+        mapEntriesView,
+        "You haven't caught any Pokémon yet! Start catching Pokémon from the Search module.",
+      );
+
+    if (query) {
+      storeQueryResults(query, pokemonBatch);
+      await loadQueryBatch(requestId);
+      const queryBatch = getQueryResults();
+
+      console.log(queryBatch);
+      if (queryBatch.length > 0) mapEntriesView.render(queryBatch);
+      else {
+        controlAppError(
+          new Error('Pokemon Not Found'),
+          mapEntriesView,
+          `We couldn't find the Pokémon, ${capitalize(query)}!`,
+        );
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    controlAppError(err, mapEntriesView);
+  }
 };
 
 const controlMapLogEntry = function () {
@@ -93,4 +137,5 @@ export const controlMapInit = function () {
   formView.addHandlerLogEntry(controlMapLogEntry);
   deleteEntryView.addHandlerDeleteBtn(controlMapDeleteEntry);
   editEntryView.addHandlerEditBtn(controlMapEditEntry);
+  queryView.addHandlerQuery(controlMapLoadEntries);
 };
