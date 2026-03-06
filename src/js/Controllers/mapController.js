@@ -3,11 +3,13 @@ import navView from '../views/NavViews/navView.js';
 import {
   getCaughtPokemon,
   getLastCaughtPokemon,
+  removeCaughtPokemon,
   setLastCaughtPokemonLocation,
 } from '../models/caughtModel';
 import formView from '../views/MapViews/formView.js';
 import { capitalize } from '../helpers.js';
 import mapEntriesView from '../views/MapViews/mapEntriesView.js';
+import deleteEntryView from '../views/MapViews/deleteEntryView.js';
 
 const controlMapLoadSummary = function () {
   const caughtSummary = getCaughtPokemon().length || 0;
@@ -55,9 +57,20 @@ const controlMapCalculateFormData = function () {
   return { name: capitalize(name), id };
 };
 
+const controlMapDeleteEntry = function (pokemon) {
+  const removePokemon = getCaughtPokemon().find(
+    currPokemon => currPokemon.name === pokemon,
+  );
+
+  removeCaughtPokemon(removePokemon);
+
+  controlMapLoadEntries();
+};
+
 export const controlMapInit = function () {
   controlMapLoadEntries();
   // mapEntriesView.addHandlerLoadEntries(controlMapLoadEntries);
   headerView.addHandlerLoadSummary(controlMapLoadSummary);
   formView.addHandlerLogEntry(controlMapLogEntry);
+  deleteEntryView.addHandlerDeleteBtn(controlMapDeleteEntry);
 };
