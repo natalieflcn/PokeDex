@@ -70,7 +70,11 @@ import panelState from '../models/state/panelState.js';
 import queryState from '../models/state/queryState.js';
 import { controlAppError } from './appController.js';
 import { controlProfilePokemonResults } from './profileController.js';
-import { controlMapLoadEntries, controlMapRedirect } from './mapController.js';
+import {
+  controlMapLoadEntries,
+  controlMapLoadSummary,
+  controlMapRedirect,
+} from './mapController.js';
 
 let infiniteScrollLocked = false;
 let initializedSearchResults = false;
@@ -446,6 +450,7 @@ const controlSearchCaughtBtn = function () {
   } else {
     removeCaughtPokemon(pokemon);
     controlMapLoadEntries();
+    controlMapLoadSummary();
   }
 
   panelView.toggleCaughtBtn();

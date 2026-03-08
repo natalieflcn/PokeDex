@@ -102,7 +102,7 @@ export const loadGuaranteedBatch = async function (
 
       const loadedPokemon = await loadBatch(requestId, batchSize, signal);
 
-      if (!loadedPokemon) break;
+      if (!loadedPokemon || loadedPokemon.length === 0) break;
 
       pokemonPreviews.push(...(loadedPokemon ?? []));
     } catch (err) {
@@ -132,7 +132,7 @@ export const loadBatchDetails = function (pokemonBatch, signal) {
           `Failed to load Pokémon: ${pokemonName}. Will attempt to load next Pokémon instead.`,
           err,
         );
-        throw err;
+        return null;
       });
   });
 

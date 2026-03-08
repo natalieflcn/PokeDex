@@ -304,5 +304,5 @@
   - [ ] Sort by Date
 - [x] Add functionality to input field on Map module
 
-- [ ] BUG: Queries are aborting early
-- [ ] BUG: Caught Pokémon summary not updating
+- [x] BUG: Queries are aborting early
+- [x] BUG: Caught Pokémon summary not updating

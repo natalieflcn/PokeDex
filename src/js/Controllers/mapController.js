@@ -22,8 +22,14 @@ import {
 } from '../models/queryModel.js';
 import { controlAppError } from './appController.js';
 import queryView from '../views/MapViews/queryView.js';
+import sortView from '../views/MapViews/sortView.js';
+import {
+  navResolveSortParams,
+  navSanitizeSort,
+} from '../services/navService.js';
+import { setMapSortBy } from '../models/mapModel.js';
 
-const controlMapLoadSummary = function () {
+export const controlMapLoadSummary = function () {
   const caughtSummary = getCaughtPokemon().length || 0;
   headerView.render(caughtSummary);
 };
@@ -95,6 +101,7 @@ const controlMapLogEntry = function () {
   formView.clearForm();
   formView.hideMapForm();
   controlMapLoadEntries();
+  controlMapLoadSummary();
 };
 
 export const controlMapNewEntry = function () {
@@ -116,7 +123,7 @@ const controlMapDeleteEntry = function (pokemonName) {
   );
 
   removeCaughtPokemon(removePokemon);
-
+  controlMapLoadSummary();
   controlMapLoadEntries();
 };
 
@@ -130,12 +137,58 @@ const controlMapEditEntry = function (pokemonName) {
   formView.scrollIntoView();
 };
 
+const controlMapRenderSort = function (sort) {
+  switch (sort) {
+    case 'name':
+      sortView.toggleMapSortName();
+      break;
+
+    case 'id':
+      sortView.toggleMapSortId();
+      break;
+
+    case 'date':
+    default:
+      sortView.toggleMapSortDate();
+      break;
+  }
+};
+
+const controlMapSortBtn = function (sort) {
+  console.log(sort);
+
+  const currentURL = navResolveSortParams(window.location.pathname);
+
+  if (sort === 'name' || sort === 'id') {
+    currentURL.searchParams.set('sort', sort);
+    window.history.replaceState({}, '', currentURL);
+  } else if (sort === 'date') {
+    navSanitizeSort();
+  }
+
+  setMapSortBy(sort);
+  controlMapRenderSort(sort);
+};
+
+const controlMapSortLoad = function () {
+  const route = window.location.pathname;
+
+  const currentURL = navResolveSortParams(route);
+
+  window.history.replaceState({ page: route }, '', currentURL);
+
+  const sort = currentURL.searchParams.get('sort');
+  controlMapRenderSort(sort);
+};
+
 export const controlMapInit = function () {
-  controlMapLoadEntries();
+  // controlMapLoadEntries();
   // mapEntriesView.addHandlerLoadEntries(controlMapLoadEntries);
   headerView.addHandlerLoadSummary(controlMapLoadSummary);
   formView.addHandlerLogEntry(controlMapLogEntry);
   deleteEntryView.addHandlerDeleteBtn(controlMapDeleteEntry);
   editEntryView.addHandlerEditBtn(controlMapEditEntry);
   queryView.addHandlerQuery(controlMapLoadEntries);
+  sortView.addHandlerSortBtn(controlMapSortBtn);
+  sortView.addHandlerSortLoad(controlMapSortLoad);
 };

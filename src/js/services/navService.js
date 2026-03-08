@@ -86,11 +86,12 @@ export const navResolveSortParams = function (route) {
 // Hydrates sort parameters from URL into state
 export const navHydrateSortParams = function () {
   const sortParams = new URLSearchParams(window.location.search);
-  const sort = sortParams.get('sort') ?? 'id';
+  const sort = sortParams.get('sort');
   const currentRoute = window.location.pathname;
 
   if (sort !== 'name' && sort !== 'id') {
-    navSanitizeSort();
+    if (currentRoute === '/search' || currentRoute.startsWith('/profile'))
+      navSanitizeSort();
     return;
   }
 
