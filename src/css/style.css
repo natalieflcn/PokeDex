@@ -1205,6 +1205,14 @@ body {
   outline: none;
 }
 
+#map {
+  height: 100%;
+  /* width: 100%; */
+}
+
+.screen__2--map {
+  height: 90%;
+}
 /* PERSPECTIVE -- Map (Screen 2) */
 
 /* PERSPECTIVE -- Profile (Screen 1) */

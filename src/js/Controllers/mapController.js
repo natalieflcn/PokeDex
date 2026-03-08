@@ -30,6 +30,8 @@ import {
 import { getMapSortBy, setMapSortBy } from '../models/mapModel.js';
 import { sortPokemon } from '../services/pokemonService.js';
 
+let map;
+
 export const controlMapLoadSummary = function () {
   const caughtSummary = getCaughtPokemon().length || 0;
   headerView.render(caughtSummary);
@@ -186,9 +188,19 @@ const controlMapSortLoad = function () {
   controlMapRenderSort(sort);
 };
 
+const initMap = async function () {
+  const { Map, RenderingType } = await google.maps.importLibrary('maps');
+  map = new Map(document.getElementById('map'), {
+    center: { lat: -34.397, lng: 150.644 },
+    zoom: 16,
+    renderingType: RenderingType.VECTOR,
+  });
+};
+
 export const controlMapInit = function () {
   // controlMapLoadEntries();
   // mapEntriesView.addHandlerLoadEntries(controlMapLoadEntries);
+  initMap();
   headerView.addHandlerLoadSummary(controlMapLoadSummary);
   formView.addHandlerLogEntry(controlMapLogEntry);
   deleteEntryView.addHandlerDeleteBtn(controlMapDeleteEntry);

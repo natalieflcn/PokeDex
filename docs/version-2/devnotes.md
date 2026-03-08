@@ -36,7 +36,7 @@
 - [x] Create "Page Not Found" page, redirect them to the Search module
 - [x] Create "Types of Pokémon Favorited" on Profile module, that renders when accessing Favorite Pokémon
 - [ ] Hyperlink Pokémon type on Profile module to view all caught/favorited Pokémon of that type
-- [ ] Add a "Type" sorting algorithm to the Profile module
+- [ ] NICE-TO-HAVE: Add a "Type" sorting algorithm to the Profile module
   - [ ] When viewing a subset of a type of Pokémon, a 'View All' button should appear to allow user to return to viewing all caught/favorited Pokémon
   - [ ] Routing should reflect the types of Pokémon being accessed (i.e. profile/caught/fire)
 - [ ] Create personal Pokémon GIFS to use through application (Procreate)
@@ -45,16 +45,15 @@
 
 - [ ] Implement Google Maps library and render Caught Pokémon on a map
 - [ ] Add location details to the entry panel
-- [ ] When a user marks a Pokémon as "Caught" in the Search module, redirect them to the Map module to create a new entry
-  - [ ] Pre-fill the entry data with Pokémon name, Pokémon ID, date, and time
+- [x] When a user marks a Pokémon as "Caught" in the Search module, redirect them to the Map module to create a new entry
+  - [x] Pre-fill the entry data with Pokémon name, Pokémon ID, date, and time
   - [ ] When a user is clicking around the map, match the location details of the entry to the newly clicked location
-- [ ] Keep entry panel hidden if a user is not currently logging an entry
-- [ ] Sort Caught Pokémon entries
-  - [ ] Sort by Name
-  - [ ] Sort by ID
-  - [ ] Sort by Date
-- [ ] Render the number of Pokémon Caught in the Map module -- this number should match the number of Pokémon Caught indicated in the Profile module
-- [ ] TBD: Should a user be allowed to manually add Caught Pokémon entries from the Map module?
+- [x] Keep entry panel hidden if a user is not currently logging an entry
+- [x] Sort Caught Pokémon entries
+  - [x] Sort by Name
+  - [x] Sort by ID
+  - [x] Sort by Date
+- [x] Render the number of Pokémon Caught in the Map module -- this number should match the number of Pokémon Caught indicated in the Profile module
 
 ---
 
