@@ -50,9 +50,9 @@ const controlAboutBtns = function (action) {
 };
 
 export const controlAppError = function (err, view, message) {
-  console.log(err);
-  console.log(err.message);
-  console.log('running ControlAppERROR');
+  // console.log(err);
+  // console.log(err.message);
+  // console.log('running ControlAppERROR');
   switch (err.message) {
     case 'Pokemon Not Found':
       view.renderError(message || view._errorMessage);

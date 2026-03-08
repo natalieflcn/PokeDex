@@ -16,6 +16,7 @@ import {
 import { getFavoriteSortBy, setFavoriteSortBy } from '../models/favoriteModel';
 import { BASE_POKEDEX_URL } from '../config';
 import { getPokemon } from '../models/panelModel';
+import { getMapSortBy, setMapSortBy } from '../models/mapModel';
 
 /**
  * Resolves pages identifiers to application routes.
@@ -72,40 +73,64 @@ export const navResolveSortParams = function (route) {
   let sortBy;
 
   // console.log(route);
-  if (route === '/search') sortBy = getPokemonSortBy();
+  if (route.startsWith('/search')) sortBy = getPokemonSortBy();
   else if (route === '/profile/caught') sortBy = getCaughtSortBy();
   else if (route === '/profile/favorites') sortBy = getFavoriteSortBy();
+  if (route === '/map') sortBy = getMapSortBy();
 
   // console.log(sortBy);
-  if (sortBy === 'name') currentURL.searchParams.set('sort', sortBy);
-  if (sortBy === 'id') navSanitizeSort();
+  if (sortBy === 'name') currentURL.searchParams.set('sort', 'name');
+  else if (sortBy === 'id' && route === '/map')
+    currentURL.searchParams.set('sort', 'id');
+  else navSanitizeSort();
 
+  console.log(currentURL);
+  console.log(sortBy);
+  console.log(getPokemonSortBy());
   return currentURL;
 };
 
 // Hydrates sort parameters from URL into state
 export const navHydrateSortParams = function () {
-  const sortParams = new URLSearchParams(window.location.search);
-  const sort = sortParams.get('sort');
+  const currentURL = new URL(window.location.href);
+  const sort = currentURL.searchParams.get('sort');
   const currentRoute = window.location.pathname;
 
-  if (sort !== 'name' && sort !== 'id') {
-    if (currentRoute === '/search' || currentRoute.startsWith('/profile'))
-      navSanitizeSort();
+  console.log(currentURL, currentRoute, sort);
+  if (sort !== 'name' && sort !== 'id' && sort !== 'date') {
+    // if (currentRoute === '/search' || currentRoute.startsWith('/profile'))
+    navSanitizeSort();
     return;
   }
 
-  // console.log(sort);
-  switch (currentRoute) {
-    case '/profile/caught':
-    case '/profile/favorites':
-      setCaughtSortBy(sort);
-      setFavoriteSortBy(sort);
-      break;
-
-    case '/search':
-      setPokemonSortBy(sort);
-      break;
+  if (
+    currentRoute.startsWith('/search') ||
+    currentRoute.startsWith('/profile')
+  ) {
+    if (sort !== 'name' && sort !== 'id') return;
   }
+
+  // console.log(sort);
+
+  if (currentRoute.startsWith('/search')) setPokemonSortBy(sort);
+  if (currentRoute.startsWith('/profile/caught')) setCaughtSortBy(sort);
+  if (currentRoute.startsWith('/profile/favorites')) setFavoriteSortBy(sort);
+  if (currentRoute.startsWith('/map')) setMapSortBy(sort);
+
+  // switch (currentRoute) {
+  //   case '/profile/caught':
+  //   case '/profile/favorites':
+  //     setCaughtSortBy(sort);
+  //     setFavoriteSortBy(sort);
+  //     break;
+
+  //   case '/search':
+  //     setPokemonSortBy(sort);
+  //     break;
+
+  //   case '/map':
+  //     setMapSortBy(sort);
+  //     break;
+  // }
   // console.log(getPokemonSortBy(), getCaughtSortBy(), getFavoriteSortBy());
 };

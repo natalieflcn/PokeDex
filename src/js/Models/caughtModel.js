@@ -57,7 +57,7 @@ export const setCaughtPokemonLocation = function (pokemonName, newLocation) {
     currPokemon => currPokemon.name === pokemonName,
   ).location = newLocation;
 
-  console.log(caughtState.caughtPokemon);
+  // console.log(caughtState.caughtPokemon);
 
   persistData('caughtPokemon', caughtState.caughtPokemon);
 };
@@ -81,7 +81,7 @@ export const loadCaughtPokemon = async function () {
   if (module === 'map') sortBy = getMapSortBy();
   else sortBy = getCaughtSortBy();
 
-  console.log(module, sortBy);
+  // console.log(module, sortBy);
   try {
     const caughtPokemon = sortPokemon(caughtState.caughtPokemon, sortBy);
 
@@ -112,7 +112,7 @@ export const addCaughtPokemon = function (newPokemon) {
 
   caughtState.caughtPokemon.push(newPokemon);
 
-  console.log(caughtState.caughtPokemon);
+  // console.log(caughtState.caughtPokemon);
   persistData('caughtPokemon', caughtState.caughtPokemon);
   updateTypesPokemonCaught();
 };

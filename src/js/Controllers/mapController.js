@@ -69,7 +69,7 @@ export const controlMapLoadEntries = async function () {
       await loadQueryBatch(requestId);
       const queryBatch = getQueryResults();
 
-      console.log(queryBatch);
+      // console.log(queryBatch);
       if (queryBatch.length > 0) {
         const sortedQueryBatch = sortPokemon(queryBatch, getMapSortBy());
 
@@ -95,8 +95,8 @@ const controlMapLogEntry = function () {
   const formData = formView.getFormData();
   const name = formData['pokemon-name'];
   const location = formData['pokemon-location'];
-  console.log(name);
-  console.log(location);
+  // console.log(name);
+  // console.log(location);
   // setLastCaughtPokemonLocation(location || 'Unknown Location');
 
   setCaughtPokemonLocation(name, location);
@@ -109,7 +109,7 @@ const controlMapLogEntry = function () {
 
 export const controlMapNewEntry = function () {
   const { name, id } = controlMapCalculateFormData();
-  console.log('controlmap' + name);
+  // console.log('controlmap' + name);
   formView.showMapForm();
   formView.updateFormNameAndId(name, id);
 };
@@ -158,7 +158,7 @@ const controlMapRenderSort = function (sort) {
 };
 
 const controlMapSortBtn = async function (sort) {
-  console.log(sort);
+  // console.log(sort);
 
   const currentURL = navResolveSortParams(window.location.pathname);
 

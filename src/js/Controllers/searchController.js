@@ -235,7 +235,9 @@ const controlSearchInfiniteScroll = async function () {
 };
 
 export const controlSearchRenderSort = function (sort) {
-  switch (sort) {
+  console.log('controlsearchrendersort, ' + sort);
+  console.log(getPokemonSortBy());
+  switch (sort || getPokemonSortBy()) {
     case 'name':
       sortView.toggleSearchSortName();
       break;
@@ -245,6 +247,8 @@ export const controlSearchRenderSort = function (sort) {
       sortView.toggleSearchSortId();
       break;
   }
+
+  console.log('running controlsearchrendersort');
 };
 
 /**
@@ -259,29 +263,33 @@ const controlSearchSortBtn = async function (sort) {
   if (sort === 'name') {
     currentURL.searchParams.set('sort', sort);
     window.history.replaceState({}, '', currentURL);
-  } else if (sort === 'id') {
+  } else {
+    sort === 'id';
     navSanitizeSort();
   }
 
+  console.log('controlsearchsortbtn, ' + sort);
   setPokemonSortBy(sort);
   // console.log(getPokemonSortBy());
-
+  console.log('running controlsearchsortbtn');
   controlSearchRenderSort(sort);
   await controlSearchResults();
 };
 
-const controlSearchSortLoad = function () {
+export const controlSearchSortLoad = function () {
   const currentURL = new URL(window.location.href);
   const sort = currentURL.searchParams.get('sort');
 
+  console.log('controlsearchsortload, ' + sort);
   // console.log();
   if (!sort || sort !== 'name') navSanitizeSort();
 
+  console.log('running controlsearchsortload');
   // const route = window.location.href;
 
   // const currentURL = navResolveSortParams(new URL(route));
 
-  window.history.replaceState({ page: '/search ' }, '', currentURL);
+  // window.history.replaceState({ page: '/search' }, '', currentURL);
 
   // const sort = currentURL.searchParams.get('sort');
 
@@ -362,7 +370,7 @@ const controlSearchPokemonPanel = async function () {
     // console.log(prev, next);
   } catch (err) {
     panelView._clear();
-    console.log('controlpokemonpanel line 344 calling error');
+    // console.log('controlpokemonpanel line 344 calling error');
     controlAppError(
       new Error('Pokemon Not Found'),
       panelView,

@@ -298,12 +298,12 @@
   - [x] Add functionality to button, pre-populate form with map entry details and allow user to edit location data
 - [x] Add tool-tip texts to buttons on map entries
 - [ ] 'Location' field is determined by map marker (When a user is clicking around the map, match the location details of the entry to the newly clicked location)
-- [~] Add sorting functionality to Map Module
-  - [ ] Sort by Name
-  - [ ] Sort by ID
-  - [ ] Sort by Date
-  - [~] Implement appropriate routing behavior for map sort buttons
-  - [ ] Ensure other sorting routing mechanisms are still intact
+- [x] Add sorting functionality to Map Module
+  - [x] Sort by Name
+  - [x] Sort by ID
+  - [x] Sort by Date
+  - [x] Implement appropriate routing behavior for map sort buttons
+  - [x] Ensure other sorting routing mechanisms are still intact
 - [x] Add functionality to input field on Map module
 
 - [x] BUG: Queries are aborting early

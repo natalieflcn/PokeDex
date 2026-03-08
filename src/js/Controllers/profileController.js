@@ -98,12 +98,12 @@ export const controlProfilePokemonResults = async function () {
         ? await loadCaughtPokemon()
         : await loadFavoritePokemon();
 
-    console.log(pokemonBatch);
+    // console.log(pokemonBatch);
     // Rendering all of the Caught/Favorite Pokémon results if there is no query
     if (!query && pokemonBatch.length > 0)
       savedPokemonView.render(pokemonBatch);
     else if (!query && pokemonBatch.length < 1) {
-      console.log('controlprofilepokemon line 105 calling error');
+      // console.log('controlprofilepokemon line 105 calling error');
       controlAppError(
         new Error('Pokemon Not Found'),
         savedPokemonView,
@@ -124,7 +124,7 @@ export const controlProfilePokemonResults = async function () {
 
       if (queryBatch.length > 0) savedPokemonView.render(queryBatch);
       else {
-        console.log('controlprofilepokemon line 125 calling error');
+        // console.log('controlprofilepokemon line 125 calling error');
 
         controlAppError(
           new Error('Pokemon Not Found'),
@@ -145,7 +145,7 @@ export const controlProfilePokemonResults = async function () {
     }
   } catch (err) {
     // savedPokemonView.renderError();
-    console.log('controlprofilepokemon line 144 calling error');
+    // console.log('controlprofilepokemon line 144 calling error');
     // controlAppError(new Error('Pokemon Not Found'), savedPokemonView);
     controlAppError(err, savedPokemonView);
     console.error(err);
