@@ -168,6 +168,8 @@ export const sortPokemon = function (pokemon, sortParam) {
 
   if (sortParam === 'name') {
     sortedPokemon = pokemon.toSorted((a, b) => a.name.localeCompare(b.name));
+  } else if (sortParam === 'date') {
+    sortedPokemon = pokemon.toReversed();
   } else {
     sortedPokemon = pokemon.toSorted((a, b) => a.id - b.id);
   }

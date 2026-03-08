@@ -12,6 +12,7 @@ import caughtState from './state/caughtState';
 import { resetQueryState } from './queryModel';
 import { sortPokemon } from '../services/pokemonService';
 import { persistData } from '../helpers';
+import { getMapSortBy } from './mapModel';
 
 /**
  * ======================
@@ -73,11 +74,16 @@ export const loadCaughtPokemon = async function () {
 
   const caughtPokemonPreviews = [];
 
+  //do url checking mdoule here
+
+  const module = window.location.pathname.split('/').at(1);
+  let sortBy;
+  if (module === 'map') sortBy = getMapSortBy();
+  else sortBy = getCaughtSortBy();
+
+  console.log(module, sortBy);
   try {
-    const caughtPokemon = sortPokemon(
-      caughtState.caughtPokemon,
-      getCaughtSortBy(),
-    );
+    const caughtPokemon = sortPokemon(caughtState.caughtPokemon, sortBy);
 
     for (const pokemon of caughtPokemon) {
       const { name, id, img } = pokemon;

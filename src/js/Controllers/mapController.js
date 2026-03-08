@@ -27,7 +27,8 @@ import {
   navResolveSortParams,
   navSanitizeSort,
 } from '../services/navService.js';
-import { setMapSortBy } from '../models/mapModel.js';
+import { getMapSortBy, setMapSortBy } from '../models/mapModel.js';
+import { sortPokemon } from '../services/pokemonService.js';
 
 export const controlMapLoadSummary = function () {
   const caughtSummary = getCaughtPokemon().length || 0;
@@ -55,8 +56,7 @@ export const controlMapLoadEntries = async function () {
 
     const pokemonBatch = await loadCaughtPokemon();
 
-    if (!query && pokemonBatch.length > 0)
-      mapEntriesView.render(getCaughtPokemon().toReversed());
+    if (!query && pokemonBatch.length > 0) mapEntriesView.render(pokemonBatch);
     else if (!query && pokemonBatch.length < 1)
       controlAppError(
         new Error('Pokemon Not Found'),
@@ -70,8 +70,11 @@ export const controlMapLoadEntries = async function () {
       const queryBatch = getQueryResults();
 
       console.log(queryBatch);
-      if (queryBatch.length > 0) mapEntriesView.render(queryBatch);
-      else {
+      if (queryBatch.length > 0) {
+        const sortedQueryBatch = sortPokemon(queryBatch, getMapSortBy());
+
+        mapEntriesView.render(sortedQueryBatch);
+      } else {
         controlAppError(
           new Error('Pokemon Not Found'),
           mapEntriesView,
@@ -154,7 +157,7 @@ const controlMapRenderSort = function (sort) {
   }
 };
 
-const controlMapSortBtn = function (sort) {
+const controlMapSortBtn = async function (sort) {
   console.log(sort);
 
   const currentURL = navResolveSortParams(window.location.pathname);
@@ -168,6 +171,8 @@ const controlMapSortBtn = function (sort) {
 
   setMapSortBy(sort);
   controlMapRenderSort(sort);
+
+  await controlMapLoadEntries();
 };
 
 const controlMapSortLoad = function () {
