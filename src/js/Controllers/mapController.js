@@ -213,7 +213,15 @@ const controlMapLoadScript = function () {
   });
 };
 
-const controlMapInitGoogleMaps = function () {
+const controlMapCreateMapMarker = async function (latitude, longitude) {
+  new google.maps.Marker({
+    position: { lat: latitude, lng: longitude },
+    title: 'Location Place or Anything that you want to tooltip while hovering',
+    map,
+  });
+};
+
+const controlMapInitGoogleMaps = async function () {
   console.log(process.env.GOOGLE_MAPS_API_KEY);
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -227,6 +235,8 @@ const controlMapInitGoogleMaps = function () {
           zoom: 13,
           styles: MAP_STYLES,
         });
+
+        mapView.addHandlerCreateMapMarker(map, controlMapCreateMapMarker);
       },
       function () {
         alert(

@@ -14,11 +14,21 @@ class MapView extends View {
     return this._parentEl;
   }
 
-  createMapMarker(latitude, longitude) {
-    var marker = new google.maps.Marker({
-      position: { lat: latitude, lng: longitude },
-      title:
-        'Location Place or Anything that you want to tooltip while hovering',
+  //   createMapMarker(latitude, longitude, map) {
+  //     new google.maps.Marker({
+  //       position: { lat: latitude, lng: longitude },
+  //       title:
+  //         'Location Place or Anything that you want to tooltip while hovering',
+  //       map,
+  //     });
+  //   }
+
+  addHandlerCreateMapMarker(map, handler) {
+    map.addListener('click', function (e) {
+      const latitude = e.latLng.lat();
+      const longitude = e.latLng.lng();
+
+      handler(latitude, longitude);
     });
   }
 }
