@@ -52,10 +52,17 @@ export const setCaughtRender = value => (caughtState.profile.render = value);
 // Sets sort value to 'name' or 'id' depending on value maintained in caughtState
 export const setCaughtSortBy = sort => (caughtState.profile.sortBy = sort);
 
-export const setCaughtPokemonLocation = function (pokemonName, newLocation) {
-  caughtState.caughtPokemon.find(
+export const setCaughtPokemonLocation = function (
+  pokemonName,
+  newLocation,
+  coordinates,
+) {
+  const pokemon = caughtState.caughtPokemon.find(
     currPokemon => currPokemon.name === pokemonName,
-  ).location = newLocation;
+  );
+
+  pokemon.location = newLocation;
+  pokemon.latLng = coordinates;
 
   console.log('cAUGHT MODEL');
   console.log(newLocation);
@@ -87,10 +94,10 @@ export const loadCaughtPokemon = async function () {
     );
 
     for (const pokemon of caughtPokemon) {
-      const { name, id, img, location } = pokemon;
-      caughtPokemonPreviews.push({ name, id, img, location });
+      const { name, id, img, location, latLng } = pokemon;
+      caughtPokemonPreviews.push({ name, id, img, location, latLng });
     }
-
+    console.log(caughtPokemonPreviews);
     return caughtPokemonPreviews;
   } else {
     // console.log(module, sortBy);

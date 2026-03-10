@@ -3,7 +3,7 @@ import View from '../View.js';
 class MapView extends View {
   _parentEl = document.getElementById('map');
   _errorMessage = 'There was an error rendering the map.';
-
+  _currentMarker = {};
   /**
    * Adds handler to navigation light bulbs (another way to navigate across pages besides navigation menu buttons).
    *
@@ -24,12 +24,20 @@ class MapView extends View {
   //   }
 
   addHandlerCreateMapMarker(map, handler) {
-    map.addListener('click', function (e) {
+    map.addListener('click', e => {
       const latitude = e.latLng.lat();
       const longitude = e.latLng.lng();
 
       handler(latitude, longitude);
+
+      this._currentMarker = { latitude, longitude };
+      //   console.log(this.currentMarker);
     });
+  }
+
+  getCurrentMarker() {
+    // console.log(currentMarker);
+    return this._currentMarker;
   }
 }
 

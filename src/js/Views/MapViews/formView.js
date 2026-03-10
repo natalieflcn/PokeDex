@@ -14,6 +14,9 @@ class FormView extends View {
     this._parentEl.classList.remove('hidden');
   }
 
+  getFormName() {
+    return this._parentEl.querySelector('.map__input--name').value;
+  }
   updateFormNameAndId(name, id) {
     this._parentEl.querySelector('.map__input--name').value = name;
     this._parentEl.querySelector('.map__input--id').value = id;
@@ -83,6 +86,8 @@ class FormView extends View {
                     placeholder="Last Caught Pokémon in..."
                     auto-complete="off"
                   />
+                  <input type="hidden" id="latitude" name="latitude" value="">
+                  <input type="hidden" id="longitude" name="longitude" value="">
                 </div>
               </form>
               <button class="btn map__btn--submit btn--red">Log Entry</button>

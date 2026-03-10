@@ -100,6 +100,7 @@ const controlMapLogEntry = function () {
   //   pokemon.location = 'Unknown Location';
 
   const formData = formView.getFormData();
+  console.log(formData);
   const name = formData['pokemon-name'];
   const location = formData['pokemon-location'];
   // console.log(name);
@@ -108,7 +109,9 @@ const controlMapLogEntry = function () {
 
   console.log('CONTROLMAPLOGENTRY');
   console.log(location);
-  setCaughtPokemonLocation(name, location);
+  const coordinates = mapView.getCurrentMarker();
+  // console.log(coordinates);
+  setCaughtPokemonLocation(name, location, coordinates);
 
   formView.clearForm();
   formView.hideMapForm();
@@ -217,10 +220,6 @@ const controlMapLoadScript = function () {
   });
 };
 
-const controlMapSetLocation = function (location) {
-  formView.updateFormLocation(location);
-};
-
 const controlMapCreateMapMarker = async function (latitude, longitude) {
   new google.maps.Marker({
     position: { lat: latitude, lng: longitude },
@@ -239,6 +238,7 @@ const controlMapCreateMapMarker = async function (latitude, longitude) {
     result.types.includes('neighborhood'),
   ).formatted_address;
   console.log(location);
+
   formView.updateFormLocation(location);
 };
 
