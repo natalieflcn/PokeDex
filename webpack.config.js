@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+require('dotenv').config();
 
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -53,5 +54,10 @@ module.exports = {
     new HtmlWebpackPlugin({ template: './public/index.html' }),
     ...(isDev ? [] : [new MiniCssExtractPlugin()]),
     new CopyWebpackPlugin({ patterns: [{ from: 'public/imgs', to: 'imgs' }] }),
+    new webpack.DefinePlugin({
+      'process.env.GOOGLE_MAPS_API_KEY': JSON.stringify(
+        process.env.GOOGLE_MAPS_API_KEY,
+      ),
+    }),
   ],
 };

@@ -305,9 +305,10 @@
   - [x] Ensure other sorting routing mechanisms are still intact
 - [x] Add functionality to input field on Map module
 - [ ] Implement Google Maps API
+  - [ ] Hide API key
   - [x] When initializing the map, center the map around user's location (geolocation coordinates)
   - [x] Customize map pattern (retro)
-    - [ ] Refactor the map pattern into mapView.js
+    - [x] Refactor the map pattern into mapView.js
   - [ ] Display map markers where Pokémon were caught
     - [ ] 'Location' field is determined by map marker (When a user is clicking around the map, match the location details of the entry to the newly clicked location)
     - [ ] When form is submitted, marker will be added to the map with associated location
