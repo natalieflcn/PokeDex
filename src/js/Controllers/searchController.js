@@ -235,8 +235,8 @@ const controlSearchInfiniteScroll = async function () {
 };
 
 export const controlSearchRenderSort = function (sort) {
-  console.log('controlsearchrendersort, ' + sort);
-  console.log(getPokemonSortBy());
+  // console.log('controlsearchrendersort, ' + sort);
+  // console.log(getPokemonSortBy());
   switch (sort || getPokemonSortBy()) {
     case 'name':
       sortView.toggleSearchSortName();
@@ -248,7 +248,7 @@ export const controlSearchRenderSort = function (sort) {
       break;
   }
 
-  console.log('running controlsearchrendersort');
+  // console.log('running controlsearchrendersort');
 };
 
 /**
@@ -268,10 +268,10 @@ const controlSearchSortBtn = async function (sort) {
     navSanitizeSort();
   }
 
-  console.log('controlsearchsortbtn, ' + sort);
+  // console.log('controlsearchsortbtn, ' + sort);
   setPokemonSortBy(sort);
   // console.log(getPokemonSortBy());
-  console.log('running controlsearchsortbtn');
+  // console.log('running controlsearchsortbtn');
   controlSearchRenderSort(sort);
   await controlSearchResults();
 };
@@ -280,11 +280,11 @@ export const controlSearchSortLoad = function () {
   const currentURL = new URL(window.location.href);
   const sort = currentURL.searchParams.get('sort');
 
-  console.log('controlsearchsortload, ' + sort);
+  // console.log('controlsearchsortload, ' + sort);
   // console.log();
   if (!sort || sort !== 'name') navSanitizeSort();
 
-  console.log('running controlsearchsortload');
+  // console.log('running controlsearchsortload');
   // const route = window.location.href;
 
   // const currentURL = navResolveSortParams(new URL(route));
@@ -452,7 +452,7 @@ const controlSearchCaughtBtn = function () {
   // To add/remove Caught status
   if (!pokemon.caught) {
     addCaughtPokemon(pokemon);
-    console.log(caughtState.caughtPokemon);
+    // console.log(caughtState.caughtPokemon);
     window.history.pushState({ page: `map` }, '', `/map`);
     controlMapRedirect();
   } else {

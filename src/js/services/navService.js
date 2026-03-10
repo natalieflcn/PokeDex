@@ -84,9 +84,9 @@ export const navResolveSortParams = function (route) {
     currentURL.searchParams.set('sort', 'id');
   else navSanitizeSort();
 
-  console.log(currentURL);
-  console.log(sortBy);
-  console.log(getPokemonSortBy());
+  // console.log(currentURL);
+  // console.log(sortBy);
+  // console.log(getPokemonSortBy());
   return currentURL;
 };
 
@@ -96,7 +96,7 @@ export const navHydrateSortParams = function () {
   const sort = currentURL.searchParams.get('sort');
   const currentRoute = window.location.pathname;
 
-  console.log(currentURL, currentRoute, sort);
+  // console.log(currentURL, currentRoute, sort);
   if (sort !== 'name' && sort !== 'id' && sort !== 'date') {
     // if (currentRoute === '/search' || currentRoute.startsWith('/profile'))
     navSanitizeSort();

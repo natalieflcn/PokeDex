@@ -39,7 +39,7 @@ import pageNotFoundView from '../views/ErrorViews/pageNotFoundView';
  * @param {string} route - Route identifier derived from navigation button or URL
  */
 const controlNavRenderView = function (route) {
-  console.log('running controlnavrenderview');
+  // console.log('running controlnavrenderview');
   navView.resetNav();
 
   // let pokemon = null;
@@ -115,7 +115,7 @@ const controlNavRenderView = function (route) {
  */
 export const controlNavBtn = function (page) {
   navSanitizeSort();
-  console.log('running controlnavbtn');
+  // console.log('running controlnavbtn');
 
   const route = navCheckRoute(page);
 
@@ -129,7 +129,7 @@ export const controlNavBtn = function (page) {
 
 // Reads the URL and navigates to appropriate module when user interacts with browser history stack
 const controlNavBrowser = function () {
-  console.log('running controlnavbrowser');
+  // console.log('running controlnavbrowser');
   navHydrateSortParams();
   const route = window.location.pathname;
 
@@ -139,7 +139,7 @@ const controlNavBrowser = function () {
 
 // Rewrites the root URL '/' to '/search' to maintain URL consistency across page loads
 const controlNavInitialLoad = function () {
-  console.log('running controlnavinitialload');
+  // console.log('running controlnavinitialload');
   if (window.location.pathname === '/') {
     window.history.replaceState({ page: 'search' }, '', '/search');
   }
@@ -152,7 +152,7 @@ const controlNavLogo = function () {
 };
 
 const controlNavBackToSearch = function () {
-  console.log('running controlnavbacktosearch');
+  // console.log('running controlnavbacktosearch');
   controlNavBtn('search');
 };
 /**

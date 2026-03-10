@@ -189,12 +189,25 @@ const controlMapSortLoad = function () {
 };
 
 const initMap = async function () {
-  const { Map, RenderingType } = await google.maps.importLibrary('maps');
-  map = new Map(document.getElementById('map'), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 16,
-    renderingType: RenderingType.VECTOR,
-  });
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        const { longitude, latitude } = position.coords;
+        console.log(longitude, latitude);
+
+        // refactor into mapView.js later
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: { lat: latitude, lng: longitude },
+          zoom: 13,
+        });
+      },
+      function () {
+        alert(
+          'Please enable your browser to access your location to use the Map feature.',
+        );
+      },
+    );
+  }
 };
 
 export const controlMapInit = function () {
