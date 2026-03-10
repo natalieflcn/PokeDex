@@ -221,6 +221,8 @@ const controlMapLoadScript = function () {
 };
 
 const controlMapCreateMapMarker = async function (latitude, longitude) {
+  if (!formView.isFormOpen()) return;
+
   new google.maps.Marker({
     position: { lat: latitude, lng: longitude },
     title: 'Location Place or Anything that you want to tooltip while hovering',
