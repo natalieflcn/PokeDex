@@ -61,6 +61,8 @@ export const controlMapLoadEntries = async function () {
 
     const pokemonBatch = await loadCaughtPokemon();
 
+    console.log('controlMAPLKADENTRIES');
+    console.log(pokemonBatch);
     if (!query && pokemonBatch.length > 0) mapEntriesView.render(pokemonBatch);
     else if (!query && pokemonBatch.length < 1)
       controlAppError(
@@ -104,6 +106,8 @@ const controlMapLogEntry = function () {
   // console.log(location);
   // setLastCaughtPokemonLocation(location || 'Unknown Location');
 
+  console.log('CONTROLMAPLOGENTRY');
+  console.log(location);
   setCaughtPokemonLocation(name, location);
 
   formView.clearForm();
@@ -213,12 +217,29 @@ const controlMapLoadScript = function () {
   });
 };
 
+const controlMapSetLocation = function (location) {
+  formView.updateFormLocation(location);
+};
+
 const controlMapCreateMapMarker = async function (latitude, longitude) {
   new google.maps.Marker({
     position: { lat: latitude, lng: longitude },
     title: 'Location Place or Anything that you want to tooltip while hovering',
     map,
   });
+
+  const geocoder = new google.maps.Geocoder();
+
+  const geocode = await geocoder.geocode({
+    location: { lat: latitude, lng: longitude },
+  });
+
+  console.log(geocode);
+  const location = geocode.results.find(result =>
+    result.types.includes('neighborhood'),
+  ).formatted_address;
+  console.log(location);
+  formView.updateFormLocation(location);
 };
 
 const controlMapInitGoogleMaps = async function () {
@@ -232,7 +253,7 @@ const controlMapInitGoogleMaps = async function () {
         // refactor into mapView.js later
         map = new google.maps.Map(mapView.getMapElement(), {
           center: { lat: latitude, lng: longitude },
-          zoom: 13,
+          zoom: 14,
           styles: MAP_STYLES,
         });
 

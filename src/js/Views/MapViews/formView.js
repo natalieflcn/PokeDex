@@ -19,6 +19,9 @@ class FormView extends View {
     this._parentEl.querySelector('.map__input--id').value = id;
   }
 
+  updateFormLocation(location) {
+    this._parentEl.querySelector('.map__input--location').value = location;
+  }
   hideMapForm() {
     this._parentEl.classList.add('hidden');
   }
