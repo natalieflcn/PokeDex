@@ -236,9 +236,12 @@ const controlMapCreateMapMarker = async function (latitude, longitude) {
   });
 
   console.log(geocode);
-  const location = geocode.results.find(result =>
-    result.types.includes('neighborhood'),
-  ).formatted_address;
+  const location =
+    geocode.results.find(
+      result =>
+        result.types?.includes('neighborhood') ||
+        result.types?.includes('administrative_area_level_2'),
+    )?.formatted_address || 'Unknown Location';
   console.log(location);
 
   formView.updateFormLocation(location);
