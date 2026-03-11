@@ -304,15 +304,19 @@
   - [x] Implement appropriate routing behavior for map sort buttons
   - [x] Ensure other sorting routing mechanisms are still intact
 - [x] Add functionality to input field on Map module
-- [ ] Implement Google Maps API
-  - [ ] Hide API key
+- [~] Implement Google Maps API
+  - [x] Hide API key
   - [x] When initializing the map, center the map around user's location (geolocation coordinates)
   - [x] Customize map pattern (retro)
     - [x] Refactor the map pattern into mapView.js
-  - [ ] Display map markers where Pokémon were caught
-    - [ ] 'Location' field is determined by map marker (When a user is clicking around the map, match the location details of the entry to the newly clicked location)
-    - [ ] When form is submitted, marker will be added to the map with associated location
-    - [ ] Geocode location from coordinates will be displayed on map panel
+  - [~] Display map markers where Pokémon were caught
+    - [x] 'Location' field is determined by map marker (When a user is clicking around the map, match the location details of the entry to the newly clicked location)
+    - [x] When form is submitted, marker will be added to the map with associated location
+    - [x] Reverse geocode location from coordinates will be displayed on map entry
+    - [x] Prevent map from displaying markers when form is not open
+    - [x] Return 'unknown location' or nearby country if reverse-geocoded address is not available
+    - [ ] Need to remove previous marker instead of adding multiple markers when creating markers for a singular entry
+    - [ ] Need to populate map with Caught Pokemon coordinates/locations when app is loaded
   - [ ] Customize pin text alongside map marker
   - [ ] Move to marker on the map, when clicking a map entry
 - [x] BUG: Queries are aborting early

@@ -64,10 +64,10 @@ export const setCaughtPokemonLocation = function (
   pokemon.location = newLocation;
   pokemon.latLng = coordinates;
 
-  console.log('cAUGHT MODEL');
-  console.log(newLocation);
+  // console.log('cAUGHT MODEL');
+  // console.log(newLocation);
   // console.log(caughtState.caughtPokemon);
-  console.log(caughtState.caughtPokemon);
+  // console.log(caughtState.caughtPokemon);
   persistData('caughtPokemon', caughtState.caughtPokemon);
 };
 
@@ -97,7 +97,7 @@ export const loadCaughtPokemon = async function () {
       const { name, id, img, location, latLng } = pokemon;
       caughtPokemonPreviews.push({ name, id, img, location, latLng });
     }
-    console.log(caughtPokemonPreviews);
+    // console.log(caughtPokemonPreviews);
     return caughtPokemonPreviews;
   } else {
     // console.log(module, sortBy);

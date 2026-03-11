@@ -503,7 +503,7 @@ const initPokemonData = async function () {
     await storeAllPokemonReferences();
   } catch (err) {
     console.log(err);
-    console.log('searchcontroller line 466 calling error');
+    // console.log('searchcontroller line 466 calling error');
     controlAppError(err, panelView);
   }
 };

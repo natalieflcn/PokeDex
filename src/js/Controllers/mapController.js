@@ -27,10 +27,19 @@ import {
   navResolveSortParams,
   navSanitizeSort,
 } from '../services/navService.js';
-import { getMapSortBy, setMapSortBy } from '../models/mapModel.js';
+import {
+  addMarker,
+  addSavedMarker,
+  getAllMarkers,
+  getMapSortBy,
+  getMarkers,
+  getSavedMarkers,
+  setMapSortBy,
+} from '../models/mapModel.js';
 import { sortPokemon } from '../services/pokemonService.js';
 import mapView from '../views/MapViews/mapView.js';
 import { MAP_STYLES } from '../config.js';
+import mapState from '../models/state/mapState.js';
 
 let map;
 let mapsLoaded = false;
@@ -61,8 +70,8 @@ export const controlMapLoadEntries = async function () {
 
     const pokemonBatch = await loadCaughtPokemon();
 
-    console.log('controlMAPLKADENTRIES');
-    console.log(pokemonBatch);
+    // console.log('controlMAPLKADENTRIES');
+    // console.log(pokemonBatch);
     if (!query && pokemonBatch.length > 0) mapEntriesView.render(pokemonBatch);
     else if (!query && pokemonBatch.length < 1)
       controlAppError(
@@ -100,21 +109,25 @@ const controlMapLogEntry = function () {
   //   pokemon.location = 'Unknown Location';
 
   const formData = formView.getFormData();
-  console.log(formData);
+  // console.log(formData);
   const name = formData['pokemon-name'];
   const location = formData['pokemon-location'];
   // console.log(name);
   // console.log(location);
   // setLastCaughtPokemonLocation(location || 'Unknown Location');
 
-  console.log('CONTROLMAPLOGENTRY');
-  console.log(location);
+  // console.log('CONTROLMAPLOGENTRY');
+  // console.log(location);
   const coordinates = mapView.getCurrentMarker();
   // console.log(coordinates);
   setCaughtPokemonLocation(name, location, coordinates);
 
   formView.clearForm();
   formView.hideMapForm();
+  // formView.clearCurrentMarker(); //MAYBE
+
+  addSavedMarker(coordinates, name);
+  // console.log(mapState.savedMarkers);
   controlMapLoadEntries();
   controlMapLoadSummary();
 };
@@ -220,14 +233,65 @@ const controlMapLoadScript = function () {
   });
 };
 
+const controlMapClearNullMarkers = function () {
+  const allMarkers = getAllMarkers();
+  const savedMarkers = getSavedMarkers();
+
+  console.log('ALL MARKERS');
+  console.log(allMarkers);
+
+  console.log('SAVED MARKERS');
+  console.log(savedMarkers);
+
+  // allMarkers.forEach(marker =>
+  //   savedMarkers
+  //     .some(
+  //       savedMarker =>
+  //         savedMarker.coordinates.latitude !== marker.coordinates.latitude &&
+  //         savedMarker.coordinates.longitude !== marker.coordinates.longitude,
+  //     )
+  //     .forEach(nullMarker => nullMarker.setMap(null)),
+  // );
+
+  // const filteredArray = allMarkers.filter(marker =>
+  //   savedMarkers.some(
+  //     savedMarker =>
+  //       savedMarker.coordinates.latitude === marker.coordinates.latitude &&
+  //       savedMarker.coordinates.longitude === marker.coordinates.longitude,
+  //   ),
+  // );
+
+  console.log('FILTERED ARRAY');
+  const filteredArray = allMarkers.filter(marker => {
+    const exists = savedMarkers.some(
+      savedMarker =>
+        savedMarker.coordinates.latitude === marker.position.lat() &&
+        savedMarker.coordinates.longitude === marker.position.lng(),
+    );
+
+    if (!exists) marker.setMap(null);
+
+    return exists;
+  });
+
+  // console.log(filteredArray);
+};
+
 const controlMapCreateMapMarker = async function (latitude, longitude) {
   if (!formView.isFormOpen()) return;
 
-  new google.maps.Marker({
+  controlMapClearNullMarkers();
+  // mapView.clearCurrentMarker();
+
+  const marker = new google.maps.Marker({
     position: { lat: latitude, lng: longitude },
     title: 'Location Place or Anything that you want to tooltip while hovering',
     map,
   });
+
+  // addMarker({ coordinates: { latitude, longitude } });
+  // console.log(getAllMarkers());
+  addMarker(marker);
 
   const geocoder = new google.maps.Geocoder();
 
@@ -235,25 +299,25 @@ const controlMapCreateMapMarker = async function (latitude, longitude) {
     location: { lat: latitude, lng: longitude },
   });
 
-  console.log(geocode);
+  // console.log(geocode);
   const location =
     geocode.results.find(
       result =>
         result.types?.includes('neighborhood') ||
         result.types?.includes('administrative_area_level_2'),
     )?.formatted_address || 'Unknown Location';
-  console.log(location);
+  // console.log(location);
 
   formView.updateFormLocation(location);
 };
 
 const controlMapInitGoogleMaps = async function () {
-  console.log(process.env.GOOGLE_MAPS_API_KEY);
+  // console.log(process.env.GOOGLE_MAPS_API_KEY);
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       function (position) {
         const { longitude, latitude } = position.coords;
-        console.log(longitude, latitude);
+        // console.log(longitude, latitude);
 
         // refactor into mapView.js later
         map = new google.maps.Map(mapView.getMapElement(), {
