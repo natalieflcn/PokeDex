@@ -262,14 +262,17 @@ const controlMapClearNullMarkers = function () {
   // );
 
   console.log('FILTERED ARRAY');
-  const filteredArray = allMarkers.filter(marker => {
+  allMarkers.filter(marker => {
     const exists = savedMarkers.some(
       savedMarker =>
         savedMarker.coordinates.latitude === marker.position.lat() &&
         savedMarker.coordinates.longitude === marker.position.lng(),
     );
 
-    if (!exists) marker.setMap(null);
+    if (!exists) {
+      marker.setMap(null);
+      allMarkers.splice(allMarkers.indexOf(marker), 1);
+    }
 
     return exists;
   });
@@ -311,6 +314,24 @@ const controlMapCreateMapMarker = async function (latitude, longitude) {
   formView.updateFormLocation(location);
 };
 
+const controlMapLoadMarkers = function () {
+  console.log('running controlMapLoadMarkers');
+  const markers = getSavedMarkers();
+
+  console.log(markers);
+  for (let marker of markers) {
+    new google.maps.Marker({
+      position: {
+        lat: marker.coordinates.latitude,
+        lng: marker.coordinates.longitude,
+      },
+      title: marker.name,
+      map,
+    });
+    console.log(marker);
+  }
+};
+
 const controlMapInitGoogleMaps = async function () {
   // console.log(process.env.GOOGLE_MAPS_API_KEY);
   if (navigator.geolocation) {
@@ -327,6 +348,7 @@ const controlMapInitGoogleMaps = async function () {
         });
 
         mapView.addHandlerCreateMapMarker(map, controlMapCreateMapMarker);
+        controlMapLoadMarkers();
       },
       function () {
         alert(

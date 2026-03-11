@@ -315,9 +315,13 @@
     - [x] Reverse geocode location from coordinates will be displayed on map entry
     - [x] Prevent map from displaying markers when form is not open
     - [x] Return 'unknown location' or nearby country if reverse-geocoded address is not available
-    - [ ] Need to remove previous marker instead of adding multiple markers when creating markers for a singular entry
-    - [ ] Need to populate map with Caught Pokemon coordinates/locations when app is loaded
-  - [ ] Customize pin text alongside map marker
+    - [x] Need to remove previous marker instead of adding multiple markers when creating markers for a singular entry
+    - [x] Need to populate map with Caught Pokemon coordinates/locations when app is loaded
+    - [ ] Need to edit marker when Caught Pokemon entry location is modified
+    - [ ] Need to delete marker when Caught Pokemon entry is deleted
+  - [ ] Customize marker icon and pinned text alongside map marker
   - [ ] Move to marker on the map, when clicking a map entry
+  - [ ] Fix error rendering on Caught Screen when there's no Caught Pokémon
 - [x] BUG: Queries are aborting early
 - [x] BUG: Caught Pokémon summary not updating
+- [ ] BUG: When navigating to Search module from 404 error, controlSearchResults doesn't render Pokémon results
