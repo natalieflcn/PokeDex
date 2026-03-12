@@ -9,7 +9,7 @@ import {
   setLastCaughtPokemonLocation,
 } from '../models/caughtModel';
 import formView from '../views/MapViews/formView.js';
-import { capitalize } from '../helpers.js';
+import { capitalize, isEmpty } from '../helpers.js';
 import mapEntriesView from '../views/MapViews/mapEntriesView.js';
 import deleteEntryView from '../views/MapViews/deleteEntryView.js';
 import editEntryView from '../views/MapViews/editEntryView.js';
@@ -119,7 +119,7 @@ const controlMapLogEntry = function () {
   const formData = formView.getFormData();
   // console.log(formData);
   const name = formData['pokemon-name'];
-  const location = formData['pokemon-location'];
+  const location = formData['pokemon-location'] || 'Unknown Location';
   // console.log(name);
   // console.log(location);
   // setLastCaughtPokemonLocation(location || 'Unknown Location');
@@ -132,13 +132,16 @@ const controlMapLogEntry = function () {
 
   formView.clearForm();
   formView.hideMapForm();
+  // mapView.clearCurrentMarker();
   // formView.clearCurrentMarker(); //MAYBE
 
   // DECIDE HERE -- WHETHER ADDING A MARKER OR EDITING A MARKER
+  if (isEmpty(coordinates)) {
+    console.log('coordinastes i empty');
+  }
   if (!getSavedMarkerReferences().some(marker => marker.name === name)) {
     addSavedMarkerReference(coordinates, name);
   }
-
   // console.log(mapState.savedMarkers);
   controlMapLoadEntries();
   controlMapLoadSummary();
@@ -161,9 +164,20 @@ const controlMapDeleteEntry = function (pokemonName) {
   const removePokemon = getCaughtPokemon().find(
     pokemon => pokemon.name === pokemonName,
   );
+  const removeMarker = getSavedMarkerReferences().find(
+    marker => marker.name === pokemonName,
+  );
+
+  if (!isEmpty(removeMarker)) {
+    console.log('this shit is still running');
+    controlMapDeleteMarker(removePokemon);
+  }
 
   removeCaughtPokemon(removePokemon);
-  controlMapDeleteMarker(removePokemon);
+
+  console.log(removePokemon);
+  // if (getSavedMarkerReferences().some(marker => marker.name === pokemonName))
+
   controlMapLoadSummary();
   controlMapLoadEntries();
 };
@@ -304,10 +318,11 @@ const controlMapClearNullMarkers = function () {
 
 const controlMapCreateMapMarker = async function (latitude, longitude) {
   if (!formView.isFormOpen()) return;
+  console.log(latitude, longitude);
 
   controlMapClearNullMarkers();
   // mapView.clearCurrentMarker();
-
+  if (!latitude && !longitude) return;
   const pokemonName = formView.getFormName();
 
   if (getSavedMarkerReferences().some(marker => marker.name === pokemonName)) {
@@ -371,6 +386,9 @@ export const controlMapDeleteMarker = function (pokemon) {
   console.log(pokemon);
   console.log(`deleting ${pokemon.name} marker`);
 
+  console.log(pokemon.location);
+  if (pokemon.location === 'Unknown Location') return;
+
   // find saved marker, delete
   // const savedMarkers = getSavedMarkers();
   // const savedMarker = savedMarkers.find(marker => marker.name === pokemon.name);
@@ -381,6 +399,7 @@ export const controlMapDeleteMarker = function (pokemon) {
   // savedMarkers.splice(savedMarkers.indexOf(savedMarker), 1);
 
   const removedSavedMarker = removeSavedMarkerReference(pokemon.name);
+  console.log(removedSavedMarker);
   const targetLat = removedSavedMarker.coordinates.latitude;
   const targetLng = removedSavedMarker.coordinates.longitude;
 

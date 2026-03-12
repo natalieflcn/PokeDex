@@ -458,7 +458,8 @@ const controlSearchCaughtBtn = function () {
     controlMapRedirect();
   } else {
     removeCaughtPokemon(pokemon);
-    controlMapDeleteMarker(pokemon);
+
+    // controlMapDeleteMarker(pokemon);
     controlMapLoadEntries();
     controlMapLoadSummary();
   }

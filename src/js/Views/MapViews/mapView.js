@@ -39,6 +39,10 @@ class MapView extends View {
     // console.log(currentMarker);
     return this._currentMarker;
   }
+
+  clearCurrentMarker() {
+    this._currentMarker = {};
+  }
 }
 
 export default new MapView();
