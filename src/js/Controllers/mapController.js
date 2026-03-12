@@ -28,15 +28,20 @@ import {
   navSanitizeSort,
 } from '../services/navService.js';
 import {
-  addMarker,
-  addSavedMarker,
+  // addMarker,
+  addMarkerObject,
+  addSavedMarkerReference,
   editMarker,
-  getAllMarkers,
+  getAllMarkerObjects,
+  // getAllMarkers,
   getMapSortBy,
-  getMarkers,
-  getSavedMarkers,
-  removeMarkerReference,
+  // getMarkers,
+  getSavedMarkerReferences,
+  // getSavedMarkers,
+  removeMarkerObject,
+  // removeMarkerReference,
   removeSavedMarker,
+  removeSavedMarkerReference,
   setMapSortBy,
 } from '../models/mapModel.js';
 import { sortPokemon } from '../services/pokemonService.js';
@@ -130,8 +135,8 @@ const controlMapLogEntry = function () {
   // formView.clearCurrentMarker(); //MAYBE
 
   // DECIDE HERE -- WHETHER ADDING A MARKER OR EDITING A MARKER
-  if (!getSavedMarkers().some(marker => marker.name === name)) {
-    addSavedMarker(coordinates, name);
+  if (!getSavedMarkerReferences().some(marker => marker.name === name)) {
+    addSavedMarkerReference(coordinates, name);
   }
 
   // console.log(mapState.savedMarkers);
@@ -167,10 +172,14 @@ const controlMapEditEntry = function (pokemonName) {
   const id = getCaughtPokemon().find(
     pokemon => pokemon.name === pokemonName,
   ).id;
+  const location = getCaughtPokemon().find(
+    pokemon => pokemon.name === pokemonName,
+  ).location;
 
   console.log(pokemonName);
   formView.showMapForm();
   formView.updateFormNameAndId(pokemonName, id);
+  formView.updateFormLocation(location);
   formView.scrollIntoView();
 
   // TODO ADD LOCATION INTO FORM
@@ -246,14 +255,14 @@ const controlMapLoadScript = function () {
 };
 
 const controlMapClearNullMarkers = function () {
-  const allMarkers = getAllMarkers();
-  const savedMarkers = getSavedMarkers();
+  const allMarkerObjects = getAllMarkerObjects();
+  const savedMarkerReferences = getSavedMarkerReferences();
 
   console.log('ALL MARKERS');
-  console.log(allMarkers);
+  console.log(allMarkerObjects);
 
   console.log('SAVED MARKERS');
-  console.log(savedMarkers);
+  console.log(savedMarkerReferences);
 
   // allMarkers.forEach(marker =>
   //   savedMarkers
@@ -274,8 +283,8 @@ const controlMapClearNullMarkers = function () {
   // );
 
   console.log('FILTERED ARRAY');
-  allMarkers.filter(marker => {
-    const exists = savedMarkers.some(
+  allMarkerObjects.filter(marker => {
+    const exists = savedMarkerReferences.some(
       savedMarker =>
         savedMarker.coordinates.latitude === marker.position.lat() &&
         savedMarker.coordinates.longitude === marker.position.lng(),
@@ -283,7 +292,8 @@ const controlMapClearNullMarkers = function () {
 
     if (!exists) {
       marker.setMap(null);
-      allMarkers.splice(allMarkers.indexOf(marker), 1);
+      // allMarkers.splice(allMarkers.indexOf(marker), 1);
+      removeMarkerObject(marker);
     }
 
     return exists;
@@ -300,7 +310,7 @@ const controlMapCreateMapMarker = async function (latitude, longitude) {
 
   const pokemonName = formView.getFormName();
 
-  if (getSavedMarkers().some(marker => marker.name === pokemonName)) {
+  if (getSavedMarkerReferences().some(marker => marker.name === pokemonName)) {
     editMarker(pokemonName, latitude, longitude);
   } else {
     const marker = new google.maps.Marker({
@@ -308,9 +318,9 @@ const controlMapCreateMapMarker = async function (latitude, longitude) {
       title: pokemonName,
       map,
     });
-    // addMarker({ coordinates: { latitude, longitude } });
+
     // console.log(getAllMarkers());
-    addMarker(marker);
+    addMarkerObject(marker);
   }
 
   const geocoder = new google.maps.Geocoder();
@@ -333,7 +343,7 @@ const controlMapCreateMapMarker = async function (latitude, longitude) {
 
 const controlMapLoadMarkers = function () {
   console.log('running controlMapLoadMarkers');
-  const markers = getSavedMarkers();
+  const markers = getSavedMarkerReferences();
 
   console.log(markers);
   for (let marker of markers) {
@@ -346,10 +356,10 @@ const controlMapLoadMarkers = function () {
       map,
     });
 
-    addMarker(currMarker);
+    addMarkerObject(currMarker);
     console.log(marker);
   }
-  console.log(getAllMarkers());
+  console.log(getAllMarkerObjects());
 };
 
 const controlMapEditMarker = function (pokemonName) {
@@ -370,26 +380,25 @@ export const controlMapDeleteMarker = function (pokemon) {
   // const targetLng = savedMarker.coordinates.longitude;
   // savedMarkers.splice(savedMarkers.indexOf(savedMarker), 1);
 
-  const removedSavedMarker = removeSavedMarker(pokemon.name);
+  const removedSavedMarker = removeSavedMarkerReference(pokemon.name);
   const targetLat = removedSavedMarker.coordinates.latitude;
   const targetLng = removedSavedMarker.coordinates.longitude;
 
-  console.log(targetLat, targetLng, getSavedMarkers());
+  console.log(targetLat, targetLng, getSavedMarkerReferences());
 
   // find all marker reference, delete
-  const markerReferences = getAllMarkers();
+  // const markerReferences = getAllMarkerObjects();
   // const markerReference = markerReferences.find(
   //   marker =>
   //     marker.position.lat() === targetLat &&
   //     marker.position.lng() === targetLng,
   // );
 
-  const markerReference = removeMarkerReference(targetLat, targetLng);
+  const markerObject = removeMarkerObject(targetLat, targetLng);
 
-  console.log(markerReference);
-  markerReference.setMap(null);
+  console.log(markerObject);
+  markerObject.setMap(null);
   // markerReferences.splice(markerReferences.indexOf(markerReference), 1);
-  console.log(markerReferences);
 };
 
 const controlMapInitGoogleMaps = async function () {

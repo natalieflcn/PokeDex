@@ -1,7 +1,7 @@
 const mapState = {
   sortBy: 'date',
-  savedMarkers: [],
-  allMarkers: [],
+  savedMarkerReferences: [],
+  allMarkerObjects: [],
 };
 
 export default mapState;

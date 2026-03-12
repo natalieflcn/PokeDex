@@ -5,62 +5,70 @@ export const getMapSortBy = () => mapState.sortBy;
 
 export const setMapSortBy = sortBy => (mapState.sortBy = sortBy);
 
-export const addSavedMarker = function (coordinates, name) {
-  mapState.savedMarkers.push({ coordinates, name });
-  persistData('markers', mapState.savedMarkers);
+export const addSavedMarkerReference = function (coordinates, name) {
+  mapState.savedMarkerReferences.push({ coordinates, name });
+  persistData('markers', mapState.savedMarkerReferences);
 };
 
-export const getSavedMarkers = () => mapState.savedMarkers;
+export const getSavedMarkerReferences = () => mapState.savedMarkerReferences;
 
-export const removeSavedMarker = function (pokemonName) {
-  const removedSavedMarker = mapState.savedMarkers.find(
+export const removeSavedMarkerReference = function (pokemonName) {
+  const removedSavedMarkerReference = mapState.savedMarkerReferences.find(
     marker => marker.name === pokemonName,
   );
 
-  mapState.savedMarkers.splice(
-    mapState.savedMarkers.indexOf(removedSavedMarker),
+  mapState.savedMarkerReferences.splice(
+    mapState.savedMarkerReferences.indexOf(removedSavedMarkerReference),
     1,
   );
 
-  persistData('markers', mapState.savedMarkers);
-  return removedSavedMarker;
+  persistData('markers', mapState.savedMarkerReferences);
+  return removedSavedMarkerReference;
 };
 
-export const addMarker = marker => mapState.allMarkers.push(marker);
+export const addMarkerObject = marker => mapState.allMarkerObjects.push(marker);
 
-export const getAllMarkers = () => mapState.allMarkers;
+export const getAllMarkerObjects = () => mapState.allMarkerObjects;
+
+// export const removeMarkerObject = function (marker) {
+//   mapState.allMarkerObjects.splice(allMarkerObjects.indexOf(marker), 1);
+// };
 
 export const editMarker = function (pokemonName, newLat, newLng) {
   // editing saved marker
-  const savedMarker = mapState.savedMarkers.find(
+  const savedMarkerReference = mapState.savedMarkerReferences.find(
     marker => marker.name === pokemonName,
   );
-  savedMarker.coordinates = { latitude: newLat, longitude: newLng };
+  savedMarkerReference.coordinates = { latitude: newLat, longitude: newLng };
 
   // editing marker reference
-  const markerReference = mapState.allMarkers.find(
+  const markerObject = mapState.allMarkerObjects.find(
     marker => marker.title === pokemonName,
   );
-  markerReference.setPosition({ lat: newLat, lng: newLng });
+  markerObject.setPosition({ lat: newLat, lng: newLng });
 
-  persistData('markers', mapState.savedMarkers);
+  persistData('markers', mapState.savedMarkerReferences);
 };
 
-export const removeMarkerReference = function (targetLat, targetLng) {
-  const markerReference = mapState.allMarkers.find(
+export const removeMarkerObject = function (targetLat, targetLng) {
+  const markerObject = mapState.allMarkerObjects.find(
     marker =>
       marker.position.lat() === targetLat &&
       marker.position.lng() === targetLng,
   );
 
-  mapState.allMarkers.splice(mapState.allMarkers.indexOf(markerReference), 1);
+  mapState.allMarkerObjects.splice(
+    mapState.allMarkerObjects.indexOf(markerObject),
+    1,
+  );
 
-  return markerReference;
+  return markerObject;
 };
 const init = function () {
   const storageMapMarkers = localStorage.getItem('markers');
 
-  if (storageMapMarkers) mapState.savedMarkers = JSON.parse(storageMapMarkers);
+  if (storageMapMarkers)
+    mapState.savedMarkerReferences = JSON.parse(storageMapMarkers);
 };
 
 init();
