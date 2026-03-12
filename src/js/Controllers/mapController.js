@@ -34,6 +34,8 @@ import {
   getMapSortBy,
   getMarkers,
   getSavedMarkers,
+  removeMarkerReference,
+  removeSavedMarker,
   setMapSortBy,
 } from '../models/mapModel.js';
 import { sortPokemon } from '../services/pokemonService.js';
@@ -151,6 +153,7 @@ const controlMapDeleteEntry = function (pokemonName) {
   );
 
   removeCaughtPokemon(removePokemon);
+  controlMapDeleteMarker(removePokemon);
   controlMapLoadSummary();
   controlMapLoadEntries();
 };
@@ -160,11 +163,13 @@ const controlMapEditEntry = function (pokemonName) {
     pokemon => pokemon.name === pokemonName,
   ).id;
 
+  console.log(pokemonName);
   formView.showMapForm();
   formView.updateFormNameAndId(pokemonName, id);
   formView.scrollIntoView();
 };
 
+// controlMapEditMarker = function () {};
 const controlMapRenderSort = function (sort) {
   switch (sort) {
     case 'name':
@@ -320,7 +325,7 @@ const controlMapLoadMarkers = function () {
 
   console.log(markers);
   for (let marker of markers) {
-    new google.maps.Marker({
+    const currMarker = new google.maps.Marker({
       position: {
         lat: marker.coordinates.latitude,
         lng: marker.coordinates.longitude,
@@ -328,8 +333,48 @@ const controlMapLoadMarkers = function () {
       title: marker.name,
       map,
     });
+
+    addMarker(currMarker);
     console.log(marker);
   }
+  console.log(getAllMarkers());
+};
+
+const controlMapEditMarker = function (pokemonName) {};
+
+const controlMapDeleteMarker = function (pokemon) {
+  console.log(pokemon);
+  console.log(`deleting ${pokemon.name} marker`);
+
+  // find saved marker, delete
+  // const savedMarkers = getSavedMarkers();
+  // const savedMarker = savedMarkers.find(marker => marker.name === pokemon.name);
+  // console.log(savedMarker);
+
+  // const targetLat = savedMarker.coordinates.latitude;
+  // const targetLng = savedMarker.coordinates.longitude;
+  // savedMarkers.splice(savedMarkers.indexOf(savedMarker), 1);
+
+  const removedSavedMarker = removeSavedMarker(pokemon.name);
+  const targetLat = removedSavedMarker.coordinates.latitude;
+  const targetLng = removedSavedMarker.coordinates.longitude;
+
+  console.log(targetLat, targetLng, getSavedMarkers());
+
+  // find all marker reference, delete
+  const markerReferences = getAllMarkers();
+  // const markerReference = markerReferences.find(
+  //   marker =>
+  //     marker.position.lat() === targetLat &&
+  //     marker.position.lng() === targetLng,
+  // );
+
+  const markerReference = removeMarkerReference(targetLat, targetLng);
+
+  console.log(markerReference);
+  markerReference.setMap(null);
+  // markerReferences.splice(markerReferences.indexOf(markerReference), 1);
+  console.log(markerReferences);
 };
 
 const controlMapInitGoogleMaps = async function () {

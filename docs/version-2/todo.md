@@ -321,6 +321,8 @@
     - [ ] Need to delete marker when Caught Pokemon entry is deleted
   - [ ] Customize marker icon and pinned text alongside map marker
   - [ ] Move to marker on the map, when clicking a map entry
+  - [ ] Change mapState names to more accurately reflect the state objects
+  - [ ] Need to handle deleting/editing of Caught Pokémon with Unknown Locations
   - [ ] Fix error rendering on Caught Screen when there's no Caught Pokémon
 - [x] BUG: Queries are aborting early
 - [x] BUG: Caught Pokémon summary not updating
