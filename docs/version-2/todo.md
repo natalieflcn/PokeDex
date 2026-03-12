@@ -317,13 +317,13 @@
     - [x] Return 'unknown location' or nearby country if reverse-geocoded address is not available
     - [x] Need to remove previous marker instead of adding multiple markers when creating markers for a singular entry
     - [x] Need to populate map with Caught Pokemon coordinates/locations when app is loaded
-    - [ ] Need to edit marker when Caught Pokemon entry location is modified
-    - [ ] Need to delete marker when Caught Pokemon entry is deleted
-  - [ ] Customize marker icon and pinned text alongside map marker
-  - [ ] Move to marker on the map, when clicking a map entry
-  - [ ] Change mapState names to more accurately reflect the state objects
-  - [ ] Need to handle deleting/editing of Caught Pokémon with Unknown Locations
-  - [ ] Fix error rendering on Caught Screen when there's no Caught Pokémon
+    - [x] Need to edit marker when Caught Pokemon entry location is modified
+    - [x] Need to delete marker when Caught Pokemon entry is deleted
+  - [ ] Customize marker icon and pinned text alongside map marker TODO 4
+  - [ ] Move to marker on the map, when clicking a map entry TODO 3
+  - [ ] Change mapState names to more accurately reflect the state objects TODO 1
+  - [ ] Need to handle deleting/editing of Caught Pokémon with Unknown Locations TODO 2
+  - [x] Fix error rendering on Caught Screen when there's no Caught Pokémon TODO 0
 - [x] BUG: Queries are aborting early
 - [x] BUG: Caught Pokémon summary not updating
 - [ ] BUG: When navigating to Search module from 404 error, controlSearchResults doesn't render Pokémon results

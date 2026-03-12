@@ -30,6 +30,22 @@ export const addMarker = marker => mapState.allMarkers.push(marker);
 
 export const getAllMarkers = () => mapState.allMarkers;
 
+export const editMarker = function (pokemonName, newLat, newLng) {
+  // editing saved marker
+  const savedMarker = mapState.savedMarkers.find(
+    marker => marker.name === pokemonName,
+  );
+  savedMarker.coordinates = { latitude: newLat, longitude: newLng };
+
+  // editing marker reference
+  const markerReference = mapState.allMarkers.find(
+    marker => marker.title === pokemonName,
+  );
+  markerReference.setPosition({ lat: newLat, lng: newLng });
+
+  persistData('markers', mapState.savedMarkers);
+};
+
 export const removeMarkerReference = function (targetLat, targetLng) {
   const markerReference = mapState.allMarkers.find(
     marker =>

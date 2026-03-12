@@ -30,6 +30,7 @@ import {
 import {
   addMarker,
   addSavedMarker,
+  editMarker,
   getAllMarkers,
   getMapSortBy,
   getMarkers,
@@ -47,8 +48,8 @@ let map;
 let mapsLoaded = false;
 
 export const controlMapLoadSummary = function () {
-  const caughtSummary = getCaughtPokemon().length || 0;
-  headerView.render(caughtSummary);
+  const caughtSummary = getCaughtPokemon().length;
+  headerView.render(caughtSummary || '0');
 };
 
 export const controlMapRedirect = function () {
@@ -128,7 +129,11 @@ const controlMapLogEntry = function () {
   formView.hideMapForm();
   // formView.clearCurrentMarker(); //MAYBE
 
-  addSavedMarker(coordinates, name);
+  // DECIDE HERE -- WHETHER ADDING A MARKER OR EDITING A MARKER
+  if (!getSavedMarkers().some(marker => marker.name === name)) {
+    addSavedMarker(coordinates, name);
+  }
+
   // console.log(mapState.savedMarkers);
   controlMapLoadEntries();
   controlMapLoadSummary();
@@ -167,6 +172,8 @@ const controlMapEditEntry = function (pokemonName) {
   formView.showMapForm();
   formView.updateFormNameAndId(pokemonName, id);
   formView.scrollIntoView();
+
+  // TODO ADD LOCATION INTO FORM
 };
 
 // controlMapEditMarker = function () {};
@@ -291,15 +298,20 @@ const controlMapCreateMapMarker = async function (latitude, longitude) {
   controlMapClearNullMarkers();
   // mapView.clearCurrentMarker();
 
-  const marker = new google.maps.Marker({
-    position: { lat: latitude, lng: longitude },
-    title: 'Location Place or Anything that you want to tooltip while hovering',
-    map,
-  });
+  const pokemonName = formView.getFormName();
 
-  // addMarker({ coordinates: { latitude, longitude } });
-  // console.log(getAllMarkers());
-  addMarker(marker);
+  if (getSavedMarkers().some(marker => marker.name === pokemonName)) {
+    editMarker(pokemonName, latitude, longitude);
+  } else {
+    const marker = new google.maps.Marker({
+      position: { lat: latitude, lng: longitude },
+      title: pokemonName,
+      map,
+    });
+    // addMarker({ coordinates: { latitude, longitude } });
+    // console.log(getAllMarkers());
+    addMarker(marker);
+  }
 
   const geocoder = new google.maps.Geocoder();
 
@@ -340,7 +352,10 @@ const controlMapLoadMarkers = function () {
   console.log(getAllMarkers());
 };
 
-const controlMapEditMarker = function (pokemonName) {};
+const controlMapEditMarker = function (pokemonName) {
+  //update saved marker
+  //update marker reference
+};
 
 export const controlMapDeleteMarker = function (pokemon) {
   console.log(pokemon);
