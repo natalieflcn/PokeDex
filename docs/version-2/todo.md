@@ -322,7 +322,8 @@
   - [ ] Customize marker icon and pinned text alongside map marker TODO 4
   - [ ] Move to marker on the map, when clicking a map entry TODO 3
   - [x] Change mapState names to more accurately reflect the state objects TODO 1
-  - [~] Need to handle deleting/editing of Caught Pokémon with Unknown Locations TODO 2
+  - [x] Need to handle deleting/editing of Caught Pokémon with Unknown Locations TODO 2
+  - [ ] After deleting entry, need to toggle controlSearchPanel
   - [x] Fix error rendering on Caught Screen when there's no Caught Pokémon TODO 0
 - [x] BUG: Queries are aborting early
 - [x] BUG: Caught Pokémon summary not updating

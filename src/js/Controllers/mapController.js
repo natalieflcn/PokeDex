@@ -139,12 +139,16 @@ const controlMapLogEntry = function () {
   if (isEmpty(coordinates)) {
     console.log('coordinastes i empty');
   }
-  if (!getSavedMarkerReferences().some(marker => marker.name === name)) {
+  if (
+    !isEmpty(coordinates) &&
+    !getSavedMarkerReferences().some(marker => marker.name === name)
+  ) {
     addSavedMarkerReference(coordinates, name);
   }
   // console.log(mapState.savedMarkers);
   controlMapLoadEntries();
   controlMapLoadSummary();
+  mapView.clearCurrentMarker();
 };
 
 export const controlMapNewEntry = function () {
@@ -272,6 +276,8 @@ const controlMapClearNullMarkers = function () {
   const allMarkerObjects = getAllMarkerObjects();
   const savedMarkerReferences = getSavedMarkerReferences();
 
+  if (isEmpty(allMarkerObjects)) return;
+
   console.log('ALL MARKERS');
   console.log(allMarkerObjects);
 
@@ -326,6 +332,7 @@ const controlMapCreateMapMarker = async function (latitude, longitude) {
   const pokemonName = formView.getFormName();
 
   if (getSavedMarkerReferences().some(marker => marker.name === pokemonName)) {
+    console.log('editing pokemon is running');
     editMarker(pokemonName, latitude, longitude);
   } else {
     const marker = new google.maps.Marker({
