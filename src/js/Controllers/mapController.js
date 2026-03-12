@@ -342,7 +342,7 @@ const controlMapLoadMarkers = function () {
 
 const controlMapEditMarker = function (pokemonName) {};
 
-const controlMapDeleteMarker = function (pokemon) {
+export const controlMapDeleteMarker = function (pokemon) {
   console.log(pokemon);
   console.log(`deleting ${pokemon.name} marker`);
 

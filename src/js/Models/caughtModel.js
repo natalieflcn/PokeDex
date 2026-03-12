@@ -13,6 +13,7 @@ import { resetQueryState } from './queryModel';
 import { sortPokemon } from '../services/pokemonService';
 import { persistData } from '../helpers';
 import { getMapSortBy } from './mapModel';
+import { controlMapDeleteMarker } from '../controllers/mapController';
 
 /**
  * ======================

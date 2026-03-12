@@ -71,6 +71,7 @@ import queryState from '../models/state/queryState.js';
 import { controlAppError } from './appController.js';
 import { controlProfilePokemonResults } from './profileController.js';
 import {
+  controlMapDeleteMarker,
   controlMapLoadEntries,
   controlMapLoadSummary,
   controlMapRedirect,
@@ -457,6 +458,7 @@ const controlSearchCaughtBtn = function () {
     controlMapRedirect();
   } else {
     removeCaughtPokemon(pokemon);
+    controlMapDeleteMarker(pokemon);
     controlMapLoadEntries();
     controlMapLoadSummary();
   }
