@@ -330,7 +330,6 @@
 
 - [x] BUG: Queries are aborting early
 - [x] BUG: Caught Pokémon summary not updating
-- [ ] BUG: Sometimes controlSearchResults still doesn't run upon initial load
 
 ## Week: March 15 - March 21
 

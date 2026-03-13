@@ -78,9 +78,9 @@ export const controlMapLoadEntries = async function () {
     const query = queryView.getQuery();
     mapEntriesView.renderSpinner();
 
-    const pokemonBatch = await loadCaughtPokemon();
+    const pokemonBatch = getCaughtPokemon();
 
-    console.log(pokemonBatch);
+    console.log(getCaughtPokemon());
     // console.log('controlMAPLKADENTRIES');
     // console.log(pokemonBatch);
     if (!query && pokemonBatch.length > 0) mapEntriesView.render(pokemonBatch);
@@ -95,10 +95,11 @@ export const controlMapLoadEntries = async function () {
       storeQueryResults(query, pokemonBatch);
       await loadQueryBatch(requestId);
       const queryBatch = getQueryResults();
+      console.log(queryBatch);
       const hydratedQueryBatch = hydrateQueryBatch(queryBatch, pokemonBatch);
 
       // console.log(queryBatch);
-      if (hydratedQueryBatch.length > 0) {
+      if (hydrateQueryBatch.length > 0) {
         const sortedQueryBatch = sortPokemon(
           hydratedQueryBatch,
           getMapSortBy(),
