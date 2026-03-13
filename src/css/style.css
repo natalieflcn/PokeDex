@@ -1261,6 +1261,7 @@ body {
 
 .profile__header--bio {
   /* height: 3.5rem; */
+  line-height: 0.75rem;
   font-size: 0.65rem;
   flex: 1 1 0;
 }

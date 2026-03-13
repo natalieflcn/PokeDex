@@ -37,6 +37,7 @@ import {
   getMapSortBy,
   // getMarkers,
   getSavedMarkerReferences,
+  hydrateQueryBatch,
   // getSavedMarkers,
   removeMarkerObject,
   // removeMarkerReference,
@@ -79,6 +80,7 @@ export const controlMapLoadEntries = async function () {
 
     const pokemonBatch = await loadCaughtPokemon();
 
+    console.log(pokemonBatch);
     // console.log('controlMAPLKADENTRIES');
     // console.log(pokemonBatch);
     if (!query && pokemonBatch.length > 0) mapEntriesView.render(pokemonBatch);
@@ -93,10 +95,14 @@ export const controlMapLoadEntries = async function () {
       storeQueryResults(query, pokemonBatch);
       await loadQueryBatch(requestId);
       const queryBatch = getQueryResults();
+      const hydratedQueryBatch = hydrateQueryBatch(queryBatch, pokemonBatch);
 
       // console.log(queryBatch);
-      if (queryBatch.length > 0) {
-        const sortedQueryBatch = sortPokemon(queryBatch, getMapSortBy());
+      if (hydratedQueryBatch.length > 0) {
+        const sortedQueryBatch = sortPokemon(
+          hydratedQueryBatch,
+          getMapSortBy(),
+        );
 
         mapEntriesView.render(sortedQueryBatch);
       } else {
@@ -482,6 +488,7 @@ const controlMapInitGoogleMaps = async function () {
           center: { lat: latitude, lng: longitude },
           zoom: 14,
           styles: MAP_STYLES,
+          mapTypeControl: false,
         });
 
         mapView.addHandlerCreateMapMarker(map, controlMapCreateMapMarker);

@@ -28,7 +28,7 @@
 
 ### Phase 3: Introducing New Features to Existing Modules
 
-- [ ] Add sorting by "Type" for the Search and Profile views
+- [ ] NICE-TO-HAVE: Add sorting by "Type" for the Search and Profile views
 - [x] Create an "About the Project" section for visitors to learn more
 - [ ] Create a custom Pokémon Trainer GIF for Profile view
 

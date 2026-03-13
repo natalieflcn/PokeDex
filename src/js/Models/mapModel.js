@@ -64,6 +64,20 @@ export const removeMarkerObject = function (targetLat, targetLng) {
 
   return markerObject;
 };
+
+export const hydrateQueryBatch = function (queryBatch, pokemonBatch) {
+  for (let pokemon of queryBatch) {
+    const locationInfo = pokemonBatch.find(
+      marker => marker.name === pokemon.name,
+    );
+
+    pokemon.location = locationInfo.location;
+    pokemon.latLng = locationInfo.latLng;
+  }
+
+  return queryBatch;
+};
+
 const init = function () {
   const storageMapMarkers = localStorage.getItem('markers');
 
