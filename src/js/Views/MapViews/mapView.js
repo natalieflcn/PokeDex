@@ -35,6 +35,13 @@ class MapView extends View {
     });
   }
 
+  addHandlerMarkerClick(marker, handler) {
+    marker.addListener('click', e => {
+      const pokemonName = marker.title;
+      handler(pokemonName);
+    });
+  }
+
   getCurrentMarker() {
     // console.log(currentMarker);
     return this._currentMarker;

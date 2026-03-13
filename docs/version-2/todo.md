@@ -319,12 +319,16 @@
     - [x] Need to populate map with Caught Pokemon coordinates/locations when app is loaded
     - [x] Need to edit marker when Caught Pokemon entry location is modified
     - [x] Need to delete marker when Caught Pokemon entry is deleted
-  - [ ] Customize marker icon and pinned text alongside map marker TODO 2
+  - [x] Customize marker icon
+  - [ ] Create clickable pop-up marker text that displays Pokémon capture details
+  - [x] When marker is clicked, the corresponding map entry should be highlighted and scrolled into view
+
   - [x] Move to marker on the map, when clicking a map entry
   - [x] Change mapState names to more accurately reflect the state objects
   - [x] Need to handle deleting/editing of Caught Pokémon with Unknown Locations
   - [x] After deleting entry, need to toggle controlSearchPanel to display updated Caught status
   - [x] Fix error rendering on Caught Screen when there's no Caught Pokémon
+
 - [x] BUG: Queries are aborting early
 - [x] BUG: Caught Pokémon summary not updating
 - [ ] BUG: Sometimes controlSearchResults still doesn't run upon initial load

@@ -347,11 +347,18 @@ const controlMapCreateMapMarker = async function (latitude, longitude) {
     console.log('editing pokemon is running');
     editMarker(pokemonName, latitude, longitude);
   } else {
+    const image = getCaughtPokemon().find(
+      pokemon => pokemon.name === pokemonName,
+    ).img;
+
     const marker = new google.maps.Marker({
       position: { lat: latitude, lng: longitude },
       title: pokemonName,
       map,
+      icon: image,
     });
+
+    mapView.addHandlerMarkerClick(marker, controlMapMarkerClick);
 
     // console.log(getAllMarkers());
     addMarkerObject(marker);
@@ -375,12 +382,34 @@ const controlMapCreateMapMarker = async function (latitude, longitude) {
   formView.updateFormLocation(location);
 };
 
+const controlMapMarkerClick = function (pokemonName) {
+  console.log(pokemonName);
+
+  const pokemon = getCaughtPokemon().find(
+    pokemon => pokemon.name === pokemonName,
+  );
+
+  const markerObjects = getAllMarkerObjects();
+  const marker = markerObjects.find(marker => marker.title === pokemonName);
+
+  console.log(marker);
+  if (!marker) return;
+  console.log(marker);
+  map.panTo(marker.getPosition());
+  mapEntriesView.toggleActiveEntry(pokemonName);
+  console.log(pokemonName);
+};
+
 const controlMapLoadMarkers = function () {
   console.log('running controlMapLoadMarkers');
   const markers = getSavedMarkerReferences();
 
   console.log(markers);
   for (let marker of markers) {
+    const image = getCaughtPokemon().find(
+      pokemon => pokemon.name === marker.name,
+    ).img;
+
     const currMarker = new google.maps.Marker({
       position: {
         lat: marker.coordinates.latitude,
@@ -388,10 +417,16 @@ const controlMapLoadMarkers = function () {
       },
       title: marker.name,
       map,
+      icon: image,
     });
 
     addMarkerObject(currMarker);
-    console.log(marker);
+
+    mapView.addHandlerMarkerClick(currMarker, controlMapMarkerClick);
+
+    // const lat = marker.coordinates.latitude;
+    // const lng = marker.coordinates.longitude;
+    // controlMapCreateMapMarker(lat, lng, true);
   }
   console.log(getAllMarkerObjects());
 };
