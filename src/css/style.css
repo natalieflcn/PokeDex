@@ -1129,7 +1129,8 @@ body {
   );
 } */
 
-.map__entry--active {
+.map__entry--active,
+.map__entry:hover {
   background: linear-gradient(
     -40deg,
     var(--secondary-color--red-gradient--1) 10%,

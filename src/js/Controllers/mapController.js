@@ -48,6 +48,7 @@ import { sortPokemon } from '../services/pokemonService.js';
 import mapView from '../views/MapViews/mapView.js';
 import { MAP_STYLES } from '../config.js';
 import mapState from '../models/state/mapState.js';
+import { controlSearchPokemonPanel } from './searchController.js';
 
 let map;
 let mapsLoaded = false;
@@ -164,7 +165,17 @@ const controlMapCalculateFormData = function () {
   return { name: capitalize(name), id };
 };
 
-const controlMapDeleteEntry = function (pokemonName) {
+const controlMapClickEntry = function (pokemonName) {
+  const markerObjects = getAllMarkerObjects();
+  const marker = markerObjects.find(marker => marker.title === pokemonName);
+
+  if (!marker) return;
+  console.log(marker);
+  map.panTo(marker.getPosition());
+  console.log(pokemonName);
+};
+
+const controlMapDeleteEntry = async function (pokemonName) {
   const removePokemon = getCaughtPokemon().find(
     pokemon => pokemon.name === pokemonName,
   );
@@ -178,6 +189,7 @@ const controlMapDeleteEntry = function (pokemonName) {
   }
 
   removeCaughtPokemon(removePokemon);
+  await controlSearchPokemonPanel();
 
   console.log(removePokemon);
   // if (getSavedMarkerReferences().some(marker => marker.name === pokemonName))
@@ -384,11 +396,6 @@ const controlMapLoadMarkers = function () {
   console.log(getAllMarkerObjects());
 };
 
-const controlMapEditMarker = function (pokemonName) {
-  //update saved marker
-  //update marker reference
-};
-
 export const controlMapDeleteMarker = function (pokemon) {
   console.log(pokemon);
   console.log(`deleting ${pokemon.name} marker`);
@@ -464,6 +471,7 @@ export const controlMapInit = async function () {
   formView.addHandlerLogEntry(controlMapLogEntry);
   deleteEntryView.addHandlerDeleteBtn(controlMapDeleteEntry);
   editEntryView.addHandlerEditBtn(controlMapEditEntry);
+  mapEntriesView.addHandlerClickEntry(controlMapClickEntry);
   queryView.addHandlerQuery(controlMapLoadEntries);
   sortView.addHandlerSortBtn(controlMapSortBtn);
   sortView.addHandlerSortLoad(controlMapSortLoad);

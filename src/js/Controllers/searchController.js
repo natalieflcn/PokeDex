@@ -323,7 +323,7 @@ const controlSearchLoadActivePreview = function () {
 };
 
 // To render Pokémon details (desc, stats, moves) for the Pokémon panel
-const controlSearchPokemonPanel = async function () {
+export const controlSearchPokemonPanel = async function () {
   try {
     const pokemonName = window.location.pathname.split('/search/')[1];
     // Retrieve Pokémon name from URL
@@ -495,8 +495,8 @@ export const controlSearchRedirect = async function () {
   // resultsView.renderSpinner();
   // panelView.renderSpinner();
 
+  await controlSearchResults();
   await controlSearchPokemonPanel();
-  // await controlSearchResults();
 };
 
 // To initialize all Pokémon references to store in our state (pokemonState)

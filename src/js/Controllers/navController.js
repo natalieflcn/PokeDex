@@ -17,6 +17,7 @@ import {
   navSanitizeSort,
 } from '../services/navService';
 import {
+  controlSearchPokemonPanel,
   controlSearchRenderSort,
   controlSearchSortLoad,
 } from './searchController';
@@ -54,6 +55,7 @@ const controlNavRenderView = function (route) {
       navView.toggleNavSearch();
       // controlSearchRenderSort(getPokemonSortBy());
       controlSearchSortLoad();
+      controlSearchPokemonPanel();
 
       // testing
       const pokemonName = capitalize(

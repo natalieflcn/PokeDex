@@ -34,7 +34,7 @@
 
 ### Phase 4: Implementing the Map Module
 
-- [ ] Implement Google Maps library and develop the long-awaited Map module
+- [~] Implement Google Maps library and develop the long-awaited Map module
 
 ### Phase 5: Beta Release
 
